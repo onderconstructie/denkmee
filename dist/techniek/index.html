@@ -77,6 +77,18 @@
   --op-eiland-30: rgba(245,241,232,.3);
   --op-eiland-25: rgba(245,241,232,.25);
   --eiland-pink:  rgb(255,77,148);
+  /* Roze VLAKKEN: kaartjes, de cockpit, knoppen en chips, alles met witte tekst erop.
+     Waarom niet het merkroze #FF0066 zelf: dat haalt met wit 3,86:1 en blijft onder AA.
+     Waarom niet --pink-deep #b3004a: dat zit op 35% helderheid en leest als bordeaux.
+     #e6005c is het LICHTSTE roze op dezelfde tint dat 4,5:1 haalt (4,66:1), dus zo dicht
+     bij het merkroze als leesbaar kan. Bij hover gaan we een stap DIEPER (5,69:1), niet
+     feller: de knop reageert zichtbaar en de tekst wordt onderweg beter leesbaar in
+     plaats van slechter. */
+  --pink-vlak:#e6005c; --pink-vlak-hover:#cc0052;
+  /* Aliassen: het portaal noemt deze tokens in het Nederlands. Beide namen laten
+     bestaan zodat CSS die je tussen de sites kopieert niet stil afbreekt. */
+  --tekst:#1a1712; --tekst-2:#514a40; --pink-tekst:#c80054;
+  --pink-zacht:rgba(255,0,102,.09);
 
   /* Haarlijnen — warme inkt op papier; de kaartlijn draagt de kaartvorm */
   --line:         rgba(26,23,18,.10);
@@ -113,7 +125,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-*::selection{background:var(--pink);color:#fff}
+*::selection{background:var(--pink-vlak);color:#fff}
 
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 
@@ -208,7 +220,7 @@ section:not(:last-of-type){ border-bottom:1px solid var(--line); }
 }
 .demo-banner .db-tag{
   flex-shrink:0;
-  background:var(--pink); color:#fff;
+  background:var(--pink-vlak); color:#fff;
   padding:.12rem .5rem; border-radius:2px;
   font-weight:600; text-transform:uppercase; letter-spacing:.12em; font-size:.66rem;
 }
@@ -269,7 +281,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   border:1px solid var(--pink); color:var(--pink-text);
   transition:all .15s;
 }
-.nav-cta:hover{ background:var(--pink); color:#fff; }
+.nav-cta:hover{ background:var(--pink-vlak-hover); color:#fff; }
 .nav-cta{ white-space:nowrap; }
 @media (max-width:780px){
   .nav-links{ display:none; }
@@ -557,7 +569,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
    het felle roze zijn werk blijft doen waar het klein en decoratief is (bolletjes, chips,
    knoppen). Zelfde keuze als het accentkaartje bij 'Wat je hier leest'. */
 .hero-cockpit{
-  background:var(--pink-deep); color:#fff;
+  background:var(--pink-vlak); color:#fff;
   padding:1rem 1.2rem 1.05rem;
   opacity:0; animation:rise .9s .45s ease-out forwards;
 }
@@ -657,8 +669,8 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   border:1px solid var(--line-strong);
   transition:all .2s ease;
 }
-.btn-pink{ background:var(--pink); color:#fff; border-color:var(--pink); box-shadow:0 6px 18px -9px rgba(255,0,102,.5); }
-.btn-pink:hover{ background:var(--pink-deep); border-color:var(--pink-deep); transform:translate(0,-2px); box-shadow:var(--shadow-pink); }
+.btn-pink{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); box-shadow:0 6px 18px -9px rgba(255,0,102,.5); }
+.btn-pink:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); transform:translate(0,-2px); box-shadow:var(--shadow-pink); }
 .btn-ghost{ color:var(--ink); border-color:var(--ink); }
 .btn-ghost:hover{ background:var(--ink); color:var(--paper); }
 .btn .arrow{ transition:transform .2s; display:inline-block; }
@@ -1084,7 +1096,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .tch:hover{ color:var(--bone); border-color:var(--bone-dim); }
 .tch.active{
-  color:#fff; background:var(--pink); border-color:var(--pink);
+  color:#fff; background:var(--pink-vlak); border-color:var(--pink-vlak);
 }
 
 .kw-row{ display:flex; gap:.5rem; }
@@ -1102,7 +1114,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border:1px solid var(--line-strong);
   transition:all .15s;
 }
-.kw-row button:hover{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.kw-row button:hover{ background:var(--pink-vlak-hover); color:#fff; border-color:var(--pink-vlak-hover); }
 .kw-list{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.7rem; }
 .kw-tag{
   display:inline-flex; align-items:center; gap:.4rem;
@@ -1322,7 +1334,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .seg-opt + .seg-opt{ border-left:1px solid var(--line-strong); }
 .seg-opt.on{ background:var(--ink); color:var(--paper); }
 /* 'Voor mij' actief = roze: alles wat persoonlijk filtert, kleurt roze. */
-.seg-toggle .seg-opt:first-child.on{ background:var(--pink); color:#fff; }
+.seg-toggle .seg-opt:first-child.on{ background:var(--pink-vlak); color:#fff; }
 .seg-opt:not(.on):hover{ background:var(--paper-3); color:var(--ink); }
 .notif-perm-lnk{ background:none; border:none; padding:0; color:var(--pink-text); text-decoration:underline; cursor:pointer; font:inherit; }
 #notifSeg{ margin-top:.15rem; }
@@ -2350,7 +2362,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   transition:all .15s;
 }
 .of-btn:hover{ color:var(--bone); border-color:var(--bone-dim); }
-.of-btn.active{ color:#fff; background:var(--pink); border-color:var(--pink); }
+.of-btn.active{ color:#fff; background:var(--pink-vlak); border-color:var(--pink-vlak); }
 
 /* Scanbare archief-tabel — click-to-expand */
 .arch-table{
@@ -2760,7 +2772,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border:1px solid var(--line-strong); border-radius:50%;
   cursor:pointer; transition:background .15s, color .15s;
 }
-.ov-modal-close:hover{ color:var(--paper); background:var(--pink); border-color:var(--pink); }
+.ov-modal-close:hover{ color:var(--paper); background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
 
 /* Compacte 2-kolom layout in WOB-modal */
 .ov-fields-row{
@@ -2841,7 +2853,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   cursor:pointer;
   transition:all .15s;
 }
-.dc-cta:hover{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dc-cta:hover{ background:var(--pink-vlak-hover); color:#fff; border-color:var(--pink-vlak-hover); }
 @media (max-width:700px){
   /* Smartphone: volwaardige app-CTA over de volle breedte, netjes uitgelijnd met de kaarten. */
   .dc-cta{ width:100%; padding:.95rem 1.1rem; }
@@ -2956,7 +2968,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dos-track-lbl{ font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); width:3.4rem; flex-shrink:0; }
 .dos-flow .step{ background:var(--paper-2); padding:.3rem .6rem; border:1px solid var(--line-strong); white-space:nowrap; }
 .dos-flow .step.gr{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-.dos-flow .step.col{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dos-flow .step.col{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); }
 .dos-flow .step.rmw{ background:var(--ink-dim); color:var(--paper); border-color:var(--ink-dim); white-space:normal; min-width:0; }
 .dos-flow .step.vb{ background:var(--paper-2); color:var(--ink-2); border-color:var(--line-strong); }
 .dos-flow .arr{ color:var(--pink); font-weight:600; }
@@ -3017,7 +3029,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .dos-prof-toggle:hover{ opacity:.88; }
 /* 'Alleen mijn thema's' = persoonlijk filter = roze. */
-.dos-prof-toggle.active{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dos-prof-toggle.active{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); }
 .dos-prof-toggle .dot{ width:7px; height:7px; background:currentColor; border-radius:50%; opacity:.6; }
 .dos-prof-toggle.active .dot{ background:#fff; opacity:1; }
 .dos-prof-toggle.disabled{ opacity:.4; pointer-events:none; }
@@ -3025,10 +3037,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dos-volg-chip{
   display:inline-flex; align-items:center; gap:.45rem; cursor:pointer;
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.02em;
-  padding:.55rem .85rem; border:1px solid var(--pink); background:var(--pink); color:#fff;
+  padding:.55rem .85rem; border:1px solid var(--pink-vlak); background:var(--pink-vlak); color:#fff;
   transition:.18s;
 }
-.dos-volg-chip:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
+.dos-volg-chip:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
 .dos-volg-chip[hidden]{ display:none; }
 .dos-stat{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:var(--ink-faint); margin-left:auto; }
 
@@ -3059,7 +3071,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   letter-spacing:.1em; text-transform:uppercase; padding:.22rem .5rem; line-height:1;
 }
 .dos-org.gr{ background:var(--ink); color:var(--paper); }
-.dos-org.col{ background:var(--pink); color:#fff; }
+.dos-org.col{ background:var(--pink-vlak); color:#fff; }
 .dos-org.rmw{ background:var(--ink-dim); color:var(--paper); }
 .dos-org.vb{ background:transparent; color:var(--ink-dim); box-shadow:inset 0 0 0 1px var(--ink-dim); }
 .dos-org.bm{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
@@ -3109,7 +3121,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   background:var(--paper-2); color:var(--ink-dim); border:1px solid var(--line);
 }
 .dos-status.goedgekeurd{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-.dos-status.verworpen{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dos-status.verworpen{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); }
 .dos-status.verdaagd,.dos-status.lopend{ background:var(--paper-3); color:var(--ink-2); border:1px solid var(--line-strong); }
 .dos-status.beslist{ background:var(--paper-2); color:var(--ink-dim); border:1px solid var(--line); }
 .dos-followed{
@@ -3154,7 +3166,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.64rem; letter-spacing:.04em;
   padding:.24rem .55rem; border:1px solid var(--op-eiland-25); color:var(--op-eiland-85); line-height:1.3;
 }
-.dosm-chip.pink{ background:var(--pink); border-color:var(--pink); color:#fff; font-weight:600; }
+.dosm-chip.pink{ background:var(--pink-vlak); border-color:var(--pink-vlak); color:#fff; font-weight:600; }
 .dosm-summary{
   display:flex; gap:0; border-bottom:1px solid var(--line);
 }
@@ -3182,7 +3194,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dosm-ev-date{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink); font-weight:500; letter-spacing:.01em; }
 .dosm-ev-org{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.58rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:.18rem .42rem; line-height:1; }
 .dosm-ev-org.gr{ background:var(--ink); color:var(--paper); }
-.dosm-ev-org.col{ background:var(--pink); color:#fff; }
+.dosm-ev-org.col{ background:var(--pink-vlak); color:#fff; }
 .dosm-ev-org.rmw{ background:var(--ink-dim); color:var(--paper); }
 .dosm-ev-org.bm{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
 .dosm-ev-org.sv{ background:transparent; color:var(--pink-text); box-shadow:inset 0 0 0 1px var(--pink); }
@@ -3193,7 +3205,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    een goedkeuring en niet als een verdaging. */
 .dosm-ev-result{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.58rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-left:auto; padding:.18rem .42rem; line-height:1.2; color:var(--ink-2); background:var(--paper-3); }
 .dosm-ev-result.goedgekeurd{ color:var(--paper); background:var(--ink); }
-.dosm-ev-result.verworpen{ color:#fff; background:var(--pink); }
+.dosm-ev-result.verworpen{ color:#fff; background:var(--pink-vlak); }
 .dosm-ev-result.verdaagd{ color:var(--ink-2); background:var(--paper-3); }
 .dosm-ev-titel{ font-size:.96rem; font-weight:600; line-height:1.35; color:var(--ink); margin-bottom:.35rem; }
 /* Zelfde eerlijke label als op de kaart, hier per punt in de tijdlijn. */
@@ -3226,7 +3238,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dosm-ev-ic{ width:14px; height:14px; flex:none; display:block; }
 /* Hover naar --pink-deep en niet --pink: wit op #FF0066 haalt 3,86:1 en zakt onder AA,
    wit op #b3004a haalt bijna 7. */
-.dosm-ev-link:hover{ color:#fff; background:var(--pink-deep); border-color:var(--pink-deep); }
+.dosm-ev-link:hover{ color:#fff; background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
 /* Fout melden: een hulpmiddel, geen hoofdactie. Neutraal grijs zodat het de bronstukken niet
    overschreeuwt, maar wel als volwaardige knop vindbaar in plaats van een vage vraagzin. */
 .dosm-ev-meld{
@@ -3240,7 +3252,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dosm-ev-cur{ color:var(--ink-dim); background:transparent; border-style:dashed; border-color:var(--line-strong); }
 .dosm-ev-cur:hover{ color:#fff; background:var(--ink); border-color:var(--ink); border-style:solid; }
 .dosm-ev-cur.aan{ color:var(--pink-text); background:var(--pink-soft); border-style:solid; border-color:var(--line-pink); }
-.dosm-cur-btn.aan{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dosm-cur-btn.aan{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); }
 /* Verwante dossiers: kaartjes met de reden van de verwantschap eerlijk benoemd. */
 .dosm-verwant{ margin-top:1.8rem; padding-top:1.3rem; border-top:1px solid var(--line-strong); }
 .dosm-verwant-lab{
@@ -3364,9 +3376,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .wiz-skip[hidden]{ display:inline-block; visibility:hidden; pointer-events:none; }
 .wiz-next{
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.85rem; font-weight:500; letter-spacing:.01em;
-  background:var(--pink); color:#fff; border:1px solid var(--pink); padding:.7rem 1.3rem; transition:.18s;
+  background:var(--pink-vlak); color:#fff; border:1px solid var(--pink-vlak); padding:.7rem 1.3rem; transition:.18s;
 }
-.wiz-next:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
+.wiz-next:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
 .wiz-summary{ display:flex; flex-direction:column; gap:0; border:1px solid var(--line-strong); }
 .wiz-sum-row{ display:flex; gap:1rem; padding:.9rem 1.1rem; border:none; border-bottom:1px solid var(--line); align-items:baseline; width:100%; text-align:left; background:none; font:inherit; color:inherit; cursor:pointer; transition:background .15s; }
 .wiz-sum-row:last-child{ border-bottom:none; }
@@ -3437,9 +3449,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .menu-search input::placeholder{ color:var(--ink-faint); }
 .menu-search .ms-go{
   flex:none; padding:0 1.1rem; border:none; cursor:pointer;
-  background:var(--pink); color:#fff; font-size:1.15rem; transition:background .15s;
+  background:var(--pink-vlak); color:#fff; font-size:1.15rem; transition:background .15s;
 }
-.menu-search .ms-go:hover{ background:var(--pink-deep); }
+.menu-search .ms-go:hover{ background:var(--pink-vlak-hover); }
 
 /* =====================================================================
    NIEUW-SINDS-VORIG-BEZOEK TOAST + hamburger-signaal
@@ -3520,7 +3532,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   color:rgba(245,241,232,.9); cursor:pointer; border-radius:2px; min-height:34px;
 }
 .curator-paneel .cur-actie:hover{ border-color:var(--pink); color:#fff; }
-.curator-paneel .cur-actie.prim{ background:var(--pink); border-color:var(--pink); color:#fff; margin-bottom:.55rem; }
+.curator-paneel .cur-actie.prim{ background:var(--pink-vlak); border-color:var(--pink-vlak); color:#fff; margin-bottom:.55rem; }
 .curator-paneel .cur-actie[disabled]{ opacity:.4; cursor:default; }
 .curator-paneel .cur-actie[disabled]:hover{ border-color:rgba(245,241,232,.3); color:rgba(245,241,232,.9); }
 .curator-paneel .cur-voet{ margin:.7rem 0 0; font-size:.72rem; color:rgba(245,241,232,.55); }
@@ -3630,10 +3642,10 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
   flex-shrink:0;
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.72rem; letter-spacing:.04em; text-transform:uppercase;
-  background:var(--pink); color:#fff; border:1px solid var(--pink);
+  background:var(--pink-vlak); color:#fff; border:1px solid var(--pink-vlak);
   padding:.55rem .9rem; cursor:pointer;
 }
-.cn-ok:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
+.cn-ok:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
 
 /* toegankelijkheid: zichtbare focus voor toetsenbordnavigatie */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible,
@@ -3716,11 +3728,13 @@ body{
   border-color:rgba(200,0,84,.16);
 }
 .dc-card.dc-accent{
-  background:var(--pink-deep);
-  border-color:var(--pink-deep);
+  background:var(--pink-vlak);
+  border-color:var(--pink-vlak);
 }
 .dc-card.dc-accent h3{ color:#fff; }
-.dc-card.dc-accent p{ color:rgba(255,255,255,.93); }
+/* Vol wit, geen 93%. Die lichte verzachting werkte op het oude, donkere bordeaux, maar op
+   het lichtere --pink-vlak zakt ze naar 4,12:1 en haalt ze de norm niet meer. Nagemeten. */
+.dc-card.dc-accent p{ color:#fff; }
 .dc-card.dc-accent p strong,
 .dc-card.dc-accent p em{ color:#fff; }
 /* De link moet zichtbaar blijven als link. Alles wit maken haalde het enige onderscheid weg:
