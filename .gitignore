@@ -1,0 +1,50 @@
+# --- Denk mee met Mechelen ---
+# De gepubliceerde site is dist/index.html (zelfstandig bestand, mét de data erin).
+# data.json wordt WEL meegecommit: zo kan build.py op een verse kloon herbouwen
+# zonder opnieuw op te halen of te taggen (geen API-kosten).
+
+# Python
+__pycache__/
+*.pyc
+
+# Opgehaalde bron-PDF's — groot, en opnieuw op te halen met fetch_all.py
+data/raw/
+
+# Saved overzichts-HTML (debug, regenereerbaar)
+bron/
+
+# Lokale cache en backups (worden opnieuw aangemaakt)
+data/tags_cache.json
+data/tags_cache.json.old
+data/_sweep_cache.json
+data/_dg_cache.json
+data.json.bak
+*.json.tmp
+*.bak
+
+# Tussenbestanden van de assemblage (per build opnieuw gemaakt)
+data/schriftelijke_vragen.json
+besluiten.agendapunten.json
+notulen.notulen.json
+*.agenda.json
+*.agendapunten.json
+*.notulen.json
+
+# Lokale tooling / scratch (niet voor de repo)
+.claude/
+_*.py
+_*.png
+
+# Cache van de zoekindex-bouw: volledige geëxtraheerde documentteksten. Die horen
+# NIET in de publieke repo (geen documentkopieën op GitHub); enkel de index zelf
+# (zoekindex.json: losse woorden, geen tekst) wordt meegecommit.
+data/zoekcache/
+
+# Uittreksels: de opgehaalde PDF's (onder data/raw/, al genegeerd) én de geëxtraheerde
+# VOLLEDIGE besluitteksten. Documentkopieën, dus NOOIT in git. Enkel de afgeleide data
+# (rijkere samenvatting, kernbegrippen, zoekindex) belandt in de gecommitte bestanden.
+data/uittreksel_cache/
+data/uittreksels_tekst.json
+data/uittreksels_index.json
+data/uittreksel_koppeling.json
+privacy_namen.json

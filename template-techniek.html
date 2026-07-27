@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="nl">
+__DENKMEE_HEAD__
+<body>
+
+<style>
+/* ====== Alleen voor de techniek-pagina. De rest van de huisstijl komt uit de
+   gedeelde <head> van template.html (zelfde tokens, zelfde brand-mark). ====== */
+
+/* Pagina-identiteit: een ietsje koeler, donkerder papier dan de hoofdsite. Subtiel,
+   maar genoeg om meteen te voelen dat dit een uitleg-/over-pagina is. */
+body{ background:var(--paper-3); }
+
+.tech-hero{ position:relative; padding:clamp(2.5rem,7vw,5rem) 0 1rem; }
+.tech-hero > *{ position:relative; z-index:1; }
+/* Uitgegrijsde Sint-Romboutstoren als rustig watermerk: dezelfde vorm als op de hoofdsite
+   (we hergebruiken .bh-circle), maar ontkleurd en transparant, en zonder rise-animatie. */
+.tech-hero-bg{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+.tech-circle{
+  position:absolute;
+  /* Volledig ín beeld: de bol wordt nergens afgesneden. Verticaal gecentreerd naast de titel. */
+  width:min(26vw, 260px);
+  aspect-ratio:1 / 1;
+  top:50%; right:3%; left:auto; bottom:auto;
+  transform:translateY(-50%);
+  opacity:.16;
+  filter:grayscale(1) contrast(.9);
+  animation:none;
+}
+@media (max-width:640px){
+  /* Op smartphone kleiner, hoog in de hoek, maar nog steeds de vólle cirkel. */
+  .tech-circle{ width:120px; top:8px; right:12px; transform:none; opacity:.14; }
+}
+
+/* Pulserende bol i.p.v. het roze vierkantje vóór 'Over dit experiment', zoals op de voorpagina.
+   Genoeg ruimte na de bol zodat de pulserende ring (tot ~10px) niet door de tekst loopt. */
+.tech-hero .eyebrow::before{
+  width:7px; height:7px;
+  border-radius:50%;
+  margin-right:14px;
+  vertical-align:middle;
+  box-shadow:0 0 0 0 rgba(255,0,102,.5);
+  animation:pulse 2s infinite;
+}
+.tech-h1{ font-size:clamp(2.4rem,6vw,4rem); font-weight:600; letter-spacing:-.03em; line-height:1.03; margin:.6rem 0 1.1rem; }
+.tech-lede{ max-width:62ch; }
+.tech-prose{ max-width:64ch; }
+.tech-prose p{ margin-bottom:1rem; color:var(--ink-2); line-height:1.62; }
+/* --pink-text, niet --pink: het decoratieve roze haalt op papier 3,13:1 en dat is te
+   weinig voor tekst van deze grootte. Dit staat los van de merkkeuze wit-op-roze; hier
+   gaat het om roze op papier. De blokjes hieronder mogen wél --pink houden: geen tekst. */
+.tech-prose strong, .tech-prose em{ color:var(--pink-text); font-weight:600; font-style:normal; }
+.tech-prose ul{ list-style:none; display:flex; flex-direction:column; gap:.7rem; margin-top:.4rem; }
+.tech-prose li{ position:relative; padding-left:1.3rem; color:var(--ink-2); line-height:1.5; }
+.tech-prose li::before{ content:''; position:absolute; left:0; top:.55em; width:.5em; height:.5em; background:var(--pink); }
+
+/* Pijplijn-schema: één strakke verticale flow met verbindingslijn en nette ronde knopen */
+.flow{ margin-top:.8rem; max-width:64ch; }
+.flow-phase{ margin-bottom:2rem; }
+.flow-phase:last-child{ margin-bottom:0; }
+/* Ook hier --pink-text: dit zijn de fase-labels waarmee de lezer het schema volgt, en op
+   10,56px mono was 3,13:1 het zwaarste geval van de pagina. Het blokje ervoor blijft roze. */
+.flow-tag{ display:inline-flex; align-items:center; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--pink-text); margin-bottom:1rem; }
+.flow-tag::before{ content:''; width:.5em; height:.5em; background:var(--pink); margin-right:.55em; }
+.flow-line{ list-style:none; margin:0; padding:0; }
+.flow-line li{ position:relative; padding:0 0 1.1rem 1.9rem; color:var(--ink-2); line-height:1.6; font-size:.95rem; }
+.flow-line li:last-child{ padding-bottom:0; }
+.flow-line li::before{ content:''; position:absolute; left:0; top:.4em; width:13px; height:13px; border:1.5px solid var(--ink); background:var(--paper); border-radius:50%; box-sizing:border-box; z-index:1; }
+.flow-line li::after{ content:''; position:absolute; left:6px; top:.4em; bottom:-.4em; width:1px; background:var(--line-strong); }
+.flow-line li:last-child::after{ display:none; }
+.flow-line li.key::before{ background:var(--pink); border-color:var(--pink); }
+.flow-line li b{ color:var(--ink); font-weight:600; }
+
+/* Eén lijn per sectie. De zwarte onderlijn van de kop is de scheiding; de dunne
+   grijze sectie-onderrand uit de hoofd-CSS valt hier weg (anders twee lijnen vlak
+   na elkaar zonder iets ertussen). */
+.shell > section:not(:last-of-type){ border-bottom:0; }
+
+/* Geen nummering op de techniek-pagina: enkel het label boven elke sectiekop. */
+.sec-num em{ display:none; }
+
+/* Het colofon komt uit de gedeelde <head>; hier alleen het verschil: de footer
+   neemt exact de paginakleur (de band) over, dus geen naadlijn en geen
+   kleurverschil met het vlak er net boven. */
+.colofon{ border-top:none; background:transparent; }
+.co-sep{ margin:0 .45rem; color:var(--c-stil); }
+@media (max-width:780px){
+  .tech-nav .nav-links{ display:none; }
+  .arch-step{ white-space:normal; }
+  /* De gedeelde <head> verbergt .nav-cta onder 780px. Op de hoofdpagina kan dat, want daar
+     staat een hamburgermenu; hier is '← terug' de enige navigatie, en de sitewissel-balk
+     verschijnt pas onder 700px. Tussen 701 en 780px zat je dus zonder terugweg. */
+  .tech-nav .nav-cta{ display:inline-flex; }
+}
+</style>
+
+<nav class="nav tech-nav">
+  <div class="nav-inner">
+    <!-- Zelfde topmerk als op de hoofdpagina en de andere deelsites: de mug + As Gau Paust,
+         naar het portaal. De weg terug naar Denk mee zelf zit in de "terug"-knop hiernaast. -->
+    <a class="brand" href="https://asgaupaust.be/" aria-label="As Gau Paust, naar het portaal"><img class="brand-mug" src="/beelden/mug.png" alt="" aria-hidden="true" width="512" height="512">As Gau <em class="pink">Paust</em></a>
+    <a class="nav-cta" href="https://denkmee.asgaupaust.be/" style="margin-left:auto">← terug</a>
+  </div>
+</nav>
+
+<main class="shell">
+
+  <section class="tech-hero">
+    <div class="tech-hero-bg" aria-hidden="true"><span class="bh-shape bh-circle tech-circle"></span></div>
+    <p class="eyebrow">Over dit experiment</p>
+    <h1 class="tech-h1">Technische pagina</h1>
+    <p class="sec-lede tech-lede">
+      Hier lees je hoe een officieel document een leesbaar dossier wordt, hoe we het
+      ophalen bij de bron, en waar het experiment tekortschiet.
+    </p>
+  </section>
+
+  <!-- 01 · De vijf organen -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">De organen<em>01</em></div>
+      <div class="sec-titles">
+        <h2>Wie <em>beslist</em> er in Mechelen?</h2>
+        <p class="sec-lede">
+          De politieke macht ligt bij vijf officiële bestuursorganen. De gemeenteraad en het college
+          van burgemeester en schepenen sturen de stad aan. <strong>Diezelfde mensen</strong> besturen,
+          als raad voor maatschappelijk welzijn en vast bureau, ook het OCMW. En de burgemeester
+          waakt zelf over de openbare orde en kan bij hoogdringendheid tijdelijke politiemaatregelen
+          nemen, die de gemeenteraad nadien moet bekrachtigen. Samen zijn dat de vijf organen die we
+          volgen.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Termijnen -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Termijnen<em>02</em></div>
+      <div class="sec-titles">
+        <h2>Hoeveel <em>tijd</em> krijgt het stadsbestuur?</h2>
+        <p class="sec-lede">
+          Het Decreet Lokaal Bestuur legt de <strong>termijnen</strong> vast die we opvolgen.
+          De agenda van de gemeenteraad moet er minstens 8 dagen vóór de zitting zijn (artikel 22),
+          en die van de raad voor maatschappelijk welzijn even lang vooraf (artikel 74). De besluiten
+          van alle vijf de organen volgen uiterlijk 10 dagen na de zitting of de beslissing
+          (artikel 287).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Architectuur -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Architectuur<em>03</em></div>
+      <div class="sec-titles">
+        <h2>Van officieel stuk tot <em>leesbaar</em> dossier</h2>
+        <div class="tech-prose">
+          <p>
+            Hoe ontstaat een dossier? We bundelen stukken op hun meest onderscheidende gedeelde woord:
+            een besteknummer of adres, een eigennaam zoals een kerk, een buurt of een project, of een
+            zeldzaam kernwoord uit de titel. Een breed thema bindt nooit op zichzelf. Het is een
+            <strong>vuistregel</strong>, geen absolute waarheid: soms koppelt ze twee losse zaken, soms knipt ze één
+            verhaal in twee.
+          </p>
+          <p>
+            In zo'n dossier schuift ook een schriftelijke vraag van een raadslid mee, naast de
+            agendapunten en besluiten. Zo zie je de vraag en de latere beslissing over hetzelfde
+            onderwerp in één tijdlijn.
+          </p>
+          <p>
+            Zoek je op een trefwoord, dan kijken we niet alleen in de titels en de samenvattingen,
+            maar ook in de <strong>volledige stukken</strong>: de notulen van een agendapunt, de
+            pdf van een schriftelijke vraag. Zit een woord enkel daar, dan tonen we die treffer
+            gewoon tussen de andere, met het label "in het volledige stuk", zodat je weet dat het
+            dieper in de tekst zat en niet in de samenvatting.
+          </p>
+          <p>
+            Soms verwijzen twee stukken naar dezelfde harde code: een lijn in het meerjarenplan,
+            een zaaknummer, een omgevingsvergunning. Die codes staan in de stukken zelf, dus we
+            gebruiken ze om verwante dossiers te tonen, met de reden erbij. Meestal blijft dat
+            een tip en geen oordeel: we zetten twee dossiers naast elkaar zonder ze samen te
+            voegen. Alleen een verwijzing die naar precies één zaak wijst, zoals een besteknummer
+            of een adres met huisnummer, bundelt stukken wel meteen in hetzelfde dossier.
+          </p>
+          <p>
+            Deze site is gebouwd met hulp van Claude Code, de
+            AI-programmeerassistent van Anthropic. Ze is geen journalistiek eindproduct, maar een
+            opstapje: een manier om de vinger aan de pols te houden en zelf te beslissen waar je je
+            tanden in zet.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-phase">
+        <span class="flow-tag">Lokaal</span>
+        <ol class="flow-line">
+          <li><b>Ophalen.</b> We halen de agenda's, besluitenlijsten, notulen en de schriftelijke vragen van raadsleden rustig op, stuk voor stuk en met een pauze tussendoor.</li>
+          <li><b>Uitlezen.</b> We lezen de pdf's uit tot losse agendapunten en besluiten.</li>
+          <li><b>Samenvatten.</b> Een taalmodel zet de ambtelijke taal om naar mensentaal.</li>
+          <li class="key"><b>Bouwen.</b> Alle data gaat mee in de pagina zelf, dus zonder server of databank. De lettertypes staan als losse bestanden ernaast.</li>
+        </ol>
+      </div>
+
+      <div class="flow-phase">
+        <span class="flow-tag">Publiceren</span>
+        <ol class="flow-line">
+          <li class="key"><b>GitHub Pages.</b> Bij elke wijziging zet een actie de nieuwe versie online op denkmee.asgaupaust.be. Geen server nodig, geen databank.</li>
+        </ol>
+      </div>
+
+      <div class="flow-phase">
+        <span class="flow-tag">In jouw browser</span>
+        <ol class="flow-line">
+          <li><b>Bundelen en zoeken.</b> Het samenstellen van dossiers en het doorzoeken van alle besluiten gebeuren live bij jou. Er gaat niets naar een server terug.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · De bron -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">De bron<em>04</em></div>
+      <div class="sec-titles">
+        <!-- Bewust feitelijk gehouden. Een eerdere versie las als een conflict met de stad: ze
+             gebruikte de taal van een verbod, velde een juridisch oordeel over robots.txt en zette
+             ons ophalen neer als verzet. Zo'n bestand vraagt echter, het verbiedt niet, en dat
+             oordeel is niet aan ons. Hier staat enkel nog waar de stukken vandaan komen en hoe
+             rustig we ze ophalen. (De oude zinnen staan hier niet geciteerd: dit commentaar reist
+             mee naar de gepubliceerde paginabron.) -->
+        <h2>Waar de stukken <em>vandaan</em> komen</h2>
+        <p class="sec-lede">
+          De stad publiceert deze stukken zelf, omdat het Decreet Lokaal Bestuur haar dat oplegt
+          (behalve voor de schriftelijke vragen), binnen de termijnen die je hierboven leest.
+        </p>
+        <div class="tech-prose" style="margin-top:1.1rem">
+          <p>
+            Op datzelfde portaal staat ook een <strong>robots.txt</strong> met één algemene regel:
+            geen geautomatiseerde bezoekers. Die regel is niet op ons gericht, ze geldt voor
+            iedereen, ook voor zoekmachines.
+          </p>
+          <p>
+            Wij halen de stukken wel op, want zonder hen bestaat deze site niet. We doen dat met
+            zorg: we kijken niet constant of er iets nieuw is, maar op ruim gespreide momenten,
+            stuk voor stuk en met een pauze tussendoor, zodat de servers van de stad er amper iets
+            van merken. We nemen enkel wat al openbaar is, en we brengen je telkens terug naar het
+            origineel.
+          </p>
+          <p>
+            De rest volgt vanzelf. De kosten blijven laag: alleen het resultaat gaat online, een
+            handvol statische bestanden, gratis te hosten, zonder server of databank. Het zoeken naar dossiers en
+            besluiten gebeurt in jouw browser, dus niemand logt wat jij intikt. En alles is open: wie
+            de stappen herhaalt, krijgt dezelfde site, en de code staat publiek.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Kritische zelfevaluatie -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Kritisch<em>05</em></div>
+      <div class="sec-titles">
+        <h2>Wat we mogelijk over het <em>hoofd</em> zien</h2>
+        <p class="sec-lede">
+          Natuurlijk hebben wij ook <strong>blinde vlekken</strong>. Dit zijn de grenzen aan dit
+          project die we zelf zien.
+        </p>
+        <div class="tech-prose" style="margin-top:1.1rem">
+          <p>
+            We tonen vijf organen. Wat daarbuiten valt, zoals gemeenteraadscommissies, adviesraden of de
+            mondelinge toelichting in de zaal, zie je hier niet. De site begint bovendien eind 2024, bij
+            deze bestuursperiode. Oudere stukken halen we niet op. Een beslissing heeft vaak een
+            voorgeschiedenis die niet in één document past.
+          </p>
+          <p>
+            Een samenvatting is niet de bron. Samenvatten is kiezen, en kiezen is weglaten. Ook het
+            uitlezen van de pdf's gebeurt met vuistregels: soms glipt een agendapunt weg, of knippen
+            we het verkeerd, nog voor de samenvatting. Een deel van dat werk doet een taalmodel:
+            sneller, maar nooit onfeilbaar. Voor wat juridisch telt, ga je naar de bron: we brengen je
+            telkens naar de officiële publicaties van net die zitting bij de stad. Voor het volledige
+            besluit van het college, het vast bureau of de burgemeester heb je soms een
+            openbaarheidsverzoek nodig.
+          </p>
+          <p>
+            En de site is een momentopname. Ze verandert pas wanneer we de stukken opnieuw ophalen
+            en de nieuwe versie online zetten. Tussen twee versies kan ze achterlopen op de stad.
+          </p>
+          <p>
+            Ook de bundeling zit er soms naast. Merk je dat een stuk niet in een dossier
+            thuishoort, dan kan je dat melden met de knop in het dossier. Zo'n melding gaat naar
+            ons, niet automatisch de site in: <strong>wij beslissen</strong> of ze klopt en
+            leggen de correctie dan vast in een apart bestand dat bij de volgende bouw meegaat.
+            Zo verbetert de bundeling stap voor stap, met een mens die telkens de knoop doorhakt.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · Ter inspiratie -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Ter inspiratie<em>06</em></div>
+      <div class="sec-titles">
+        <h2>Een <em>uitgestoken</em> hand</h2>
+        <p class="sec-lede">
+          Bekijk deze site vooral als een <strong>uitnodiging</strong> aan de stad om haar
+          bestuursdocumenten veel leesbaarder en toegankelijker te maken, en zo de Mechelaar
+          dichter bij de politiek te brengen. En natuurlijk is het ook een voorzet voor andere
+          (burger)journalisten om iets gelijkaardigs te beginnen in hun stad of gemeente.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colofon">
+  <div class="co-shell">
+    <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee met Mechelen, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
+    <div class="co-body">
+      <p class="co-zin"><strong class="co-naam">Denk mee <em>met Mechelen</em></strong>, een experiment van <strong>As Gau Paust</strong>. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
+      <!-- Geen "naar de hoofdpagina" meer: die weg terug staat al drie keer op deze pagina
+           (de knop "terug" in de nav, het merkteken hiernaast, en de tab Denk mee in de
+           onderbalk). Het colofon zegt nu enkel nog waar deze site bij hoort. -->
+      <p class="co-fam">Onderdeel van <a href="https://asgaupaust.be">asgaupaust.be</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Sitewissel-balk: exact dezelfde balk als op de hoofdpagina en op de andere sites van
+     As Gau Paust, zodat je ook vanaf deze pagina naar de rest van de familie kunt springen.
+     De opmaak komt uit de gedeelde <head>, dus hier staat enkel het merk zelf.
+     Denk mee draagt aria-current="true" en niet "page": je zit wél in Denk mee, maar deze
+     tab wijst naar de hoofdpagina en niet naar /techniek/. -->
+<nav class="tabbar" id="tabbar" aria-label="As Gau Paust, spring tussen de sites">
+  <a href="https://asgaupaust.be/"><img class="tab-mug" src="/beelden/mug.png" alt="" aria-hidden="true" width="512" height="512"><span>Start</span></a>
+  <a href="https://denkmee.asgaupaust.be/" aria-current="true"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><g transform="translate(2.4 -1.5) scale(0.8)"><path stroke-width="2" d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></g><circle cx="7.6" cy="17.2" r="1.3"/><circle cx="5.1" cy="20.9" r=".75"/></svg><span>Denk mee</span></a>
+  <a href="https://leesmee.asgaupaust.be/"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span>Lees mee</span></a>
+  <a href="https://asgaupaust.be/en-meer/"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" stroke-dasharray="3 2.4"/><line x1="12" y1="8.5" x2="12" y2="15.5"/><line x1="8.5" y1="12" x2="15.5" y2="12"/></svg><span>En meer</span></a>
+  <a href="https://asgaupaust.be/#contact"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.6 7l8.4 6.4L20.4 7"/></svg><span>Contact</span></a>
+</nav>
+
+</body>
+</html>
