@@ -84,12 +84,15 @@ NAAM_MASKER = "[naam]"
 # eigen stad is dat het juiste gedrag: die begint met een lege lijst. Voor deze site zou het een
 # stille terugval zijn, en daarom staat er verderop een harde stop die dat geval herkent.
 PRIVACY_BESTAND = BASE / "privacy_namen.json"
+_PRIVACY_RUW = {}
 
 
 def _lees_privacylijst():
+    global _PRIVACY_RUW
     if not PRIVACY_BESTAND.exists():
+        _PRIVACY_RUW = {}
         return (), (), ()
-    rauw = json.loads(PRIVACY_BESTAND.read_text(encoding="utf-8"))
+    rauw = _PRIVACY_RUW = json.loads(PRIVACY_BESTAND.read_text(encoding="utf-8"))
     volledig = tuple(r["naam"] for r in rauw.get("volledig", []) if r.get("naam"))
     return volledig, tuple(rauw.get("achternaam", [])), tuple(rauw.get("beroep_achternaam", []))
 
@@ -231,21 +234,10 @@ STRAATNAAM = re.compile(r"(?:straat|laan|weg|dreef|plein|kaai|baan|vest|lei|mark
 # Een bedrijfsvorm vlak achter de naam: 'Emiel De Coninck NV', 'Keerdok Mechelen VVZRL'.
 BEDRIJFSVORM = re.compile(r"^\s*(NV|BV|BVBA|CVBA|CV|VZW|VVZRL|Comm\.\s?V|SA|BVBA)\b")
 
-# Eenmalig beoordeeld en publiek bevonden: mandatarissen buiten de roster, ambtenaren in functie,
-# en wie namens een organisatie optreedt. Zonder deze lijst meldt de waakhond ze elke run opnieuw
-# en leer je hem negeren, en dan is hij niets meer waard.
-BEOORDEELD_PUBLIEK = (
-    "Bart Somers", "Kim Brooks", "Dries Devillé", "Luc Geysels", "Luc Hilderson",
-    "Danny Huygelen", "Nick Vrijdag", "Bram Van der Auwera", "Sergio Zearo",
-    "Koen Anciaux",            # oud-voorzitter OCMW, eretitel
-    "Erik Laga",               # algemeen directeur
-    "Rik Schaerlaecken", "Henri Schaerlaecken",   # financieel beheerder
-    "Nick Hermans",            # schatter-onderhandelaar bij de Vlaamse overheid
-    "Bart De Pauw",            # namens welzijnsvereniging Audio
-    "Ignace De Paepe",         # gedelegeerd bestuurder MG Real Estate
-    "Bregt Brosens",           # teamcoördinator NMBS Railway Heritage
-    "Emiel De Coninck", "Officenter Mechelen", "Keerdok Mechelen",   # bedrijven
-)
+# Namen die we beoordeeld hebben en NIET maskeren, uit hetzelfde lokale bestand. Ook dit
+# oordeel hoort niet in een publieke repo: "wij vinden deze persoon publiek" is een uitspraak
+# over een mens, en die staat er dan zwart op wit naast een naam die soms in opspraak is.
+BEOORDEELD_PUBLIEK = tuple(_PRIVACY_RUW.get("beoordeeld_publiek", ()))
 
 
 def waakhond(data):
