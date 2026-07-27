@@ -1,0 +1,4138 @@
+{
+  "deelgemeenten": [
+    "Mechelen",
+    "Heffen",
+    "Hombeek",
+    "Leest",
+    "Muizen",
+    "Walem"
+  ],
+  "buurten": [],
+  "straten": [
+    {
+      "naam": "'t Leitje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "'t Plein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "'t Veer",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "'t Vlietje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "A.B.-straat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Aambeeldstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Aardpeerhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Abeelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Acaciastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Acht-Zalighedenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Adegemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Aland",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Albaststraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Albert Geudensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Alemstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Alfred De Taeyestraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Alfred Nobelstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Alfred Oststraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ambachtenplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Amblèvestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ankerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Anna Paulownaboomstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Anna Van Ranstplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Annie Van Bosstraetenstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Annonciadenstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Antonia Wolversstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Antoon Spinoystraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Antwerpsesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Arendonckstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Arme-Clarenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Arsenaalstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Artemispad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Aspergeveld",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Athenapad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "August De Boecklaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "August Lenaertsstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Augustijnenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Auwegemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Auwegemvaart",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Baarbeekstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Bakelaarstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bankstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Barbarastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Barbelgemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Baron Coppenslaan",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Baron Eduard Empainlaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Baroniestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Battelse Bergen",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Battelsesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Battenbroek",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Batterijstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bautersemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bedrijvenlaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Beekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Befferstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Begijnenkerkhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Begijnenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Begijnenweide",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Belgradestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Belsveld",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Berendansstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bergenstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Bergstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Berkenhofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Berkenlaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Bernardinnenstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Berthe Seroenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Berthoudersplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bessemstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Besterveld",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Bethaniënstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Betsebroekstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Beukeboomstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Beukenhofstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Beukstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Biesblokstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Biest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bistseveldenstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Blaasbalgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Blaasveldstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Blarenberglaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Blauwesteenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Blauwhondstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bleekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bleukensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bleukenweg",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Blijdenbergstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Blindestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Blokhuisstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Blokstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Boerenkrijgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Boetestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bonheidensteenweg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Boomgaardstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Boomkensstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Borchtstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Borgersteinlei",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bornstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Borzestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bosbesstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Bosstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Boterbloemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Botermarkt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Boterstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Brabantstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Brede Driesstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Broekstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Brouwerijstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Brugstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Brusselsepoortstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Brusselsesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Bruul",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Camilla van Peteghemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Canadalaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Caputsteenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Carmosteynstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Cecilialaan",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Cederstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Cellebroedersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Colomalaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Colomastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Conventstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Cortenbachplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Coxiestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Cypriaan de Rorestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dageraadstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dahliastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dalenborchstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Davidstorenstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "De Hamer",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "De Langhestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "De Noterstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "De Prinsenlaan",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "De Regenboog",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "De Streyp",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dellingstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Demerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Demeterpad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dennenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dianapad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Diepestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Dijkstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dijle",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dijleberg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Dobbelhuizen",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Doelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Donkerlei",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Doornenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dorpstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Douaneplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Draaibankstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Drabstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Driesstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Duivelstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Duivenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Dukestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Dwergenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Désiré Boucherystraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Edgard Tinellaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Eenheidstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Eggestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Egide Walschaertsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Eglegemweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Eikestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Eksterstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Elektriciteitstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Elf-novemberstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Elfenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Elisabeth Desoleilstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Elleboogstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Emiel Engelsstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Emilie Frescostraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Emmaüsdreef",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ernest Wijnantsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Esdoornplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Esptweg",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Europalaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Expoelstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Fabiolalaan",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Faid'Herbestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Fazantenstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Feeënstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Feminastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Fleerdonk",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Fonteinstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Fonteinweg",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Fortuinstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Frans Broersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Frans Halsvest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Frans Hoogenberghstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Frans Reyniersstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Frans Stormsstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Frederik de Merodestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gabriella Tambuyserstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gagelstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Galgestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ganzendries",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gasthuisveldstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gebroeders Romboutsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gebroeders Verhaegenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Geerdegem-Schonenberg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Geerdegemdries",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Geerdegemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Geerdegemvaart",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Geitenberg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Geitestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gemeentestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Gendarmenhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Generaal De Ceuninckstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Generaal De Wittelaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gentsesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gerechtstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gijsbeekstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Gommaruspark",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gorzenstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Goswin de Stassartstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Goudbloemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Goudenregenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Goudleerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Graaf van Egmontstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Groenenbeemd",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Groenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Grootbrug",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Grootmeesteressenpad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Grote Heide",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Grote Markt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Grote Mierenstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Grote Nieuwedijkstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Guido Gezellelaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Guldenbodemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Guldendal",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Guldenmouwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Guldenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Gustaaf Ghijselsstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Gustave Van de Woestijnestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Halfgalgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hallestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hamerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hanswijk de Bercht",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hanswijkdries",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hanswijkstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hanswijkvaart",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Harnasstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Haverwerf",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hazelaarstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hazeldonkstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hazestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Heembeemd",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Heerweg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Heffen-Dorp",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Heffenveldweg",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Heidestraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Heihoek",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Heike",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Heirstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Heisegemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hellebeemd",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Hellincstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hendrik Consciencestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hendrik Speecqvest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Herapad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hertshoornstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hertstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Het Eitje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hoeveweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hogeblokstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hogeweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Holmlei",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hombeeksesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hombekerkouter",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Hoogland",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hoogstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hoogstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hoogstratenplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hooiendonkstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Hopstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Houtestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Hoveniersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hoviusstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Huidevettersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Hultendries",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Humbeekseweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Ieperleestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "IJzerenleen",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "IJzerenleen 32 bus S",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "IJzerenveld",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "IJzerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ivo Cornelisstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jan Bolstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jan Frans Boeckstuynsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jan Frans van Geelstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Jan Schoonjansstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jan Van Musenelaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Jeanne Hellemansstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jef Denynplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jezuspoort",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jodenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Joos De Rijckeplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jozef Verbertstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Jubellaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Julienne Van Avondtstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Juniorslaan",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Kaardenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kaboutersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kadodderstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kalkovenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kalverenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kanonstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kanunnik De Deckerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kapellebaan",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Kapelleblokstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kapellekensweg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Kapellestraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Kapelseweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Kapelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kapoenenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kardinaal Cardynstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kardinaal Mercierplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Karekietstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Karmelietenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Karolingenstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Karperstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kastanjelaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Katelijne Janssensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kattenberg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kattenbleekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kattestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Kauwendaal",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kazernestraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Keepstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Keerbergstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Keizerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Keldermansvest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Keramiekstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Kerkenblokweg",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Kerkenbos",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Kerkhoflei",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kerkhofstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Kerkstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Kerkstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kerkweg",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Kerselaarstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Kievitstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Klapgat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Klaverstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Klein Begijnhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Klein Muizenveld",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Klein Rozendaalveld",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Klein-Begijnhofbogaard",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Klein-Veldekenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kleine Bareelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kleine Heide",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kleine Mierenstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Kleine Nieuwedijkstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kleinestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Kloosterhoeveweg",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Kloosterstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Kluisstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Koekoekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Koning Albertplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Koning Albertstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Koningin Astridlaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Koolstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korenkorfstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Korenmarkt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Heidestraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Korte Heistraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Maagdenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Nieuwstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Korte Oudestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Pennincstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Ridderstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Ridderstraat 18 bus K",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Ridderstraat 18 bus S",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Schipstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Veluwestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Korte Zandstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Kouter",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Kouterdreef",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kouterweg",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Kraaistraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kraanstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Krankenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Krankenvelden",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kreefthoeveweg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Kreitenborgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kriekerijveld",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Kromme Elleboogstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Krommestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kroonstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kruisbaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kruisbesstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Kruiskensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kruisveldstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Kruynighemstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Kurassiersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Laathofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lakenmakersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lakenraamstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Landbouwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Landweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Akkerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Heergracht",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Heistraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Hofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Nieuwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Pennincstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Ridderstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Schipstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lange Zandstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Langedreef",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Lansiersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Larestraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Laurierlaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Leegheid",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leemputstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Leemstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leermarkt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leest-Dorp",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Leestsesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leeuwerikstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leibeekstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Leiestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lekkernijstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leliestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leliëndaalstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Lemmensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leopoldstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Leuvensesteenweg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Liersesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lieve-Heerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lijsterstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lindestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Locomotiefstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Locquetstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Loe Lindemansplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lorkstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lotelingstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Louis Neefsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Louizastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Lucas en Maria Faydherbestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Luchtvaartstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Luysenberchstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Maalderijstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Maalstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Maanstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Maasstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Magdalenasteenweg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Mahatma Gandhistraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mandelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Marterstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Martha Somersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Matigheidstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Maurits Sabbestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mayken Verhulststraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mechelbaan",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Mechelsbroekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mechelseweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Mechelsveldstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Meerkolstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Meerminnenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Meidoornstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Meistraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Melaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Melkstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Merelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Meubelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Meysbrug",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mezenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Middenveldweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Milsenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Minderbroedersgang",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Moensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Moerbeistraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Moerstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Moestuinstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Molenbeekstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Molenbergstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Molenhofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Molenstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Molenweg",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Molenweide",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mollestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Monseigneur Scheppersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Monseigneur Van Nuffelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Moreelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mosselschelpstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Moststraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Motstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Mouterijpad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Muizen-Dorp",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Muizenhoekstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Muizenvaart",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Muntstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Muskenstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Nachtegaalstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nattehofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nauwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Neerheide",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Neerstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Neerweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nekkerspoel-Borcht",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nekkerspoelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Netestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nicolaas Van der Vekenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nieuwe Beggaardenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nieuwe Kapucijnenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nieuwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nieuwwerk",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nijverheidstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nimfenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nini Tremeriestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nokerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nonnenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Noordstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Noordveld",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Nora Tilleylaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Notenboomstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Nuffelstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "O-L-V van Fatimastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Offenbossen",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Olivetenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Olivetenvest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Olmenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Onder-den-Toren",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ontvoeringsplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Onze-Lieve-Vrouwekerkhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Onze-Lieve-Vrouwestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ooievaarstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oratorenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oscar Van Kesbeeckstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Otterstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Antwerpsebaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Baan",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Oude Bankstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Oude Beggaardenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Brusselsestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Leestsebaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Liersebaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Putsebaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Sint-Gommarusstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Oude Tisseltbaan",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Oude-Pleinstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ourthestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ouwen Dokstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Overheide",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Paardenkerkhofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Paardenstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Papenhofdreef",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Papenhofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pareipoelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pasbrugplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pasbrugstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pasmolenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pastinaakhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pastoor De Heuckstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Pastorijstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Patrijzenstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Paviljoenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pennemeesterstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pennepoelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Perelaarstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Persoonshoek",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Peter Benoitstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Philippus de Montestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pijnboomstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Pikkeriestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Pitzemburgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Planetendreef",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Plankendaalstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Plankstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Plataanstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Plattebeekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Plein-der-Verenigde-Naties",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ploegstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Poedermolenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Poelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Polderstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Populierendreef",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Poreistraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Posthoornstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Potterijstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Prinsenhoekstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Prinsenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Prinsenveldstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Prosper De Troyerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Putsesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Raaienblokstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Raapsteelhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Raghenoplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rapopstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Rateaulaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Ravenbergstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rechtestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Reigerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Reinheidstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rembert Dodoensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rennekouter",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Reuzenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ridder Dessainlaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rietstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rijmenamsesteenweg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Rik De Saedeleerplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rik Woutersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Robbroek",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Rode Doornstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Rode Molenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rode-Kruisplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rodeveld",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Roekstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Rommekensbergstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rozendaal",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Rozenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rubensstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Ruggebroodstraatje",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Ruimtevaartstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Rupelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Samberstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schaalstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schaliënhoevedreef",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schansveld",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Scheerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Scheldeplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Scheppershofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schepvoortstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schijfstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schippersweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Schoenmarkt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schoolstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schoorstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Schorsmolenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schotelveldstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Schotten Bosserstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schoutetstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schouwbroekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schransbeekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schrijnstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schuttershofstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schuttersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schuttersvest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Schuttevee",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sijsjesstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Albertusstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Sint-Alexiusstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Amandusstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Sint-Beggastraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Gommarusstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Jacobstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Jan-Berchmansstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Janskerkhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Janstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Jozefstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Katelijnekerkhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Katelijnestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Lambertuslaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Sint-Maartensplein",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Sint-Martinusstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Sint-Pietersberg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Romboutskerkhof",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sint-Rumoldusstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Slachthuislaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Slagveldlaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Sleutelstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Smisstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sparrenstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Spechtstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Spiegelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Spildorenlaan",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Spinnewielpad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Spoorwegstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Spreeuwenhuisstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Spreeuwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Sprookjesplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Spuibeekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Stadionstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Stadsheimelijkheid",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Standonckstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Stationsberg",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Stationsplein",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Stationsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Steenhoevestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Steenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Steenweg op Blaasveld",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Steenweg op Heindonk",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Stenenmolenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Stephensonstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Stompaertshoek",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Stompershoekstraat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Straatje-zonder-einde",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Struikheidestraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Stuivenbergbaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Stuivenbergvaart",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Tantelaarstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Technologielaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ten Doorn",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Ten Moortele",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Tenderstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ter Doncklaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Ter Hertstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Tervuursesteenweg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Terwenblok",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Tessestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Thaborstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Theo Blickxstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Theo Vinckxlaan",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Thiebroekvaart",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Tichelrij",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Tiendenschuurstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Tisseltbaan",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Tivolilaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Toekomststraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Tolhuisstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Trianonlaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Tuinbouwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Turfbeemd",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Twaalf-Apostelenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vaartdijk",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Valkstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Van Beethovenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Van Benedenlaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Van Busleydenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Van Hoeystraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Van Kerckhovenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Varenbosstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Varkensstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Veemarkt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vekestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Veldenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Veldstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Velkgerstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Veluwestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vennecourtlaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Vennekant",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vennestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Verschuerenlaan",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Vesderstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Viermolenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vijfhoek",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vijverstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vinkstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Vismarkt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vlamingenstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Vleeshouwersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vlierbesstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Vlierstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Voetbalstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Voldersstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vondelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Voochtstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vooruitgangstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Voorzorgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Voosdonk",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Vorendonkstraatje",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Vorsenborgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Voskespad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vredestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vrijbroekstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vrijevelden",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Vrijewoonstplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vrijgeweidestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vrouw van Mechelenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vrouwvlietstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Vuurkruisenplein",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wagenmakersstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Wagonstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Walestraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Warandestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Warmoesstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Waterputstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Watertorenstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Wayenborgstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Weefgetouwpad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Weidestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Welkomstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Welvaartstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Werfheide",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Weverstraat",
+      "buurt": "",
+      "deelgemeente": "Walem"
+    },
+    {
+      "naam": "Wezelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wielewaalstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wijngaardstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wilgenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Willem Geetsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Willem Herreynsstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Willem Rosierstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Willendriesstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Willibrordusweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Winkelstraat",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Winketkaai",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Withuisstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wittebroodstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Witveld",
+      "buurt": "",
+      "deelgemeente": "Leest"
+    },
+    {
+      "naam": "Witzandpad",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wollemarkt",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wolverbosstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Wupstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Ysebrantstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zakstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zandpoortvest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zandstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zandvoortstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zavelstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zeevaartstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zelestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zemstbaan",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zemstseweg",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Zennebeemden",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zennegat",
+      "buurt": "",
+      "deelgemeente": "Heffen"
+    },
+    {
+      "naam": "Zennegatvaart",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zennestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zepstraat",
+      "buurt": "",
+      "deelgemeente": "Hombeek"
+    },
+    {
+      "naam": "Zeutestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ziekebeemdenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Ziekeliedenstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zierikzeestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zijpestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zilverberklaan",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Zonnestraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zoutwerf",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zwaanstraatje",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zwaluwstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zwartbunder",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    },
+    {
+      "naam": "Zwartkloosterstraat",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zwartzustersberg",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zwartzustersvest",
+      "buurt": "",
+      "deelgemeente": "Mechelen"
+    },
+    {
+      "naam": "Zwijvegemstraat",
+      "buurt": "",
+      "deelgemeente": "Muizen"
+    }
+  ]
+}

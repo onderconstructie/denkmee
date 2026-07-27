@@ -1,0 +1,33 @@
+{
+  "_leesmij": "Handmatig onderhouden correcties op de automatische dossiervorming. Niets hierin gebeurt automatisch: de redactie beslist. Anker op stabiele stuk-id's (bv. gemeenteraad-20241202-1), NOOIT op dossier-id's (die verschuiven per build). 'losmaken' haalt een stuk uit zijn cluster: het wordt een eigen dossier. 'samenvoegen' voegt de dossiers van de opgesomde stukken samen (union in de clustering). 'verplaatsen' schuift een stuk naar het dossier waarin een ander stuk (naar_item) zit. 'dossiers' geeft het dossier waarin het anker-stuk zit een naam-override en/of extra plaatsen (enkel de weergave, niet de bundeling). 'alias' laat een oude deellink naar een sindsdien samengevoegd dossier meeverhuizen (dossier-oud -> dossier-nieuw). De curatormodus (#curator op de site) kan dit bestand voor je exporteren.",
+  "_voorbeeld": {
+    "losmaken": [
+      {"item": "gemeenteraad-20241202-1", "reden": "gaat over iets anders dan de rest van het dossier", "bron": "lezer", "datum": "2026-07-18"}
+    ],
+    "samenvoegen": [
+      {"items": ["gemeenteraad-20241202-1", "rmw-20250224-8"], "reden": "zelfde project, andere titel", "bron": "curator", "datum": "2026-07-18"}
+    ],
+    "verplaatsen": [
+      {"item": "gemeenteraad-20241202-1", "naar_item": "rmw-20250224-8", "reden": "hoort bij het dossier van dat stuk", "bron": "curator", "datum": "2026-07-18"}
+    ],
+    "dossiers": [
+      {"anker": "gemeenteraad-20241202-1", "naam": "Duidelijke dossiernaam", "plaatsen": ["Buurtnaam"], "reden": "heldere naam en ontbrekende locatie", "bron": "curator", "datum": "2026-07-18"}
+    ],
+    "alias": {"dossier-oudehash": "dossier-nieuwehash"}
+  },
+  "losmaken": [
+    {"item": "college-20250819-37", "reden": "DIFTAR-stuk (afval), verkeerd geclusterd in een fiets- en voetgangersbrugdossier", "bron": "curator", "datum": "2026-07-18"}
+  ],
+  "samenvoegen": [
+    {"items": ["college-20260519-32", "college-20260317-38", "college-20250401-40"], "reden": "alle stukken over de Borchtbrug (fiets- en voetgangersbrug Nekkerspoel-Borcht over de Afleidingsdijle): naamgeving, planning, gunning, meerwerken en opening", "bron": "curator", "datum": "2026-07-18"},
+    {"items": ["college-20260113-53", "college-20250408-37", "sv-2025-10-2025-054", "college-20241217-63"], "reden": "alle stukken over de Winketkaaibrug (fiets- en voetgangersbrug over de Binnendijle tussen Keerdoksite en Winketkaai): stopzetting, gunning, procedure en raadsvraag", "bron": "curator", "datum": "2026-07-18"}
+  ],
+  "verplaatsen": [
+    {"item": "college-20260630-33", "naar_item": "college-20260113-53", "reden": "aktename hinder Winketkaaibrug-werken, zat in het gemengde dossier Sportclubs Nekker", "bron": "curator", "datum": "2026-07-18"}
+  ],
+  "dossiers": [
+    {"anker": "college-20260519-32", "naam": "Borchtbrug", "plaatsen": ["Nekkerspoel"], "reden": "eenduidige naam voor het samengevoegde brugdossier; de brug ligt bij Nekkerspoel-Borcht maar geen enkel stuk noemt een straatnaam", "bron": "curator", "datum": "2026-07-18"},
+    {"anker": "college-20260113-53", "naam": "Winketkaaibrug / Keerdokbrug", "plaatsen": ["Winketkaai", "Keerdok"], "reden": "samengevoegd brugdossier; de brug wordt met beide namen aangeduid (Winketkaaibrug in college-20250408-37, brug over het Keerdok in andere stukken), naar de twee oevers", "bron": "curator", "datum": "2026-07-18"}
+  ],
+  "alias": {}
+}

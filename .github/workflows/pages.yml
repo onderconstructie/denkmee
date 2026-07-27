@@ -1,0 +1,40 @@
+# Publiceert dist/index.html naar GitHub Pages.
+#
+# Waarom geen build in de CI? De pijplijn haalt de documenten op en bouwt de data lokaal
+# (python run_all.py); deze workflow publiceert enkel het resultaat: dist/index.html.
+#
+# Eenmalig instellen: GitHub → repo → Settings → Pages → Source = "GitHub Actions".
+# Daarna publiceert elke push die dist/ wijzigt vanzelf.
+name: Publiceer naar GitHub Pages
+
+on:
+  push:
+    branches: [main]           # elke push naar main publiceert (geen paths-filter, zoals de
+                               # officiële Pages-workflow) — zo is re-triggeren altijd simpel
+  workflow_dispatch: {}        # ook handmatig te starten vanuit het Actions-tabblad
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  # false: een lopende deploy niet annuleren als er snel een nieuwe push volgt. Annuleren
+  # laat de deploy in een 'failed'-staat achter (die rode X); we laten hem liever afronden.
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist            # de hele map; bevat enkel index.html
+      - id: deployment
+        uses: actions/deploy-pages@v4

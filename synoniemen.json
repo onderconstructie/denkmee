@@ -1,0 +1,25 @@
+{
+  "_leesmij": "Synoniemgroepen voor de zoekbalk: wie het ene woord intikt, vindt ook stukken met het andere. Handmatig gecureerd en getoetst aan het corpus (18/07/2026). Regels: enkel losse woorden (de zoek splitst op spaties); geen juridisch verschillende begrippen aan elkaar plakken (belasting is geen retributie); geen paren die substring-zoek al dekt (armoede vindt kansarmoede vanzelf). Synoniemtreffers ranken onder directe treffers en de zoekbalk toont eerlijk op welke woorden er mee gezocht is.",
+  "groepen": [
+    ["kinderopvang", "creche", "kinderdagverblijf"],
+    ["woonzorgcentrum", "rusthuis", "wzc"],
+    ["omgevingsvergunning", "bouwvergunning"],
+    ["afval", "huisvuil", "restafval", "vuilnis"],
+    ["sluikstort", "zwerfvuil"],
+    ["speelplein", "speeltuin", "speelterrein"],
+    ["parkeren", "parking", "parkeerplaats"],
+    ["voetpad", "trottoir", "stoep"],
+    ["fietspad", "fietsinfrastructuur", "fietsroute"],
+    ["subsidie", "toelage", "betoelaging"],
+    ["begraafplaats", "kerkhof"],
+    ["jeugd", "jongeren"],
+    ["senioren", "ouderen", "bejaarden"],
+    ["geluidsoverlast", "geluidshinder", "lawaai"],
+    ["camera", "anpr", "bewakingscamera"],
+    ["kermis", "foor"],
+    ["riolering", "riool"],
+    ["sporthal", "sportzaal"],
+    ["heraanleg", "herinrichting"],
+    ["school", "onderwijs"]
+  ]
+}

@@ -1,0 +1,5 @@
+# Fontbestanden zijn binair: nooit EOL-conversie of diff (anders raken de woff2 corrupt).
+*.woff2 binary
+*.woff  binary
+*.ttf   binary
+*.otf   binary

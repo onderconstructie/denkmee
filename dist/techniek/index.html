@@ -1,0 +1,4093 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Technische pagina, Denk mee met Mechelen</title>
+<meta name="description" content="De technische pagina van Denk mee met Mechelen: de architectuur, waarom het lokaal draait, en wat we mogelijk over het hoofd zien.">
+<link rel="canonical" href="https://denkmee.asgaupaust.be/techniek/">
+
+<!-- Deelkaart. Zonder deze tags toont een gedeelde link (WhatsApp, Signal, LinkedIn, een
+     persmail) enkel de kale URL. og:image is absoluut, want scrapers lossen relatieve paden
+     niet op, en 1200x630 zodat het als grote kaart doorkomt. build.py schrijft titel,
+     omschrijving en url over voor de techniek-pagina. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="As Gau Paust">
+<meta property="og:locale" content="nl_BE">
+<meta property="og:title" content="Technische pagina, Denk mee met Mechelen">
+<meta property="og:description" content="De technische pagina van Denk mee met Mechelen: de architectuur, waarom het lokaal draait, en wat we mogelijk over het hoofd zien.">
+<meta property="og:url" content="https://denkmee.asgaupaust.be/techniek/">
+<meta property="og:image" content="https://denkmee.asgaupaust.be/beelden/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Het merkteken van As Gau Paust: de mug in de kamer.">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Favicon = hetzelfde toren-in-cirkel-logo (SVG data-URI; maak_toren.py houdt dit mee in sync). -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiNGRjAwNjYiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjRkYwMDY2Ij48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==">
+<meta name="theme-color" content="#FF0066">
+
+<!-- Zelf-gehoste lettertypes: geen Google Fonts, dus geen bezoekers-IP naar derden. -->
+<style>
+/* Geist (body): Copyright 2024 The Geist Project Authors (github.com/vercel/geist-font).
+   JetBrains Mono (display + data): Copyright 2020 The JetBrains Mono Project Authors
+   (github.com/JetBrains/JetBrainsMono). Beide onder de SIL Open Font License 1.1; de
+   volledige licenties staan in /fonts/Geist-OFL.txt en /fonts/JetBrainsMono-OFL.txt.
+   Variabele woff2 (latin-subset), gehost op ons eigen domein. */
+@font-face{font-family:'Geist';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/geist-var.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jbmono-var.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'JetBrains Mono';font-style:italic;font-weight:400 800;font-display:swap;src:url('/fonts/jbmono-italic-var.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+</style>
+
+<style>
+/* =================================================================
+   DENK MEE MET MECHELEN, Editorial Brutalism / Civic Data Edition
+   ================================================================= */
+
+:root{
+  /* Dag-editie: het verlichte familie-palet van asgaupaust.be. Warm papier als grond,
+     warme inkt (geen hard zwart), kaarten die als bijna-wit bóven het papier uit tillen
+     (de haarlijn draagt de kaartvorm), en donkere eilanden voor banners en meldingen.
+     De namen blijven semantisch: --paper is het vlak, --ink is de tekst. */
+  --paper:        #f5f1e8;        /* familiepapier, de grond */
+  --paper-2:      #fffdf7;        /* kaart/hover — tilt bóven het papier uit */
+  --paper-3:      #ece7db;        /* afwijkende band / recess */
+  --ink:          #1a1712;        /* warme inkt, geen hard zwart */
+  --ink-2:        #514a40;        /* secundaire tekst */
+  --ink-dim:      #635a4d;        /* tertiaire tekst, captions */
+  --ink-faint:    #635a4d;        /* eyebrows en labels (niet lichter: leesdrempel) */
+  --pink:         #FF0066;        /* decoratief — knoppen, dots, headlines */
+  --pink-text:    #c80054;        /* leesbaar pink op licht (familie pink-tekst) */
+  --pink-deep:    #b3004a;        /* hover state op pink-knoppen */
+  --pink-soft:    rgba(255,0,102,.09);
+
+  /* De donkere eilanden (banner, meldingen, accentblokken): altijd warme inkt */
+  --black:        #1a1712;
+  --black-2:      #1a1712;
+  --black-3:      #1a1712;
+  --bone:         #1a1712;
+  --bone-2:       #514a40;
+  --bone-dim:     #635a4d;
+  --bone-faint:   #635a4d;
+
+  /* Óp de donkere eilanden: papier-tinten en leesbaar pink (editie-vaste tokens) */
+  --op-eiland-85: rgba(245,241,232,.85);
+  --op-eiland-65: rgba(245,241,232,.65);
+  --op-eiland-55: rgba(245,241,232,.55);
+  --op-eiland-30: rgba(245,241,232,.3);
+  --op-eiland-25: rgba(245,241,232,.25);
+  --eiland-pink:  rgb(255,77,148);
+
+  /* Haarlijnen — warme inkt op papier; de kaartlijn draagt de kaartvorm */
+  --line:         rgba(26,23,18,.10);
+  --line-kaart:   rgba(26,23,18,.12);
+  --line-strong:  rgba(26,23,18,.22);
+  --line-pink:    rgba(255,0,102,.4);
+  --shadow-pink:  0 0 0 1px rgba(255,0,102,.3), 0 6px 32px -10px rgba(255,0,102,.4);
+  --shadow-soft:  0 1px 2px rgba(72,56,38,.05), 0 10px 30px -12px rgba(72,56,38,.16);
+  --shadow-lift:  0 4px 10px rgba(72,56,38,.08), 0 22px 48px -18px rgba(255,0,102,.22);
+
+  /* Familie-afronding (portaal/Leesmee) */
+  --r-kaart: 18px; --r-chip: 14px; --r-input: 10px;
+  --kaart-a: #fffefb; --kaart-b: #fffdf7;
+
+  /* Type scale */
+  --display-1: clamp(2.4rem, 7vw, 5.5rem);
+  --display-2: clamp(2.5rem, 7vw, 5rem);
+  --h1:        clamp(2rem, 5vw, 3.4rem);
+  --h2:        clamp(1.5rem, 3vw, 2.2rem);
+  --h3:        1.15rem;
+  --body:      1rem;
+  --small:     .82rem;
+  --micro:     .7rem;
+
+  /* Spacing rhythm */
+  --gut:       clamp(1rem, 2vw, 1.75rem);
+  --max:       1440px;
+  /* Ondergrens 1,1rem en niet 1rem: op een telefoon valt 4vw (15px bij 375px) onder het
+     minimum, dus dat minimum bepaalt de zijmarge. Stond die op 1rem, dan begon de mug in de
+     bovenbalk hier 1,6px linkser dan op het portaal en Lees mee, en dat zag je verspringen
+     bij het wisselen van site. De bovengrens blijft 4rem: die is van deze site alleen. */
+  --pad-x:     clamp(1.1rem, 4vw, 4rem);
+  --pad-y:     clamp(3rem, 8vw, 7rem);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+*::selection{background:var(--pink);color:#fff}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Geist', system-ui, -apple-system, sans-serif;
+  font-size:var(--body);
+  line-height:1.55;
+  font-feature-settings:"kern","liga";
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Subtle paper-grain texture — cream warmth.
+   De ruis staat in een variabele omdat ook .dos-toolbar ze nodig heeft: die balk ligt op
+   z-index 20 en dus BOVEN deze laag (z-index 1), waardoor ze anders als een vlakke,
+   lichtere plek in de korrelige pagina zou staan. */
+:root{
+  --grain-ruis:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  --grain-stip:radial-gradient(rgba(26,23,18,.04) 1px, transparent 1px);
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:1;
+  opacity:.05;
+  background-image:var(--grain-ruis);
+  mix-blend-mode:multiply;
+}
+
+/* Typography primitives */
+.serif    { font-family:'Geist', system-ui, -apple-system, sans-serif; }
+.display  { font-family:'JetBrains Mono', ui-monospace, monospace; }
+.mono     { font-family:'JetBrains Mono', ui-monospace, monospace; font-feature-settings:"tnum","zero"; }
+.tnum     { font-variant-numeric:tabular-nums; }
+
+a{color:inherit;text-decoration:none}
+button{border:none;background:none;color:inherit;font:inherit;cursor:pointer}
+input,textarea{font:inherit;color:inherit;background:transparent;border:none;outline:none}
+
+/* Headings */
+h1, h2, h3, .h1, .h2, .h3 {
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-weight:500;
+  line-height:1;
+  letter-spacing:-.02em;
+}
+h1, .h1 { font-size:var(--h1); }
+h2, .h2 { font-size:var(--h2); line-height:1.05; letter-spacing:-.025em; }
+h3, .h3 { font-size:var(--h3); font-weight:500; letter-spacing:0; line-height:1.2; }
+em, .italic{ font-style:italic; }
+
+/* Eyebrow — small caps mono indicator */
+.eyebrow{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--pink-text);
+}
+/* Roze vierkantje als markering, in plaats van de // — in lijn met het logo */
+.eyebrow::before, .wiz-eyebrow::before, .ov-fieldset-lbl::before,
+.dvb-recent-title::before, .dos-flow-note::before{
+  content:''; display:inline-block; width:.5em; height:.5em;
+  background:var(--pink); margin-right:.5em; vertical-align:.04em;
+}
+
+/* Layout shell */
+.shell{ max-width:var(--max); margin:0 auto; padding:0 var(--pad-x); position:relative; z-index:2; }
+section{ position:relative; z-index:2; padding:var(--pad-y) 0; }
+section:not(:last-of-type){ border-bottom:1px solid var(--line); }
+
+/* ============================================================
+   DEMO BANNER, toont dat de getoonde data fictief is
+   ============================================================ */
+.demo-banner{
+  position:relative; z-index:101;
+  background:var(--ink); color:var(--paper);
+  border-bottom:2px solid var(--pink);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.74rem; letter-spacing:.02em;
+}
+.demo-banner-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:.55rem var(--pad-x);
+  display:flex; align-items:center; gap:.7rem; flex-wrap:wrap;
+}
+.demo-banner .db-tag{
+  flex-shrink:0;
+  background:var(--pink); color:#fff;
+  padding:.12rem .5rem; border-radius:2px;
+  font-weight:600; text-transform:uppercase; letter-spacing:.12em; font-size:.66rem;
+}
+.demo-banner .db-text{ color:var(--paper); opacity:.92; line-height:1.45; }
+.demo-banner .db-text strong{ color:var(--paper); }
+@media (max-width:560px){
+  .demo-banner .db-text{ font-size:.7rem; }
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{
+  position:sticky; top:0; z-index:100;
+  background:rgba(245,241,232,.82);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(10,10,10,.03), 0 10px 28px -18px rgba(10,10,10,.12);
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:.9rem var(--pad-x);
+  display:flex; align-items:center; gap:2rem;
+}
+/* Merkregel bovenaan: één standaard over de drie sites van As Gau Paust
+   (mug.png op 34px, 1rem/600, gap .65rem, "Paust" roze en rechtop). */
+.brand{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:1rem;
+  font-weight:600; letter-spacing:-.01em;
+  display:inline-flex; align-items:center; gap:.65rem;
+  color:inherit; text-decoration:none;
+}
+a.brand:hover .brand-mark{ filter:brightness(1.05); }
+.brand .pink{ color:var(--pink-text); font-style:normal; font-weight:600; }
+.brand-mark{
+  height:34px; width:34px;  /* vierkant: ronde cirkel vult de mark */
+  display:block;
+  flex-shrink:0;
+}
+/* Eén centrale background-image voor alle brand-marks — toren IN de pink cirkel, consistent met hero */
+.brand-mark-bg{
+  background-image:url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiNGRjAwNjYiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjRkYwMDY2Ij48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+}
+/* De mug: het merkteken van As Gau Paust, bovenaan in de balk en de menukop. Het platform-merk
+   staat nu bovenaan (niet meer de toren); de deelsite komt terug in de hoofdtitel. Zelfde maat
+   als de oude toren-mark. */
+.brand-mug{ height:34px; width:34px; display:block; flex-shrink:0; border-radius:50%; }
+.nav-links{ display:flex; gap:1.4rem; flex:1; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.04em; margin-left:.5rem; }
+.nav-links a{ color:var(--bone-dim); transition:color .15s; }
+.nav-links a:hover{ color:var(--bone); }
+.nav-cta{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.06em;
+  text-transform:uppercase; padding:.55rem 1.1rem;
+  border:1px solid var(--pink); color:var(--pink-text);
+  transition:all .15s;
+}
+.nav-cta:hover{ background:var(--pink); color:#fff; }
+.nav-cta{ white-space:nowrap; }
+@media (max-width:780px){
+  .nav-links{ display:none; }
+  .brand-mark{ height:28px; width:28px; }
+  /* De merkregel zelf krimpt hier bewust NIET meer: ze blijft op 1rem/34px, gelijk aan
+     het portaal en Lees mee. In dit blok verdwijnen de nav-links en de CTA al, dus er is ruimte. */
+  .nav-cta{ display:none; }
+}
+
+/* Hamburger button */
+.nav-burger{
+  position:relative;
+  display:flex; flex-direction:column; justify-content:center; gap:5px;
+  width:38px; height:38px;
+  padding:8px;
+  background:transparent;
+  border:1px solid var(--line-strong);
+  cursor:pointer;
+  margin-left:auto;
+  flex-shrink:0;
+}
+.nav-burger span{
+  display:block; width:100%; height:1.5px;
+  background:var(--ink);
+  transition:transform .25s, opacity .25s;
+}
+.nav-burger{ border-color:var(--pink); }
+.nav-burger span:nth-child(2){ background:var(--pink); }
+.nav-burger:hover{ border-color:var(--pink); background:var(--pink-soft); }
+.nav-burger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+.nav-burger.open span:nth-child(2){ opacity:0; }
+.nav-burger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+
+/* Fullscreen menu overlay */
+.menu-overlay{
+  position:fixed; inset:0; z-index:200;
+  background:rgba(10,10,10,.55);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  display:flex; justify-content:flex-end;
+  animation:fadeIn .2s ease-out;
+}
+.menu-overlay[hidden]{ display:none; }
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+
+.menu-card{
+  background:var(--paper);
+  width:min(560px, 100%);
+  height:100%;
+  display:flex; flex-direction:column;
+  border-left:1px solid var(--ink);
+  box-shadow:-32px 0 80px -10px rgba(10,10,10,.3);
+  overflow-y:auto;
+  animation:slideIn .3s cubic-bezier(.16,1,.3,1);
+}
+@keyframes slideIn{
+  from{ transform:translateX(40px); opacity:0; }
+  to{ transform:translateX(0); opacity:1; }
+}
+
+/* De menukop spiegelt de bovenbalk EXACT (zelfde padding, zelfde .brand-typografie en
+   -logo-maat): wie het menu opent ziet het merk op precies dezelfde plek staan, niets
+   verspringt. Alleen het zwarte kader rond 'met Mechelen' komt erbij. */
+.menu-head{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.9rem var(--pad-x);
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
+}
+.menu-close{
+  font-size:1.8rem;
+  width:38px; height:38px;
+  color:var(--ink);
+  cursor:pointer;
+  line-height:1;
+  flex-shrink:0;
+}
+.menu-close:hover{ color:var(--pink); }
+
+.menu-list{
+  display:flex; flex-direction:column;
+  flex:1;
+}
+.menu-list a{
+  display:grid;
+  grid-template-columns:60px 1fr;
+  gap:.6rem;
+  padding:1.1rem 1.6rem 1.1rem;
+  border-bottom:1px solid var(--line);
+  text-decoration:none;
+  color:var(--ink);
+  position:relative;
+  align-items:baseline;
+  transition:background .15s;
+}
+.menu-list a:hover{ background:var(--paper-2); }
+/* Laatste item geen onderrand: anders staat die vlak naast de border-top van .menu-foot
+   en lijkt het een dubbele streep. De foot-lijn is de enige scheiding. */
+.menu-list a:last-child{ border-bottom:none; }
+.menu-list a:hover .menu-num{ color:var(--pink); }
+/* Menu-icoon per sectie i.p.v. een volgnummer: hetzelfde teken als bij de sectiekop. */
+.menu-num{
+  color:var(--ink-faint);
+  transition:color .15s;
+  grid-row:1 / span 2;
+  align-self:start;
+  padding-top:.15rem;
+}
+.menu-num svg{ width:22px; height:22px; display:block; }
+.menu-name{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.1rem; font-weight:500;
+  letter-spacing:-.005em;
+  display:block;
+}
+.menu-desc{
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.85rem;
+  color:var(--ink-dim);
+  line-height:1.45;
+  margin-top:.2rem;
+  display:block;
+}
+
+@media (max-width:430px){
+  .nav-inner{ padding-right:.65rem; }            /* hamburger dichter bij de rechterrand */
+  .nav-burger{ width:34px; height:34px; padding:6px; margin-left:auto; }
+  .menu-list a{ grid-template-columns:48px 1fr; padding:.95rem 1.2rem; }
+  /* menukop spiegelt de balk, ook hier */
+  .menu-head{ padding-right:.65rem; }
+  .menu-close{ width:34px; height:34px; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;
+  padding:clamp(1.5rem, 3vw, 2.5rem) 0 clamp(3rem, 7vw, 6rem);
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:clamp(2rem, 6vw, 6rem);
+  align-items:start;
+  /* GEEN overflow:hidden hier — dat knipte de pulse-ring van de hero-meta af.
+     De achtergrond-vorm wordt in een eigen .hero-bg-laag geclipt (zie hieronder). */
+}
+.hero-bg{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+.hero-content{ position:relative; z-index:2; }
+@media (max-width:900px){ .hero{ grid-template-columns:1fr; } }
+
+/* Bauhaus geometrische vormen */
+.bh-shape{ position:absolute; pointer-events:none; }
+.bh-circle{
+  /* Sint-Romboutstoren in pink cirkel, poster-stijl achter de titelzone. VOLLEDIG in beeld
+     (nergens afgesneden) en met right:37% structureel vrij van het paneel, dat door de
+     kolomverhouding (1.6fr/1fr) altijd rond 63% begint. Zo balanceert de bol de compositie:
+     tekst links, paneel rechts, de cirkel ankert het midden. */
+  width:clamp(240px, 26vw, 320px);
+  aspect-ratio: 1 / 1;
+  background-image:url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiNGRjAwNjYiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjRkYwMDY2Ij48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+  top:1%; right:38%; left:auto;
+  z-index:0;
+  opacity:.92;
+  animation:rise 1.4s .5s ease-out backwards;
+}
+/* De grote bol licht op bij hover, net als het logo in de bovenbalk. De bol zit in de
+   pointer-events:none-achtergrondlaag, dus we zetten 'm hier expliciet weer aan. Enkel op
+   toestellen met een echte cursor (geen hover-artefacten op touch). */
+@media (hover:hover){
+  .hero-bg .bh-circle{ pointer-events:auto; transition:filter .35s ease, opacity .35s ease; }
+  .hero-bg .bh-circle:hover{ opacity:1; filter:brightness(1.2); }
+}
+.bh-line{
+  width:clamp(80px, 12vw, 200px);
+  height:2px;
+  background:var(--ink);
+  top:6%; right:24%; left:auto;
+  transform:rotate(-25deg);
+  z-index:1;
+  animation:rise 1.6s 1s ease-out backwards;
+}
+@media (max-width:900px){
+  .bh-circle{
+    top:auto; bottom:-5%; left:auto; right:-15%;
+    width:55vw;
+    opacity:.4;
+  }
+  .bh-line{ display:none; }
+}
+/* Smartphone, alleen de hero van de hoofdpagina: geen tweede toren. De toren zit daar al
+   als watermerk ín de kaart; hier enkel een schone Bauhaus-cirkel (een open roze ring) als
+   accent, hoog en aflopend in de rechterbovenhoek, boven het kader, niet erachter verstopt.
+   Bewust gescoped op .hero-bg: de techniek-pagina hergebruikt .bh-circle als toren-watermerk
+   en moet zijn toren houden. */
+@media (max-width:700px){
+  .hero-bg .bh-circle{
+    background-image:none;
+    border:3px solid var(--pink);
+    border-radius:50%;
+    width:min(66vw, 320px);
+    top:-13%; right:-26%; bottom:auto; left:auto;
+    opacity:.38;
+  }
+}
+
+.hero-meta{
+  /* 14px tussen de bol en 'Experiment': exact dezelfde afstand als op de techniek-pagina
+     (.tech-hero .eyebrow::before margin-right:14px), zodat de pulserende ring de tekst net niet raakt. */
+  display:flex; gap:14px; align-items:center;
+  margin-bottom:2.5rem;
+  /* Geen padding-left meer: die 6,4px duwde het bolletje naar rechts, waardoor de
+     Experiment-regel niet meer uitlijnde met de titel eronder, en evenmin met Lees mee. */
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--pink-text);            /* zelfde kleur als de eyebrow op Lees mee */
+  opacity:0; animation:rise .8s .1s ease-out forwards;
+}
+.hero-meta .pulse{
+  width:7px; height:7px; border-radius:50%;
+  background:var(--pink);
+  box-shadow:0 0 0 0 var(--pink);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%   { box-shadow:0 0 0 0 rgba(255,0,102,.5); }
+  70%  { box-shadow:0 0 0 10px rgba(255,0,102,0); }
+  100% { box-shadow:0 0 0 0 rgba(255,0,102,0); }
+}
+
+.hero-title{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:var(--display-1);
+  line-height:1.14;   /* lucht voor het kader in de hoofdtitel, zodat het niet over de regel eronder bloedt */
+  letter-spacing:-.04em;
+  font-weight:500;
+  opacity:0; animation:rise 1s .25s ease-out forwards;
+}
+/* Het kader (de 'box') rond de subdomeinnaam in de hoofdtitel: pink op inkt. Zo komt de
+   deelsite (Denk mee) terug in de hoofdtitel, terwijl bovenaan As Gau Paust met de mug staat. */
+.hero-title .box{
+  font-style:normal;
+  font-weight:500;
+  color:var(--pink);
+  background:var(--ink);
+  padding:0 .12em;
+  white-space:nowrap;
+  box-decoration-break:clone; -webkit-box-decoration-break:clone;
+}
+.hero-title .nm{ white-space:nowrap; }   /* "met Mechelen" breekt als geheel af, geen los 'met' */
+
+/* Korte tagline onder de titel: de belofte in één regel, boven de uitgebreide lede. */
+.hero-tagline{
+  margin-top:1.15rem;
+  font-size:clamp(1.1rem, 1.9vw, 1.45rem);
+  line-height:1.3;
+  font-weight:500;
+  letter-spacing:-.01em;
+  color:var(--pink-text);   /* het rozige van de omtrek-cirkel, maar in de leesbare tekstvariant */
+  opacity:0; animation:rise .8s .42s ease-out forwards;
+}
+
+.hero-lede{
+  margin-top:1.4rem;
+  max-width:42ch;
+  font-size:clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height:1.5;
+  color:var(--bone-2);
+  opacity:0; animation:rise .8s .55s ease-out forwards;
+}
+.hero-lede strong{ color:var(--bone); font-weight:600; }
+
+/* Het hero-paneel rechts: roze profiel-blok (persoonlijk = roze) + zittingskaart in
+   licht papier, samen in één omrande Bauhaus-compositie. */
+.hero-panel{
+  position:relative; z-index:2;
+  /* Steviger kader (2px), in lijn met de techniek-pagina; de schaduw geeft diepte. */
+  border:2px solid var(--ink);
+  box-shadow:0 1px 0 rgba(0,0,0,.05), 0 14px 30px -16px rgba(10,10,10,.28), 0 38px 78px -28px rgba(10,10,10,.55);
+}
+.hero-cockpit{
+  background:var(--pink); color:#fff;
+  padding:1rem 1.2rem 1.05rem;
+  opacity:0; animation:rise .9s .45s ease-out forwards;
+}
+.hero-cockpit[hidden]{ display:none; }
+/* Cockpit staat ónder de zittingskaart: stevige scheidingslijn zodra hij zichtbaar is. */
+.hero-cockpit:not([hidden]){ border-top:2px solid var(--ink); }
+.hc-head{ display:flex; align-items:center; justify-content:space-between; gap:.8rem; }
+.hc-title{ display:flex; align-items:center; gap:.4rem; line-height:1; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:#fff; font-weight:600; }
+.hc-star{ width:.95em; height:.95em; flex-shrink:0; display:block; }
+/* Alleen het pijltje als link naar de wizard (zelfde pijl als in de wizard zelf). */
+.hc-edit{ cursor:pointer; color:#fff; background:none; border:none; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; line-height:1; padding:.2rem .1rem; display:inline-flex; align-items:center; gap:.35rem; transition:transform .15s, opacity .15s; }
+.hc-edit .hce-arr{ font-size:1.05rem; }
+.hc-edit:hover{ transform:translateX(2px); opacity:.85; }
+/* Monochrome kaart-pin voor locatie, schaalt mee met de tekst. */
+.loc-pin{ width:.85em; height:.85em; vertical-align:-.14em; margin-right:.16rem; flex-shrink:0; }
+.hc-chips{ display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.65rem; }
+.hc-chip{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; letter-spacing:.02em; padding:.15rem .5rem; border:1px solid rgba(255,255,255,.55); color:#fff; white-space:nowrap; background:none; cursor:pointer; transition:background .15s, color .15s, border-color .15s; }
+.hc-chip:hover{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.hc-chip:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+/* 'Nieuw sinds vorig bezoek': volle ink-balk binnen het roze, de blikvanger. */
+.hc-nieuw{ display:flex; align-items:center; gap:.6rem; margin-top:.7rem; padding:.5rem .75rem; background:var(--ink); color:var(--paper); text-decoration:none; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.02em; transition:background .15s; }
+.hc-nieuw:hover{ background:var(--ink-2); }
+.hc-nieuw .hcn-dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); flex-shrink:0; box-shadow:0 0 0 0 var(--pink); animation:pulse 2s infinite; }
+.hc-nieuw .hcn-txt{ flex:1; }
+.hc-nieuw .hcn-txt strong{ font-weight:600; }
+.hc-nieuw .hcn-arr{ flex-shrink:0; }
+.hc-stats{ display:grid; grid-template-columns:repeat(2,1fr); gap:.6rem .8rem; margin-top:.8rem; border-top:1.5px solid rgba(255,255,255,.4); padding-top:.8rem; }
+/* Elke teller is een echte tik-tegel (zelfde witte-omlijning-taal als de chips): zo lees je
+   meteen dat de hele cockpit bedienbaar is, ook op touch waar hover niet bestaat. */
+.hc-stat{ display:flex; flex-direction:column; gap:.25rem; text-decoration:none; color:inherit;
+  padding:.5rem .6rem; border:1px solid rgba(255,255,255,.45); border-radius:var(--r-chip);
+  background:rgba(255,255,255,.10); transition:background .15s, border-color .15s; }
+.hc-stat:hover{ background:rgba(255,255,255,.22); border-color:rgba(255,255,255,.8); }
+.hc-num{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:1.5rem; font-weight:600; line-height:1; color:#fff; font-variant-numeric:tabular-nums; }
+/* Geen opacity: wit op merkroze haalt 3,86:1 (de bewuste huisnorm), maar met .85 dekking
+   zakte deze ~10px labeltekst naar 3,00:1, en binnen .hc-stat zelfs naar 2,89:1. Dat is
+   geen merkkeuze maar contrastverlies zonder reden. */
+.hc-lbl{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:#fff; line-height:1.35; }
+.hc-stat:hover .hc-num{ color:var(--ink); }
+/* Brede schermen (2-koloms hero): de vier tellingen op één rij, zodat het hele kader
+   ook op een kleiner breed scherm zonder scrollen past. */
+@media (min-width:900px){ .hc-stats{ grid-template-columns:repeat(4,1fr); gap:.7rem .8rem; } }
+/* Smal scherm: compacter, zodat de zittingskaart en de cockpit (de clou) meteen in beeld
+   staan. De pitch-lede wijkt voor wie al een profiel heeft; die kent de uitleg al. */
+@media (max-width:700px){
+  .hero{
+    /* Compact genoeg zodat de VOLLEDIGE cockpit (met de tik-tegels) boven de tabbalk past. */
+    padding:.7rem 0 2.2rem; gap:1.1rem;
+    /* Vul het eerste scherm met alleen de essentie (titel + zittingskaart + cockpit) en
+       balanceer ze verticaal, zodat de volgende sectie ('Dossiers') onder de vaste tabbalk
+       valt en niet meer afleidend in beeld piekt. svh = zonder de mobiele adresbalk. */
+    min-height: calc(100vh - 3.5rem);
+    min-height: calc(100svh - 3.5rem);
+    display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;
+  }
+  .hero-meta{ margin-bottom:.85rem; }
+  /* Titel op smartphone op ÉÉN regel: de <br> valt weg en de maat schaalt mee met de breedte,
+     zodat "Denk mee met Mechelen" ook op smallere toestellen (vanaf 320px) op één regel past.
+     De em-marge (die het roze blok op desktop stapelt) gaat op nul, zodat het mooi inline aansluit. */
+  .hero-title{ font-size:clamp(1.35rem, 7.3vw, 1.85rem); }
+  /* Zelfde kleur als 'Laat je inspireren.' op Lees mee: overal var(--pink-text), ook mobiel. */
+  .hero-tagline{ margin-top:.55rem; font-size:1.1rem; }
+  .hero-lede{ margin-top:1rem; font-size:1rem; }
+  .hero-actions{ margin-top:1.2rem; }
+  /* Met profiel wijkt enkel de pitch-lede (de terugkerende lezer kent de uitleg). De eyebrow
+     '● Experiment' blijft staan: die geeft context, en de pulserende stip is een blikvanger. */
+  .hero.met-profiel .hero-lede{ display:none; }
+  .meeting-card{ padding:1.2rem 1.25rem; }
+  .hero-cockpit{ padding:.85rem 1.05rem .8rem; }
+  /* Compactere tussenruimtes in kaart en cockpit: samen winnen ze net genoeg hoogte
+     om de cockpit volledig op het eerste scherm te tonen. */
+  .mc-stats{ margin-top:1rem; padding-top:1rem; }
+  .hc-stats{ margin-top:.6rem; padding-top:.6rem; gap:.5rem .8rem; }
+  .hc-stat{ padding:.4rem .55rem; }
+}
+
+.hero-actions{
+  margin-top:2.5rem;
+  display:flex; flex-wrap:wrap; gap:.75rem;
+  opacity:0; animation:rise .8s .75s ease-out forwards;
+}
+/* Beide startknoppen exact even breed (naast elkaar op desktop, gestapeld op smal scherm),
+   met een licht zweefeffect bij hover: voelt als een app-knop. */
+.hero-actions .btn{
+  width:260px; max-width:100%;
+  justify-content:center;
+}
+.hero-actions .btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 24px -12px rgba(10,10,10,.45);
+}
+.btn{
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:.95rem 1.4rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
+  border:1px solid var(--line-strong);
+  transition:all .2s ease;
+}
+.btn-pink{ background:var(--pink); color:#fff; border-color:var(--pink); box-shadow:0 6px 18px -9px rgba(255,0,102,.5); }
+.btn-pink:hover{ background:var(--pink-deep); border-color:var(--pink-deep); transform:translate(0,-2px); box-shadow:var(--shadow-pink); }
+.btn-ghost{ color:var(--ink); border-color:var(--ink); }
+.btn-ghost:hover{ background:var(--ink); color:var(--paper); }
+.btn .arrow{ transition:transform .2s; display:inline-block; }
+.btn:hover .arrow{ transform:translateX(4px); }
+
+.hero-credit{
+  margin-top:3rem;
+  display:flex; gap:.7rem; align-items:center;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.1em;
+  color:var(--bone-faint);
+  opacity:0; animation:rise .8s .9s ease-out forwards;
+}
+.hero-credit .agp{
+  display:inline-block; padding:.25rem .55rem;
+  border:1px solid var(--bone-faint);
+  font-weight:600; letter-spacing:.18em;
+}
+
+/* Meeting card — dark inverted block, the visual anchor of the page */
+.meeting-card{
+  /* Subtiel warm papier i.p.v. hard zwart of vlak wit: de zitting is context, het roze
+     profiel-blok eronder is de hoofdrol. Rand en schaduw zitten op .hero-panel. */
+  position:relative;
+  /* Dezelfde logo-mark als in de nav (Sint-Romboutstoren mét raampjes ín de bol), maar
+     monochroom en subtiel als watermerk: de bol is een lichte ink-schaduw, de toren snijdt
+     eruit in de papierkleur, de raampjes zijn iets donkerder. Loopt Bauhaus-gewijs af langs
+     de rechterrand; de datum links blijft vrij en leesbaar. */
+  background-color:var(--paper-2);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 480'><circle cx='240' cy='240' r='212' fill='%231a1712' fill-opacity='0.08'/><g transform='translate(-36,-36) scale(1.15)'><g fill='%23fffdf7'><rect x='188' y='150' width='104' height='222'/><rect x='194' y='130' width='16' height='20'/><rect x='218' y='130' width='16' height='20'/><rect x='242' y='130' width='16' height='20'/><rect x='266' y='130' width='16' height='20'/></g><g fill='%231a1712' fill-opacity='0.11'><rect x='218' y='195' width='8' height='85'/><rect x='236' y='182' width='8' height='110'/><rect x='254' y='195' width='8' height='85'/><polygon points='224,372 224,338 240,318 256,338 256,372'/></g></g></svg>");
+  /* Bewust kleiner dan de roze held-bol in de hero: dit is een watermerk (context),
+     de roze bol is het merk-statement. Zo klopt de visuele hiërarchie. */
+  background-repeat:no-repeat;
+  background-position:center right -42px;
+  background-size:auto 190px;
+  color:var(--ink);
+  padding:1.45rem 1.75rem;
+  opacity:0; animation:rise 1s .4s ease-out forwards;
+}
+.meeting-card::before{
+  content:''; position:absolute; top:-1px; left:-1px;
+  width:34px; height:34px;
+  border-top:2px solid var(--pink);
+  border-left:2px solid var(--pink);
+}
+.meeting-card::after{
+  content:''; position:absolute; bottom:-1px; right:-1px;
+  width:34px; height:34px;
+  border-bottom:2px solid var(--pink);
+  border-right:2px solid var(--pink);
+}
+.meeting-card.is-clickable{ cursor:pointer; transition:transform .2s, box-shadow .2s; }
+.meeting-card.is-clickable:hover{ transform:translateY(-3px); box-shadow:0 1px 0 rgba(0,0,0,.04), 0 34px 74px -26px rgba(10,10,10,.55); }
+.meeting-card.is-clickable:focus-visible{ outline:2px solid var(--pink); outline-offset:3px; }
+.mc-tag{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--pink-text);
+  margin-bottom:.85rem;
+}
+.mc-type{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-style:italic;
+  font-size:1.1rem;
+  color:var(--ink-dim);
+  margin-bottom:.4rem;
+}
+.mc-date{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:clamp(1.8rem, 3vw, 2.6rem);
+  line-height:1;
+  letter-spacing:-.025em;
+  font-weight:300;
+  color:var(--ink);
+}
+.mc-time{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.82rem; letter-spacing:.08em;
+  color:var(--ink-dim);
+  margin-top:.4rem;
+}
+
+.cd-grid{
+  margin-top:1rem;
+  display:flex; align-items:baseline; gap:.75rem;
+  padding-top:.9rem;
+}
+/* De scheidingslijntjes in de zittingskaart stoppen vóór het toren-watermerk rechts
+   (altijd ±148px zichtbaar): ze lopen er niet doorheen. Bewust ingekorte lijnen, Bauhaus. */
+.cd-grid, .pub-status, .mc-stats{ position:relative; }
+.cd-grid::before, .pub-status::before, .mc-stats::before{
+  content:''; position:absolute; top:0; left:0; right:156px; height:1px; background:var(--line);
+}
+.cd-num{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:2.2rem; line-height:1;
+  font-variant-numeric:tabular-nums;
+  font-weight:300;
+  letter-spacing:-.02em;
+  color:var(--ink);
+}
+.cd-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.64rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-faint);
+}
+
+.pub-status{
+  margin-top:1rem; padding-top:.85rem;
+}
+.pub-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.64rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-faint); margin-bottom:.35rem;
+}
+.pub-pill{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.4rem .75rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.04em;
+  border:1px solid;
+}
+.pub-ok    { color:var(--pink-text); border-color:var(--pink); background:rgba(255,0,102,.12); }
+.pub-late  { color:#c4006a; border-color:#c4006a; background:rgba(196,0,106,.06); }
+.pub-wait  { color:var(--ink-dim); border-color:var(--line-strong); }
+.pub-deadline{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink-dim); margin-top:.4rem; }
+
+/* Meeting card zitting-stats — verschijnt zodra agenda gepubliceerd is */
+.mc-stats{
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:1px;
+  margin-top:1.4rem;
+  padding-top:1.4rem;
+}
+/* Het [hidden]-attribuut moet de lege statistieken écht verbergen (anders overschrijft
+   display:grid het): geen "—"-tellingen tonen zolang er geen agenda is. */
+.mc-stats[hidden]{ display:none; }
+.mc-stat{
+  display:flex; flex-direction:column; align-items:flex-start;
+  padding-right:.4rem;
+}
+.mc-stat-num{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.55rem; font-weight:300;
+  letter-spacing:-.04em; line-height:1;
+  color:var(--pink);
+  font-variant-numeric:tabular-nums;
+  margin-bottom:.35rem;
+}
+.mc-stat-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink-faint);
+  line-height:1.4;
+}
+
+@keyframes rise{
+  from{ opacity:0; transform:translateY(20px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+
+/* ============================================================
+   SECTION CHROME, Bauhaus
+   ============================================================ */
+.sec-head{
+  position:relative;
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:clamp(1.5rem, 4vw, 3rem);
+  align-items:start;
+  margin-bottom:clamp(2rem, 5vw, 4rem);
+  padding-bottom:1.8rem;
+  padding-top:1rem;
+  border-bottom:2px solid var(--ink);
+}
+.sec-num{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ink-dim);
+  white-space:nowrap;
+  display:flex; flex-direction:column; gap:.4rem;
+  position:relative;
+}
+.sec-num em{
+  font-style:normal;
+  font-size:clamp(4rem, 9vw, 7.5rem);
+  line-height:.85;
+  color:var(--pink);
+  font-weight:600;
+  letter-spacing:-.04em;
+  margin-right:0;
+  font-variant-numeric:tabular-nums;
+  display:block;
+}
+.sec-num::before{
+  /* Bauhaus dot - klein zwart vierkant boven nummer */
+  content:'';
+  width:14px; height:14px;
+  background:var(--ink);
+  position:absolute;
+  top:-1.4rem; left:0;
+}
+/* Sectiekop mét icoon (startpagina): het herkenbare geometrische icoon vervangt het
+   vierkantje. Het icoon is de identiteit van het blok, ook terug te zien in het menu
+   en de mobiele tabbalk. */
+.sec-num.met-ic::before{ content:none; }
+.sec-ic{ width:24px; height:24px; color:var(--pink); display:block; flex-shrink:0; }
+.sec-titles{ padding-top:.4rem; }
+.sec-titles h2{
+  font-size:var(--h1);
+  letter-spacing:-.03em;
+  margin-bottom:.7rem;
+  font-weight:600;
+}
+.sec-titles h2 em{
+  color:var(--pink);
+  font-style:normal;
+}
+/* Nadruk in de uitleg: spaarzaam, vetjes logo-roze, nooit cursief */
+.sec-lede em, .sec-lede strong, .hero-lede em, .hero-lede strong,
+.dc-card p em, .dc-card p strong,
+.dc-foot em, .dc-foot strong, .wiz-lede em, .wiz-lede strong, .wiz-h em{
+  color:var(--pink-text); font-weight:600; font-style:normal; }
+.sec-lede{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.05rem;
+  line-height:1.55;
+  color:var(--ink-dim);
+  max-width:60ch;
+}
+
+@media (max-width:780px){
+  .sec-head{
+    grid-template-columns:1fr;
+    gap:.4rem;
+    padding-top:1.5rem;
+  }
+  .sec-num{ flex-direction:row; align-items:baseline; gap:.7rem; }
+  .sec-num em{ font-size:3rem; }
+  .sec-num::before{ top:-1rem; }
+  .sec-num.met-ic{ align-items:center; }
+  .sec-ic{ width:20px; height:20px; }
+}
+
+/* Inverted (zwarte) sectie — Bauhaus contrast */
+section.inverted{
+  position:relative;
+  background:var(--black-2);
+  color:var(--ink);
+  padding:clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3.5rem);
+  /* Full-bleed: laat de zwarte achtergrond doorlopen tot de viewport-rand */
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  margin-top:clamp(3rem, 6vw, 5rem);
+  margin-bottom:clamp(3rem, 6vw, 5rem);
+  overflow:hidden;
+}
+/* Beperk content binnen de zwarte sectie tot de shell-breedte */
+section.inverted > .sec-head,
+section.inverted > .grid,
+section.inverted > .bh-shape{
+  max-width:1240px;
+  margin-left:auto; margin-right:auto;
+}
+section.inverted > .grid{ padding:0 0; }
+section.inverted .sec-num{ color:rgba(245,241,232,.55); }
+section.inverted .sec-num em{ color:var(--pink); }
+section.inverted .sec-num::before{ background:var(--pink); }
+section.inverted .sec-head{ border-bottom-color:rgba(245,241,232,.2); }
+section.inverted .sec-titles h2{ color:var(--ink); }
+section.inverted .sec-titles h2 em{ color:var(--pink); }
+section.inverted .sec-lede{ color:rgba(245,241,232,.7); }
+
+/* Bauhaus decoratie binnen de inverted-sectie */
+/* Bauhaus decoratie binnen de inverted-sectie — gewone pink cirkel */
+.bh-circle.inv{
+  width:clamp(180px, 22vw, 360px);
+  height:clamp(180px, 22vw, 360px);
+  aspect-ratio:auto;
+  border-radius:50%;
+  background-image:none;
+  background-color:var(--pink);
+  opacity:.12;
+  mix-blend-mode:normal;
+  top:-10%; right:-5%; left:auto;
+}
+
+/* Volgen-sectie kindelementen op zwarte achtergrond */
+section.inverted .lifecycle-explainer{
+  border:1px solid rgba(245,241,232,.18);
+  background:rgba(245,241,232,.03);
+  padding:1.75rem 1.5rem;
+}
+section.inverted .lifecycle-explainer h3{ color:var(--ink); }
+section.inverted .lifecycle-explainer h3 em{ color:var(--pink); }
+section.inverted .lifecycle-explainer .desc{ color:rgba(245,241,232,.65); }
+section.inverted .lc-tl-stage::after{ background:rgba(245,241,232,.2); }
+section.inverted .lc-tl-stage:nth-child(4) .dot{ background:rgba(245,241,232,.5); }
+section.inverted .lc-tl-stage:nth-child(5) .dot{ background:rgba(245,241,232,.25); }
+section.inverted .lc-tl-stage h4{ color:var(--ink); }
+section.inverted .lc-tl-stage p{ color:rgba(245,241,232,.55); }
+
+section.inverted .subscribe-form{
+  border:1px solid rgba(245,241,232,.18);
+  background:rgba(245,241,232,.03);
+}
+section.inverted .subscribe-form h3{ color:var(--ink); }
+section.inverted .subscribe-form .desc{ color:rgba(245,241,232,.5); }
+section.inverted .field-lbl{ color:rgba(245,241,232,.7); }
+section.inverted .tch{
+  border-color:rgba(245,241,232,.2);
+  color:rgba(245,241,232,.75);
+  background:transparent;
+}
+section.inverted .tch:hover{ border-color:rgba(245,241,232,.5); color:var(--ink); }
+section.inverted .tch.active{ background:var(--pink); color:var(--ink); border-color:var(--pink); }
+
+section.inverted .notif-opt{
+  border-color:rgba(245,241,232,.2);
+  color:rgba(245,241,232,.65);
+  background:transparent;
+}
+section.inverted .notif-opt:hover{ color:var(--ink); }
+section.inverted .notif-opt.active{
+  background:var(--ink);
+  color:var(--ink);
+  border-color:var(--ink);
+}
+
+section.inverted .btn-perm{
+  border-color:rgba(245,241,232,.25);
+  background:rgba(245,241,232,.05);
+  color:var(--ink);
+}
+section.inverted .btn-perm:hover{ background:rgba(245,241,232,.1); }
+section.inverted .btn-perm.granted{
+  background:var(--pink);
+  color:var(--ink);
+  border-color:var(--pink);
+}
+section.inverted .perm-desc{ color:rgba(245,241,232,.55); }
+section.inverted .subscribe-foot{
+  border-top-color:rgba(245,241,232,.15);
+  color:rgba(245,241,232,.4);
+}
+section.inverted .subscribe-foot strong{ color:var(--ink); }
+
+
+.profile-form{
+  border:1px solid var(--line-strong);
+  padding:1.5rem;
+  position:sticky; top:5.5rem;
+  height:fit-content;
+}
+.profile-form h3{
+  font-size:.95rem;
+  margin-bottom:.4rem;
+}
+.profile-form .sub{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.68rem; letter-spacing:.06em;
+  color:var(--bone-faint);
+  margin-bottom:1.5rem;
+  line-height:1.5;
+}
+
+.field{ margin-bottom:1.4rem; }
+.field-lbl{
+  display:block;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--bone-dim);
+  margin-bottom:.6rem;
+}
+.field-input{
+  width:100%; padding:.7rem .8rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  /* 1rem = 16px, en geen haar minder: onder die grens zoomt Safari op iOS bij elke tik
+     in een veld, en zoomt daarna niet terug uit. De zoekbalk stond hier altijd al boven
+     en zoomt daarom niet; deze velden deden dat wel. */
+  font-size:1rem;
+  color:var(--bone);
+  background:var(--paper-2);
+  border:1px solid var(--line-strong);
+  transition:border-color .15s;
+}
+.field-input:focus{ border-color:var(--pink); }
+.field-input::placeholder{ color:var(--bone-faint); font-style:italic; }
+
+.autocomplete-wrap{ position:relative; }
+.autocomplete-list{
+  position:absolute; top:100%; left:0; right:0; z-index:50;
+  background:var(--paper-3);
+  border:1px solid var(--line-strong);
+  border-top:none;
+  max-height:240px; overflow:auto;
+  display:none;
+}
+.autocomplete-list.show{ display:block; }
+.ac-item{
+  padding:.65rem .8rem; cursor:pointer;
+  font-size:.9rem;
+  border-bottom:1px solid var(--line);
+  transition:background .12s;
+}
+.ac-item:last-child{ border-bottom:none; }
+.ac-item:hover{ background:var(--pink-soft); }
+.ac-area{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.68rem; color:var(--bone-faint);
+  margin-left:.5rem; letter-spacing:.04em;
+}
+
+.theme-chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.tch{
+  padding:.45rem .8rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.04em;
+  color:var(--bone-dim);
+  border:1px solid var(--line-strong);
+  transition:all .15s;
+}
+.tch:hover{ color:var(--bone); border-color:var(--bone-dim); }
+.tch.active{
+  color:#fff; background:var(--pink); border-color:var(--pink);
+}
+
+.kw-row{ display:flex; gap:.5rem; }
+.kw-row input{
+  flex:1; padding:.65rem .75rem;
+  background:var(--paper-2);
+  border:1px solid var(--line-strong);
+  font-size:1rem;        /* zie .field-input: onder 16px zoomt iOS in en niet meer uit */
+}
+.kw-row input:focus{ border-color:var(--pink); }
+.kw-row button{
+  padding:.65rem 1rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--line-strong);
+  transition:all .15s;
+}
+.kw-row button:hover{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.kw-list{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.7rem; }
+.kw-tag{
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.3rem .55rem .3rem .65rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem;
+  background:var(--pink-soft);
+  border:1px solid var(--line-pink);
+  color:var(--bone);
+}
+.kw-tag button{ color:var(--pink); padding:0 .25rem; line-height:1; font-size:1rem; }
+
+.profile-meta{
+  margin-top:1.2rem; padding-top:1.2rem;
+  border-top:1px solid var(--line);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; line-height:1.6;
+  color:var(--bone-faint);
+}
+
+/* Item card — gebruikt door itemCardHTML, vandaag enkel nog vanuit renderAgenda */
+.item-card{
+  border:1px solid var(--line);
+  padding:1.5rem 1.6rem;
+  margin-bottom:.85rem;
+  background:var(--paper-2);
+  transition:border-color .2s, transform .2s, box-shadow .2s;
+  position:relative;
+}
+.item-card:hover{
+  border-color:var(--pink);
+  transform:translateY(-1px);
+  box-shadow:0 8px 24px -16px rgba(10,10,10,.15);
+}
+.item-card .topline{
+  display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--bone-faint);
+  margin-bottom:.85rem;
+}
+.item-card .num{ color:var(--pink-text); }
+.item-card .cat{
+  padding:.18rem .5rem;
+  border:1px solid var(--line-strong);
+  letter-spacing:.06em;
+}
+.item-card h4{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.2rem; line-height:1.25;
+  font-weight:400; letter-spacing:-.012em;
+  margin-bottom:.6rem;
+}
+.item-card .decoded{
+  font-style:italic;
+  font-size:.95rem;
+  color:var(--bone-2);
+  line-height:1.55;
+  margin-bottom:1rem;
+  border-left:2px solid var(--pink);
+  padding-left:.85rem;
+}
+/* Leesbare opmaak van samenvattingen: alinea's met lucht, opsommingen met pink bullet. */
+.decoded p, .prc-decoded p, .arch-decoded p, .dosm-ev-decoded p{ margin:0 0 .5em; }
+.decoded p:last-child, .prc-decoded p:last-child, .arch-decoded p:last-child, .dosm-ev-decoded p:last-child{ margin-bottom:0; }
+.dec-list{ margin:.35em 0 .15em; padding-left:1.3em; }
+.dec-list li{ margin:.25em 0; }
+.dec-list li::marker{ color:var(--pink); }
+.bron-link{
+  display:inline-block; margin:.1rem 1.1rem .5rem 0;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.03em;
+  color:var(--pink-text); border-bottom:1px solid transparent; transition:border-color .15s;
+}
+.bron-link:hover{ border-bottom-color:var(--pink); }
+.item-card .meta-row{
+  display:flex; gap:1.2rem; flex-wrap:wrap;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.04em;
+  color:var(--bone-dim);
+  padding-top:1rem;
+  border-top:1px solid var(--line);
+}
+.item-card .meta-row span strong{ color:var(--bone); font-weight:500; }
+/* Compacter op smartphone: minder padding, kleinere titel, strakkere lifecycle */
+@media (max-width:560px){
+  .item-card{ padding:1rem 1.05rem; margin-bottom:.65rem; }
+  .item-card .topline{ margin-bottom:.6rem; }
+  .item-card h4{ font-size:1.02rem; line-height:1.3; }
+  .item-card .decoded{ font-size:.86rem; padding-left:.7rem; margin-bottom:.8rem; }
+  .item-card .meta-row{ font-size:.72rem; }
+  .lifecycle{ margin-top:.8rem; padding-top:.8rem; }
+  .lc-stage{ font-size:.58rem; }
+}
+.item-card .reasons{
+  margin-top:.7rem;
+  display:flex; flex-wrap:wrap; gap:.4rem;
+}
+.item-card .reasons span{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.06em;
+  color:var(--pink-text);
+  padding:.2rem .45rem;
+  background:var(--pink-soft);
+}
+
+/* Lifecycle indicator — vijf fases (zie .lc-bar hieronder en lifecycleHTML) */
+.lifecycle{
+  margin-top:1rem;
+  padding-top:1rem;
+  border-top:1px solid var(--line);
+}
+.lc-bar{
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:0;
+  position:relative;
+}
+.lc-stage{
+  position:relative;
+  padding:0 .25rem 0 0;
+  display:flex; flex-direction:column; gap:.4rem;
+}
+.lc-stage .lc-dot{
+  width:10px; height:10px; border-radius:50%;
+  border:1px solid var(--bone-faint);
+  background:transparent;
+  position:relative; z-index:2;
+}
+.lc-stage::after{
+  content:''; position:absolute;
+  top:4px; left:14px; right:0; height:1px;
+  background:var(--line-strong);
+}
+.lc-stage:last-child::after{ display:none; }
+.lc-stage.done .lc-dot{ background:var(--pink); border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft); }
+.lc-stage.done::after{ background:var(--pink); }
+.lc-stage.fail .lc-dot{ background:transparent; border-color:#c4006a; position:relative; }
+.lc-stage.fail .lc-dot::before{
+  content:'×'; position:absolute; inset:-3px 0 0 0; text-align:center;
+  font:bold 12px 'JetBrains Mono', ui-monospace, monospace; color:#c4006a;
+}
+.lc-stage.now .lc-dot{
+  border-color:var(--pink);
+  animation:pulse-dot 2s infinite;
+}
+@keyframes pulse-dot{
+  0%,100% { box-shadow:0 0 0 0 var(--pink-soft); }
+  50%     { box-shadow:0 0 0 6px transparent; }
+}
+.lc-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--bone-faint);
+}
+.lc-stage.done .lc-lbl{ color:var(--pink-text); }
+.lc-date{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem;
+  color:var(--bone-faint);
+}
+
+.lc-outcome{
+  margin-top:.85rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.92rem; line-height:1.5;
+  color:var(--bone-2);
+}
+.lc-outcome strong{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  font-weight:600;
+}
+.lc-outcome.goedgekeurd strong       { color:var(--pink-text); }
+.lc-outcome.goedgekeurd-met-amendering strong { color:#8a1457; }
+.lc-outcome.verdaagd strong          { color:var(--ink-dim); }
+.lc-outcome.verworpen strong         { color:#c8102e; }
+
+.lc-notulen{
+  margin-top:.6rem;
+  padding:.7rem .85rem;
+  background:var(--paper);
+  border-left:2px solid var(--ink-dim);
+  font-size:.88rem; line-height:1.55;
+  color:var(--ink-2);
+}
+.lc-notulen strong{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-dim);
+  font-weight:600;
+  margin-right:.4em;
+}
+
+
+/* Wizard: schakelaar naast de thema-chips. ONGEBRUIKT: #themeAllBtn staat niet in de HTML. */
+.wiz-all{
+  display:flex; align-items:flex-start; gap:.7rem; width:100%; text-align:left;
+  margin-top:1rem; background:transparent;
+  border:1px solid var(--line-strong); padding:.85rem 1rem; cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.wiz-all:hover{ border-color:var(--pink); }
+.wiz-all .wa-box{
+  flex:0 0 auto; width:1.15rem; height:1.15rem; margin-top:.15rem;
+  border:1px solid var(--ink); background:var(--paper); position:relative;
+}
+.wiz-all.active{ border-color:var(--pink); background:rgba(255,0,102,.06); }
+.wiz-all.active .wa-box{ background:var(--pink); border-color:var(--pink); }
+.wiz-all.active .wa-box::after{ content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.78rem; }
+.wa-text{ display:flex; flex-direction:column; line-height:1.4; color:var(--ink); }
+.theme-chips.dimmed{ opacity:.4; }
+/* Profiel-schakelaar boven "Op de agenda" en "Recent beslist" */
+/* Links uitgelijnd, net als de dossiers-toolbar: 'Voor mij / Alle …' hoort links te staan,
+   consequent over agenda én beslissingen (de logica van de site). */
+.sec-toolbar{ display:flex; justify-content:flex-start; margin-bottom:1.3rem; }
+.seg-toggle{ display:inline-flex; border:1px solid var(--line-strong); }
+.seg-opt{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.04em; padding:.42rem .8rem; background:none; border:none; color:var(--ink-dim); cursor:pointer; transition:background .15s, color .15s; white-space:nowrap; }
+.seg-opt + .seg-opt{ border-left:1px solid var(--line-strong); }
+.seg-opt.on{ background:var(--ink); color:var(--paper); }
+/* 'Voor mij' actief = roze: alles wat persoonlijk filtert, kleurt roze. */
+.seg-toggle .seg-opt:first-child.on{ background:var(--pink); color:#fff; }
+.seg-opt:not(.on):hover{ background:var(--paper-3); color:var(--ink); }
+.notif-perm-lnk{ background:none; border:none; padding:0; color:var(--pink-text); text-decoration:underline; cursor:pointer; font:inherit; }
+#notifSeg{ margin-top:.15rem; }
+#notifSeg .seg-opt{ font-size:.82rem; padding:.62rem 1.4rem; letter-spacing:.06em; }
+.ic-todo{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; padding:.14rem .5rem; border:1px solid var(--pink); color:var(--pink-text); font-weight:600; }
+.blok-leeg{ color:var(--ink-faint); font-size:.92rem; line-height:1.5; padding:.3rem 0 .2rem; }
+
+.dash-more{ margin-top:1rem; }
+
+/* Personal recent card — compacter dan itemCardHTML */
+.prc-card{
+  border:1px solid var(--line-strong);
+  background:var(--paper);
+  padding:.95rem 1.1rem;
+  margin-bottom:.7rem;
+}
+.prc-head{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:1rem;
+  margin-bottom:.5rem;
+}
+.prc-date{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.75rem;
+  color:var(--ink-dim);
+  font-variant-numeric:tabular-nums;
+}
+.prc-status{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.04em;
+  padding:.2rem .55rem;
+  border:1px solid;
+}
+.prc-status.status-goedgekeurd{ color:var(--pink-text); border-color:var(--pink); background:var(--pink-soft); }
+.prc-status.status-goedgekeurd-met-amendering{ color:#8a1457; border-color:#8a1457; background:rgba(138,20,87,.07); }
+.prc-status.status-verdaagd{ color:var(--ink-dim); border-color:var(--line-strong); }
+.prc-status.status-verworpen{ color:#c8102e; border-color:#c8102e; background:rgba(201,32,32,.08); }
+.prc-titel{
+  font-size:1rem; font-weight:500;
+  margin:0 0 .4rem;
+  line-height:1.35;
+}
+.prc-decoded{
+  font-style:italic;
+  font-size:.88rem;
+  color:var(--ink-2);
+  border-left:2px solid var(--pink);
+  padding-left:.7rem;
+  margin:.5rem 0 .6rem;
+  line-height:1.5;
+}
+.prc-foot{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:1rem; flex-wrap:wrap;
+  margin-top:.5rem;
+}
+.prc-themes{ display:flex; gap:.3rem; flex-wrap:wrap; }
+.prc-theme{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.06em;
+  color:var(--ink-faint);
+  padding:.12rem .4rem;
+  border:1px solid var(--line);
+  text-transform:uppercase;
+}
+.prc-link{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.04em;
+  color:var(--pink-text);
+  border-bottom:1px solid currentColor;
+}
+.prc-link:hover{ color:var(--pink); }
+
+/* ---------- Schriftelijke vraag: uitklap van vraag + antwoord (in de dossier-modal) ---------- */
+.vr-details{ margin:.2rem 0 .55rem; }
+/* Zelfde chipvorm als de acties eronder, zodat de rij één taal spreekt. Bewust neutraal grijs
+   en niet roze: dit is de onbewerkte tekst van de stad, geen leesbare samenvatting, en die
+   belofte mag de chip niet wekken. Het blijft een <details>: de tekst vouwt hier open, je
+   navigeert niet weg. Het chevron toont dat er iets uitklapt. */
+.vr-details summary{
+  display:inline-flex; align-items:center; gap:.38rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.68rem; letter-spacing:.02em;
+  line-height:1.35;
+  color:var(--ink-dim); background:transparent;
+  border:1px solid var(--line-strong); border-radius:999px;
+  padding:.34rem .7rem; cursor:pointer; list-style:none; transition:.15s;
+}
+.vr-details summary::-webkit-details-marker{ display:none; }
+.vr-details summary::after{ content:'▾'; font-size:.72em; display:inline-block; opacity:.8; transition:transform .15s; }
+.vr-details[open] summary::after{ transform:rotate(180deg); }
+.vr-details summary:hover{ color:#fff; background:var(--ink); border-color:var(--ink); }
+.vr-details[open] summary{ color:var(--ink); border-color:var(--ink); }
+/* Eerlijk kader boven de brontekst: de lezer komt van een samenvatting en moet weten dat
+   hier iets anders begint. */
+.vr-note{ font-size:.72rem; color:var(--ink-faint); margin:.7rem 0 .2rem; line-height:1.5; }
+.vr-detail-blok{ margin:.55rem 0; }
+.vr-detail-lbl{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:.3rem; }
+.vr-detail-blok p{ font-size:.85rem; line-height:1.55; color:var(--ink-2); margin:0; white-space:pre-line; }
+
+/* College mini-list in personal feed */
+.college-mini-list{
+  border:1px solid var(--line-strong);
+  background:var(--paper);
+}
+.cml-item{
+  display:grid;
+  grid-template-columns:90px 1fr auto;
+  gap:1rem;
+  align-items:center;
+  padding:.75rem 1rem;
+  border-bottom:1px solid var(--line);
+}
+.cml-item:last-child{ border-bottom:none; }
+.cml-date{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.74rem;
+  color:var(--ink-dim);
+  font-variant-numeric:tabular-nums;
+}
+.cml-cat{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.06em;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+  margin-bottom:.15rem;
+}
+.cml-titel{
+  font-size:.92rem;
+  color:var(--ink);
+  line-height:1.4;
+}
+.cml-action{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.04em;
+  color:var(--pink-text);
+  background:transparent;
+  border:1px solid var(--line-strong);
+  padding:.4rem .75rem;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.cml-action:hover{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+@media (max-width:680px){
+  .cml-item{ grid-template-columns:1fr auto; }
+  .cml-date{ grid-column:1; }
+  .cml-action{ grid-row:span 2; }
+}
+.empty{
+  border:1px dashed var(--ink-faint);
+  padding:3rem 2rem;
+  text-align:center;
+}
+.empty strong{
+  display:block;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.6rem; line-height:1.1;
+  color:var(--bone);
+  margin-bottom:.6rem;
+  letter-spacing:-.02em;
+}
+.empty p{
+  font-size:.95rem; color:var(--bone-dim); max-width:42ch; margin:0 auto;
+}
+
+.result-summary{
+  border:1px solid var(--line-pink);
+  background:linear-gradient(180deg, var(--pink-soft), transparent);
+  padding:1.4rem 1.6rem;
+  margin-bottom:1.5rem;
+}
+.result-summary h3{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--pink-text);
+  margin-bottom:.6rem;
+}
+.result-summary p{
+  font-size:1.05rem; line-height:1.5;
+  color:var(--bone);
+}
+.result-summary p strong{ color:var(--pink-text); }
+
+/* ============================================================
+   02, VOLLEDIGE AGENDA
+   ============================================================ */
+.agenda-toolbar{
+  display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;
+  margin-bottom:1.5rem;
+  padding-bottom:1rem;
+  border-bottom:1px solid var(--line);
+}
+.search-input{
+  flex:1; min-width:220px; max-width:400px;
+  padding:.7rem .9rem;
+  background:var(--paper-2);
+  border:1px solid var(--line-strong);
+  font-size:.9rem;
+}
+.search-input:focus{ border-color:var(--pink); }
+.toolbar-stat{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.06em;
+  color:var(--bone-dim);
+}
+.toolbar-stat strong{ color:var(--pink-text); font-weight:500; }
+
+/* Filter chips webshop-stijl */
+.filter-bar{
+  display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1rem;
+  margin-bottom:1.5rem;
+}
+.filter-bar-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint);
+  flex-shrink:0;
+}
+.filter-chips{
+  display:flex; flex-wrap:wrap; gap:.4rem;
+  flex:1;
+}
+.fc{
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.35rem .7rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.02em;
+  background:transparent;
+  border:1px solid var(--line-strong);
+  color:var(--ink-2);
+  cursor:pointer;
+  transition:all .12s;
+}
+.fc:hover{ border-color:var(--ink); }
+.fc.on{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.fc.on .fc-cnt{ color:var(--pink); }
+.fc-cnt{
+  font-size:.66rem;
+  color:var(--ink-faint);
+  font-variant-numeric:tabular-nums;
+  font-weight:500;
+}
+.filter-clear{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.04em;
+  color:var(--pink-text);
+  background:transparent; border:none;
+  cursor:pointer;
+  flex-shrink:0;
+  padding:.35rem .5rem;
+}
+.filter-clear:hover{ color:var(--pink); }
+
+/* Filter-status banner — verschijnt als filter actief is vanuit profiel */
+.filter-status{
+  display:flex; align-items:center; gap:.85rem;
+  padding:.85rem 1.1rem;
+  margin-bottom:1.2rem;
+  background:var(--ink);
+  color:var(--paper);
+  border-left:4px solid var(--pink);
+}
+.filter-status .fs-icon{
+  color:var(--pink);
+  font-size:1.1rem;
+  line-height:1;
+}
+.filter-status .fs-msg{
+  flex:1;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.82rem;
+  letter-spacing:.01em;
+}
+.filter-status .fs-msg strong{ color:var(--pink); font-weight:500; }
+.filter-status .fs-clear{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.04em;
+  color:var(--paper);
+  background:transparent;
+  border:1px solid var(--op-eiland-30);
+  padding:.4rem .8rem;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.filter-status .fs-clear:hover{
+  background:var(--paper); color:var(--ink); border-color:var(--paper);
+}
+
+/* Agenda groepen per thema — collapsible */
+.agenda-group{
+  margin-bottom:1.2rem;
+  border:1px solid var(--line);
+  background:var(--paper);
+}
+.agenda-group[open]{ background:var(--paper); }
+.ag-group-head{
+  display:flex; align-items:center; gap:.8rem;
+  padding:.85rem 1.1rem;
+  border-bottom:1px solid transparent;
+  cursor:pointer;
+  list-style:none;
+  transition:background .12s;
+}
+.ag-group-head::-webkit-details-marker{ display:none; }
+.agenda-group[open] .ag-group-head{
+  border-bottom-color:var(--ink);
+  background:var(--paper-2);
+}
+.agenda-group:not([open]) .ag-group-head:hover{ background:var(--paper-2); }
+.ag-group-toggle{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.85rem;
+  color:var(--pink);
+  transition:transform .2s;
+  display:inline-block;
+  width:14px;
+}
+.agenda-group:not([open]) .ag-group-toggle{ transform:rotate(-90deg); }
+/* Bol (niet langer een ster) als "raakt jouw profiel"-markering, gelijk aan de dossiers.
+   De ster blijft voorbehouden voor wat je volgt. */
+.ag-group-star{
+  color:var(--pink);
+  font-size:.7rem;
+  line-height:1;
+  margin-right:.15rem;
+}
+.agenda-group.is-profile-match{
+  border-color:var(--pink);
+  border-left-width:3px;
+}
+.agenda-group.is-profile-match .ag-group-title{ font-weight:600; }
+.ag-group-title{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.92rem; font-weight:500;
+  letter-spacing:-.005em;
+  color:var(--ink);
+  flex:1;
+}
+.ag-group-count{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem;
+  color:var(--ink-faint);
+  font-variant-numeric:tabular-nums;
+}
+.ag-group-body{
+  padding:1rem 1.1rem;
+}
+.ag-group-body > .agenda-item{
+  margin-bottom:.85rem;
+}
+.ag-group-body > .agenda-item:last-child{ margin-bottom:0; }
+
+/* ============================================================
+   03, TIJDIGHEIDSDASHBOARD
+   ============================================================ */
+
+/* Tijdigheid-tabs voor de vier bestuursorganen */
+/* Echte knoppen: elk met eigen rand en afronding, met ruimte ertussen. Zo lezen ze als
+   iets waarop je klikt, in plaats van als aaneengesloten platte tekstvlakken. */
+/* Eén schakelaar met vijf standen, niet vijf losse kaartjes.
+   Eerdere rondes stapelden signaal (vollere rand, hover-inversie) op een vorm die kaart BLEEF:
+   --kaart-b is de kaartkleur en --shadow-soft is de kaartschaduw (zie .dos-card), en met een
+   naam plus een cijfer erin was dit de anatomie van een statistiek-tegel, boven een dashboard
+   vol van die tegels. Vijf losse dozen met tussenruimte kunnen niet anders dan als tegels
+   lezen. Daarom nu de grammatica van .seg-toggle, die op deze pagina al drie keer bedient:
+   één omhulsel met de rand, scheidingslijnen ertussen, precies één stand gevuld. De maat is
+   bewust niet die van .seg-toggle (geen pil, geen haarlijn): dat past niet bij tweeregelige
+   items. Het signaal zit nu in de RUSTSTAND, dus het werkt ook op een aanraakscherm. */
+.tij-tabs{
+  display:flex;
+  gap:0;
+  flex-wrap:nowrap;
+  margin-bottom:.6rem;
+  border:1.5px solid var(--ink);
+  border-radius:var(--r-chip);
+  overflow:hidden;
+}
+.tij-tab{
+  flex:1; min-width:0;
+  display:flex; flex-direction:column;
+  gap:.25rem;
+  padding:.95rem 1.2rem;
+  background:none;
+  cursor:pointer;
+  text-align:left;
+  border:none;
+  border-radius:0;
+  box-shadow:none;
+  transition:background .15s, color .15s;
+  position:relative;
+  font-family:inherit;
+}
+.tij-tab + .tij-tab{ border-left:1.5px solid var(--ink); }
+/* Hover mag NIET gelijk zijn aan actief, anders wist ze net het verschil tussen gekozen en
+   niet-gekozen uit. Zelfde hover als .seg-opt:not(.on). Geen lift: binnen overflow:hidden
+   kan een segment toch niet omhoog springen. */
+.tij-tab:not(.active):hover{ background:var(--paper-3); color:var(--ink); }
+/* Offset naar BINNEN: de groep heeft overflow:hidden, dus een ring buiten het segment
+   wordt afgeknipt en de toetsenbordgebruiker ziet niets. */
+.tij-tab:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
+.tij-tabs-hint{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:var(--ink-dim); margin:1.4rem 0 .7rem; }
+.tij-tab.active{
+  background:var(--ink);
+  color:var(--paper);
+}
+.tij-tab-name{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.92rem; font-weight:500;
+  letter-spacing:-.005em;
+}
+.tij-tab-meta{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.06em;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+}
+.tij-tab.active .tij-tab-meta{ color:var(--op-eiland-65); }
+/* Vóór-mij-telling in de tabmeta: roze zodra er treffers zijn, ook op niet-actieve tabs.
+   Zo zie je meteen op welk tabblad je overige hits zitten. */
+.tij-tab-meta .mijn-n{ font-style:normal; font-variant-numeric:tabular-nums; }
+.tij-tab-meta .mijn-n.aan{ color:var(--pink-text); font-weight:700; }
+.tij-tab.active .tij-tab-meta .mijn-n.aan{ color:var(--eiland-pink); }
+/* Recent beslist: zelfde tab-taal, met het aantal per orgaan op de tab */
+.rb-tabs{ margin-bottom:1rem; }
+.rb-tabs .tij-tab.rb-leeg:not(.active){ opacity:.45; }
+.rb-meta{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; letter-spacing:.04em; color:var(--ink-faint); margin:.35rem 0 1rem; }
+/* Breekpunt op 900 en niet op 680: zonder flex-wrap kunnen de vijf standen niet meer
+   uitwijken, en "10 dagen · besluitenlijst" maakt ze breed. Onder deze maat wordt het een
+   kolom, en dan verhuist de scheidingslijn van links naar boven.
+   De regel .tij-tab.active::before die hier stond is geschrapt: er was nergens een basisregel
+   met content, dus dat pseudo-element rendeerde nooit. Dood spoor van een oud actief-streepje;
+   de volle inktvulling zegt het nu duidelijker dan een streepje ooit kon. */
+@media (max-width:900px){
+  .tij-tabs{ flex-direction:column; }
+  .tij-tab + .tij-tab{ border-left:none; }
+  /* Op elk kind, niet op .tij-tab + .tij-tab: in de accordeon schuift het dashboard tussen de
+     tabs, en dan is de tab eronder niet meer aangrenzend en zou zijn scheidingslijn wegvallen. */
+  .tij-tabs > * + *{ border-top:1.5px solid var(--ink); }
+}
+
+.dashboard{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  grid-template-rows:auto auto;
+  gap:1px;
+  background:var(--line-strong);
+  border:1px solid var(--line-strong);
+  margin-bottom:2rem;
+}
+.dashboard > *{ background:var(--paper); padding:1.6rem 1.8rem; }
+/* Smartphone-accordeon: het dashboard schuift binnen #tijTabs onder de actieve orgaan-tab.
+   De tabs-container levert al de rand en de scheidingslijnen, dus het dashboard laat zijn
+   eigen rand en marge vallen zodat het naadloos onder de tab aansluit. */
+#tijTabs > .dashboard{ border:none; margin:0; }
+
+.dash-stat{
+  display:flex; flex-direction:column;
+  justify-content:center;
+  grid-row:1; grid-column:1;
+  background:var(--ink) !important;
+  color:var(--paper);
+  padding:2.2rem 2rem !important;
+}
+.dash-num{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:clamp(4rem, 8vw, 6.5rem);
+  line-height:.9;
+  font-weight:300;
+  letter-spacing:-.04em;
+  font-variant-numeric:tabular-nums;
+  color:var(--pink);
+  margin-bottom:.2rem;
+}
+.dash-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--op-eiland-85);
+  margin-bottom:.5rem;
+}
+.dash-sub{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem;
+  color:var(--op-eiland-55);
+}
+
+.dash-secondary{
+  grid-row:1; grid-column:2;
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; padding:0 !important;
+  background:var(--line);
+}
+.dash-cell{ background:var(--paper); padding:1.4rem 1.2rem; display:flex; flex-direction:column; justify-content:center; }
+.dash-cell-num{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:2.2rem; line-height:1;
+  font-weight:400; letter-spacing:-.02em;
+  color:var(--ink);
+  margin-bottom:.5rem;
+}
+.dash-cell-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-dim);
+  line-height:1.5;
+}
+
+.dash-viz{
+  grid-row:2; grid-column:1 / -1;
+  padding:1.6rem 1.8rem !important;
+}
+.dash-viz-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-dim);
+  margin-bottom:.9rem;
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.6rem;
+}
+.dash-viz-legend{ display:inline-flex; gap:1rem; align-items:center; }
+.dash-viz-legend .dot{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:.35rem; }
+.dash-viz-legend .dot.tijdig{ background:rgba(82,74,63,.35); }
+.dash-viz-legend .dot.late{ background:var(--pink); }
+
+.dash-viz-bars{
+  position:relative;
+  display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1.5rem 2rem;
+  align-items:start;
+}
+.dvb-chartwrap{ min-width:0; display:flex; flex-direction:column; }
+.dvb-chart{
+  position:relative;
+  min-width:0;
+  height:170px;
+  display:flex; align-items:end; gap:2px;
+  /* Linkergutter voor de as-waarden; rechts een GERESERVEERDE labelstrook waar de balken
+     nooit komen: zo staat er gegarandeerd geen tekst bovenop een balk, ook niet in een
+     dichtbevolkte grafiek. Geen bodempadding: balken en 0-lijn delen één coördinatenstelsel. */
+  padding:0 var(--dvb-strook, 146px) 0 56px;
+  border-bottom:1px solid var(--line-strong);
+  --max-days:16;
+  --deadline-days:8;
+}
+/* De hoogste y-as-waarde tonen we bewust niet meer als label: dat gaf te veel ruis
+   op de as. Enkel de deadline-lijn houdt haar waarde (zie ::after). */
+.dvb-chart::before{ content:none; }
+/* Y-as label op deadline-niveau, dynamisch */
+.dvb-chart::after{
+  content:attr(data-deadline);
+  position:absolute; left:0; top:var(--deadline-top, 50%); width:48px; text-align:right;
+  transform:translateY(-50%);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.04em;
+  color:var(--pink-text);
+  font-variant-numeric:tabular-nums;
+  font-weight:500;
+  pointer-events:none;
+}
+/* ÉÉN visuele taal voor beide regimes: de 0-LIJN IS DE WETTELIJKE DEADLINE.
+   Alles BOVEN nul = dagen te laat (roze zone), alles ONDER nul = binnen de termijn.
+   Bij de agenda betekent 0 "8 dagen op voorhand" (negatief = nog vroeger, dus goed);
+   bij de besluitenlijsten betekent 0 "10 dagen nadien" (negatief = sneller, dus goed). */
+.dvb-chart > .dvb-deadline{
+  position:absolute; left:56px; right:0; top:var(--deadline-top, 50%);
+  border-top:1px dashed rgba(200, 32, 84, .45);
+  pointer-events:none;
+  z-index:0;
+}
+/* Verticale y-as, zoals in een klassieke grafiek. */
+.dvb-axis{
+  position:absolute; left:56px; top:0; bottom:0;
+  border-left:1px solid var(--line-strong);
+  pointer-events:none;
+}
+/* De te-laat-zone: alles boven de 0-lijn. */
+.dvb-zone{
+  position:absolute; left:56px; right:0; top:0; height:var(--deadline-top, 50%);
+  background:rgba(255,0,102,.08);
+  pointer-events:none;
+}
+/* De labels wonen in de gereserveerde strook rechts (de padding van de chart): daar komen
+   geen balken, dus de tekst staat altijd vrij. De zone en de 0-lijn lopen er wél onderdoor. */
+.dvb-lbl{
+  position:absolute; z-index:2; pointer-events:none;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.12em; text-transform:uppercase;
+  text-align:right;
+}
+.dvb-lbl.lbl-telaat{ right:8px; top:8px; color:var(--pink-text); }
+.dvb-lbl.lbl-nul{ right:8px; top:calc(var(--deadline-top, 50%) + 6px); color:var(--pink-text); }
+.dvb-lbl.lbl-ok{ right:8px; bottom:8px; color:var(--ink-faint); }
+/* Bijschrift onder de grafiek: de mobiele plek voor de uitleg. Op smal scherm past geen
+   labelstrook naast 100+ balken (de rij met tussenruimtes is breder dan het scherm), dus
+   daar krijgen de balken de volle breedte en staat de uitleg eronder: drie heldere regels
+   met een kleurstaal, die meteen ook de legenda vervangen (die verbergen we daar). */
+.dvb-uitleg{ display:none; }
+@media (max-width:560px){
+  .dvb-chart{ --dvb-strook:8px; }
+  .dvb-lbl{ display:none; }
+  .dash-viz-legend{ display:none; }   /* de uitleg-regels hieronder dragen de kleuren al */
+  .dvb-uitleg{
+    display:flex; flex-direction:column; gap:.35rem;
+    margin-top:.7rem;
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+    font-size:.72rem; line-height:1.45;
+    color:var(--ink-dim);
+  }
+  .dvb-uitleg .u-rij{ display:flex; align-items:baseline; gap:.5rem; }
+  .dvb-uitleg .u-staal{
+    flex-shrink:0; width:10px; height:10px; align-self:center;
+  }
+  .dvb-uitleg .u-staal.s-laat{ background:var(--pink); }
+  .dvb-uitleg .u-staal.s-ok{ background:rgba(82,74,63,.35); }
+  .dvb-uitleg .u-staal.s-lijn{ height:0; border-top:2px dashed rgba(200,32,84,.6); }
+  .dvb-uitleg strong{ color:var(--ink); font-weight:600; }
+}
+/* As-waarden in de linkermarge: +6 boven, −6 onder (0 staat al op de lijn zelf). */
+.dvb-tick{
+  position:absolute; left:0; width:48px; text-align:right; pointer-events:none;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; color:var(--ink-faint); font-variant-numeric:tabular-nums;
+}
+.dvb-bar{
+  flex:1 1 0; min-width:0; max-width:16px;
+  position:relative;
+  height:100%;
+  cursor:pointer;
+  z-index:1;
+}
+/* Balken hangen aan de 0-lijn: te laat groeit omhoog de zone in, binnen de termijn
+   groeit omlaag. De positionering (top/bottom + hoogte) komt inline uit de renderer. */
+.dvb-bar-inner{
+  position:absolute; left:0; right:0;
+  transition:filter .15s;
+  min-height:2px;
+}
+.dvb-bar:hover .dvb-bar-inner{ filter:brightness(1.15); }
+/* Kleurtaal zoals op de rest van de site: roze = aandacht. Het tijdige gros is licht
+   warmgrijs (rustige achtergrond); de laatkomers kleuren vol roze en springen eruit. */
+.dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.35); border-radius:0 0 2px 2px; }
+.dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:2px 2px 0 0; }
+.dvb-bar.active .dvb-bar-inner{ filter:brightness(1.2); box-shadow:0 0 0 1.5px var(--ink); }
+/* Readout onder de grafiek: toont de gekozen zitting — werkt op hover én tik (mobiel) */
+.dvb-readout{
+  margin-top:.85rem; padding-top:.7rem;
+  border-top:1px solid var(--line);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.74rem; line-height:1.5; color:var(--ink-2); min-height:2.4em;
+}
+/* De uitklap onder de grafiek op smal scherm, plus het regeltje dat zegt wat we weglieten.
+   Dat regeltje is niet optioneel: een ingekorte grafiek zonder melding leest als "dit is
+   alles wat er is". */
+.dvb-knip{
+  margin-top:.6rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; color:var(--ink-faint); letter-spacing:.02em;
+}
+.dvb-meer{
+  margin-top:.45rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.68rem; letter-spacing:.04em;
+  color:var(--pink-text);
+  border-bottom:1px solid var(--line-pink); padding-bottom:1px;
+}
+.dvb-meer:hover{ color:var(--pink); border-color:var(--pink); }
+.dvb-readout .hint{ color:var(--ink-faint); }
+.dvb-readout strong{ color:var(--ink); font-weight:600; }
+.dvb-readout .ok{ color:var(--pink-text); }
+.dvb-readout .bad{ color:#c8102e; }
+
+.dvb-recent{
+  border-left:1px solid var(--line);
+  padding-left:1.2rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; line-height:1.6;
+  color:var(--ink-dim);
+}
+.dvb-recent-title{
+  font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint);
+  margin-bottom:.6rem;
+}
+
+.dash-detail{
+  grid-row:3; grid-column:1 / -1;
+  padding:0 !important;
+  background:var(--paper);
+}
+.dash-detail summary{
+  padding:1rem 1.8rem;
+  cursor:pointer;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-dim);
+  border-top:1px solid var(--line);
+  list-style:none;
+  user-select:none;
+}
+.dash-detail summary::-webkit-details-marker{ display:none; }
+.dash-detail summary::before{
+  content:'+ '; color:var(--pink); margin-right:.4rem;
+}
+.dash-detail[open] summary::before{ content:'− '; }
+.dash-detail .sessions-table{ border:none; border-top:1px solid var(--line); }
+
+@media (max-width:900px){
+  .dashboard{ grid-template-columns:1fr; }
+  /* Smal scherm: de GRAFIEK eerst, meteen onder de orgaan-tabs. Wie een orgaan aantikt
+     ziet direct het antwoord in beeld; de cijfertegels volgen eronder. */
+  .dash-viz{ grid-row:1; grid-column:1; }
+  .dash-stat{ grid-row:2; grid-column:1; }
+  .dash-secondary{ grid-row:3; grid-column:1; }
+  .dash-detail{ grid-row:4; }
+  .dash-viz-bars{ grid-template-columns:1fr; }
+  .dvb-recent{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:1rem; }
+  /* Compactere pct-tegel: op mobiel is hij een samenvattingsstrook, niet de blikvanger. */
+  .dash-stat{ padding:1.3rem 1.3rem !important; }
+  .dash-num{ font-size:3rem; }
+}
+
+/* ============================================================
+   03, VERGADERINGEN (volledige lijst, in dash-detail)
+   ============================================================ */
+.sessions-table{
+  width:100%;
+  border:1px solid var(--line-strong);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.82rem;
+}
+.sessions-table thead th{
+  text-align:left;
+  padding:.85rem 1rem;
+  border-bottom:1px solid var(--line-strong);
+  background:var(--paper-2);
+  font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--bone-faint);
+  font-weight:500;
+}
+.sessions-table tbody td{
+  padding:.85rem 1rem;
+  border-bottom:1px solid var(--line);
+  vertical-align:middle;
+}
+.sessions-table tbody tr:last-child td{ border-bottom:none; }
+.sessions-table tbody tr:hover{ background:var(--paper); }
+.sessions-table .date{ color:var(--bone); font-variant-numeric:tabular-nums; }
+.sessions-table .type{ color:var(--bone-dim); font-style:italic; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.92rem; }
+.s-pill{
+  display:inline-block;
+  padding:.22rem .55rem;
+  font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+  border:1px solid;
+}
+.s-pill.tijdig    { color:var(--pink-text); border-color:var(--pink); background:var(--pink-soft); }
+.s-pill.te-laat   { color:#c4006a; border-color:#c4006a; background:rgba(196,0,106,.06); }
+.s-pill.verwacht  { color:var(--bone-dim); border-color:var(--line-strong); }
+.s-pill.beslist   { color:var(--bone-dim); border-color:var(--line-strong); background:transparent; }
+/* Knopje, geen kale tekst. Volle inkt-rand zoals .btn-ghost, en bij hover keert hij om:
+   onmiskenbaar iets waarop je klikt. */
+.sessions-table .sess-link{
+  display:inline-block; white-space:nowrap;
+  color:var(--ink);
+  background:var(--kaart-b);
+  border:1.5px solid var(--ink); border-radius:999px;
+  padding:.24rem .68rem;
+  font-size:.72rem; font-weight:500;
+  transition:background .15s, color .15s;
+}
+.sessions-table .sess-link:hover{ background:var(--ink); color:var(--paper); }
+.sessions-table .sess-link:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+
+@media (max-width:780px){
+  .sessions-table thead{ display:none; }
+  .sessions-table tbody tr{ display:block; padding:.75rem 0; border-bottom:1px solid var(--line); }
+  .sessions-table tbody tr:last-child{ border-bottom:none; }
+  .sessions-table tbody td{ display:flex; justify-content:space-between; padding:.4rem 1rem; border:none; }
+  .sessions-table tbody td::before{
+    content:attr(data-lbl);
+    font-size:.6rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--bone-faint);
+  }
+}
+
+/* ============================================================
+   04, COLLEGEMONITOR
+   ============================================================ */
+/* Activity-stat: top block with totale telling + maandbalken */
+/* Verdeeld paneel: de cellen vullen de afgeronde hoeken, dus overflow:hidden is nodig,
+   anders steken hun vierkante hoeken door de ronding heen (zoals bij .dashboard). */
+.college-activity{
+  display:grid;
+  grid-template-columns:1.1fr 2fr;
+  gap:1px;
+  background:var(--line-strong);
+  border:1px solid var(--line-strong);
+  overflow:hidden;
+  margin-bottom:2rem;
+}
+.college-activity > *{ background:var(--paper); }
+.ca-stat{
+  background:var(--ink) !important;
+  color:var(--paper);
+  padding:2rem 1.85rem;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.ca-num{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:clamp(3rem, 6vw, 5rem);
+  line-height:.9;
+  font-weight:300; letter-spacing:-.04em;
+  font-variant-numeric:tabular-nums;
+  color:var(--pink);
+  margin-bottom:.3rem;
+}
+.ca-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--op-eiland-85);
+  margin-bottom:.5rem;
+}
+.ca-sub{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem;
+  color:var(--op-eiland-55);
+}
+.ca-viz{ padding:1.6rem 1.8rem; display:flex; flex-direction:column; gap:.85rem; }
+.ca-viz-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-dim);
+}
+.ca-viz-lbl .dim{ color:var(--ink-faint); margin-left:.4rem; }
+.ca-bars{
+  flex:1;
+  display:grid; grid-template-columns:repeat(18, 1fr); gap:3px;
+  align-items:end; height:90px; min-height:90px;
+}
+.ca-bar{
+  background:var(--pink-soft);
+  position:relative;
+  transition:filter .15s;
+}
+.ca-bar.on{ background:var(--pink); }
+.ca-bar:hover{ filter:brightness(1.1); }
+.ca-bar:hover::after{
+  content: attr(data-tip);
+  position:absolute; bottom:calc(100% + 6px); left:50%;
+  transform:translateX(-50%);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.04em;
+  background:var(--ink); color:var(--paper);
+  padding:.3rem .55rem;
+  white-space:nowrap;
+  z-index:10;
+}
+@media (max-width:900px){
+  .college-activity{ grid-template-columns:1fr; }
+  .ca-bars{ grid-template-columns:repeat(18, 1fr); height:60px; min-height:60px; }
+}
+
+/* College leden — secundair, ingeklapt */
+.college-people-detail{
+  margin-top:2.5rem;
+  border-top:1px solid var(--line);
+  padding-top:1.5rem;
+}
+.college-people-detail summary{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.82rem; letter-spacing:.04em;
+  color:var(--ink-2);
+  font-weight:500;
+  cursor:pointer;
+  list-style:none;
+  display:flex; align-items:center; gap:.5rem;
+}
+.college-people-detail summary::-webkit-details-marker{ display:none; }
+.cpd-arrow{
+  font-size:.7rem;
+  transition:transform .25s;
+  color:var(--ink-faint);
+}
+.college-people-detail[open] .cpd-arrow{ transform:rotate(180deg); }
+.cpd-desc{
+  margin:1rem 0 1.5rem;
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.88rem; color:var(--ink-dim);
+  line-height:1.5;
+}
+
+/* Burgemeester apart, in een groot horizontaal blok */
+.college-people{ margin-bottom:0; }
+.cp-burg{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:1.5rem; align-items:center;
+  padding:1.5rem 1.6rem;
+  border:1px solid var(--ink);
+  background:var(--paper);
+  margin-bottom:1px;
+  position:relative;
+}
+.cp-burg::before{
+  content:'BURGEMEESTER';
+  position:absolute;
+  top:.5rem; right:1rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.18em;
+  color:var(--pink-text);
+}
+.cp-burg .sch-init{
+  font-size:3.6rem;
+  margin-bottom:0;
+}
+.cp-burg .cp-meta{
+  display:flex; flex-direction:column; gap:.2rem;
+}
+.cp-burg .sch-name{ font-size:1.4rem; font-weight:500; margin:0; }
+.cp-burg .sch-role{ font-size:.92rem; margin:0; }
+.cp-burg .sch-keywords{
+  display:flex; flex-wrap:wrap; gap:.3rem;
+  padding:0; border-top:none;
+  margin-top:.6rem;
+}
+.cp-burg .sch-mailto{ margin-top:0; }
+@media (max-width:780px){
+  .cp-burg{ grid-template-columns:auto 1fr; gap:1rem; padding-top:2rem; }
+  .cp-burg .sch-mailto{ grid-column:1/-1; }
+}
+
+/* Schepenen grid (8 ipv 9 — burgemeester staat apart) */
+/* Echte tussenruimte, geen haarlijn-truc: .sch-card is afgerond, en een afgerond kaartje
+   op een donker raster laat dat raster in elk hoekje doorschijnen. */
+.schepenen-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
+  gap:.9rem;
+}
+.sch-card{
+  background:var(--paper);
+  padding:1.4rem 1.3rem 1.2rem;
+  position:relative;
+  border:1px solid var(--line-kaart);
+  box-shadow:var(--shadow-soft);
+  transition:border-color .2s, box-shadow .2s;
+}
+.sch-card:hover{ border-color:var(--pink); box-shadow:var(--shadow-lift); }
+.sch-init{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:2rem; line-height:1;
+  font-weight:300; letter-spacing:-.04em;
+  color:var(--pink);
+  margin-bottom:.7rem;
+}
+.sch-name{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.98rem;
+  font-weight:500;
+  margin-bottom:.15rem;
+  letter-spacing:-.005em;
+}
+.sch-role{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-style:italic;
+  font-size:.78rem;
+  color:var(--ink-dim);
+  margin-bottom:.85rem;
+  line-height:1.4;
+}
+/* Mini activity sparkline per schepen (CSS-only horizontal bars) */
+.sch-spark{
+  display:flex; gap:2px; align-items:end;
+  height:18px;
+  margin-bottom:.85rem;
+  padding-bottom:.25rem;
+  border-bottom:1px solid var(--line);
+}
+.sch-spark span{
+  flex:1;
+  background:var(--pink-soft);
+  border-radius:1px;
+  transition:background .15s;
+}
+.sch-spark span.on{ background:var(--pink); }
+.sch-spark-lbl{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.06em;
+  color:var(--ink-faint);
+  margin-bottom:.85rem;
+  display:flex; justify-content:space-between;
+}
+.sch-spark-lbl strong{ color:var(--ink-2); font-weight:500; }
+.sch-keywords{
+  display:flex; flex-wrap:wrap; gap:.3rem;
+  padding-top:.85rem;
+  border-top:1px solid var(--line);
+}
+.sch-kw{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.04em;
+  color:var(--ink-faint);
+  padding:.15rem .35rem;
+  border:1px solid var(--line);
+}
+.sch-mailto{
+  display:inline-flex; align-items:center; gap:.4rem;
+  margin-top:.85rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.68rem; letter-spacing:.04em;
+  color:var(--pink-text);
+}
+.sch-mailto:hover{ text-decoration:underline; }
+
+/* ============================================================
+   05, ARCHIEF
+   ============================================================ */
+.archief-toolbar{
+  display:flex; gap:.7rem; flex-wrap:wrap; align-items:center;
+  margin-bottom:1.5rem;
+}
+.outcome-filters{ display:flex; gap:.4rem; flex-wrap:wrap; }
+.of-btn{
+  padding:.4rem .75rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--line-strong);
+  color:var(--ink-dim);
+  background:var(--paper);
+  transition:all .15s;
+}
+.of-btn:hover{ color:var(--bone); border-color:var(--bone-dim); }
+.of-btn.active{ color:#fff; background:var(--pink); border-color:var(--pink); }
+
+/* Scanbare archief-tabel — click-to-expand */
+.arch-table{
+  border:1px solid var(--line-strong);
+  background:var(--paper);
+}
+.arch-table-head{
+  display:grid;
+  grid-template-columns:90px 1fr 220px 32px;
+  gap:1rem;
+  padding:.75rem 1rem;
+  background:var(--paper-2);
+  border-bottom:1px solid var(--line-strong);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint);
+  font-weight:500;
+}
+.arch-row{
+  border-bottom:1px solid var(--line);
+}
+.arch-row:last-child{ border-bottom:none; }
+.arch-row summary{
+  display:grid;
+  grid-template-columns:90px 1fr 220px 32px;
+  gap:1rem;
+  padding:.85rem 1rem;
+  align-items:center;
+  cursor:pointer;
+  list-style:none;
+  transition:background .12s;
+}
+.arch-row summary::-webkit-details-marker{ display:none; }
+.arch-row:hover summary{ background:var(--paper-2); }
+
+.arch-date{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem;
+  color:var(--ink-dim);
+  font-variant-numeric:tabular-nums;
+}
+.arch-title{
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.95rem;
+  color:var(--ink);
+  line-height:1.4;
+  display:flex; flex-direction:column; gap:.3rem;
+}
+.arch-themes{
+  display:flex; flex-wrap:wrap; gap:.3rem;
+}
+.arch-theme{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.58rem; letter-spacing:.06em;
+  color:var(--ink-faint);
+  padding:.1rem .35rem;
+  border:1px solid var(--line);
+  text-transform:uppercase;
+}
+.arch-outcome{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.04em;
+  padding:.3rem .6rem;
+  border:1px solid;
+  text-align:center;
+  white-space:nowrap;
+}
+.arch-outcome.goedgekeurd{ color:var(--pink-text); border-color:var(--pink); background:var(--pink-soft); }
+.arch-outcome.goedgekeurd-met-amendering{ color:#8a1457; border-color:#8a1457; background:rgba(138,20,87,.07); }
+.arch-outcome.verdaagd{ color:var(--ink-dim); border-color:var(--line-strong); }
+.arch-outcome.verworpen{ color:#c8102e; border-color:#c8102e; background:rgba(201,32,32,.08); }
+.arch-toggle{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  color:var(--ink-faint);
+  font-size:.85rem;
+  text-align:center;
+  transition:transform .2s;
+}
+.arch-row[open] .arch-toggle{ transform:rotate(180deg); color:var(--pink); }
+
+.arch-detail{
+  padding:1rem 1rem 1.25rem;
+  background:var(--paper-2);
+  border-top:1px solid var(--line);
+}
+.arch-decoded{
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.95rem;
+  font-style:italic;
+  line-height:1.55;
+  color:var(--ink-2);
+  border-left:3px solid var(--pink);
+  padding-left:.85rem;
+  margin-bottom:.85rem;
+}
+.arch-meta{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem;
+  color:var(--ink-dim);
+  margin-bottom:.85rem;
+}
+.arch-meta strong{ color:var(--ink); font-weight:500; }
+.arch-more{
+  margin-top:1rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem;
+  color:var(--ink-faint);
+  text-align:center;
+}
+
+@media (max-width:780px){
+  .arch-table-head{ display:none; }
+  .arch-row summary{
+    grid-template-columns:1fr 32px;
+    gap:.4rem;
+    grid-template-areas:
+      "date    toggle"
+      "title   toggle"
+      "outcome toggle";
+  }
+  .arch-date{ grid-area:date; font-size:.7rem; }
+  .arch-title{ grid-area:title; font-size:.92rem; }
+  .arch-outcome{ grid-area:outcome; justify-self:start; font-size:.65rem; }
+  .arch-toggle{ grid-area:toggle; align-self:center; }
+}
+
+/* ============================================================
+   06, ABONNEER (lifecycle-aware)
+   ============================================================ */
+#abonneer .grid{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  gap:clamp(1.5rem, 4vw, 4rem);
+  align-items:start;
+}
+@media (max-width:1000px){ #abonneer .grid{ grid-template-columns:1fr; } }
+
+.lifecycle-explainer{
+  border:1px solid var(--line);
+  padding:1.75rem 1.5rem;
+  background:linear-gradient(180deg, rgba(255,0,102,.04), transparent 80%);
+}
+.lifecycle-explainer h3{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.4rem; font-weight:400;
+  letter-spacing:-.015em;
+  margin-bottom:.5rem;
+}
+.lifecycle-explainer h3 em{ color:var(--pink-text); font-style:normal; }
+.lifecycle-explainer .desc{
+  font-size:.95rem; color:var(--bone-2);
+  line-height:1.55;
+  margin-bottom:1.5rem;
+}
+
+.lc-timeline{
+  display:grid; grid-template-columns:repeat(5, 1fr);
+  gap:0;
+  margin-top:1.5rem;
+}
+.lc-tl-stage{
+  position:relative;
+  padding:0 .35rem 0 0;
+}
+.lc-tl-stage .dot{
+  width:12px; height:12px; border-radius:50%;
+  background:var(--pink);
+  position:relative; z-index:2;
+  margin-bottom:.7rem;
+}
+.lc-tl-stage:nth-child(4) .dot{ background:var(--ink-2); }
+.lc-tl-stage:nth-child(5) .dot{ background:var(--ink-faint); }
+.lc-tl-stage::after{
+  content:''; position:absolute; top:5px; left:16px; right:0; height:1px;
+  background:var(--line-strong);
+}
+.lc-tl-stage:last-child::after{ display:none; }
+.lc-tl-stage h4{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--bone);
+  margin-bottom:.35rem;
+}
+.lc-tl-stage p{
+  font-size:.78rem; color:var(--bone-dim); line-height:1.45;
+}
+.lc-tl-stage .when{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.06em; color:var(--pink-text);
+  margin-bottom:.35rem;
+}
+
+.subscribe-form{
+  border:1px solid var(--line-strong);
+  padding:1.75rem 1.6rem;
+}
+.subscribe-form h3{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.3rem; font-weight:400; letter-spacing:-.01em;
+  margin-bottom:.5rem;
+}
+.subscribe-form .desc{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; color:var(--bone-faint); letter-spacing:.04em;
+  margin-bottom:1.5rem; line-height:1.5;
+}
+
+.notif-when{
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:.4rem;
+  margin-top:.4rem;
+}
+.notif-opt{
+  padding:.65rem .5rem;
+  text-align:center;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--line-strong);
+  color:var(--bone-dim);
+  cursor:pointer;
+  transition:all .15s;
+}
+.notif-opt:hover{ color:var(--ink); }
+.notif-opt.active{ color:var(--paper); background:var(--ink); border-color:var(--ink); }
+
+.notif-perm{
+  margin-top:.4rem;
+}
+.btn-perm{
+  width:100%;
+  padding:.75rem 1rem;
+  text-align:center;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--line-strong);
+  background:var(--paper-2);
+  color:var(--ink);
+  cursor:pointer;
+  transition:all .15s;
+}
+.btn-perm:hover{ background:var(--paper-3); }
+.btn-perm.granted{ background:var(--pink-soft); border-color:var(--pink); color:var(--pink-text); }
+.btn-perm.denied  { background:transparent; border-color:var(--ink-faint); color:var(--ink-dim); cursor:not-allowed; }
+.perm-desc{
+  margin-top:.6rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.02em; line-height:1.55;
+  color:var(--ink-dim);
+}
+
+.subscribe-foot{
+  margin-top:1.2rem; padding-top:1.2rem;
+  border-top:1px solid var(--line);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.04em;
+  color:var(--ink-faint);
+  line-height:1.6;
+}
+
+/* ============================================================
+   07, COLLEGE + OPENBAARHEIDSVERZOEK
+   ============================================================ */
+.college-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:clamp(1.5rem, 3vw, 3rem);
+}
+@media (max-width:1000px){ .college-grid{ grid-template-columns:1fr; } }
+
+.college-list-header{
+  display:flex; justify-content:space-between; align-items:baseline;
+  margin-bottom:1rem;
+  padding-bottom:.85rem;
+  border-bottom:1px solid var(--line);
+}
+.college-list-stat{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem;
+  color:var(--ink-dim);
+}
+.college-item{
+  display:grid;
+  grid-template-columns:80px 1fr auto;
+  gap:1rem; align-items:center;
+  padding:1rem 0;
+  border-bottom:1px solid var(--line);
+}
+.college-item:last-child{ border-bottom:none; }
+.college-item .ci-date{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.74rem; letter-spacing:.04em;
+  color:var(--ink-dim);
+  font-variant-numeric:tabular-nums;
+}
+.college-item .ci-title{
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.95rem;
+  color:var(--ink);
+  line-height:1.45;
+}
+.college-item .ci-cat{
+  display:inline-block;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.08em;
+  color:var(--ink-faint);
+  margin-bottom:.2rem;
+}
+.ci-action{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.06em;
+  padding:.5rem .85rem;
+  border:1px solid var(--ink);
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.ci-action:hover{ background:var(--ink); color:var(--paper); }
+
+.ov-tijdlijn{
+  border:1px solid var(--line-strong);
+  padding:1.5rem 1.4rem;
+  background:var(--paper-2);
+  height:fit-content;
+  position:sticky; top:5.5rem;
+}
+.ov-tijdlijn h3{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.95rem; font-weight:500;
+  margin-bottom:.5rem;
+}
+.ov-tijdlijn .desc{
+  font-size:.85rem; line-height:1.55;
+  color:var(--ink-dim);
+  margin-bottom:1.5rem;
+}
+.ov-steps{ display:flex; flex-direction:column; gap:.85rem; }
+.ov-step{
+  position:relative;
+  padding-left:1rem;
+  border-left:2px solid var(--ink-faint);
+  padding-bottom:.6rem;
+  padding-top:.1rem;
+}
+.ov-step::before{
+  content:''; position:absolute; left:-5px; top:.4rem;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--ink-dim);
+}
+.ov-step.ov-step-warn{ border-left-color:var(--pink); }
+.ov-step.ov-step-warn::before{ background:var(--pink); }
+.ov-step-when{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint);
+  margin-bottom:.15rem;
+}
+.ov-step.ov-step-warn .ov-step-when{ color:var(--pink-text); }
+.ov-step-title{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.86rem; font-weight:500;
+  color:var(--ink);
+  margin-bottom:.2rem;
+}
+.ov-step-desc{
+  font-size:.8rem; line-height:1.5;
+  color:var(--ink-dim);
+}
+.ov-step-desc a{ color:var(--pink-text); border-bottom:1px solid var(--pink-text); }
+
+/* Modal */
+.ov-modal{ position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:1rem; }
+.ov-modal[hidden]{ display:none; }
+.ov-modal-overlay{ position:absolute; inset:0; background:rgba(10,10,10,.55); backdrop-filter:blur(4px); }
+.ov-modal-card{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--ink);
+  padding:2rem 1.85rem 1.6rem;
+  width:100%; max-width:560px;
+  max-height:90vh; overflow:auto;
+  box-shadow:0 24px 80px -20px rgba(10,10,10,.4);
+}
+.ov-modal-card h3{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.4rem; font-weight:500;
+  margin:.5rem 0 .8rem;
+  letter-spacing:-.015em;
+}
+.ov-modal-context{
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.95rem; line-height:1.55;
+  color:var(--ink-dim);
+  padding:.75rem .9rem;
+  background:var(--paper-2);
+  border-left:2px solid var(--pink);
+  margin-bottom:1.5rem;
+}
+.ov-modal-close{
+  position:sticky; top:.6rem; float:right;
+  margin:-.7rem -.55rem .2rem 0; z-index:5;
+  width:36px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; line-height:1;
+  color:var(--ink); background:var(--paper-2);
+  border:1px solid var(--line-strong); border-radius:50%;
+  cursor:pointer; transition:background .15s, color .15s;
+}
+.ov-modal-close:hover{ color:var(--paper); background:var(--pink); border-color:var(--pink); }
+
+/* Compacte 2-kolom layout in WOB-modal */
+.ov-fields-row{
+  display:grid; grid-template-columns:1fr 1fr; gap:.85rem;
+  margin-bottom:.85rem;
+}
+@media (max-width:580px){ .ov-fields-row{ grid-template-columns:1fr; } }
+.field-hint{
+  color:var(--ink-faint);
+  font-weight:400;
+  font-size:.78em;
+  margin-left:.3em;
+}
+
+.ov-modal-foot{
+  margin-top:1rem; padding-top:1rem;
+  border-top:1px solid var(--line);
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.02em; line-height:1.55;
+  color:var(--ink-faint);
+}
+
+
+/* ============================================================
+   08, VERANTWOORDING (disclaimer)
+   ============================================================ */
+.dc-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:.9rem;
+  margin-bottom:2rem;
+}
+@media (max-width:780px){ .dc-grid{ grid-template-columns:1fr; } }
+/* Subtiele diepte: de grote panelen komen iets los van het papier. */
+/* De rasters zijn nu doorzichtige containers met echte tussenruimte; de schaduw hoort
+   bij de blokjes zelf (zie .dc-card / .dos-card), niet meer bij het raster. */
+.dashboard, .college-activity{ box-shadow:var(--shadow-soft); }
+
+.dc-card{
+  background:var(--paper);
+  padding:1.6rem 1.6rem 1.4rem;
+  position:relative;
+  border:1px solid var(--line-kaart);
+  box-shadow:var(--shadow-soft);
+}
+.dc-card h3{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:1.05rem; font-weight:500;
+  letter-spacing:-.005em;
+  margin-bottom:.85rem;
+}
+.dc-card p{
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.92rem; line-height:1.6;
+  color:var(--ink-2);
+}
+/* Zonder deze regel is een link hier onzichtbaar: de globale a{color:inherit;text-decoration:none}
+   maakt hem exact gelijk aan de lopende tekst. Zelfde behandeling als .ov-step-desc a. */
+.dc-card p a{ color:var(--pink-text); border-bottom:1px solid var(--pink-text); }
+.dc-card p a:hover{ color:var(--pink-deep); border-bottom-color:var(--pink-deep); }
+.dc-mail{
+  color:var(--pink-text);
+  border-bottom:1px solid var(--pink-text);
+}
+.dc-mail:hover{ color:var(--pink); border-color:var(--pink); }
+
+.dc-cta{
+  /* Gecentreerd onder het kaartenraster: de oproep geldt voor de hele verantwoording. */
+  display:flex; align-items:center; justify-content:center;
+  width:max-content;
+  margin:1.2rem auto 0;
+  padding:.7rem 1.1rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.78rem; letter-spacing:.06em; text-transform:uppercase;
+  background:var(--ink);
+  color:var(--paper);
+  border:1px solid var(--ink);
+  cursor:pointer;
+  transition:all .15s;
+}
+.dc-cta:hover{ background:var(--pink); color:#fff; border-color:var(--pink); }
+@media (max-width:700px){
+  /* Smartphone: volwaardige app-CTA over de volle breedte, netjes uitgelijnd met de kaarten. */
+  .dc-cta{ width:100%; padding:.95rem 1.1rem; }
+}
+
+.dc-foot{
+  border:1px solid var(--ink);
+  background:var(--paper);
+  padding:1.4rem 1.6rem;
+}
+.dc-foot .eyebrow{
+  display:block;
+  margin-bottom:.5rem;
+  color:var(--ink);
+}
+.dc-foot p{
+  font-family:'Geist', system-ui, sans-serif;
+  font-size:.88rem; line-height:1.6;
+  color:var(--ink-2);
+}
+
+
+/* ================================================================
+   HET COLOFON — hetzelfde footer-systeem op portaal, Denk mee en Lees mee.
+   Eén ritme-eenheid (1,5rem) stuurt alles: regelhoogte, gat, de maat van
+   het merkteken en de padding zijn er veelvouden van. Het teken is exact
+   twee tekstregels hoog en hangt aan de KAPLIJN van de eerste regel, niet
+   aan de regelbox: zo loopt het van kaplijn 1 tot kaplijn 3.
+   Enkel dit alias-blok verschilt per site (de tokennamen lopen uiteen).
+   ================================================================ */
+.colofon{
+  --c-ink:var(--ink); --c-tekst:var(--ink-2); --c-stil:var(--ink-faint);
+  --c-lijn:var(--line); --c-pink:var(--pink); --c-pink-tekst:var(--pink-text);
+  --c-pink-deep:var(--pink-deep); --c-pink-zacht:var(--pink-soft);
+  background:var(--paper);   /* alleen hier: Denk mee heeft geen grond onder de footer */
+}
+.colofon{
+  --co-r:1.5rem;
+  --co-teken:calc(var(--co-r) * 2);   /* 48px = twee regels */
+  /* Gemeten uit geist-var.woff2 (cap .710): bij .95rem in een regelbox van
+     24px ligt de kaplijn op 6,6px. Dit is de enige natikwaarde. */
+  --co-kap:.41rem;
+  border-top:1px solid var(--c-lijn);
+  padding-block:calc(var(--co-r) * 2) calc(var(--co-r) * 3);
+  margin-top:0;
+}
+.co-shell{
+  max-width:var(--max); margin-inline:auto; padding-inline:var(--pad-x);
+  display:flex; align-items:flex-start; gap:var(--co-r);
+}
+.co-mark{
+  flex:none; display:block;
+  width:var(--co-teken); height:var(--co-teken);
+  margin-top:var(--co-kap);
+  border-radius:50%; transition:box-shadow .16s;
+}
+.co-mark > *{ display:block; width:100%; height:100%; }
+/* De mug-png op het portaal is een VOLLE schijf; de toren tekent r=212 in een
+   viewBox van 480, dus 88,33%. Daar zet een inzet op de img dat gelijk. */
+.co-mark img{ width:88.33%; height:88.33%; margin:5.833%; }
+.co-mark:hover{ box-shadow:0 0 0 4px var(--c-pink-zacht); }
+.co-mark:focus-visible{ outline:2px solid var(--c-pink); outline-offset:3px; }
+.co-body{ max-width:33rem; }     /* rem, niet ch: 'ch' meet de brede nul van Geist */
+.co-zin{
+  margin:0; font-size:.95rem; line-height:var(--co-r);
+  color:var(--c-tekst); text-wrap:pretty;
+}
+.co-zin strong{ font-weight:600; color:var(--c-ink); }
+/* Het merk dat hier spreekt: mono is in de familie de stem van de merknaam.
+   .96em zet de x-hoogte van mono (550) gelijk aan die van Geist (530). */
+.co-zin .co-naam{
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-weight:500; font-size:.96em; letter-spacing:-.015em;
+  color:var(--c-ink); white-space:nowrap;
+}
+.co-zin .co-naam em{ font-style:italic; color:var(--c-pink-tekst); }
+.co-fam{
+  margin:var(--co-r) 0 0;
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:.66rem; line-height:var(--co-r); letter-spacing:.1em;
+  text-transform:uppercase; color:var(--c-stil);
+}
+.co-fam a{ color:var(--c-pink-tekst); border-bottom:1px solid var(--c-pink); }
+.co-fam a:hover{ color:var(--c-pink-deep); border-bottom-color:var(--c-pink-deep); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *, *::before, *::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+}
+</style>
+
+<!-- ===================================================================
+     DOSSIERS, centrale feature + UX/look polish (toegevoegd)
+     =================================================================== -->
+<style>
+/* ---------- Scroll-reveal ---------- */
+.reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); will-change:opacity,transform; }
+.reveal.in{ opacity:1; transform:none; }
+.reveal.d1{ transition-delay:.05s } .reveal.d2{ transition-delay:.1s } .reveal.d3{ transition-delay:.15s } .reveal.d4{ transition-delay:.2s }
+
+/* ===================================================================
+   DOSSIERS SECTION
+   =================================================================== */
+#dossiers{ position:relative; }
+#dossiers .sec-head{ border-bottom-color:var(--line-strong); }
+.dos-flow{
+  display:flex; flex-direction:column; gap:.6rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem;
+  letter-spacing:-.01em; color:var(--ink-2); margin-top:1rem;
+}
+.dos-track-row{ display:flex; flex-wrap:nowrap; align-items:center; gap:.5rem; }
+.dos-track-lbl{ font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); width:3.4rem; flex-shrink:0; }
+.dos-flow .step{ background:var(--paper-2); padding:.3rem .6rem; border:1px solid var(--line-strong); white-space:nowrap; }
+.dos-flow .step.gr{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.dos-flow .step.col{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dos-flow .step.rmw{ background:var(--ink-dim); color:var(--paper); border-color:var(--ink-dim); white-space:normal; min-width:0; }
+.dos-flow .step.vb{ background:var(--paper-2); color:var(--ink-2); border-color:var(--line-strong); }
+.dos-flow .arr{ color:var(--pink); font-weight:600; }
+.dos-flow-note{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink-faint); margin-top:.7rem; letter-spacing:-.01em; }
+.dos-organs{ max-width:64ch; color:var(--ink-2); line-height:1.62; margin:0 0 .6rem; }
+.dos-organs strong{ color:var(--pink-text); font-weight:600; font-style:normal; }
+
+/* Toolbar — de zoekbalk krijgt een vaste, duidelijke plek: full-width bovenaan en
+   STICKY, zodat hij altijd bereikbaar blijft terwijl je door de kaarten bladert. */
+/* Deze balk ligt op z-index 20 en dus boven de ruislaag van body::before (z-index 1), en ze
+   schilderde daarbij dekkend --paper over het stippenraster van de body. Zo miste ze allebei
+   de graanlagen en stond er rond de zoekbalk een vlakke, lichtere plek in de korrelige
+   pagina. Ze draagt haar korrel nu zelf: het stippenraster als achtergrond, de ruis als
+   ::after. Het z-indexen naar onder is geen optie, want dan schuiven de kaarten eroverheen. */
+.dos-toolbar{
+  /* 68px, niet 60: de nav is .9rem padding boven en onder plus een 38px hoge hamburger plus
+     1px rand. Op 60px verdween de bovenste ~8px van deze balk eronder. */
+  position:sticky; top:68px; z-index:20;
+  display:flex; flex-wrap:wrap; gap:.7rem 1rem; align-items:center;
+  margin:0 0 1.75rem; padding:1.05rem 0 1.1rem; border-bottom:1px solid var(--line);
+  background-color:var(--paper);
+  background-image:var(--grain-stip);
+  background-size:3px 3px;
+}
+.dos-toolbar::after{
+  content:''; position:absolute; inset:0;
+  pointer-events:none;
+  opacity:.05;
+  background-image:var(--grain-ruis);
+  mix-blend-mode:multiply;
+}
+/* Synoniemen-hint: eigen regel onder de zoekbalk, enkel zichtbaar als de zoek echt
+   breder zocht dan wat er getikt is. Mono en gedimd: informatie, geen decoratie. */
+.dos-syn-hint{
+  flex:1 1 100%;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.68rem; letter-spacing:.03em; color:var(--ink-dim);
+}
+.dos-syn-hint[hidden]{ display:none; }
+.dos-search{
+  flex:1 1 100%; display:flex; align-items:center; gap:.75rem;
+  background:var(--paper-2); border:1.5px solid var(--line-strong); padding:.95rem 1.15rem;
+  transition:border-color .15s, box-shadow .15s;
+}
+.dos-search:focus-within{ border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft); }
+.dos-search input{ flex:1; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:1.02rem; }
+.dos-search input::placeholder{ color:var(--ink-faint); }
+.dos-search .ic{ color:var(--pink); font-size:1.25rem; line-height:1; }
+.dos-search-clear{ color:var(--ink-faint); font-size:1rem; cursor:pointer; padding:.15rem .4rem; line-height:1; flex-shrink:0; }
+.dos-search-clear:hover{ color:var(--pink); }
+.dos-toolbar-aside{ display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1rem; flex:1 1 auto; }
+.dos-prof-toggle{
+  display:flex; align-items:center; gap:.5rem; cursor:pointer; user-select:none;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.02em;
+  /* Standaard = 'Alle dossiers' = zwart (het gewone, niet-persoonlijke aanzicht). */
+  color:var(--paper); padding:.55rem .85rem; border:1px solid var(--ink); background:var(--ink);
+  transition:.18s;
+}
+.dos-prof-toggle:hover{ opacity:.88; }
+/* 'Alleen mijn thema's' = persoonlijk filter = roze. */
+.dos-prof-toggle.active{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dos-prof-toggle .dot{ width:7px; height:7px; background:currentColor; border-radius:50%; opacity:.6; }
+.dos-prof-toggle.active .dot{ background:#fff; opacity:1; }
+.dos-prof-toggle.disabled{ opacity:.4; pointer-events:none; }
+/* Actieve 'gevolgde dossiers'-filter (via de cockpit): roze chip, klik = filter weg. */
+.dos-volg-chip{
+  display:inline-flex; align-items:center; gap:.45rem; cursor:pointer;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.02em;
+  padding:.55rem .85rem; border:1px solid var(--pink); background:var(--pink); color:#fff;
+  transition:.18s;
+}
+.dos-volg-chip:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
+.dos-volg-chip[hidden]{ display:none; }
+.dos-stat{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:var(--ink-faint); margin-left:auto; }
+
+/* Grid of dossier cards */
+/* Echte tussenruimte i.p.v. de haarlijn-truc (gap:1px op een donker raster): met afgeronde
+   hoeken scheen dat raster bij elke hoek door als een donker wigje. Elk blokje lijnt zichzelf af. */
+.dos-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(330px,1fr)); gap:.9rem; }
+.dos-more{ grid-column:1/-1; background:var(--kaart-b); border:1px solid var(--line-kaart); border-radius:var(--r-kaart); display:flex; flex-direction:column; align-items:center; gap:.7rem; padding:1.7rem 1rem; }
+.dos-more-note{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.02em; color:var(--ink-faint); text-align:center; }
+.dos-card{
+  background:var(--paper); padding:1.5rem 1.5rem 1.35rem; cursor:pointer; position:relative;
+  border:1px solid var(--line-kaart); box-shadow:var(--shadow-soft);
+  display:flex; flex-direction:column; min-height:248px; transition:border-color .2s, transform .2s, box-shadow .2s;
+}
+.dos-card:hover{ border-color:var(--pink); box-shadow:var(--shadow-lift); z-index:2; }
+/* Visuele taal: gevolgd = favoriet (ster + licht-roze), raakt jouw profiel = bol,
+   en met een profiel ingesteld grijzen de niet-passende dossiers iets uit zodat de
+   relevante opvallen. */
+.dos-card.matched{ box-shadow:inset 3px 0 0 var(--pink); }
+.dos-card.followed{ box-shadow:inset 3px 0 0 var(--pink); background:var(--pink-soft); }
+.dos-card.followed:hover{ background:var(--pink-soft); }
+.dos-card.dim{ opacity:.55; }
+.dos-card.dim:hover{ opacity:1; }
+.dos-match{ color:var(--pink); font-size:.66rem; line-height:1; }
+.dos-card-top{ display:flex; align-items:center; gap:.5rem; margin-bottom:.85rem; }
+.dos-org{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; padding:.22rem .5rem; line-height:1;
+}
+.dos-org.gr{ background:var(--ink); color:var(--paper); }
+.dos-org.col{ background:var(--pink); color:#fff; }
+.dos-org.rmw{ background:var(--ink-dim); color:var(--paper); }
+.dos-org.vb{ background:transparent; color:var(--ink-dim); box-shadow:inset 0 0 0 1px var(--ink-dim); }
+.dos-org.bm{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
+.dos-org.sv{ background:transparent; color:var(--pink-text); box-shadow:inset 0 0 0 1px var(--pink); }
+.dos-count{ margin-left:auto; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; color:var(--ink-faint); letter-spacing:.02em; }
+.dos-star{ color:var(--pink); font-size:.8rem; }
+.dos-name{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:500; font-size:1.12rem;
+  line-height:1.18; letter-spacing:-.02em; color:var(--ink); margin-bottom:.7rem;
+  text-wrap:balance;
+  /* lange, meerdelige titels mogen één kaart niet uitrekken */
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
+}
+.dos-blurb{
+  font-family:'Geist', system-ui, -apple-system, sans-serif;
+  font-size:.82rem; line-height:1.45; color:var(--ink-dim); margin-bottom:.75rem;
+}
+/* Zoektreffer die enkel in het VOLLEDIGE stuk zit (niet in titel of samenvatting): een
+   eerlijk, terughoudend label met het roze vierkantje als merkteken, zoals de eyebrows. */
+.dos-ft{
+  display:flex; align-items:center; gap:.45rem; margin:-.25rem 0 .7rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text);
+}
+.dos-ft::before{ content:''; width:.45em; height:.45em; background:var(--pink); flex:none; }
+.dos-themes{ display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:auto; }
+.dos-theme{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.02em;
+  color:var(--ink-dim); border:1px solid var(--line-strong); padding:.16rem .45rem; line-height:1.3;
+}
+/* horizontal activity timeline strip */
+.dos-track{ position:relative; height:30px; margin:1.1rem 0 .85rem; }
+.dos-track-line{ position:absolute; left:0; right:0; top:50%; height:1px; background:var(--line-strong); }
+.dos-node{
+  position:absolute; top:50%; width:8px; height:8px; border-radius:50%; transform:translate(-50%,-50%);
+  background:var(--ink); border:1.5px solid var(--paper);
+}
+.dos-node.col{ background:var(--pink); }
+.dos-node.last{ width:13px; height:13px; box-shadow:0 0 0 3px var(--paper); z-index:2; }
+.dos-foot{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+.dos-range{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; color:var(--ink-faint); letter-spacing:.02em; }
+.dos-status{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; font-weight:600;
+  letter-spacing:.04em; text-transform:uppercase; padding:.2rem .5rem; line-height:1.2; white-space:nowrap;
+  /* Neutrale grondvorm voor de uitkomsten die we niet apart kleuren (vaststelling,
+     aktename, gunstig advies, en de samengestelde). Zie BESLUIT_LBL in het script. */
+  background:var(--paper-2); color:var(--ink-dim); border:1px solid var(--line);
+}
+.dos-status.goedgekeurd{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.dos-status.verworpen{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.dos-status.verdaagd,.dos-status.lopend{ background:var(--paper-3); color:var(--ink-2); border:1px solid var(--line-strong); }
+.dos-status.beslist{ background:var(--paper-2); color:var(--ink-dim); border:1px solid var(--line); }
+.dos-followed{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.58rem; font-weight:600;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text); padding:.16rem .42rem;
+  border:1px solid var(--line-pink); line-height:1;
+}
+/* inline dossier-grid in 'Mijn gemeenteraad' */
+
+@media (max-width:760px){
+  .dos-grid{ grid-template-columns:1fr; }
+}
+
+/* ===================================================================
+   DOSSIER DETAIL OVERLAY
+   =================================================================== */
+.dosm-overlay{ position:fixed; inset:0; z-index:300; display:flex; justify-content:flex-end; }
+.dosm-overlay[hidden]{ display:none; }
+.dosm-scrim{ position:absolute; inset:0; background:rgba(10,10,10,.5); animation:fadeIn .25s ease-out; backdrop-filter:blur(2px); }
+.dosm-panel{
+  position:relative; width:min(640px,100%); height:100%; background:var(--paper); overflow-y:auto;
+  box-shadow:-20px 0 60px -20px rgba(10,10,10,.5); animation:dosmIn .4s cubic-bezier(.16,1,.3,1);
+  display:flex; flex-direction:column;
+}
+@keyframes dosmIn{ from{ transform:translateX(40px); opacity:.4 } to{ transform:none; opacity:1 } }
+.dosm-head{
+  position:sticky; top:0; z-index:3; background:var(--ink); color:var(--paper);
+  padding:1.5rem clamp(1.5rem,4vw,2.5rem) 1.4rem;
+}
+.dosm-head .eyebrow{ color:var(--eiland-pink); margin-bottom:.7rem; }
+.dosm-close{
+  position:absolute; top:1.2rem; right:1.2rem; width:38px; height:38px; font-size:1.4rem; line-height:1;
+  color:var(--paper); border:1px solid var(--op-eiland-30); transition:.18s;
+}
+.dosm-close:hover{ background:var(--pink); border-color:var(--pink); }
+.dosm-title{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:500; font-size:clamp(1.3rem,3vw,1.75rem);
+  line-height:1.12; letter-spacing:-.02em; padding-right:3rem; text-wrap:balance; margin-bottom:1rem;
+}
+.dosm-meta{ display:flex; flex-wrap:wrap; gap:.4rem .5rem; }
+.dosm-chip{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.64rem; letter-spacing:.04em;
+  padding:.24rem .55rem; border:1px solid var(--op-eiland-25); color:var(--op-eiland-85); line-height:1.3;
+}
+.dosm-chip.pink{ background:var(--pink); border-color:var(--pink); color:#fff; font-weight:600; }
+.dosm-summary{
+  display:flex; gap:0; border-bottom:1px solid var(--line);
+}
+.dosm-sum-cell{ flex:1; padding:1.1rem clamp(1.5rem,4vw,2.5rem); border-right:1px solid var(--line); }
+.dosm-sum-cell:last-child{ border-right:none; }
+.dosm-sum-num{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:1.7rem; font-weight:300; color:var(--pink); line-height:1; letter-spacing:-.03em; }
+.dosm-sum-lbl{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-top:.4rem; line-height:1.3; }
+
+.dosm-body{ padding:1.75rem clamp(1.5rem,4vw,2.5rem) 2.5rem; flex:1; }
+.dosm-body-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1.5rem; }
+.dosm-body-head h4{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.95rem; font-weight:500; letter-spacing:-.01em; }
+.dosm-body-head span{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; color:var(--ink-faint); letter-spacing:.04em; }
+
+/* vertical timeline spine */
+.dosm-timeline{ position:relative; padding-left:1.75rem; }
+.dosm-timeline::before{ content:''; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--line-strong); }
+.dosm-event{ position:relative; padding:0 0 1.65rem 0; }
+.dosm-event:last-child{ padding-bottom:0; }
+.dosm-event::before{
+  content:''; position:absolute; left:-1.75rem; top:4px; width:12px; height:12px; border-radius:50%;
+  background:var(--ink); border:2px solid var(--paper); box-shadow:0 0 0 2px var(--ink);
+}
+.dosm-event.col::before{ background:var(--pink); box-shadow:0 0 0 2px var(--pink); }
+.dosm-ev-top{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin-bottom:.4rem; }
+.dosm-ev-date{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink); font-weight:500; letter-spacing:.01em; }
+.dosm-ev-org{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.58rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:.18rem .42rem; line-height:1; }
+.dosm-ev-org.gr{ background:var(--ink); color:var(--paper); }
+.dosm-ev-org.col{ background:var(--pink); color:#fff; }
+.dosm-ev-org.rmw{ background:var(--ink-dim); color:var(--paper); }
+.dosm-ev-org.bm{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
+.dosm-ev-org.sv{ background:transparent; color:var(--pink-text); box-shadow:inset 0 0 0 1px var(--pink); }
+.dosm-event.sv::before{ background:var(--paper); box-shadow:0 0 0 2px var(--pink); }
+.dosm-ev-indiener{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink-dim); margin-bottom:.4rem; letter-spacing:.01em; }
+/* De grondvorm is neutraal, want de stukken kennen tweeëntwintig uitkomsten en wij kleuren
+   er maar drie. Een vaststelling of een aktename hoort er dus rustig uit te zien, niet als
+   een goedkeuring en niet als een verdaging. */
+.dosm-ev-result{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.58rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-left:auto; padding:.18rem .42rem; line-height:1.2; color:var(--ink-2); background:var(--paper-3); }
+.dosm-ev-result.goedgekeurd{ color:var(--paper); background:var(--ink); }
+.dosm-ev-result.verworpen{ color:#fff; background:var(--pink); }
+.dosm-ev-result.verdaagd{ color:var(--ink-2); background:var(--paper-3); }
+.dosm-ev-titel{ font-size:.96rem; font-weight:600; line-height:1.35; color:var(--ink); margin-bottom:.35rem; }
+/* Zelfde eerlijke label als op de kaart, hier per punt in de tijdlijn. */
+.dosm-ev-ft{
+  display:flex; align-items:center; gap:.45rem; margin:-.1rem 0 .45rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text);
+}
+.dosm-ev-ft::before{ content:''; width:.45em; height:.45em; background:var(--pink); flex:none; }
+.dosm-ev-decoded{ font-size:.88rem; line-height:1.55; color:var(--ink-2); margin-bottom:.55rem; }
+/* Herkomstnota boven de tijdslijn: wie de samenvattingen leest, hoort daar te zien waar ze
+   vandaan komen. De verantwoording verderop op de pagina is een colofon, geen label. Eén keer
+   per dossier, niet per stuk, anders wordt een eerlijk label ruis. */
+.dosm-ai-nota{ margin:.1rem 0 .9rem; font-size:.72rem; line-height:1.45; color:var(--ink-3, #6b6257); }
+.dosm-ai-nota a{ color:var(--pink); border-bottom:1px solid rgba(255,0,102,.35); }
+.dosm-ai-nota a:hover{ border-bottom-color:var(--pink); }
+.dosm-ev-actions{ display:flex; flex-wrap:wrap; gap:.45rem; align-items:center; }
+/* Bronstukken als chips: een icoon dat het documenttype toont plus één woord (Besluit,
+   Besluitenlijst, Notulen, Agenda). Dat scant sneller dan volzinnen als "Bekijk de
+   besluitenlijst ↗" en je ziet vooraf wélk soort stuk je opent. Alle chips in de rij zijn
+   even hoog, ook de meldknop, zodat het één ritme blijft. */
+.dosm-ev-link{
+  display:inline-flex; align-items:center; gap:.38rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.68rem; letter-spacing:.02em;
+  line-height:1.35;
+  color:var(--pink-text); background:var(--pink-soft);
+  border:1px solid var(--line-pink); border-radius:999px;
+  padding:.34rem .7rem; transition:.15s; cursor:pointer;
+}
+.dosm-ev-ic{ width:14px; height:14px; flex:none; display:block; }
+/* Hover naar --pink-deep en niet --pink: wit op #FF0066 haalt 3,86:1 en zakt onder AA,
+   wit op #b3004a haalt bijna 7. */
+.dosm-ev-link:hover{ color:#fff; background:var(--pink-deep); border-color:var(--pink-deep); }
+/* Fout melden: een hulpmiddel, geen hoofdactie. Neutraal grijs zodat het de bronstukken niet
+   overschreeuwt, maar wel als volwaardige knop vindbaar in plaats van een vage vraagzin. */
+.dosm-ev-meld{
+  color:var(--ink-dim); background:transparent; border-color:var(--line-strong);
+}
+.dosm-ev-meld:hover{ color:#fff; background:var(--ink); border-color:var(--ink); }
+/* Curator-acties in het dossierpaneel: los-knop (per punt) en samenvoeg-keuze (footer).
+   Duidelijk anders dan de lezer-knoppen; 'aan' toont dat de keuze vastligt. */
+/* Nu de acties chips zijn, markeert een gestippelde rand (niet enkel de onderlijn) de
+   curator-knoppen als 'werkinstrument', duidelijk anders dan de lezer-chips. */
+.dosm-ev-cur{ color:var(--ink-dim); background:transparent; border-style:dashed; border-color:var(--line-strong); }
+.dosm-ev-cur:hover{ color:#fff; background:var(--ink); border-color:var(--ink); border-style:solid; }
+.dosm-ev-cur.aan{ color:var(--pink-text); background:var(--pink-soft); border-style:solid; border-color:var(--line-pink); }
+.dosm-cur-btn.aan{ background:var(--pink); color:#fff; border-color:var(--pink); }
+/* Verwante dossiers: kaartjes met de reden van de verwantschap eerlijk benoemd. */
+.dosm-verwant{ margin-top:1.8rem; padding-top:1.3rem; border-top:1px solid var(--line-strong); }
+.dosm-verwant-lab{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:.75rem;
+}
+.dosm-verwant-lijst{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:.6rem; }
+.dosm-verwant-kaart{
+  display:flex; flex-direction:column; gap:.35rem; text-align:left;
+  background:var(--paper); border:1px solid var(--line-kaart); border-radius:var(--r-kaart);
+  padding:.75rem .9rem; cursor:pointer; transition:border-color .15s, box-shadow .15s;
+}
+.dosm-verwant-kaart:hover{ border-color:var(--pink); box-shadow:var(--shadow-soft); }
+.dv-naam{ font-size:.88rem; font-weight:600; line-height:1.35; color:var(--ink); }
+.dv-waarom{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.56rem;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text);
+}
+.dosm-foot{
+  position:sticky; bottom:0; background:var(--paper-2); border-top:1px solid var(--line-strong);
+  padding:1rem clamp(1.5rem,4vw,2.5rem); display:flex; gap:.75rem; flex-wrap:wrap;
+}
+.dosm-foot .btn{ font-size:.8rem; padding:.7rem 1.1rem; }
+@media (max-width:560px){
+  .dosm-summary{ flex-wrap:wrap; }
+  .dosm-sum-cell{ flex:1 1 50%; border-bottom:1px solid var(--line); }
+}
+
+/* ---------- hover polish on existing nav links ---------- */
+.nav-links a{ position:relative; }
+.nav-links a::after{ content:''; position:absolute; left:0; bottom:-3px; width:0; height:1.5px; background:var(--pink); transition:width .25s ease; }
+.nav-links a:hover::after{ width:100%; }
+
+/* ---------- Openbaarheidsverzoek-modal polish ---------- */
+.ov-note{
+  font-size:.84rem; line-height:1.55; color:var(--ink-2);
+  background:var(--pink-soft); border-left:2px solid var(--pink);
+  padding:.85rem 1rem; margin-bottom:1.25rem;
+}
+.ov-note strong{ color:var(--pink-text); }
+.ov-fieldset{ border:1px solid var(--line-strong); padding:1rem 1rem .35rem; margin-bottom:1rem; position:relative; }
+.ov-fieldset-lbl{
+  position:absolute; top:-.62rem; left:.75rem; background:var(--paper); padding:0 .45rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-faint);
+}
+.field-input.invalid{ border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft); }
+.ov-error{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; line-height:1.4;
+  color:var(--pink-text); background:var(--pink-soft); border:1px solid var(--line-pink);
+  padding:.6rem .8rem; margin-top:.85rem;
+}
+/* Geen [hidden]: een role="alert" die pas ná het invullen zichtbaar wordt, spreekt
+   onbetrouwbaar. De regio staat er dus altijd en verbergt zichzelf zolang ze leeg is,
+   zodat één tekstwijziging volstaat om de melding hoorbaar te maken. */
+.ov-error:empty{ display:none; }
+
+/* =====================================================================
+   PROFIEL-WIZARD
+   ===================================================================== */
+.wiz-overlay{ position:fixed; inset:0; z-index:400; display:flex; align-items:center; justify-content:center; padding:clamp(.5rem,3vw,2rem); }
+.wiz-overlay[hidden]{ display:none; }
+.wiz-scrim{ position:absolute; inset:0; background:rgba(10,10,10,.62); backdrop-filter:blur(3px); animation:fadeIn .25s ease-out; }
+.wiz-panel{
+  position:relative; width:min(620px,100%); max-height:min(760px,94vh);
+  background:var(--paper); display:flex; flex-direction:column;
+  box-shadow:0 40px 100px -30px rgba(10,10,10,.6); animation:wizIn .4s cubic-bezier(.16,1,.3,1);
+  border:1px solid var(--ink);
+}
+@keyframes wizIn{ from{ transform:translateY(24px) scale(.98); opacity:0 } to{ transform:none; opacity:1 } }
+.wiz-head{ display:flex; align-items:center; gap:1rem; padding:1.1rem 1.4rem; border-bottom:1px solid var(--line); }
+.wiz-brand{ display:flex; align-items:center; gap:.55rem; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.82rem; font-weight:600; letter-spacing:-.01em; }
+.wiz-brand .brand-mark{ height:26px; width:26px; }
+.wiz-progress{ display:flex; gap:.4rem; margin-left:auto; }
+.wiz-progress .wp-dot{ width:22px; height:3px; background:var(--line-strong); transition:background .3s; }
+.wiz-progress .wp-dot.on{ background:var(--pink); }
+.wiz-progress .wp-dot.done{ background:var(--ink); }
+.wiz-close{ width:34px; height:34px; font-size:1.4rem; line-height:1; color:var(--ink-dim); border:1px solid transparent; transition:.15s; }
+.wiz-close:hover{ color:var(--pink); border-color:var(--line-strong); }
+.wiz-body{ flex:1; overflow-y:auto; padding:clamp(1.5rem,4vw,2.5rem); }
+.wiz-step{ animation:wizStepIn .35s cubic-bezier(.16,1,.3,1); }
+@keyframes wizStepIn{ from{ opacity:0; transform:translateX(14px) } to{ opacity:1; transform:none } }
+.wiz-eyebrow{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pink-text); margin-bottom:1rem; }
+.wiz-h{ font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:500; font-size:clamp(1.6rem,4vw,2.2rem); line-height:1.06; letter-spacing:-.03em; margin-bottom:.9rem; text-wrap:balance; }
+.wiz-h em{ color:var(--pink); font-style:normal; }
+.wiz-lede{ font-size:1rem; line-height:1.6; color:var(--ink-2); max-width:48ch; margin-bottom:1.6rem; }
+.wiz-lede em{ color:var(--pink-text); font-weight:600; font-style:normal; }
+.wiz-bullets{ list-style:none; display:flex; flex-direction:column; gap:.65rem; margin-bottom:1.6rem; }
+.wiz-bullets li{ display:flex; align-items:center; gap:.85rem; font-size:1.02rem; color:var(--ink); padding-bottom:.65rem; border-bottom:1px solid var(--line); }
+.wiz-bullets li:last-child{ border-bottom:none; }
+.wiz-bullets em{ font-style:normal; color:var(--ink-faint); font-size:.85rem; }
+/* Wizard-welkomstlijst: per stap het herkenbare icoon i.p.v. een volgnummer. */
+.wb-n{ color:var(--pink); display:inline-flex; align-items:center; }
+.wb-n svg{ width:18px; height:18px; display:block; }
+.wiz-bullets li.wb-click{ cursor:pointer; margin:0 -.6rem; padding-left:.6rem; padding-right:.6rem; transition:background .15s; }
+.wiz-bullets li.wb-click:hover, .wiz-bullets li.wb-click:focus-visible{ background:var(--pink-soft); outline:none; }
+.wiz-bullets li.wb-click::after{ content:'→'; margin-left:auto; color:var(--pink); opacity:0; transition:opacity .15s; }
+.wiz-bullets li.wb-click:hover::after, .wiz-bullets li.wb-click:focus-visible::after{ opacity:1; }
+.wiz-privacy{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; color:var(--ink-dim); background:var(--pink-soft); border-left:2px solid var(--pink); padding:.7rem .9rem; line-height:1.5; }
+.wiz-hint{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; color:var(--ink-faint); margin-top:1rem; }
+.street-resolved{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; color:var(--pink-text); margin-top:.55rem; line-height:1.4; }
+.street-resolved .sr-pin{ color:var(--pink); }
+.street-resolved strong{ color:var(--ink); font-weight:600; }
+.wiz-chips{ max-width:none; }
+.wiz-foot{ display:flex; align-items:center; gap:.75rem; padding:1rem 1.4rem; border-top:1px solid var(--line); background:var(--paper-2); }
+/* Welkomststap: het scherm zegt al 'Welkom · Maak Mechelen van mij', dus de losse stepcount
+   'Welkom' met lege ruimte ernaast is dubbel en oogt onafgewerkt. We tonen daar in plaats één
+   zelfverzekerde CTA over de volle breedte. Vanaf stap 1 keert de gewone footer terug. */
+.wiz-foot.is-welkom .wiz-back,
+.wiz-foot.is-welkom .wiz-stepcount,
+.wiz-foot.is-welkom .wiz-skip{ display:none; }
+.wiz-foot.is-welkom .wiz-next{ width:100%; text-align:center; }
+.wiz-back{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.82rem; color:var(--ink-dim); padding:.6rem .4rem; transition:.15s; }
+.wiz-back:hover{ color:var(--ink); }
+.wiz-back[hidden]{ display:inline-block; visibility:hidden; pointer-events:none; }
+.wiz-stepcount{ margin-left:auto; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; color:var(--ink-faint); letter-spacing:.04em; }
+.wiz-skip{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.82rem; color:var(--ink-dim); padding:.6rem .8rem; border:1px solid var(--line-strong); transition:.15s; }
+.wiz-skip:hover{ border-color:var(--ink); color:var(--ink); }
+/* Onzichtbaar maar de plek blijft bezet: zo verspringen de andere knoppen nooit
+   wanneer 'Overslaan' er op een stap wel of niet is. */
+.wiz-skip[hidden]{ display:inline-block; visibility:hidden; pointer-events:none; }
+.wiz-next{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.85rem; font-weight:500; letter-spacing:.01em;
+  background:var(--pink); color:#fff; border:1px solid var(--pink); padding:.7rem 1.3rem; transition:.18s;
+}
+.wiz-next:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
+.wiz-summary{ display:flex; flex-direction:column; gap:0; border:1px solid var(--line-strong); }
+.wiz-sum-row{ display:flex; gap:1rem; padding:.9rem 1.1rem; border:none; border-bottom:1px solid var(--line); align-items:baseline; width:100%; text-align:left; background:none; font:inherit; color:inherit; cursor:pointer; transition:background .15s; }
+.wiz-sum-row:last-child{ border-bottom:none; }
+.wiz-sum-row:hover{ background:var(--paper-2); }
+/* Geen 'aanpassen'-tekst meer: de hele rij is klikbaar. Een subtiele chevron toont
+   dat je erop kunt klikken om die stap te bewerken; hij kleurt roze bij hover. */
+.wiz-sum-row::after{ content:'\203A'; margin-left:auto; align-self:center; color:var(--ink-faint); font-size:1.3rem; line-height:1; transition:color .15s, transform .15s; }
+.wiz-sum-row:hover::after, .wiz-sum-row:focus-visible::after{ color:var(--pink); transform:translateX(3px); }
+.wiz-sum-k{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); min-width:108px; flex-shrink:0; }
+.wiz-sum-v{ font-size:.95rem; color:var(--ink); line-height:1.4; }
+.wiz-sum-v.is-empty{ color:var(--ink-faint); font-style:italic; }
+@media (max-width:540px){
+  .wiz-panel{ max-height:100vh; height:100%; width:100%; border:none; }
+  .wiz-foot{ flex-wrap:wrap; }
+  .wiz-stepcount{ order:-1; width:100%; text-align:center; margin:0 0 .3rem; }
+  /* De drie knoppen passen op één rij (alles iets compacter), zodat er nooit
+     eentje naar een eigen regel wrapt. */
+  .wiz-foot{ gap:.5rem; padding:1rem 1.1rem; }
+  .wiz-skip{ padding:.6rem .55rem; }
+  .wiz-next{ padding:.7rem .95rem; margin-left:auto; }
+}
+
+/* De persoonlijke gereedschappen (Mijn Mechelen instellen + zoeken): over de VOLLE breedte
+   (geen horizontale inspringing), met lucht ertussen via de gap en een lijn eronder die ze
+   losmaakt van de rij secties. Zo neemt Mijn Mechelen de hele breedte, zonder tegen de
+   zoekbalk geplakt te staan. */
+.menu-tools{
+  display:flex; flex-direction:column; gap:.7rem;
+  padding:.7rem 0 1rem;
+  border-bottom:1px solid var(--line);
+}
+
+/* hamburger profiel-knop */
+.menu-profile{
+  display:flex; align-items:center; gap:1rem; width:100%; text-align:left;
+  background:var(--black-3); color:var(--paper); padding:1rem 1.4rem;
+  border:1px solid var(--line-kaart, var(--line)); cursor:pointer; transition:.18s;
+}
+.menu-profile:hover{ background:var(--pink); border-color:var(--pink); }
+.menu-profile .mp-ic{ color:var(--pink); line-height:1; transition:.18s; }
+.menu-profile .mp-ic svg{ width:22px; height:22px; display:block; }
+.menu-profile:hover .mp-ic{ color:#fff; }
+.menu-profile .mp-text{ display:flex; flex-direction:column; gap:.15rem; }
+.menu-profile .mp-title{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.95rem; font-weight:600; letter-spacing:-.01em; }
+.menu-profile .mp-sub{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:rgba(245,241,232,.6); }
+.menu-profile:hover .mp-sub{ color:rgba(255,255,255,.8); }
+.menu-profile .mp-arr{ margin-left:auto; font-size:1.1rem; display:inline-flex; align-items:center; gap:.35rem; white-space:nowrap; }
+.menu-profile .mp-arr-lbl{ font-size:.66rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+.menu-profile.is-set{ align-items:flex-start; }
+.menu-profile.is-set .mp-ic{ margin-top:.1rem; }
+.menu-profile .mp-chip{ display:inline-block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; letter-spacing:.02em; padding:.12rem .45rem; margin:.18rem .3rem 0 0; border:1px solid rgba(245,241,232,.3); color:rgba(245,241,232,.85); }
+.menu-profile:hover .mp-chip{ border-color:rgba(255,255,255,.55); color:#fff; }
+
+/* Zoekveld in het hamburgermenu (schakelt door naar de dossier-zoek). Scherpe hoeken, zoals
+   het profielblok erboven; het roze pijltje voert de zoek uit. */
+.menu-search{
+  display:flex; align-items:stretch; gap:.6rem;
+  margin:0; padding-left:.9rem;
+  border:1px solid var(--line-strong); background:var(--paper);
+}
+.menu-search:focus-within{ border-color:var(--pink); }
+.menu-search .ms-ic{ display:flex; align-items:center; color:var(--ink-faint); font-size:1.15rem; flex:none; }
+.menu-search input{
+  flex:1; min-width:0; border:none; background:none; outline:none;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.9rem; color:var(--ink);
+  padding:.75rem 0;
+}
+.menu-search input::placeholder{ color:var(--ink-faint); }
+.menu-search .ms-go{
+  flex:none; padding:0 1.1rem; border:none; cursor:pointer;
+  background:var(--pink); color:#fff; font-size:1.15rem; transition:background .15s;
+}
+.menu-search .ms-go:hover{ background:var(--pink-deep); }
+
+/* =====================================================================
+   NIEUW-SINDS-VORIG-BEZOEK TOAST + hamburger-signaal
+   ===================================================================== */
+/* "Nieuw sinds je vorige bezoek": een pop-up (toast) die rechtsboven binnenschuift (onder
+   560px van onderen) zodra er
+   nieuw nieuws is dat jou raakt. Geen echte push (statische site), dus dit verschijnt bij
+   je bezoek. */
+.nieuw-banner{
+  position:fixed; top:4.6rem; right:1.25rem; z-index:156;
+  width:min(430px, calc(100vw - 2.5rem));
+  display:flex; align-items:flex-start; gap:.5rem;
+  padding:1rem .9rem 1.05rem 1.25rem;
+  background:var(--black-3); color:rgba(245,241,232,.88);
+  border-left:3px solid var(--pink);
+  box-shadow:0 16px 44px rgba(10,10,10,.38);
+  font-size:.92rem; line-height:1.5;
+  transform:translateY(-150%); opacity:0;
+  transition:transform .35s cubic-bezier(.16,1,.3,1), opacity .3s;
+}
+.nieuw-banner.in{ transform:none; opacity:1; }
+.nieuw-banner[hidden]{ display:none; }   /* anders overschrijft display:flex het hidden-attribuut */
+.nieuw-banner .nb-body{ flex:1; }
+.nieuw-banner .nb-kop{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pink); margin-bottom:.35rem; }
+.nieuw-banner .nb-txt{ margin:0; color:rgba(245,241,232,.88); }
+.nieuw-banner .nb-txt strong{ color:#fff; font-weight:600; }
+.nieuw-banner .nb-acties{ display:flex; flex-wrap:wrap; gap:.45rem 1.1rem; margin-top:.6rem; }
+.nieuw-banner .nb-link{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:#fff; border-bottom:1px solid var(--pink); padding-bottom:.12rem; white-space:nowrap; }
+.nieuw-banner .nb-link:hover{ color:var(--pink); }
+.nieuw-banner .nb-close{ flex-shrink:0; background:none; border:none; color:rgba(245,241,232,.55); font-size:1.35rem; line-height:1; cursor:pointer; padding:.1rem .35rem; min-width:32px; min-height:32px; }
+.nieuw-banner .nb-close:hover{ color:#fff; }
+/* Smal scherm: als blad van onderen (haalt niets weg boven de vouw, duim-bereikbaar). */
+@media (max-width:560px){
+  .nieuw-banner{ top:auto; bottom:1rem; left:.75rem; right:.75rem; width:auto; transform:translateY(150%); }
+}
+/* Redactiemelding: enkel zichtbaar voor wie de redactiemodus aanzette (lokaal op het
+   toestel). Linksonder, zodat ze de nieuw-toast (rechtsboven/onderaan) niet overlapt. */
+.redactie-melding{
+  position:fixed; left:1rem; bottom:1rem; z-index:157;
+  width:min(430px, calc(100vw - 2rem));
+  display:flex; align-items:flex-start; gap:.5rem;
+  padding:1rem .9rem 1.05rem 1.25rem;
+  background:var(--black-3); color:rgba(245,241,232,.88);
+  border-left:3px solid var(--pink);
+  box-shadow:0 16px 44px rgba(10,10,10,.38);
+  font-size:.92rem; line-height:1.5;
+}
+.redactie-melding .rm-body{ flex:1; }
+.redactie-melding .rm-kop{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pink); margin-bottom:.35rem; }
+.redactie-melding .rm-txt{ margin:0; }
+.redactie-melding .rm-txt strong{ color:#fff; font-weight:600; }
+.redactie-melding .rm-close{ flex-shrink:0; background:none; border:none; color:rgba(245,241,232,.55); font-size:1.35rem; line-height:1; cursor:pointer; padding:.1rem .35rem; min-width:32px; min-height:32px; }
+.redactie-melding .rm-close:hover{ color:#fff; }
+
+/* Curatorpaneel: enkel zichtbaar met de curatormodus aan (lokaal op dit toestel). Rechtsonder,
+   zodat het de redactiemelding (linksonder) niet overlapt. Alles blijft hier tot de export. */
+.curator-paneel{
+  position:fixed; right:1rem; bottom:1rem; z-index:158;
+  width:min(320px, calc(100vw - 2rem));
+  padding:1rem 1.1rem 1.1rem; background:var(--black-3); color:rgba(245,241,232,.9);
+  border-left:3px solid var(--pink); box-shadow:0 16px 44px rgba(10,10,10,.4);
+  font-size:.9rem; line-height:1.5;
+}
+.curator-paneel .cur-kop{
+  display:flex; align-items:baseline; justify-content:space-between; gap:.5rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--pink); margin-bottom:.4rem;
+}
+.curator-paneel .cur-tel{ color:rgba(245,241,232,.7); letter-spacing:.04em; }
+.curator-paneel .cur-txt{ margin:0 0 .6rem; font-size:.82rem; color:rgba(245,241,232,.78); }
+/* Lichtroze i.p.v. var(--pink-text): dat is bedoeld voor roze op een lichte achtergrond en
+   haalt op dit donkere paneel de AA-contrastdrempel niet. Deze tint wel (ruim boven 4,5:1). */
+.curator-paneel .cur-hint{ margin:.1rem 0 .6rem; font-size:.78rem; color:#ff9ec2; }
+.curator-paneel .cur-knoppen{ display:flex; gap:.5rem; flex-wrap:wrap; }
+.curator-paneel .cur-actie{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem;
+  padding:.5rem .75rem; border:1px solid rgba(245,241,232,.3); background:none;
+  color:rgba(245,241,232,.9); cursor:pointer; border-radius:2px; min-height:34px;
+}
+.curator-paneel .cur-actie:hover{ border-color:var(--pink); color:#fff; }
+.curator-paneel .cur-actie.prim{ background:var(--pink); border-color:var(--pink); color:#fff; margin-bottom:.55rem; }
+.curator-paneel .cur-actie[disabled]{ opacity:.4; cursor:default; }
+.curator-paneel .cur-actie[disabled]:hover{ border-color:rgba(245,241,232,.3); color:rgba(245,241,232,.9); }
+.curator-paneel .cur-voet{ margin:.7rem 0 0; font-size:.72rem; color:rgba(245,241,232,.55); }
+.curator-paneel .cur-voet strong{ color:rgba(245,241,232,.85); font-weight:600; }
+
+/* Bol op de hamburger als blijvend signaal dat er nieuw nieuws is. */
+.burger-dot{
+  position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%;
+  background:var(--pink); box-shadow:0 0 0 0 var(--pink); animation:pulse 2s infinite;
+}
+.burger-dot[hidden]{ display:none; }
+
+/* =====================================================================
+   LOOK & FEEL POLISH, scroll-progress, back-to-top, focus, anchors
+   ===================================================================== */
+/* anchor-offset zodat links niet onder de sticky nav verdwijnen */
+section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwoording{ scroll-margin-top:80px; }
+
+/* dunne scroll-voortgangsbalk bovenaan */
+.scroll-progress{ position:fixed; top:0; left:0; height:2px; width:0; background:var(--pink); z-index:150; transition:width .08s linear; }
+
+/* terug-naar-boven knop: rond en glazig/licht transparant, net als op het portaal */
+.to-top{
+  position:fixed; right:clamp(1rem,3vw,2rem); bottom:clamp(1rem,3vw,2rem); z-index:140;
+  width:42px; height:42px; display:flex; align-items:center; justify-content:center;
+  background:rgba(245,241,232,.5); backdrop-filter:blur(9px) saturate(140%); -webkit-backdrop-filter:blur(9px) saturate(140%);
+  color:var(--ink); border:1px solid var(--line-strong); border-radius:50%;
+  font-size:1.05rem; line-height:1; cursor:pointer;
+  opacity:0; transform:translateY(10px); pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease, background .18s, color .18s, border-color .18s;
+}
+.to-top.show{ opacity:.72; transform:none; pointer-events:auto; }
+.to-top.show:hover,.to-top.show:focus-visible{ opacity:1; border-color:var(--pink); color:var(--pink); }
+.to-top .tt-arrow{ display:block; transition:transform .2s; }
+.to-top.show:hover .tt-arrow{ transform:translateY(-2px); }
+@media (max-width:560px){ .to-top{ width:38px; height:38px; } }
+
+/* =====================================================================
+   MOBIELE TABBALK: de app-navigatie op smartphone. Vijf secties, elk met
+   hun eigen Bauhaus-icoon; de actieve sectie kleurt roze met een indicator
+   bovenaan. Op groter scherm bestaat de balk niet (daar is het menu).
+   ===================================================================== */
+.tabbar{ display:none; }
+@media (max-width:700px){
+  .tabbar{
+    display:grid; grid-template-columns:repeat(5, 1fr);
+    position:fixed; left:0; right:0; bottom:0; z-index:150;
+    background:rgba(245,241,232,.92);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .tabbar a{
+    position:relative;
+    display:flex; flex-direction:column; align-items:center; gap:.28rem;
+    padding:.6rem 0 .55rem;
+    color:var(--ink-dim);
+    text-decoration:none;
+    transition:color .15s;
+  }
+  .tabbar a svg{ width:22px; height:22px; display:block; flex:none; }
+  .tabbar a .tab-mug{ width:22px; height:22px; display:block; flex:none; border-radius:50%; }
+  .tabbar a span{
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+    /* Kleine mono-caps, net als op het portaal: dit is nu een sitewissel-balk (Start, Denk
+       mee, Lees mee, En meer, Contact), niet meer de enige navigatie. De sectie-navigatie
+       van deze site zit in het menu. "DENK MEE" past met nowrap binnen een vak van 75px. */
+    font-size:.55rem; letter-spacing:.03em; text-transform:uppercase; white-space:nowrap;
+  }
+  .tabbar a:hover{ color:var(--pink-text); }
+  /* [aria-current] zonder waarde-check: de hoofdpagina zet "page" (dit IS die pagina),
+     de techniek-pagina zet "true" (je zit wél in Denk mee, maar niet op die pagina). */
+  .tabbar a[aria-current]{ color:var(--pink-text); }
+  .tabbar a[aria-current]::before{
+    content:''; position:absolute; top:0; left:24%; right:24%; height:2px;
+    background:var(--pink);
+  }
+  /* Ruimte onder de pagina + zwevende elementen boven de balk uit. */
+  body{ padding-bottom:calc(58px + env(safe-area-inset-bottom)); }
+  .to-top{ bottom:calc(70px + env(safe-area-inset-bottom)); }
+  .cookie-note{ bottom:calc(70px + env(safe-area-inset-bottom)); }
+  .redactie-melding{ bottom:calc(70px + env(safe-area-inset-bottom)); }
+  .nieuw-banner{ top:auto; bottom:calc(70px + env(safe-area-inset-bottom)) !important; }
+  /* Het curatorpaneel stond als enige zwevende element nog op 1rem en verdween dus achter de
+     tabbalk, net het gereedschap dat je op je telefoon zou willen gebruiken. */
+  .curator-paneel{ bottom:calc(70px + env(safe-area-inset-bottom)); }
+  /* De terug-naar-boven-knop stond op exact dezelfde hoogte als de privacymelding, die er met
+     een hogere z-index overheen schilderde. Bij een eerste bezoek was de knop dus onzichtbaar.
+     Zolang de melding er staat, tillen we de knop erboven. */
+  body:has(.cookie-note:not([hidden])) .to-top{ bottom:calc(148px + env(safe-area-inset-bottom)); }
+}
+
+/* Eerlijke privacymelding bij het eerste bezoek (geen consent-banner: niets om toe te staan). */
+.cookie-note{
+  position:fixed; left:1rem; right:1rem; bottom:1rem; z-index:150;
+  max-width:540px; margin:0 auto;
+  display:flex; align-items:center; gap:1rem;
+  padding:.9rem 1.1rem;
+  background:var(--ink); color:var(--paper);
+  box-shadow:0 8px 30px rgba(10,10,10,.28);
+  font-size:.82rem; line-height:1.45;
+}
+.cookie-note[hidden]{ display:none; }
+.cn-text{ margin:0; flex:1; }
+.cn-text strong{ color:var(--eiland-pink); font-weight:600; }
+.cn-ok{
+  flex-shrink:0;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.72rem; letter-spacing:.04em; text-transform:uppercase;
+  background:var(--pink); color:#fff; border:1px solid var(--pink);
+  padding:.55rem .9rem; cursor:pointer;
+}
+.cn-ok:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
+
+/* toegankelijkheid: zichtbare focus voor toetsenbordnavigatie */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible,
+.dos-card:focus-visible, .tch:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--pink); outline-offset:2px;
+}
+:focus:not(:focus-visible){ outline:none; }
+</style>
+<style>
+.stem{margin:.55rem 0 .15rem}
+.stem-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:#e7e0d2}
+.stem-bar span{display:block;height:100%}
+.stem-sum{font-size:.8rem;color:var(--ink-2);margin-top:.4rem}
+.stem-fracties{display:flex;flex-wrap:wrap;gap:.2rem 1rem;margin-top:.35rem}
+.stem-fr{font-size:.78rem;color:var(--ink-2)}
+.stem-fr b{font-weight:600;color:var(--ink)}
+.stem-dot{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;margin:0 .15rem 0 .4rem;vertical-align:middle}
+.stem-dot.voor{background:#1a7f37}.stem-dot.tegen{background:#c8102e}.stem-dot.onth{background:#9a8c00}
+.stem-unaniem{font-size:.8rem;color:#1a7f37;font-weight:600;margin-top:.35rem}
+/* De stemuitslag is zélf de knop: klik op de balk of op de telling en je ziet wie voor, tegen
+   of onthouding stemde. Bewust geen aparte "Wie stemde wat?"-link eronder meer; dat was een
+   tweede regel die aankondigde wat de uitslag al toont. Een chevron achter de telling is de
+   enige hint dat er iets uitklapt. Zonder namenlijst in de brontekst blijft het een gewoon
+   blok (zie stemBalkHTML), dus je klikt nooit op iets dat leeg opengaat. */
+.stem-klik > summary{cursor:pointer;list-style:none;display:block;border-radius:6px}
+.stem-klik > summary::-webkit-details-marker{display:none}
+.stem-klik > summary .stem-sum::after{content:'▾';display:inline-block;margin-left:.45rem;color:var(--ink-faint);transition:transform .15s}
+.stem-klik[open] > summary .stem-sum::after{transform:rotate(180deg)}
+.stem-klik > summary:hover .stem-sum{color:var(--ink)}
+.stem-klik > summary:hover .stem-bar{filter:brightness(1.07)}
+.stem-klik > summary:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+.stem-namen-body{margin-top:.55rem;padding:.7rem .85rem;background:var(--paper-2);border-left:2px solid var(--line-strong)}
+.stem-namen-list{display:flex;flex-wrap:wrap;gap:.4rem .9rem}
+.sn-naam{font-size:.82rem;color:var(--ink)}
+.stem-groep{margin-bottom:.75rem}
+.stem-groep:last-child{margin-bottom:0}
+.stem-groep-lbl{display:block;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:.35rem}
+.stem-groep.g-voor .stem-groep-lbl{color:#1a7f37}
+.stem-groep.g-tegen .stem-groep-lbl{color:#c8102e}
+.stem-groep.g-onth .stem-groep-lbl{color:#756a00}
+.arch-org{display:inline-block;font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;padding:.08rem .4rem;border:1px solid var(--pink);color:var(--pink-text);border-radius:3px;margin-right:.35rem;vertical-align:middle}
+
+/* =====================================================================
+   HUIDLAAG — de familietaal van asgaupaust.be en Lees mee (dag-editie, zie :root):
+   korrel op het vlak, roze gloed in de hero, afgeronde kaarten en pillen.
+   Bewust als aparte laag: de Bauhaus-structuur blijft, de huid wordt zachter.
+   ===================================================================== */
+body{
+  background-image:var(--grain-stip);
+  background-size:3px 3px;
+}
+/* De roze gloed zat op .hero zelf, en die staat binnen <main class="shell">. Die shell heeft
+   zijmarge (padding:0 var(--pad-x)), dus links en rechts bleef een strook onbeschilderd: de
+   gloed hield daar hard op in plaats van uit te faden. Nu ligt ze in een eigen laag die over de
+   volle schermbreedte loopt, zodat ze naar alle kanten uitdooft. body heeft overflow-x:hidden,
+   dus 100vw veroorzaakt geen horizontale schuifbalk. */
+.hero{ background:none; }
+.hero::before{
+  content:''; position:absolute; z-index:-1; pointer-events:none;
+  top:0; bottom:0; left:50%; transform:translateX(-50%); width:100vw;
+  background:radial-gradient(1100px 480px at 78% -10%, rgba(255,0,102,.10), transparent 65%);
+}
+/* Kaarten: familie-afronding; clip zodat koppen en watermerken mee ronden. */
+.hero-panel, .dashboard, .dos-card, .dc-card, .item-card,
+.prc-card, .sch-card, .wiz-panel, .subscribe-form{
+  border-radius:var(--r-kaart); overflow:hidden;
+}
+/* Familie-kaartvulling: subtiele verticale gradient zoals de artikelkaarten van Lees mee. */
+.dos-card, .item-card, .prc-card, .sch-card{
+  background:linear-gradient(180deg, var(--kaart-a), var(--kaart-b));
+}
+/* Verantwoording is meta, geen data. Drie kaarten staan wit en één in het dieproze: zo krijgt
+   het blok lucht en wordt die ene kaart een focuspunt in plaats van een muur kleur. De ROZE RAND
+   blijft op alle vier: dossierkaarten dragen een neutrale rand, dus dat is wat deze blokjes
+   onderscheidt nu de zacht-roze tint wegvalt (de dossierkaarten zijn zelf al bijna wit).
+   Waarom het accent niet in het merkroze #FF0066: wit daarop haalt 3,86:1, en bij tekst van
+   14,7px is de norm 4,5. Het dieproze haalt 6,96:1 en oogt bovendien rustiger. */
+.dc-card{
+  background:#fff;
+  border-color:rgba(200,0,84,.16);
+}
+.dc-card.dc-accent{
+  background:var(--pink-deep);
+  border-color:var(--pink-deep);
+}
+.dc-card.dc-accent h3{ color:#fff; }
+.dc-card.dc-accent p{ color:rgba(255,255,255,.93); }
+.dc-card.dc-accent p strong,
+.dc-card.dc-accent p em{ color:#fff; }
+/* De link moet zichtbaar blijven als link. Alles wit maken haalde het enige onderscheid weg:
+   de linktekst kreeg dezelfde kleur als de lopende tekst, en de onderrand stond in #c80054,
+   wat op deze #b3004a-achtergrond wegvalt. Een witte onderrand herstelt de affordance, in het
+   idioom dat de site elders al gebruikt (onderrand, geen text-decoration). */
+.dc-card.dc-accent a{ color:#fff; border-bottom-color:rgba(255,255,255,.75); }
+.dc-card.dc-accent a:hover{ border-bottom-color:#fff; }
+/* Radius zonder clip: hier scrolt of zweeft iets binnenin (modal-scroll, tooltips). */
+.ov-modal-card, .college-activity, .subscribe-foot{ border-radius:var(--r-kaart); }
+.nieuw-banner, .redactie-melding, .cookie-note, .filter-status, .hc-nieuw{ border-radius:var(--r-chip); }
+/* Het 'Mijn Mechelen'-blok in het hamburgermenu bewust met scherpe hoeken: het is een
+   volwaardige ingang, geen chip of toast, en oogt zo strakker in de menukolom. */
+.menu-profile{ border-radius:0; }
+/* Invoervelden */
+.dos-search, .field-input, .kw-row input, .autocomplete-list{ border-radius:var(--r-input); }
+/* Pillen: knoppen en chips */
+.btn, .hc-chip, .theme-chips .tch, .pub-pill, .s-pill, .dos-volg-chip, .cml-action, .dc-cta{ border-radius:999px; }
+.seg-toggle{ border-radius:999px; overflow:hidden; }
+/* display:inline-flex wint anders van het hidden-attribuut, en dan staat de schakelaar
+   'Voor mij / Alle dossiers' er ook zonder profiel, terwijl het filter dan niets doet. */
+.seg-toggle[hidden]{ display:none; }
+/* De harde pink hoek-beugels op de zittingskaart passen niet bij ronde hoeken. */
+.meeting-card::before, .meeting-card::after{ display:none; }
+</style>
+</head>
+<body>
+
+<style>
+/* ====== Alleen voor de techniek-pagina. De rest van de huisstijl komt uit de
+   gedeelde <head> van template.html (zelfde tokens, zelfde brand-mark). ====== */
+
+/* Pagina-identiteit: een ietsje koeler, donkerder papier dan de hoofdsite. Subtiel,
+   maar genoeg om meteen te voelen dat dit een uitleg-/over-pagina is. */
+body{ background:var(--paper-3); }
+
+.tech-hero{ position:relative; padding:clamp(2.5rem,7vw,5rem) 0 1rem; }
+.tech-hero > *{ position:relative; z-index:1; }
+/* Uitgegrijsde Sint-Romboutstoren als rustig watermerk: dezelfde vorm als op de hoofdsite
+   (we hergebruiken .bh-circle), maar ontkleurd en transparant, en zonder rise-animatie. */
+.tech-hero-bg{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+.tech-circle{
+  position:absolute;
+  /* Volledig ín beeld: de bol wordt nergens afgesneden. Verticaal gecentreerd naast de titel. */
+  width:min(26vw, 260px);
+  aspect-ratio:1 / 1;
+  top:50%; right:3%; left:auto; bottom:auto;
+  transform:translateY(-50%);
+  opacity:.16;
+  filter:grayscale(1) contrast(.9);
+  animation:none;
+}
+@media (max-width:640px){
+  /* Op smartphone kleiner, hoog in de hoek, maar nog steeds de vólle cirkel. */
+  .tech-circle{ width:120px; top:8px; right:12px; transform:none; opacity:.14; }
+}
+
+/* Pulserende bol i.p.v. het roze vierkantje vóór 'Over dit experiment', zoals op de voorpagina.
+   Genoeg ruimte na de bol zodat de pulserende ring (tot ~10px) niet door de tekst loopt. */
+.tech-hero .eyebrow::before{
+  width:7px; height:7px;
+  border-radius:50%;
+  margin-right:14px;
+  vertical-align:middle;
+  box-shadow:0 0 0 0 rgba(255,0,102,.5);
+  animation:pulse 2s infinite;
+}
+.tech-h1{ font-size:clamp(2.4rem,6vw,4rem); font-weight:600; letter-spacing:-.03em; line-height:1.03; margin:.6rem 0 1.1rem; }
+.tech-lede{ max-width:62ch; }
+.tech-prose{ max-width:64ch; }
+.tech-prose p{ margin-bottom:1rem; color:var(--ink-2); line-height:1.62; }
+/* --pink-text, niet --pink: het decoratieve roze haalt op papier 3,13:1 en dat is te
+   weinig voor tekst van deze grootte. Dit staat los van de merkkeuze wit-op-roze; hier
+   gaat het om roze op papier. De blokjes hieronder mogen wél --pink houden: geen tekst. */
+.tech-prose strong, .tech-prose em{ color:var(--pink-text); font-weight:600; font-style:normal; }
+.tech-prose ul{ list-style:none; display:flex; flex-direction:column; gap:.7rem; margin-top:.4rem; }
+.tech-prose li{ position:relative; padding-left:1.3rem; color:var(--ink-2); line-height:1.5; }
+.tech-prose li::before{ content:''; position:absolute; left:0; top:.55em; width:.5em; height:.5em; background:var(--pink); }
+
+/* Pijplijn-schema: één strakke verticale flow met verbindingslijn en nette ronde knopen */
+.flow{ margin-top:.8rem; max-width:64ch; }
+.flow-phase{ margin-bottom:2rem; }
+.flow-phase:last-child{ margin-bottom:0; }
+/* Ook hier --pink-text: dit zijn de fase-labels waarmee de lezer het schema volgt, en op
+   10,56px mono was 3,13:1 het zwaarste geval van de pagina. Het blokje ervoor blijft roze. */
+.flow-tag{ display:inline-flex; align-items:center; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--pink-text); margin-bottom:1rem; }
+.flow-tag::before{ content:''; width:.5em; height:.5em; background:var(--pink); margin-right:.55em; }
+.flow-line{ list-style:none; margin:0; padding:0; }
+.flow-line li{ position:relative; padding:0 0 1.1rem 1.9rem; color:var(--ink-2); line-height:1.6; font-size:.95rem; }
+.flow-line li:last-child{ padding-bottom:0; }
+.flow-line li::before{ content:''; position:absolute; left:0; top:.4em; width:13px; height:13px; border:1.5px solid var(--ink); background:var(--paper); border-radius:50%; box-sizing:border-box; z-index:1; }
+.flow-line li::after{ content:''; position:absolute; left:6px; top:.4em; bottom:-.4em; width:1px; background:var(--line-strong); }
+.flow-line li:last-child::after{ display:none; }
+.flow-line li.key::before{ background:var(--pink); border-color:var(--pink); }
+.flow-line li b{ color:var(--ink); font-weight:600; }
+
+/* Eén lijn per sectie. De zwarte onderlijn van de kop is de scheiding; de dunne
+   grijze sectie-onderrand uit de hoofd-CSS valt hier weg (anders twee lijnen vlak
+   na elkaar zonder iets ertussen). */
+.shell > section:not(:last-of-type){ border-bottom:0; }
+
+/* Geen nummering op de techniek-pagina: enkel het label boven elke sectiekop. */
+.sec-num em{ display:none; }
+
+/* Het colofon komt uit de gedeelde <head>; hier alleen het verschil: de footer
+   neemt exact de paginakleur (de band) over, dus geen naadlijn en geen
+   kleurverschil met het vlak er net boven. */
+.colofon{ border-top:none; background:transparent; }
+.co-sep{ margin:0 .45rem; color:var(--c-stil); }
+@media (max-width:780px){
+  .tech-nav .nav-links{ display:none; }
+  .arch-step{ white-space:normal; }
+  /* De gedeelde <head> verbergt .nav-cta onder 780px. Op de hoofdpagina kan dat, want daar
+     staat een hamburgermenu; hier is '← terug' de enige navigatie, en de sitewissel-balk
+     verschijnt pas onder 700px. Tussen 701 en 780px zat je dus zonder terugweg. */
+  .tech-nav .nav-cta{ display:inline-flex; }
+}
+</style>
+
+<nav class="nav tech-nav">
+  <div class="nav-inner">
+    <!-- Zelfde topmerk als op de hoofdpagina en de andere deelsites: de mug + As Gau Paust,
+         naar het portaal. De weg terug naar Denk mee zelf zit in de "terug"-knop hiernaast. -->
+    <a class="brand" href="https://asgaupaust.be/" aria-label="As Gau Paust, naar het portaal"><img class="brand-mug" src="/beelden/mug.png" alt="" aria-hidden="true" width="512" height="512">As Gau <em class="pink">Paust</em></a>
+    <a class="nav-cta" href="https://denkmee.asgaupaust.be/" style="margin-left:auto">← terug</a>
+  </div>
+</nav>
+
+<main class="shell">
+
+  <section class="tech-hero">
+    <div class="tech-hero-bg" aria-hidden="true"><span class="bh-shape bh-circle tech-circle"></span></div>
+    <p class="eyebrow">Over dit experiment</p>
+    <h1 class="tech-h1">Technische pagina</h1>
+    <p class="sec-lede tech-lede">
+      Hier lees je hoe een officieel document een leesbaar dossier wordt, hoe we het
+      ophalen bij de bron, en waar het experiment tekortschiet.
+    </p>
+  </section>
+
+  <!-- 01 · De vijf organen -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">De organen<em>01</em></div>
+      <div class="sec-titles">
+        <h2>Wie <em>beslist</em> er in Mechelen?</h2>
+        <p class="sec-lede">
+          De politieke macht ligt bij vijf officiële bestuursorganen. De gemeenteraad en het college
+          van burgemeester en schepenen sturen de stad aan. <strong>Diezelfde mensen</strong> besturen,
+          als raad voor maatschappelijk welzijn en vast bureau, ook het OCMW. En de burgemeester
+          waakt zelf over de openbare orde en kan bij hoogdringendheid tijdelijke politiemaatregelen
+          nemen, die de gemeenteraad nadien moet bekrachtigen. Samen zijn dat de vijf organen die we
+          volgen.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Termijnen -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Termijnen<em>02</em></div>
+      <div class="sec-titles">
+        <h2>Hoeveel <em>tijd</em> krijgt het stadsbestuur?</h2>
+        <p class="sec-lede">
+          Het Decreet Lokaal Bestuur legt de <strong>termijnen</strong> vast die we opvolgen.
+          De agenda van de gemeenteraad moet er minstens 8 dagen vóór de zitting zijn (artikel 22),
+          en die van de raad voor maatschappelijk welzijn even lang vooraf (artikel 74). De besluiten
+          van alle vijf de organen volgen uiterlijk 10 dagen na de zitting of de beslissing
+          (artikel 287).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Architectuur -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Architectuur<em>03</em></div>
+      <div class="sec-titles">
+        <h2>Van officieel stuk tot <em>leesbaar</em> dossier</h2>
+        <div class="tech-prose">
+          <p>
+            Hoe ontstaat een dossier? We bundelen stukken op hun meest onderscheidende gedeelde woord:
+            een besteknummer of adres, een eigennaam zoals een kerk, een buurt of een project, of een
+            zeldzaam kernwoord uit de titel. Een breed thema bindt nooit op zichzelf. Het is een
+            <strong>vuistregel</strong>, geen absolute waarheid: soms koppelt ze twee losse zaken, soms knipt ze één
+            verhaal in twee.
+          </p>
+          <p>
+            In zo'n dossier schuift ook een schriftelijke vraag van een raadslid mee, naast de
+            agendapunten en besluiten. Zo zie je de vraag en de latere beslissing over hetzelfde
+            onderwerp in één tijdlijn.
+          </p>
+          <p>
+            Zoek je op een trefwoord, dan kijken we niet alleen in de titels en de samenvattingen,
+            maar ook in de <strong>volledige stukken</strong>: de notulen van een agendapunt, de
+            pdf van een schriftelijke vraag. Zit een woord enkel daar, dan tonen we die treffer
+            gewoon tussen de andere, met het label "in het volledige stuk", zodat je weet dat het
+            dieper in de tekst zat en niet in de samenvatting.
+          </p>
+          <p>
+            Soms verwijzen twee stukken naar dezelfde harde code: een lijn in het meerjarenplan,
+            een zaaknummer, een omgevingsvergunning. Die codes staan in de stukken zelf, dus we
+            gebruiken ze om verwante dossiers te tonen, met de reden erbij. Meestal blijft dat
+            een tip en geen oordeel: we zetten twee dossiers naast elkaar zonder ze samen te
+            voegen. Alleen een verwijzing die naar precies één zaak wijst, zoals een besteknummer
+            of een adres met huisnummer, bundelt stukken wel meteen in hetzelfde dossier.
+          </p>
+          <p>
+            Deze site is gebouwd met hulp van Claude Code, de
+            AI-programmeerassistent van Anthropic. Ze is geen journalistiek eindproduct, maar een
+            opstapje: een manier om de vinger aan de pols te houden en zelf te beslissen waar je je
+            tanden in zet.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-phase">
+        <span class="flow-tag">Lokaal</span>
+        <ol class="flow-line">
+          <li><b>Ophalen.</b> We halen de agenda's, besluitenlijsten, notulen en de schriftelijke vragen van raadsleden rustig op, stuk voor stuk en met een pauze tussendoor.</li>
+          <li><b>Uitlezen.</b> We lezen de pdf's uit tot losse agendapunten en besluiten.</li>
+          <li><b>Samenvatten.</b> Een taalmodel zet de ambtelijke taal om naar mensentaal.</li>
+          <li class="key"><b>Bouwen.</b> Alle data gaat mee in de pagina zelf, dus zonder server of databank. De lettertypes staan als losse bestanden ernaast.</li>
+        </ol>
+      </div>
+
+      <div class="flow-phase">
+        <span class="flow-tag">Publiceren</span>
+        <ol class="flow-line">
+          <li class="key"><b>GitHub Pages.</b> Bij elke wijziging zet een actie de nieuwe versie online op denkmee.asgaupaust.be. Geen server nodig, geen databank.</li>
+        </ol>
+      </div>
+
+      <div class="flow-phase">
+        <span class="flow-tag">In jouw browser</span>
+        <ol class="flow-line">
+          <li><b>Bundelen en zoeken.</b> Het samenstellen van dossiers en het doorzoeken van alle besluiten gebeuren live bij jou. Er gaat niets naar een server terug.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · De bron -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">De bron<em>04</em></div>
+      <div class="sec-titles">
+        <!-- Bewust feitelijk gehouden. Een eerdere versie las als een conflict met de stad: ze
+             gebruikte de taal van een verbod, velde een juridisch oordeel over robots.txt en zette
+             ons ophalen neer als verzet. Zo'n bestand vraagt echter, het verbiedt niet, en dat
+             oordeel is niet aan ons. Hier staat enkel nog waar de stukken vandaan komen en hoe
+             rustig we ze ophalen. (De oude zinnen staan hier niet geciteerd: dit commentaar reist
+             mee naar de gepubliceerde paginabron.) -->
+        <h2>Waar de stukken <em>vandaan</em> komen</h2>
+        <p class="sec-lede">
+          De stad publiceert deze stukken zelf, omdat het Decreet Lokaal Bestuur haar dat oplegt
+          (behalve voor de schriftelijke vragen), binnen de termijnen die je hierboven leest.
+        </p>
+        <div class="tech-prose" style="margin-top:1.1rem">
+          <p>
+            Op datzelfde portaal staat ook een <strong>robots.txt</strong> met één algemene regel:
+            geen geautomatiseerde bezoekers. Die regel is niet op ons gericht, ze geldt voor
+            iedereen, ook voor zoekmachines.
+          </p>
+          <p>
+            Wij halen de stukken wel op, want zonder hen bestaat deze site niet. We doen dat met
+            zorg: we kijken niet constant of er iets nieuw is, maar op ruim gespreide momenten,
+            stuk voor stuk en met een pauze tussendoor, zodat de servers van de stad er amper iets
+            van merken. We nemen enkel wat al openbaar is, en we brengen je telkens terug naar het
+            origineel.
+          </p>
+          <p>
+            De rest volgt vanzelf. De kosten blijven laag: alleen het resultaat gaat online, een
+            handvol statische bestanden, gratis te hosten, zonder server of databank. Het zoeken naar dossiers en
+            besluiten gebeurt in jouw browser, dus niemand logt wat jij intikt. En alles is open: wie
+            de stappen herhaalt, krijgt dezelfde site, en de code staat publiek.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Kritische zelfevaluatie -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Kritisch<em>05</em></div>
+      <div class="sec-titles">
+        <h2>Wat we mogelijk over het <em>hoofd</em> zien</h2>
+        <p class="sec-lede">
+          Natuurlijk hebben wij ook <strong>blinde vlekken</strong>. Dit zijn de grenzen aan dit
+          project die we zelf zien.
+        </p>
+        <div class="tech-prose" style="margin-top:1.1rem">
+          <p>
+            We tonen vijf organen. Wat daarbuiten valt, zoals gemeenteraadscommissies, adviesraden of de
+            mondelinge toelichting in de zaal, zie je hier niet. De site begint bovendien eind 2024, bij
+            deze bestuursperiode. Oudere stukken halen we niet op. Een beslissing heeft vaak een
+            voorgeschiedenis die niet in één document past.
+          </p>
+          <p>
+            Een samenvatting is niet de bron. Samenvatten is kiezen, en kiezen is weglaten. Ook het
+            uitlezen van de pdf's gebeurt met vuistregels: soms glipt een agendapunt weg, of knippen
+            we het verkeerd, nog voor de samenvatting. Een deel van dat werk doet een taalmodel:
+            sneller, maar nooit onfeilbaar. Voor wat juridisch telt, ga je naar de bron: we brengen je
+            telkens naar de officiële publicaties van net die zitting bij de stad. Voor het volledige
+            besluit van het college, het vast bureau of de burgemeester heb je soms een
+            openbaarheidsverzoek nodig.
+          </p>
+          <p>
+            En de site is een momentopname. Ze verandert pas wanneer we de stukken opnieuw ophalen
+            en de nieuwe versie online zetten. Tussen twee versies kan ze achterlopen op de stad.
+          </p>
+          <p>
+            Ook de bundeling zit er soms naast. Merk je dat een stuk niet in een dossier
+            thuishoort, dan kan je dat melden met de knop in het dossier. Zo'n melding gaat naar
+            ons, niet automatisch de site in: <strong>wij beslissen</strong> of ze klopt en
+            leggen de correctie dan vast in een apart bestand dat bij de volgende bouw meegaat.
+            Zo verbetert de bundeling stap voor stap, met een mens die telkens de knoop doorhakt.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · Ter inspiratie -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">Ter inspiratie<em>06</em></div>
+      <div class="sec-titles">
+        <h2>Een <em>uitgestoken</em> hand</h2>
+        <p class="sec-lede">
+          Bekijk deze site vooral als een <strong>uitnodiging</strong> aan de stad om haar
+          bestuursdocumenten veel leesbaarder en toegankelijker te maken, en zo de Mechelaar
+          dichter bij de politiek te brengen. En natuurlijk is het ook een voorzet voor andere
+          (burger)journalisten om iets gelijkaardigs te beginnen in hun stad of gemeente.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colofon">
+  <div class="co-shell">
+    <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee met Mechelen, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
+    <div class="co-body">
+      <p class="co-zin"><strong class="co-naam">Denk mee <em>met Mechelen</em></strong>, een experiment van <strong>As Gau Paust</strong>. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
+      <!-- Geen "naar de hoofdpagina" meer: die weg terug staat al drie keer op deze pagina
+           (de knop "terug" in de nav, het merkteken hiernaast, en de tab Denk mee in de
+           onderbalk). Het colofon zegt nu enkel nog waar deze site bij hoort. -->
+      <p class="co-fam">Onderdeel van <a href="https://asgaupaust.be">asgaupaust.be</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Sitewissel-balk: exact dezelfde balk als op de hoofdpagina en op de andere sites van
+     As Gau Paust, zodat je ook vanaf deze pagina naar de rest van de familie kunt springen.
+     De opmaak komt uit de gedeelde <head>, dus hier staat enkel het merk zelf.
+     Denk mee draagt aria-current="true" en niet "page": je zit wél in Denk mee, maar deze
+     tab wijst naar de hoofdpagina en niet naar /techniek/. -->
+<nav class="tabbar" id="tabbar" aria-label="As Gau Paust, spring tussen de sites">
+  <a href="https://asgaupaust.be/"><img class="tab-mug" src="/beelden/mug.png" alt="" aria-hidden="true" width="512" height="512"><span>Start</span></a>
+  <a href="https://denkmee.asgaupaust.be/" aria-current="true"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><g transform="translate(2.4 -1.5) scale(0.8)"><path stroke-width="2" d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></g><circle cx="7.6" cy="17.2" r="1.3"/><circle cx="5.1" cy="20.9" r=".75"/></svg><span>Denk mee</span></a>
+  <a href="https://leesmee.asgaupaust.be/"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span>Lees mee</span></a>
+  <a href="https://asgaupaust.be/en-meer/"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" stroke-dasharray="3 2.4"/><line x1="12" y1="8.5" x2="12" y2="15.5"/><line x1="8.5" y1="12" x2="15.5" y2="12"/></svg><span>En meer</span></a>
+  <a href="https://asgaupaust.be/#contact"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.6 7l8.4 6.4L20.4 7"/></svg><span>Contact</span></a>
+</nav>
+
+</body>
+</html>
