@@ -552,8 +552,12 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   border:2px solid var(--ink);
   box-shadow:0 1px 0 rgba(0,0,0,.05), 0 14px 30px -16px rgba(10,10,10,.28), 0 38px 78px -28px rgba(10,10,10,.55);
 }
+/* Het diepere roze, niet het felle. Wit op --pink haalt 3,86:1 en blijft onder AA; op
+   --pink-deep is dat 6,96:1. Op een groot gevuld vlak met lopende tekst weegt dat, terwijl
+   het felle roze zijn werk blijft doen waar het klein en decoratief is (bolletjes, chips,
+   knoppen). Zelfde keuze als het accentkaartje bij 'Wat je hier leest'. */
 .hero-cockpit{
-  background:var(--pink); color:#fff;
+  background:var(--pink-deep); color:#fff;
   padding:1rem 1.2rem 1.05rem;
   opacity:0; animation:rise .9s .45s ease-out forwards;
 }
