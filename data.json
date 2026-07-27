@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26",
+  "generated_at": "2026-07-27",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -422,6 +422,17 @@
       "notulen_published": null
     },
     {
+      "id": "gemeenteraad-20260915",
+      "type": "Gemeenteraad",
+      "date": "2026-09-15",
+      "datetime": "2026-09-15T20:00:00",
+      "agenda_url": null,
+      "agenda_published": null,
+      "agenda_deadline": null,
+      "status": "gepland",
+      "late_days": 0
+    },
+    {
       "id": "rmw-20260915",
       "type": "RMW",
       "date": "2026-09-15",
@@ -430,14 +441,13 @@
       "agenda_published": null,
       "agenda_deadline": null,
       "status": "gepland",
-      "late_days": 0,
-      "notulen_published": null
+      "late_days": 0
     },
     {
-      "id": "gemeenteraad-20260915",
+      "id": "gemeenteraad-20261020",
       "type": "Gemeenteraad",
-      "date": "2026-09-15",
-      "datetime": "2026-09-15T20:00:00",
+      "date": "2026-10-20",
+      "datetime": "2026-10-20T20:00:00",
       "agenda_url": null,
       "agenda_published": null,
       "agenda_deadline": null,
@@ -453,14 +463,13 @@
       "agenda_published": null,
       "agenda_deadline": null,
       "status": "gepland",
-      "late_days": 0,
-      "notulen_published": null
+      "late_days": 0
     },
     {
-      "id": "gemeenteraad-20261020",
+      "id": "gemeenteraad-20261124",
       "type": "Gemeenteraad",
-      "date": "2026-10-20",
-      "datetime": "2026-10-20T20:00:00",
+      "date": "2026-11-24",
+      "datetime": "2026-11-24T20:00:00",
       "agenda_url": null,
       "agenda_published": null,
       "agenda_deadline": null,
@@ -476,14 +485,13 @@
       "agenda_published": null,
       "agenda_deadline": null,
       "status": "gepland",
-      "late_days": 0,
-      "notulen_published": null
+      "late_days": 0
     },
     {
-      "id": "gemeenteraad-20261124",
+      "id": "gemeenteraad-20261215",
       "type": "Gemeenteraad",
-      "date": "2026-11-24",
-      "datetime": "2026-11-24T20:00:00",
+      "date": "2026-12-15",
+      "datetime": "2026-12-15T20:00:00",
       "agenda_url": null,
       "agenda_published": null,
       "agenda_deadline": null,
@@ -493,18 +501,6 @@
     {
       "id": "rmw-20261215",
       "type": "RMW",
-      "date": "2026-12-15",
-      "datetime": "2026-12-15T20:00:00",
-      "agenda_url": null,
-      "agenda_published": null,
-      "agenda_deadline": null,
-      "status": "gepland",
-      "late_days": 0,
-      "notulen_published": null
-    },
-    {
-      "id": "gemeenteraad-20261215",
-      "type": "Gemeenteraad",
       "date": "2026-12-15",
       "datetime": "2026-12-15T20:00:00",
       "agenda_url": null,
@@ -98502,6 +98498,118 @@
   ],
   "is_demo": false,
   "schriftelijke_vragen": [
+    {
+      "id": "sv-2026-07-2026-067",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-07",
+      "nummer": "2026/067",
+      "indiener": "Marc HENDRICKX (N-VA)",
+      "onderwerp": "Samenwerking (OCMW) Mechelen en vzw ‘UnitedWe’",
+      "titel": "Samenwerking (OCMW) Mechelen en vzw ‘UnitedWe’",
+      "vraag": "N.a.v. de uitdeinende heisa en de grote persaandacht die er is m.b.t. dit dossier, had ik nog enkele bijkomende vragen. Vragen : -hoeveel mensen zijn er destijds in ofm.b.t. dit project als art. 60 - werknemer door het OCMW van Mechelen betaald? -zijn er op heden nog betalingen van deze mensen door het OCMW van Mechelen? -kan mij de overeenkomst van de vzw UnitedWe met het OCMW Mechelen worden voorgelegd ter info? -was het OCMW van Mechelen er van op de hoogte dat de vzw UnitedWe haar door het OCMW van Mechelen ter beschikking gestelde art. 60'ers ook liet werken voor derden? -plant het OCMW van I\\4echelen (paging tot) recuperatie der door haar uitbetaalde vergoedingen aan de door haar aan de vzw UnitedWe uitgeleende art. 60'ers, zo uit onderzoek moest blijken dat de vzw UnitedWe deze mensen ook ter beschikking stelde van derden zonder medeweten van het OCMW? -is terzake aljuridisch advies gevraagd resp. verstrekt met het oog op het,uitklaren van deze situatie? Zoja, aan wie? Marc HENDRICKX (N-VA) -gemeenteraadslid- Formulier als bijlage mailen naar gemeenteraad(%mechelen.be. MECHELEN SCHRIFTELI3K ANTWOORD OP SCHRIFTELIJKE VRAAG BUITEN DE RAADSZITTINGEN 2026/067 Indiener: Marc Hendrickx Datum indiening: 7 juli 2026 Vraag: Samenwerking (OCMW) Mechelen en vzw 'UnitedWe7",
+      "antwoord": "Sinds de opstart van vzw UnitedWe zijn er tot op heden in totaal vier leefloongerechtigden via het systeem van artikel 60 opgestart bij vzw UnitedWe door het OCMW van Mechelen. Wij hebben geen zicht of andere OCMW's ook mensen in artikel 60 hebben opgestart bij vzw UnitedWe, Met is immers op zich mogelijk dat een OCMW mensen in artikel 60 tewerk stelt bij een organisatie buiten zijn eigen gemeente- ofstadsgrenzen. Er is vandaag de dag nog 1 persoon van deze 4 mensen actief bij vzw UnitedWe. Bij iedere tewerkstelling in artikel 60 wordt er een individuele samenwerkingsovereenkomst voor de terbeschikkingstelling van een leerwerknemer afgesloten. Een geanonimiseerde versie van een dergelijke overeenkomst met vzw UnitedWe is toegevoegd in bijlage bij dit antwoord. Deze samenwerkingsovereenkomst stipuleert in artikel 6 §4 expliciet het volgende: \"Het is de gebruiker niet toegestaan het ter beschikking gesteld personeel te werk te stellen onder leiding en toezicht van personen vreemd aan de onderneming, noch dit personeel, al dan niet tijdelijk, te werk te stellen in andere ondernemingen.\" Tot op heden beschikken wij niet over aanwijzingen dat een van de Mechelse personen die in het kader van artikel 60 bij vzw UnitedWe werd tewerkgesteld, intussen in een andere ondememing is tewerkgesteld. Om hierover uitsluitsel te verkrijgen, werd een brief gestuurd naar vzw UnitedWe. Het antwoord hierop en de kwestie van een mogelijke recuperatie van de lonen van de mensen die tewerkgesteld waren in artikel 60 en de vragen van juridisch advies hieromtrent zullen u aanvullend bezorgd warden, wanneer deze informatie beschikbaar is.",
+      "heeft_antwoord": true,
+      "brontekst": "Schriftelijke vraag van Marc HENDRICKX (N-VA) aan de stad, onderwerp: Samenwerking (OCMW) Mechelen en vzw ‘UnitedWe’.\n\nN.a.v. de uitdeinende heisa en de grote persaandacht die er is m.b.t. dit dossier, had ik nog enkele bijkomende vragen. Vragen : -hoeveel mensen zijn er destijds in ofm.b.t. dit project als art. 60 - werknemer door het OCMW van Mechelen betaald? -zijn er op heden nog betalingen van deze mensen door het OCMW van Mechelen? -kan mij de overeenkomst van de vzw UnitedWe met het OCMW Mechelen worden voorgelegd ter info? -was het OCMW van Mechelen er van op de hoogte dat de vzw UnitedWe haar door het OCMW van Mechelen ter beschikking gestelde art. 60'ers ook liet werken voor derden? -plant het OCMW van I\\4echelen (paging tot) recuperatie der door haar uitbetaalde vergoedingen aan de door haar aan de vzw UnitedWe uitgeleende art. 60'ers, zo uit onderzoek moest blijken dat de vzw UnitedWe deze mensen ook ter beschikking stelde van derden zonder medeweten van het OCMW? -is terzake aljuridisch advies gevraagd resp. verstrekt met het oog op het,uitklaren van deze situatie? Zoja, aan wie? Marc HENDRICKX (N-VA) -gemeenteraadslid- Formulier als bijlage mailen naar gemeenteraad(%mechelen.be. MECHELEN SCHRIFTELI3K ANTWOORD OP SCHRIFTELIJKE VRAAG BUITEN DE RAADSZITTINGEN 2026/067 Indiener: Marc Hendrickx Datum indiening: 7 juli 2026 Vraag: Samenwerking (OCMW) Mechelen en vzw 'UnitedWe7\n\nAntwoord van het college:\nSinds de opstart van vzw UnitedWe zijn er tot op heden in totaal vier leefloongerechtigden via het systeem van artikel 60 opgestart bij vzw UnitedWe door het OCMW van Mechelen. Wij hebben geen zicht of andere OCMW's ook mensen in artikel 60 hebben opgestart bij vzw UnitedWe, Met is immers op zich mogelijk dat een OCMW mensen in artikel 60 tewerk stelt bij een organisatie buiten zijn eigen gemeente- ofstadsgrenzen. Er is vandaag de dag nog 1 persoon van deze 4 mensen actief bij vzw UnitedWe. Bij iedere tewerkstelling in artikel 60 wordt er een individuele samenwerkingsovereenkomst voor de terbeschikkingstelling van een leerwerknemer afgesloten. Een geanonimiseerde versie van een dergelijke overeenkomst met vzw UnitedWe is toegevoegd in bijlage bij dit antwoord. Deze samenwerkingsovereenkomst stipuleert in artikel 6 §4 expliciet het volgende: \"Het is de gebruiker niet toegestaan het ter beschikking gesteld personeel te werk te stellen onder leiding en toezicht van personen vreemd aan de onderneming, noch dit personeel, al dan niet tijdelijk, te werk te stellen in andere ondernemingen.\" Tot op heden beschikken wij niet over aanwijzingen dat een van de Mechelse personen die in het kader van artikel 60 bij vzw UnitedWe werd tewerkgesteld, intussen in een andere ondememing is tewerkgesteld. Om hierover uitsluitsel te verkrijgen, werd een brief gestuurd naar vzw UnitedWe. Het antwoord hierop en de kwestie van een mogelijke recuperatie van de lonen van de mensen die tewerkgesteld waren in artikel 60 en de vragen van juridisch advies hieromtrent zullen u aanvullend bezorgd warden, wanneer deze informatie beschikbaar is.",
+      "pdf": "data/raw/schriftelijke_vragen/2026-07/067. M. Hendrickx - Samenwerking (OCMW) Mechelen en vzw ‘UnitedWe’.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-07/067.%20M.%20Hendrickx%20-%20Samenwerking%20%28OCMW%29%20Mechelen%20en%20vzw%20%E2%80%98UnitedWe%E2%80%99.pdf",
+      "decoded": "Raadslid Marc Hendrickx vraagt de stad naar de samenwerking tussen het OCMW van Mechelen en vzw UnitedWe. Hij wil weten hoeveel mensen als artikel 60 werknemer via dit project door het OCMW betaald werden, en of er nog betalingen lopen. Hij vraagt ook om de overeenkomst tussen vzw UnitedWe en het OCMW in te kijken, en of het OCMW wist dat UnitedWe deze werknemers ook liet werken voor derden. Verder vraagt hij of het OCMW overweegt uitbetaalde vergoedingen terug te vorderen als blijkt dat dit zonder medeweten van het OCMW gebeurde, en of er al juridisch advies gevraagd of gegeven werd. Het college antwoordt dat er in totaal vier leefloongerechtigden via artikel 60 bij vzw UnitedWe tewerkgesteld werden, waarvan er nu nog één actief is. Een geanonimiseerde samenwerkingsovereenkomst wordt bijgevoegd, en die verbiedt uitdrukkelijk dat het personeel bij andere ondernemingen wordt tewerkgesteld. Het college heeft momenteel geen aanwijzingen dat dit toch gebeurde, maar stuurde een brief naar vzw UnitedWe om dit na te gaan, en zal later meer informatie bezorgen over eventuele recuperatie en juridisch advies.",
+      "themes": [
+        "Sociale zaken",
+        "Armoedebestrijding"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "vzw UnitedWe",
+        "OCMW Mechelen",
+        "artikel 60"
+      ]
+    },
+    {
+      "id": "sv-2026-07-2026-066",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-04",
+      "nummer": "2026/066",
+      "indiener": "Stefaan Deleus (cd&v Mechelen)",
+      "onderwerp": "Samenwerking tussen Stad en Seppe Nobels",
+      "titel": "Samenwerking tussen Stad en Seppe Nobels",
+      "vraag": "/ vraaen : Recent kwam de heer Seppe Nobels in de pers in opspraak. Voor zover bekend werkte de Stad Mechelen de voorbije jaren ook almet hem samen. Vandaar volgende vragen : 1. Op welke momenten en voor welke projecten heeft de stad Mechelen de voorbije jaren samengewerkt met de heer Seppe Nobels en/of een van zijn organisaties / vzw's / vennootschappen ? 2. In voorkomend geval, welke afspraken / contracten werden hiertoe gemaakt en welke vergoedingen (financieel of in natura / terbeschikkingstellingen enz.) stonden hier tegenover ? 3. In het bijzonder, wat was de betrokkenheid van de heer Seppe Nobels bij 't Gasthuis en Construct Europe ? Stefaan Deleus Formulier als bijlage mailen naar gemeenteraad(%mechelen.be. MECHELEN 0 SCHRIFTELUK ANTWOORD OP SCHRIFTEUJKE VRAAG BUITEN DE RAADSZITTINGEN 2026/066 Indiener: S. Deleus Datum indiening: 04/07/2026 Vraag: Samenwerking tussen Stad en Seppe Nobels Antwoord colleqe 1. Op welke momenten en voor welke projecten heeft de stad Mechelen de voorbije jaren samengewerkt met de heer Seppe Nobels en/of een van zijn organisaties / vzw's / vennootschappen Welzijnsvereniging Dodoens heeft samengewerkt met UnitedWe vzw voor een tijdelijke invulling van het Oud Gasthuis, met als doel verbinding te leggen met kansengroepen en vluchtelingen, door bijvoorbeeld oplejdingstrajecten. In het kader van Construct Europe is er eveneens samengewerkt met UnitedWe vzw. 2. In voorkomend geval, welke afspraken / contracten werden hiertoe gemaakt en welke vergoedingen (financieel of in natura / terbeschikkingstellingen enz.) stonden hier tegenover ? Er werd een bezetting ter bede afgesloten van 1.1.2024 tot en met 31.3.2024 met de volgende voorwaarden o Forfaitaire maandelijkse vergoeding voor nutsverbruik van 2.500€ per maand. Er werden verlengingen toegestaan. De bezetting werd uiteindelijk stopgezet door UnitedWe vzw en dit vanaf 1 november 2025 o Provisie maandelijkse vergoeding voor nutsverbruik van 2.500€ per maand, met afrekening op het einde van het contract. In het kader van Construct Europe werd een eenmalige subsidie uitgekeerd van 25.000€ voor publiekswerving en de artistieke omkadering van het Oud Gasthuis. De via 'UIT' afgehandelde ticketverkoop voor UnitedWe vzw, in het kader van Construct Europe, liep vanaf 6.1.2024 tot en met 27.9.2025 en werd contractueel, gedurende de looptijd/ verlengd. Voor deze ticketverkoop via UIT werden service kosten betaald aan de AGB MAC : Totaal 11.307 €, opbrengst. 3. In het bijzonder, wat was de betrokkenheid van de heer Seppe Nobels bij /t Gasthuis en Construct Europe ? In het kader van Construct Europe werd de publiekswerking/artistieke omkadering verzorgd bij bijvoorbeeld Opening tentoonstelling Lieve Blancquaert: o Seppe Nobels en zijn team verzorgden daar de receptie. Vlaams openingsfeest o Tijdens het Vlaams Openingsfeest ging het Oud Gasthuis officieel open. Toen konden Mechelaars al kennis maken met'light' versie. Rondleidingen voor Mechelaars o Het concept in het Oud Gasthuis bestond uit 2 onderdelen. /s Middags konden mensen er lunchen. 's Avonds was er een belevingswandeling waar in verschillende kamers er verhalen werden gebracht van nieuwkomers, waar gerechten werden gemaakt uit hun thuisland en waar lokale producten in de kijker werden gezet en dit in combinatie met het tonen van werken van enkele kunstenaars. Enkele samenwerkingen met lokale partners o Gasthuis werd in verschillende belevingsruimtes opgesplitst. In elke ruimte was er een artistieke invulling aanwezig die na 10 weken steeds wisselde samen met het menu, Er werd samengewerkt met volgende partners/ kunstenaars: • Kunstenaars: Nikita Kadan, Annelies De Weerdt, Tom Liekens, Jan Beddegenoodts, Lavinia Wouters • Partners: Welcome in Mechelen, Foodsavers, OekraTens nooddorp Mechelen, 15 juli 2026 Opdracht burgemeester van 02.12.2024 en 24.06.2026, in toepassing van artikel 280 decreet lokaal beshiur c w. Gert Eeraerts Kristof Calvo Pia Indigne algemeen directeur schepen schepen",
+      "antwoord": "",
+      "heeft_antwoord": false,
+      "brontekst": "Schriftelijke vraag van Stefaan Deleus (cd&v Mechelen) aan de stad, onderwerp: Samenwerking tussen Stad en Seppe Nobels.\n\n/ vraaen : Recent kwam de heer Seppe Nobels in de pers in opspraak. Voor zover bekend werkte de Stad Mechelen de voorbije jaren ook almet hem samen. Vandaar volgende vragen : 1. Op welke momenten en voor welke projecten heeft de stad Mechelen de voorbije jaren samengewerkt met de heer Seppe Nobels en/of een van zijn organisaties / vzw's / vennootschappen ? 2. In voorkomend geval, welke afspraken / contracten werden hiertoe gemaakt en welke vergoedingen (financieel of in natura / terbeschikkingstellingen enz.) stonden hier tegenover ? 3. In het bijzonder, wat was de betrokkenheid van de heer Seppe Nobels bij 't Gasthuis en Construct Europe ? Stefaan Deleus Formulier als bijlage mailen naar gemeenteraad(%mechelen.be. MECHELEN 0 SCHRIFTELUK ANTWOORD OP SCHRIFTEUJKE VRAAG BUITEN DE RAADSZITTINGEN 2026/066 Indiener: S. Deleus Datum indiening: 04/07/2026 Vraag: Samenwerking tussen Stad en Seppe Nobels Antwoord colleqe 1. Op welke momenten en voor welke projecten heeft de stad Mechelen de voorbije jaren samengewerkt met de heer Seppe Nobels en/of een van zijn organisaties / vzw's / vennootschappen Welzijnsvereniging Dodoens heeft samengewerkt met UnitedWe vzw voor een tijdelijke invulling van het Oud Gasthuis, met als doel verbinding te leggen met kansengroepen en vluchtelingen, door bijvoorbeeld oplejdingstrajecten. In het kader van Construct Europe is er eveneens samengewerkt met UnitedWe vzw. 2. In voorkomend geval, welke afspraken / contracten werden hiertoe gemaakt en welke vergoedingen (financieel of in natura / terbeschikkingstellingen enz.) stonden hier tegenover ? Er werd een bezetting ter bede afgesloten van 1.1.2024 tot en met 31.3.2024 met de volgende voorwaarden o Forfaitaire maandelijkse vergoeding voor nutsverbruik van 2.500€ per maand. Er werden verlengingen toegestaan. De bezetting werd uiteindelijk stopgezet door UnitedWe vzw en dit vanaf 1 november 2025 o Provisie maandelijkse vergoeding voor nutsverbruik van 2.500€ per maand, met afrekening op het einde van het contract. In het kader van Construct Europe werd een eenmalige subsidie uitgekeerd van 25.000€ voor publiekswerving en de artistieke omkadering van het Oud Gasthuis. De via 'UIT' afgehandelde ticketverkoop voor UnitedWe vzw, in het kader van Construct Europe, liep vanaf 6.1.2024 tot en met 27.9.2025 en werd contractueel, gedurende de looptijd/ verlengd. Voor deze ticketverkoop via UIT werden service kosten betaald aan de AGB MAC : Totaal 11.307 €, opbrengst. 3. In het bijzonder, wat was de betrokkenheid van de heer Seppe Nobels bij /t Gasthuis en Construct Europe ? In het kader van Construct Europe werd de publiekswerking/artistieke omkadering verzorgd bij bijvoorbeeld Opening tentoonstelling Lieve Blancquaert: o Seppe Nobels en zijn team verzorgden daar de receptie. Vlaams openingsfeest o Tijdens het Vlaams Openingsfeest ging het Oud Gasthuis officieel open. Toen konden Mechelaars al kennis maken met'light' versie. Rondleidingen voor Mechelaars o Het concept in het Oud Gasthuis bestond uit 2 onderdelen. /s Middags konden mensen er lunchen. 's Avonds was er een belevingswandeling waar in verschillende kamers er verhalen werden gebracht van nieuwkomers, waar gerechten werden gemaakt uit hun thuisland en waar lokale producten in de kijker werden gezet en dit in combinatie met het tonen van werken van enkele kunstenaars. Enkele samenwerkingen met lokale partners o Gasthuis werd in verschillende belevingsruimtes opgesplitst. In elke ruimte was er een artistieke invulling aanwezig die na 10 weken steeds wisselde samen met het menu, Er werd samengewerkt met volgende partners/ kunstenaars: • Kunstenaars: Nikita Kadan, Annelies De Weerdt, Tom Liekens, Jan Beddegenoodts, Lavinia Wouters • Partners: Welcome in Mechelen, Foodsavers, OekraTens nooddorp Mechelen, 15 juli 2026 Opdracht burgemeester van 02.12.2024 en 24.06.2026, in toepassing van artikel 280 decreet lokaal beshiur c w. Gert Eeraerts Kristof Calvo Pia Indigne algemeen directeur schepen schepen",
+      "pdf": "data/raw/schriftelijke_vragen/2026-07/066. S. Deleus - Samenwerking tussen Stad en Seppe Nobels.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-07/066.%20S.%20Deleus%20-%20Samenwerking%20tussen%20Stad%20en%20Seppe%20Nobels.pdf",
+      "decoded": "Raadslid Stefaan Deleus vraagt de stad naar de samenwerking met Seppe Nobels, die recent in de pers in opspraak kwam. Hij wil weten op welke momenten en voor welke projecten de stad de voorbije jaren samenwerkte met Nobels of zijn organisaties, welke afspraken en contracten daarvoor werden gemaakt en welke vergoedingen daar tegenover stonden. Hij vraagt ook specifiek naar de betrokkenheid van Nobels bij 't Gasthuis en Construct Europe. Het college antwoordt dat Welzijnsvereniging Dodoens samenwerkte met UnitedWe vzw voor een tijdelijke invulling van het Oud Gasthuis, gericht op kansengroepen en vluchtelingen, en ook in het kader van Construct Europe. Er liep een bezetting ter bede van 1 januari 2024 tot en met 31 maart 2024, met een forfaitaire vergoeding van 2.500 euro per maand voor nutsverbruik, later verlengd tot de stopzetting door UnitedWe vzw vanaf 1 november 2025. Voor Construct Europe werd een eenmalige subsidie van 25.000 euro uitgekeerd voor publiekswerving en artistieke omkadering, en liep de ticketverkoop via UIT van 6 januari 2024 tot 27 september 2025, met 11.307 euro aan servicekosten voor AGB MAC. Nobels en zijn team verzorgden onder meer de receptie bij de opening van de tentoonstelling van Lieve Blancquaert en de artistieke omkadering van het Oud Gasthuis, waar samengewerkt werd met verschillende kunstenaars en partners.",
+      "themes": [
+        "Cultuur"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Seppe Nobels",
+        "UnitedWe vzw",
+        "'t Gasthuis",
+        "Construct Europe",
+        "Welzijnsvereniging Dodoens",
+        "Oud Gasthuis"
+      ]
+    },
+    {
+      "id": "sv-2026-07-2026-065",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-04",
+      "nummer": "2026/065",
+      "indiener": "Marc HENDRICKX (N-VA)",
+      "onderwerp": "Subsidie aan vzw ‘UnitedWe’ - Herinrichtingskosten Oud Gasthuis",
+      "titel": "Subsidie aan vzw ‘UnitedWe’ - Herinrichtingskosten Oud Gasthuis",
+      "vraag": "N.a.v. de heisa die is ontstaan rond de vzw 'UnitedWe' bekwam ik graag duidelijkheid over de mogelijke financiele implicaties voor de stad Vragen : Hoeveel subsidie trok de vzw 'United We' in 2023, 2024 en 2025 van de stad Mechelen? Heeft de stad bijgedragen aan de renovatie-kost voor het Oude Gasthuis n.a.v. het sociale restaurant dat daar een tijdje gevestigd was in het verleden en zo ja, voor hoeveel? Marc HENDRICKX (N-VA) -gemeenteraadslid- MECHELEN 0 SCHRIFTELIJKANTWOORD OP SCHRIFTELI3KE VRAAG BUITEN DE RAADSZITTINGEN 2026/065 Indiener: M. Hendrickx Datum indiening: 04/07/2026 Vraag: Subsidie aan vzw ^UnitedWe7 - Herinrichtingskosten Oud Gasthuis",
+      "antwoord": "Hoeveel subsidie trok de vzw 'United We' in 2023, 2024 en 2025 van de stad Mechelen? In het kader van Construct Europe, het Mechels stadsfestival naar aanleiding het Europees voorzitterschap, werd enkel een eenmalige subsidie uitgekeerd van 25.000 euro voor de publiekswerking en de artistieke omkadering van het Gasthuis. Heeft de stad bijgedragen aan de renovatie-kost voor het Oud Gasthuis n.a.v. het sociale restaurant dat daar een tijdje gevestigd was in het verleden en zo ja, voor hoeveel? In 2022 kocht de welzijnsvereniging Dodoens het Oud Gasthuis terug van de Regie der Gebouwen. Het college van burgemeester en schepenen vatte het plan op om er een kankercentrum in onder te brengen en zocht naar een koper voor het gebouw die een dergelijk project zou kunnen realiseren. Het gebouw was in zeer slechte staat. Om aan de jarenlange periode van leegstand en verdere verloedering een einde te maken waren investeringen noodzakelijk om het gebouw in stand te houden en op een veilige wijze toegankelijk te maken. Het betreft: o Ontruimingswerken en cleaning o Vernieuwen technische installaties o Horizontale en verticals bouwstabilisatie o Vernieuwen rioleringen o Vernieuwen aansluitingen nutsleidingen o Asbestsaneringen o Brandveiligheid o Compartimentering, fixatie en schilderwerken o Plaatselijke herstellingen daken In 2023 deed Seppe Nobels het voorstel om er een tijdelijk project in onder te brengen. Het college van burgemeester en schepenen oordeelde dat de projectdoelstellingen aansloten bij de beleidsdoelen van de stad en een tijdelijke invulling ten gunste zou komen van het gebouw. Leegstand creeert immers verloedering. Om dit project mogelijk te maken, werd er door de stad ge'fnvesteerd in bekabeling en uitrusting. In totaal gaat het over een bedrag van 128.833,81 €. UnitedWe betaalde een bedrag van 2500€ per maand voor het gebruik van het pand. Na stopzetting werd de uitrustjng gerecupereerd door de welzijnsvereniging Dodoens. De resterende investeringen komen ten goede aan het gebouw en toekomstige gebruikers. De stad beoogt nog steeds om het pand te verkopen en rekent erop dat de gemaakte investeringen de verkoopprijs positief zullen be'fnvloeden.",
+      "heeft_antwoord": true,
+      "brontekst": "Schriftelijke vraag van Marc HENDRICKX (N-VA) aan de stad, onderwerp: Subsidie aan vzw ‘UnitedWe’ - Herinrichtingskosten Oud Gasthuis.\n\nN.a.v. de heisa die is ontstaan rond de vzw 'UnitedWe' bekwam ik graag duidelijkheid over de mogelijke financiele implicaties voor de stad Vragen : Hoeveel subsidie trok de vzw 'United We' in 2023, 2024 en 2025 van de stad Mechelen? Heeft de stad bijgedragen aan de renovatie-kost voor het Oude Gasthuis n.a.v. het sociale restaurant dat daar een tijdje gevestigd was in het verleden en zo ja, voor hoeveel? Marc HENDRICKX (N-VA) -gemeenteraadslid- MECHELEN 0 SCHRIFTELIJKANTWOORD OP SCHRIFTELI3KE VRAAG BUITEN DE RAADSZITTINGEN 2026/065 Indiener: M. Hendrickx Datum indiening: 04/07/2026 Vraag: Subsidie aan vzw ^UnitedWe7 - Herinrichtingskosten Oud Gasthuis\n\nAntwoord van het college:\nHoeveel subsidie trok de vzw 'United We' in 2023, 2024 en 2025 van de stad Mechelen? In het kader van Construct Europe, het Mechels stadsfestival naar aanleiding het Europees voorzitterschap, werd enkel een eenmalige subsidie uitgekeerd van 25.000 euro voor de publiekswerking en de artistieke omkadering van het Gasthuis. Heeft de stad bijgedragen aan de renovatie-kost voor het Oud Gasthuis n.a.v. het sociale restaurant dat daar een tijdje gevestigd was in het verleden en zo ja, voor hoeveel? In 2022 kocht de welzijnsvereniging Dodoens het Oud Gasthuis terug van de Regie der Gebouwen. Het college van burgemeester en schepenen vatte het plan op om er een kankercentrum in onder te brengen en zocht naar een koper voor het gebouw die een dergelijk project zou kunnen realiseren. Het gebouw was in zeer slechte staat. Om aan de jarenlange periode van leegstand en verdere verloedering een einde te maken waren investeringen noodzakelijk om het gebouw in stand te houden en op een veilige wijze toegankelijk te maken. Het betreft: o Ontruimingswerken en cleaning o Vernieuwen technische installaties o Horizontale en verticals bouwstabilisatie o Vernieuwen rioleringen o Vernieuwen aansluitingen nutsleidingen o Asbestsaneringen o Brandveiligheid o Compartimentering, fixatie en schilderwerken o Plaatselijke herstellingen daken In 2023 deed Seppe Nobels het voorstel om er een tijdelijk project in onder te brengen. Het college van burgemeester en schepenen oordeelde dat de projectdoelstellingen aansloten bij de beleidsdoelen van de stad en een tijdelijke invulling ten gunste zou komen van het gebouw. Leegstand creeert immers verloedering. Om dit project mogelijk te maken, werd er door de stad ge'fnvesteerd in bekabeling en uitrusting. In totaal gaat het over een bedrag van 128.833,81 €. UnitedWe betaalde een bedrag van 2500€ per maand voor het gebruik van het pand. Na stopzetting werd de uitrustjng gerecupereerd door de welzijnsvereniging Dodoens. De resterende investeringen komen ten goede aan het gebouw en toekomstige gebruikers. De stad beoogt nog steeds om het pand te verkopen en rekent erop dat de gemaakte investeringen de verkoopprijs positief zullen be'fnvloeden.",
+      "pdf": "data/raw/schriftelijke_vragen/2026-07/065. M. Hendrickx - Subsidie aan vzw ‘UnitedWe’ - Herinrichtingskosten Oud Gasthuis.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-07/065.%20M.%20Hendrickx%20-%20Subsidie%20aan%20vzw%20%E2%80%98UnitedWe%E2%80%99%20-%20Herinrichtingskosten%20Oud%20Gasthuis.pdf",
+      "decoded": "Raadslid Marc Hendrickx (N-VA) vraagt de stad naar de financiële gevolgen van de heisa rond vzw UnitedWe. Hij wil weten hoeveel subsidie de vzw in 2023, 2024 en 2025 kreeg van de stad Mechelen. Hij vraagt ook of de stad heeft bijgedragen aan de renovatiekosten van het Oud Gasthuis, waar vroeger een sociaal restaurant was, en zo ja voor hoeveel. Het college antwoordt dat er voor Construct Europe, het Mechels stadsfestival naar aanleiding van het Europees voorzitterschap, een eenmalige subsidie van 25.000 euro werd uitgekeerd voor publiekswerking en artistieke omkadering van het Gasthuis. Verder legt het college uit dat welzijnsvereniging Dodoens het Oud Gasthuis in 2022 terugkocht en dat de stad, na een tijdelijk projectvoorstel van Seppe Nobels in 2023, 128.833,81 euro investeerde in bekabeling en uitrusting. UnitedWe betaalde 2.500 euro per maand voor het gebruik van het pand, en na stopzetting werd de uitrusting gerecupereerd door Dodoens.",
+      "themes": [
+        "Financiën",
+        "Welzijn"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "vzw UnitedWe",
+        "Oud Gasthuis",
+        "Construct Europe",
+        "welzijnsvereniging Dodoens",
+        "Seppe Nobels"
+      ]
+    },
+    {
+      "id": "sv-2026-07-2026-064",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-03",
+      "nummer": "2026/064",
+      "indiener": "Karl Lauwers (CD&V)",
+      "onderwerp": "Zwaar verkeer Mechelen Zuid",
+      "titel": "Zwaar verkeer Mechelen Zuid",
+      "vraag": "",
+      "antwoord": "Naar aanleiding van eerdere klachten uit de buurt werd reeds verschillende keren contact opgenomen met de aannemer. In de voorwaarden van de werf is de Postzegellaan expliciet vastgelegd als de enige toegelaten route voor het werfverkeer van de MALT-site. Dit zal opnieuw onder de aandacht gebracht warden. De aannemer geeft aan dat niet al het zware verkeer in de Belgradestraat afkomstig is van de MALT-werf, aangezien er ook andere werven actief zijn in de omgeving. Daarbij wordt ook opgemerkt dat de MALT-werf ondertussen in de eindfase zit en dat de meest intensieve transporten inmiddels achter de rug zijn. Voor andere private werven in de buurt is een aanrijroute via de Belgradestraat niet te vermijden, wat verklaart waarom er vrachtverkeer in de straat aanwezig blijft. De verkeerssignalisatie die in de buurt werd geplaatst, heeft als doelom zwaar verkeer uit de Belgradestraat en de bredere woonomgeving te weren. Wel geldt er een uitzondering voor plaatselijk verkeer, waardoor bepaalde voertuigen met een lokale bestemming er toch mogen rijden. Voor de private werven in de omgeving blijft dit noodzakelijk. Mechelen/ 14juli 2026",
+      "heeft_antwoord": true,
+      "brontekst": "Schriftelijke vraag van Karl Lauwers (CD&V) aan de stad, onderwerp: Zwaar verkeer Mechelen Zuid.\n\n\n\nAntwoord van het college:\nNaar aanleiding van eerdere klachten uit de buurt werd reeds verschillende keren contact opgenomen met de aannemer. In de voorwaarden van de werf is de Postzegellaan expliciet vastgelegd als de enige toegelaten route voor het werfverkeer van de MALT-site. Dit zal opnieuw onder de aandacht gebracht warden. De aannemer geeft aan dat niet al het zware verkeer in de Belgradestraat afkomstig is van de MALT-werf, aangezien er ook andere werven actief zijn in de omgeving. Daarbij wordt ook opgemerkt dat de MALT-werf ondertussen in de eindfase zit en dat de meest intensieve transporten inmiddels achter de rug zijn. Voor andere private werven in de buurt is een aanrijroute via de Belgradestraat niet te vermijden, wat verklaart waarom er vrachtverkeer in de straat aanwezig blijft. De verkeerssignalisatie die in de buurt werd geplaatst, heeft als doelom zwaar verkeer uit de Belgradestraat en de bredere woonomgeving te weren. Wel geldt er een uitzondering voor plaatselijk verkeer, waardoor bepaalde voertuigen met een lokale bestemming er toch mogen rijden. Voor de private werven in de omgeving blijft dit noodzakelijk. Mechelen/ 14juli 2026",
+      "pdf": "data/raw/schriftelijke_vragen/2026-07/064. K. Lauwers - Zwaar verkeer Mechelen Zuid.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-07/064.%20K.%20Lauwers%20-%20Zwaar%20verkeer%20Mechelen%20Zuid.pdf",
+      "decoded": "Raadslid Karl Lauwers (CD&V) vraagt de stad naar zwaar verkeer in Mechelen Zuid. Het college antwoordt dat er al meerdere keren contact was met de aannemer van de MALT-werf, omdat de Postzegellaan de enige toegelaten route is voor werfverkeer van die site. Dit wordt opnieuw onder de aandacht gebracht bij de aannemer. Volgens de aannemer komt niet al het zware verkeer in de Belgradestraat van de MALT-werf, want er zijn ook andere werven actief in de buurt. De MALT-werf zit in de eindfase en de meest intensieve transporten zijn voorbij. Voor andere private werven in de buurt is een aanrijroute via de Belgradestraat niet te vermijden. De geplaatste verkeerssignalisatie moet zwaar verkeer uit de Belgradestraat en de bredere woonomgeving weren, met een uitzondering voor plaatselijk bestemd verkeer.",
+      "themes": [
+        "Mobiliteit",
+        "Openbare werken"
+      ],
+      "streets": [
+        "Belgradestraat"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Mechelen Zuid",
+        "MALT-site",
+        "Postzegellaan",
+        "Belgradestraat"
+      ]
+    },
     {
       "id": "sv-2026-07-2026-063",
       "type": "schriftelijke_vraag",
