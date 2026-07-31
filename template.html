@@ -4186,7 +4186,7 @@ body{
     <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee met Mechelen, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
     <div class="co-body">
       <p class="co-zin"><strong class="co-naam">Denk mee <em>met Mechelen</em></strong>, een experiment van <strong>As Gau Paust</strong>. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
-      <p class="co-fam">Onderdeel van <a href="https://asgaupaust.be">asgaupaust.be</a></p>
+      <p class="co-fam">Onderdeel van <a href="https://asgaupaust.be">asgaupaust.be</a> &middot; <a href="https://asgaupaust.be/privacy/">Privacy</a></p>
     </div>
   </div>
 </footer>
@@ -4927,6 +4927,7 @@ function removeKeyword(kw){
 }
 
 // ============= PROFILE PERSISTENCE ============= */
+/* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
 const PROFILE_KEY = 'denkmee.profile.v2';
 let PROFILE = loadProfile();
 
@@ -5927,6 +5928,7 @@ function renderArchief(){
 }
 
 // ============= 06 — VOLGEN IN BROWSER (geen mail, geen server) ============= */
+/* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
 const FOLLOW_KEY = 'denkmee.follow.v1';
 
 function loadFollow(){
@@ -6056,6 +6058,7 @@ function sluitNieuwToast(behoudBol){
 // Enkel voor wie de site beheert: een seintje wanneer de gegevens verouderd zijn en het
 // tijd is om run_all.bat en daarna deploy.bat te draaien. Aan/uit via #redactie in de URL,
 // met expliciete bevestiging; de keuze staat lokaal op dit toestel. Bezoekers zien niets.
+/* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
 const REDACTIE_KEY = 'denkmee.redactie';
 function redactieAan(){ try{ return localStorage.getItem(REDACTIE_KEY) === '1'; }catch(e){ return false; } }
 // Hoe oud is de data, en was er intussen een zitting? (D.generated_at komt uit de pijplijn.)
@@ -6176,6 +6179,7 @@ function setupRedactie(){
 // in deze browser tot de redactie het exporteert, in de repo commit en de site herbouwt. Een
 // bezoeker die de modus toevallig ontdekt, kan hoogstens op zijn eigen scherm iets aanduiden
 // dat niemand anders ziet. De correctie wordt pas echt door een bewuste commit van de redactie.
+/* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
 const CURATOR_KEY = 'denkmee.curator';
 const CURATOR_DATA_KEY = 'denkmee.curator.data';
 let curatorSelectie = [];       // dossier-id's die klaarstaan om samengevoegd te worden (vluchtig)
@@ -6423,6 +6427,7 @@ function _privacyOpgeslagen(){
 }
 function dismissCookieNote(){
   _privacyGezien = true;
+  /* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
   try{ localStorage.setItem('denkmee.privacyok','1'); }catch(e){}
   try{ sessionStorage.setItem('denkmee.privacyok','1'); }catch(e){}
   const el = $('cookieNote'); if(el) el.hidden = true;
@@ -6433,6 +6438,7 @@ function setupCookieNote(){
 
 function checkNieuwSindsVorigBezoek(){
   if(!profileIsSet()) return;                          // enkel zinvol met een profiel
+  /* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
   const KEY = 'denkmee.seen';
   const ag = D.agendapunten || [];
   const col = D.college_beslissingen || [];
@@ -6525,6 +6531,7 @@ let WIZ_STEP = 0;
 const WIZ_TITLES = ['Welkom','Thema\u2019s','Trefwoorden','Meldingen','Klaar'];
 
 function openWizard(step){
+  /* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
   try{ localStorage.setItem('denkmee.wizard.done','1'); }catch(e){}   // na de eerste keer nooit meer automatisch
   WIZ_STEP = typeof step === 'number' ? step : 0;
   // hydrateer velden uit het profiel

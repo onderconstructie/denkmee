@@ -35,6 +35,11 @@ notulen.notulen.json
 _*.py
 _*.png
 
+# Uitgelezen begrotingstabellen (parse_mjp_acties.py): de VOLLEDIGE tabel van elk
+# budgetstuk, ruim twaalfduizend lijnen. Documentkopie, dus niet in git. Enkel de lijnen
+# waar een besluit echt naar verwijst, belanden in mjp_acties.json (dat wél meegaat).
+data/mjp_cache/
+
 # Cache van de zoekindex-bouw: volledige geëxtraheerde documentteksten. Die horen
 # NIET in de publieke repo (geen documentkopieën op GitHub); enkel de index zelf
 # (zoekindex.json: losse woorden, geen tekst) wordt meegecommit.

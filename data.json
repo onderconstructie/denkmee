@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-27",
+  "generated_at": "2026-07-31",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -28476,6 +28476,464 @@
     }
   ],
   "college_beslissingen": [
+    {
+      "id": "burgemeester-20260729-1",
+      "date": "2026-07-29",
+      "orgaan": "Burgemeester",
+      "categorie": "Milieu",
+      "titel": "Besluit burgemeester van 29 juli 2026 betreffende beslissing tot kappen van een boom omwille van acuut gevaar.",
+      "decoded": "De burgemeester beslist op 29 juli 2026 om een boom te kappen. De reden is acuut gevaar.",
+      "themes": [
+        "Veiligheid",
+        "Natuur"
+      ]
+    },
+    {
+      "id": "burgemeester-20260728-1",
+      "date": "2026-07-28",
+      "orgaan": "Burgemeester",
+      "categorie": "Wonen",
+      "titel": "Besluit burgemeester van 28 juli 2026 betreffende ongeschiktheid woning.",
+      "decoded": "De burgemeester beslist op 28 juli 2026 over de ongeschiktheid van een woning.",
+      "themes": [
+        "Wonen"
+      ]
+    },
+    {
+      "id": "burgemeester-20260728-2",
+      "date": "2026-07-28",
+      "orgaan": "Burgemeester",
+      "categorie": "Milieu",
+      "titel": "Besluit burgemeester van 28 juli 2026 betreffende opheffing recreatieverbod Keerdok Zwemzone.",
+      "decoded": "De burgemeester heft het recreatieverbod op voor de zwemzone aan Keerdok.",
+      "themes": [
+        "Veiligheid",
+        "Sport"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Keerdok Zwemzone"
+      ]
+    },
+    {
+      "id": "burgemeester-20260727-1",
+      "date": "2026-07-27",
+      "orgaan": "Burgemeester",
+      "categorie": "Milieu",
+      "titel": "Besluit burgemeester van 27 juli 2026 betreffende opleggen recreatieverbod Keerdok Zwemzone.",
+      "decoded": "De burgemeester legt een recreatieverbod op voor de zwemzone aan het Keerdok.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Keerdok Zwemzone"
+      ]
+    },
+    {
+      "id": "college-20260722-1",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op tweede verblijven van ambtswege 2026. Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier vast voor de belasting op tweede verblijven van ambtswege voor 2026. Het college verklaart dit kohier uitvoerbaar.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Belasting op tweede verblijven van ambtswege 2026"
+      ]
+    },
+    {
+      "id": "college-20260722-2",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op domiciliekamers van ambtswege 2026. Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier vast voor de belasting op domiciliekamers van ambtswege voor 2026. Het college verklaart dit kohier uitvoerbaar.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Belasting op domiciliekamers van ambtswege 2026"
+      ]
+    },
+    {
+      "id": "college-20260722-3",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Goedkeuring samenwerking Stad Mechelen en Zonzo-Musica binnen het Cultuurhart.",
+      "decoded": "Het college van burgemeester en schepenen keurt de samenwerking goed tussen Stad Mechelen en Zonzo-Musica binnen het Cultuurhart.",
+      "themes": [
+        "Cultuur"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Zonzo-Musica",
+        "Cultuurhart"
+      ]
+    },
+    {
+      "id": "college-20260722-4",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bibliotheek",
+      "titel": "Goedkeuring samenwerkingsovereenkomst Stad Mechelen - OCMW Zemst betreffende tewerkstelling artikel 60 in Het Predikheren.",
+      "decoded": "Het college van burgemeester en schepenen keurt een samenwerkingsovereenkomst goed tussen Stad Mechelen en OCMW Zemst. De overeenkomst gaat over tewerkstelling via artikel 60 in Het Predikheren.",
+      "themes": [
+        "Sociale zaken",
+        "Welzijn"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "OCMW Zemst",
+        "Het Predikheren",
+        "artikel 60"
+      ]
+    },
+    {
+      "id": "college-20260722-5",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Evenementen 2026. Beslissingslijst nr. 23.",
+      "decoded": "Het college van burgemeester en schepenen behandelt beslissingslijst nr. 23 over evenementen in 2026.",
+      "themes": [
+        "Cultuur"
+      ],
+      "kernbegrippen": [
+        "Evenementen 2026",
+        "Beslissingslijst nr. 23"
+      ]
+    },
+    {
+      "id": "college-20260722-5A",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van filmopnames Lady Grace Mysteries van 27 tot 28 juli en 3 tot 4 augustus 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_22-07-2026_115637.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor de filmopnames van Lady Grace Mysteries. Die opnames vinden plaats van 27 tot 28 juli 2026 en van 3 tot 4 augustus 2026 in Mechelen. Op de Grote Markt (zijde stadhuis) en de Hallestraat is het verkeer verboden voor alle bestuurders in beide richtingen van 26 juli 2026 7u00 tot 28 juli 2026 22u00, en van 2 augustus 2026 7u00 tot 4 augustus 2026 22u00. Verbodsborden C3 maken dit bekend. Wie de verordening overtreedt, wordt gestraft volgens de verkeerswet. Het college stuurt een afschrift van de verordening naar de Bestendige Deputatie van de Provincieraad van Antwerpen en naar de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit",
+        "Veiligheid"
+      ],
+      "streets": [
+        "Grote Markt",
+        "Hallestraat"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Lady Grace Mysteries",
+        "Grote Markt",
+        "Hallestraat"
+      ]
+    },
+    {
+      "id": "college-20260722-5B",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van buitenleesdag op 8 augustus 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_22-07-2026_115639.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor Buitenleesdag op 8 augustus 2026. In de Paardenkerkhofstraat 124-136 is het verkeer verboden voor alle bestuurders in beide richtingen op 8 augustus van 13u00 tot 19u00. Verbodsborden C3 tonen dit verbod. Wie de verordening overtreedt, wordt gestraft volgens de verkeerswet. Het college maakt een afschrift van de verordening over aan de Bestendige Deputatie van de Provincieraad van Antwerpen en aan de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Paardenkerkhofstraat"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Buitenleesdag",
+        "Paardenkerkhofstraat"
+      ]
+    },
+    {
+      "id": "college-20260722-5C",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van rommelmarkt Pareipoelstraat - blokske rond op 5 september 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_22-07-2026_115640.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor de rommelmarkt Pareipoelstraat, blokske rond, op 5 september 2026. In de Pareipoelstraat 40-80, Tuinbouwstraat 2-12, Vennekant 1-43 en Veldenstraat 55-70 geldt op 5 september 2026 van 6u00 tot 16u00 een parkeerverbod aan beide zijden van de rijbaan. In diezelfde straten en op datzelfde tijdstip is het verkeer verboden voor alle bestuurders in beide richtingen. Het college kondigt deze maatregelen aan met verkeersborden E1 met pijlen van het type Xa en Xd, en met verbodsborden C3. Inbreuken op deze verordening bestraft men volgens de verkeerswet. Het college maakt een afschrift van de verordening over aan de Bestendige Deputatie van de Provincieraad van Antwerpen en aan de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Pareipoelstraat",
+        "Tuinbouwstraat",
+        "Vennekant",
+        "Veldenstraat"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "rommelmarkt Pareipoelstraat - blokske rond",
+        "Pareipoelstraat",
+        "Tuinbouwstraat",
+        "Vennekant",
+        "Veldenstraat"
+      ]
+    },
+    {
+      "id": "college-20260722-5D",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van Vennecourt bbq op 5 september 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_22-07-2026_115641.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor Vennecourt bbq op 5 september 2026. In de Vennecourtlaan 17-54 geldt op 5 september 2026 van 9u00 tot 22u00 een parkeerverbod aan beide zijden van de rijbaan. Op hetzelfde tijdstip geldt er ook een verbod voor alle bestuurders om er in beide richtingen te rijden. Het college kondigt dit aan met verkeersborden E1 met pijlen van het type Xa en Xd voor het parkeerverbod, en met verbodsborden C3 voor het rijverbod. Het college maakt de verordening bekend volgens artikel 286 van het Decreet Lokaal Bestuur. Overtredingen worden bestraft volgens de verkeerswet. Het college stuurt een afschrift van de verordening naar de Bestendige Deputatie van de Provincieraad van Antwerpen en naar de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Vennecourtlaan"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Vennecourt bbq",
+        "Vennecourtlaan"
+      ]
+    },
+    {
+      "id": "college-20260722-5E",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van wijkfeest vzw Vergeten Groentenvrienden op 5 september 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_22-07-2026_115642.pdf",
+      "decoded": "Het college van burgemeester en schepenen keurt een tijdelijke politieverordening op het wegverkeer goed voor wijkfeest van vzw Vergeten Groentenvrienden op 5 september 2026. In het Raapsteelhof geldt een verbod voor alle bestuurders in beide richtingen, van 5 september 2026 om 9u00 tot 6 september 2026 om 14u00. Verbodsborden C3 tonen dit verbod aan. Het college maakt de verordening bekend volgens artikel 286 van het Decreet Lokaal Bestuur. Inbreuken op de verordening bestraft de verkeerswet. Het college stuurt een afschrift van de verordening naar de Bestendige Deputatie van de Provincieraad van Antwerpen en naar de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Raapsteelhof"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "vzw Vergeten Groentenvrienden",
+        "Raapsteelhof",
+        "wijkfeest"
+      ]
+    },
+    {
+      "id": "college-20260722-5F",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van 28ste Turfbeemd - Terwenblok BBQ op 5 september 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_22-07-2026_115643.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor de 28ste Turfbeemd-Terwenblok BBQ op 5 september 2026. In de Vennecourtlaan 17-54 geldt van 5 september 2026 11u00 tot 6 september 2026 16u00 een parkeerverbod aan beide zijden van de rijbaan, aangeduid met verkeersborden E1 met pijlen. In diezelfde periode geldt er ook een verbod voor alle bestuurders in beide richtingen, aangeduid met verbodsborden C3. Het college maakt de verordening bekend volgens artikel 286 van het Decreet Lokaal Bestuur. Inbreuken op de verordening worden bestraft volgens de verkeerswet. Het college stuurt een afschrift van de verordening naar de Bestendige Deputatie van de Provincieraad van Antwerpen en naar de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit",
+        "Veiligheid"
+      ],
+      "streets": [
+        "Vennecourtlaan"
+      ],
+      "kernbegrippen": [
+        "28ste Turfbeemd - Terwenblok BBQ",
+        "Vennecourtlaan"
+      ]
+    },
+    {
+      "id": "college-20260722-6",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Evenementen 2026. Canal Pride 25 juli 2026.",
+      "decoded": "Het college van burgemeester en schepenen neemt kennis van het evenement Canal Pride, dat plaatsvindt op 25 juli 2026.",
+      "themes": [
+        "Cultuur"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Canal Pride"
+      ]
+    },
+    {
+      "id": "college-20260722-6A",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van Canal Pride op 25 juli 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_22-07-2026_115644.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor Canal Pride op 25 juli 2026 in Mechelen. Op de Haverwerf is het verkeer verboden voor alle bestuurders in beide richtingen van 25 juli 2026 10u00 tot 19u00. Verbodsborden C3 maken dit kenbaar. Inbreuken op deze verordening worden bestraft volgens de verkeerswet. Het college maakt een afschrift over aan de Bestendige Deputatie van de Provincieraad van Antwerpen en aan de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Haverwerf"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Canal Pride",
+        "Haverwerf"
+      ]
+    },
+    {
+      "id": "college-20260722-7",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vastleggingen week 28. Aktename vastleggingen op wekelijkse basis.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de vastleggingen van week 28. Dit gebeurt op wekelijkse basis.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Vastleggingen week 28"
+      ]
+    },
+    {
+      "id": "college-20260722-8",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Digitaal participatieplatform 2026-2030 (2+1+1). Goedkeuring gunning.",
+      "decoded": "Het college van burgemeester en schepenen keurt de gunning goed voor een digitaal participatieplatform. De opdracht loopt over de periode 2026 tot 2030, met een looptijd van 2 jaar die tweemaal met 1 jaar verlengd kan worden.",
+      "themes": [
+        "Participatie"
+      ],
+      "kernbegrippen": [
+        "Digitaal participatieplatform 2026-2030"
+      ]
+    },
+    {
+      "id": "college-20260722-10",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Goedkeuring aanstelling verantwoordelijke voor Cybersecurity (NIS2).",
+      "decoded": "Het college van burgemeester en schepenen keurt de aanstelling goed van een verantwoordelijke voor cybersecurity, volgens de NIS2-regelgeving.",
+      "themes": [
+        "Burgerzaken"
+      ],
+      "kernbegrippen": [
+        "NIS2",
+        "Cybersecurity"
+      ]
+    },
+    {
+      "id": "college-20260722-11",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Goedkeuring samenwerkingsovereenkomst met Digitaal Vlaanderen in kader van Magda Online.",
+      "decoded": "Het college van burgemeester en schepenen keurt de samenwerkingsovereenkomst met Digitaal Vlaanderen goed. Deze overeenkomst gaat over Magda Online.",
+      "themes": [
+        "Burgerzaken"
+      ],
+      "kernbegrippen": [
+        "Digitaal Vlaanderen",
+        "Magda Online"
+      ]
+    },
+    {
+      "id": "college-20260722-12",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Verbreden van toekomstperspectief van leerlingen in Mechelse scholen. Goedkeuring gunning.",
+      "decoded": "Het college van burgemeester en schepenen keurt de gunning goed voor een opdracht die het toekomstperspectief van leerlingen in Mechelse scholen verbreedt.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "neighborhood": "Mechelen"
+    },
+    {
+      "id": "college-20260722-13",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "Omgevingsvergunningen. Besluiten en meldingen lijst 30.",
+      "decoded": "Het college van burgemeester en schepenen behandelt een lijst met besluiten en meldingen over omgevingsvergunningen, genummerd 30. De bron geeft geen verdere details over de concrete aanvragen of locaties.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "kernbegrippen": [
+        "Besluiten en meldingen lijst 30"
+      ]
+    },
+    {
+      "id": "college-20260722-14",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "Hernummering Beukeboomstraat 1.",
+      "decoded": "Het college van burgemeester en schepenen beslist over de hernummering van Beukeboomstraat 1.",
+      "themes": [
+        "Burgerzaken"
+      ],
+      "streets": [
+        "Beukeboomstraat"
+      ],
+      "kernbegrippen": [
+        "Beukeboomstraat 1"
+      ]
+    },
+    {
+      "id": "college-20260722-15",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Ontwerpopdracht voor renovatie van Braemvleugel Stadhuis Mechelen. Goedkeuring selectie.",
+      "decoded": "Het college van burgemeester en schepenen keurt de selectie goed voor de ontwerpopdracht voor de renovatie van de Braemvleugel van het Stadhuis Mechelen.",
+      "themes": [
+        "Erfgoed",
+        "Openbare werken"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Braemvleugel",
+        "Stadhuis Mechelen"
+      ]
+    },
+    {
+      "id": "college-20260722-16",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Economie",
+      "titel": "Kermissen 2026. Goedkeuring organisatie herfstkermis van 2 oktober tot en met 18 oktober 2026.",
+      "decoded": "Het college van burgemeester en schepenen keurt de organisatie van de herfstkermis 2026 goed. De kermis loopt van 2 oktober tot en met 18 oktober 2026.",
+      "themes": [
+        "Toerisme"
+      ],
+      "kernbegrippen": [
+        "Herfstkermis",
+        "Kermissen 2026"
+      ]
+    },
+    {
+      "id": "college-20260722-18",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Milieu",
+      "titel": "Omgevingsvergunningen. Besluiten en meldingen lijst 30.",
+      "decoded": "Het college van burgemeester en schepenen behandelt een lijst met besluiten en meldingen over omgevingsvergunningen, genummerd 30. De bron geeft geen verdere details over de concrete aanvragen of locaties.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "kernbegrippen": [
+        "Besluiten en meldingen lijst 30"
+      ]
+    },
+    {
+      "id": "college-20260722-19",
+      "date": "2026-07-22",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Aankoop, levering en plaatsing van 4 plafondbasketbalsystemen (FIBA Level 2). Goedkeuring bestek en gunningswijze.",
+      "decoded": "Het college van burgemeester en schepenen keurt het bestek en de gunningswijze goed voor de aankoop, levering en plaatsing van 4 plafondbasketbalsystemen van het type FIBA Level 2.",
+      "themes": [
+        "Sport"
+      ],
+      "kernbegrippen": [
+        "plafondbasketbalsystemen",
+        "FIBA Level 2"
+      ]
+    },
     {
       "id": "burgemeester-20260714-1",
       "date": "2026-07-14",
@@ -96977,8 +97435,8 @@
         },
         {
           "date": "2026-07-22",
-          "published": null,
-          "status": "geen",
+          "published": "2026-07-29",
+          "status": "tijdig",
           "late_days": 0
         }
       ],
@@ -98128,6 +98586,24 @@
         {
           "date": "2026-07-14",
           "published": "2026-07-14",
+          "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-07-27",
+          "published": "2026-07-28",
+          "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-07-28",
+          "published": "2026-07-29",
+          "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-07-29",
+          "published": "2026-07-31",
           "status": "tijdig",
           "late_days": 0
         }
@@ -103925,6 +104401,9 @@
     "Burgemeester|2026-07-07|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_07-07-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-07-09|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_09-07-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-07-14|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_14-07-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-07-27|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_27-07-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-07-28|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_28-07-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-07-29|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_29-07-2026_Beslissingenlijst.pdf",
     "College|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_10-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_17-12-2024_Beslissingenlijst.pdf",
@@ -104016,6 +104495,7 @@
     "College|2026-07-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-07-2026_Beslissingenlijst.pdf",
     "College|2026-07-07|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_07-07-2026_Beslissingenlijst.pdf",
     "College|2026-07-14|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_14-07-2026_Beslissingenlijst.pdf",
+    "College|2026-07-22|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_22-07-2026_Beslissingenlijst.pdf",
     "Gemeenteraad|2024-12-02|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_02-12-2024_Beslissingslijst%20toezicht.pdf",
     "Gemeenteraad|2024-12-02|notulen": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Notulen_Gemeenteraad_02-12-2024_Notulen%20-%20openbare%20zitting.pdf",
     "Gemeenteraad|2024-12-02|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_02-12-2024_Agenda.pdf",

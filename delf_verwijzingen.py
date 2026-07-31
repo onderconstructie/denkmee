@@ -50,8 +50,16 @@ def normaliseer(soort, code):
     return f"{soort}:{code}"
 
 
-def main():
-    data = json.loads((BASE / "data.json").read_text(encoding="utf-8"))
+def verzamel_codes(data=None):
+    """code -> set van item-id's, over ALLE codes (ook die maar één punt raken).
+
+    Apart gezet omdat een tweede lezer dezelfde oogst nodig heeft: parse_mjp_acties.py
+    wil weten welke MJP-codes in dit corpus voorkomen, om enkel díe begrotingslijnen uit
+    de budgetstukken te publiceren. main() hieronder houdt er enkel de koppelende (2+) uit
+    over; wie alles wil, roept deze functie aan. De pdf-teksten komen uit de cache van
+    bouw_zoekindex, dus dit twee keer aanroepen kost geen tweede extractie."""
+    if data is None:
+        data = json.loads((BASE / "data.json").read_text(encoding="utf-8"))
     notulen = bz.notulen_per_punt()
 
     code2items = {}
@@ -84,6 +92,13 @@ def main():
     # college-besluiten dragen enkel titel + samenvatting, maar een code daarin telt mee
     for cb in data.get("college_beslissingen", []):
         registreer(cb["id"], (cb.get("titel") or "") + " " + (cb.get("decoded") or ""))
+
+    return code2items
+
+
+def main():
+    data = json.loads((BASE / "data.json").read_text(encoding="utf-8"))
+    code2items = verzamel_codes(data)
 
     # Enkel codes die echt koppelen (2+ punten). Eén punt per code = geen verband.
     koppels = {c: sorted(its) for c, its in code2items.items() if len(its) >= 2}

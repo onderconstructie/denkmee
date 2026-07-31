@@ -45,13 +45,19 @@ De startknop draait alle stappen in de juiste volgorde:
 | 1 | `fetch_all.py` | Zittingen + PDF's (agenda / aanvullend / besluiten / notulen) ophalen naar `data/raw/` | ja |
 | 1b | `fetch_zittingen.py` | Geplande zittingsdatums van de stadswebsite (voor "volgende zitting") | ja |
 | 1c | `fetch_schriftelijke_vragen.py` | Schriftelijke vragen van raadsleden (pdf's) ophalen + bron-URL-index | ja |
+| 1d | `fetch_uittreksels.py` | Individuele uittreksels/bijlagen per zitting (de volledige besluit-tekst) | ja |
+| 1e | `fetch_budgetten.py` | Meerjarenplannen, budgetwijzigingen en jaarrekeningen ophalen; meldt wat de stad nieuw publiceerde of verving | ja |
 | 2 | `maak_data.py` | **Tijdigheid** berekenen + sessies in `data.json` zetten | nee |
 | 2b | `reset_voor_assemblage` | Demo-inhoud wissen, volgende zitting afleiden, `is_demo=False` | nee |
 | 3 | `parse_*` + `assembleer_*` | Per zitting de besluiten/notulen/agenda uitlezen en als agendapunten (met stemming per fractie) en collegebesluiten invoegen | nee |
 | 3a | `parse_schriftelijke_vragen.py` | Schriftelijke vragen uitlezen (datum/vraag/antwoord **uit de pdf**) → `data.json` | nee |
 | 3b | `straten_mechelen.py` | *(optioneel)* Volledige stratenlijst → `data/straten_mechelen.json` | ja |
 | 3c | `tag_items.py` | *(optioneel)* AI-samenvattingen + thema's per punt | ja (API) |
+| 3b2 | `koppel_uittreksels.py` | Uittreksels aan hun besluit koppelen + de volledige tekst cachen | nee |
 | 3d | `schoon_brontekst.py` | E-mailadressen uit de gepubliceerde tekst redacteren (ná de tagging) | nee |
+| 3e | `bouw_zoekindex.py` | Volledige-tekstindex voor de zoekbalk (woord → punt-id's) | nee |
+| 3f | `delf_verwijzingen.py` | Harde codes (MJP, zaaknummer, OMV) → "verwante dossiers" | nee |
+| 3g | `parse_mjp_acties.py` | De begrotingslijn achter elke MJP-code uit het meerjarenplan → `mjp_acties.json` | nee |
 | 4 | `build.py` | `template.html` + `data.json` → `dist/index.html` | nee |
 | 5 | `opkuis` | Tussenbestanden in de root wissen | nee |
 
@@ -75,7 +81,7 @@ College en vast bureau publiceren enkel een besluitenlijst → enkel de art.-287
 
 **Pijplijn-scripts**
 - `run_all.py` — de startknop (orkestreert alles hieronder)
-- `fetch_all.py`, `fetch_zittingen.py`, `fetch_schriftelijke_vragen.py` — ophalen
+- `fetch_all.py`, `fetch_zittingen.py`, `fetch_schriftelijke_vragen.py`, `fetch_uittreksels.py`, `fetch_budgetten.py` — ophalen
 - `maak_data.py` — tijdigheid + sessies
 - `parse_besluiten.py`, `parse_notulen.py`, `parse_agenda.py` — PDF → JSON
 - `parse_schriftelijke_vragen.py` — schriftelijke vragen (datum/vraag/antwoord uit de pdf) → `data.json`
@@ -83,6 +89,7 @@ College en vast bureau publiceren enkel een besluitenlijst → enkel de art.-287
 - `straten_mechelen.py` — stratenregister (NIS 12025) *(optioneel)*
 - `tag_items.py` — AI-tagging *(optioneel, met cache)*
 - `schoon_brontekst.py` — e-mailadressen uit de gepubliceerde tekst redacteren
+- `parse_mjp_acties.py` — begrotingslijn per MJP-code uit de budgetstukken → `mjp_acties.json`
 - `build.py` — `dist/index.html` bouwen (met bron-lek-veiligheidsklep)
 
 **Hulp / eenmalig** *(buiten de live pijplijn)*
