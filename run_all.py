@@ -7,6 +7,7 @@ Volgorde (dit is de volledige lijst; de volgorde is niet vrijblijvend, zie hiero
   1b)  fetch_zittingen.py — geplande zittingsdatums van mechelen.be (faalt zacht)
   1c)  fetch_schriftelijke_vragen.py — pdf's van de schriftelijke vragen
   1d)  fetch_uittreksels.py — individuele uittreksels/bijlagen per zitting (faalt zacht)
+  1e)  fetch_budgetten.py  — meerjarenplannen, budgetten en jaarrekeningen (faalt zacht)
   2)   maak_data.py       — tijdigheid (art. 22 / 287) + sessies in data.json zetten
   3)   per zitting        — besluitenlijst + notulen uitlezen en als agendapunten
                             (met stemming per fractie) in data.json gieten
@@ -17,6 +18,7 @@ Volgorde (dit is de volledige lijst; de volgorde is niet vrijblijvend, zie hiero
   3d)  schoon_brontekst.py — e-mailadressen uit de gepubliceerde velden redacteren
   3e)  bouw_zoekindex.py  — volledige-tekstindex voor de zoekbalk
   3f)  delf_verwijzingen.py — harde codes (MJP, zaaknummer, OMV) voor verwante dossiers
+  3g)  parse_mjp_acties.py — de begrotingslijn achter elke MJP-code (faalt zacht)
   4)   build.py           — template.html + data.json  ->  dist/
   5)   opkuis             — tussenbestanden in de root wissen
 
@@ -166,6 +168,29 @@ def reset_voor_assemblage(base):
     print(f"  schoon: demo-inhoud gewist · volgende zitting = {vm} · is_demo = {data['is_demo']}")
 
 
+def haal_budgetten():
+    """De budgetstukken van de stad: meerjarenplannen, aanpassingen, budgetwijzigingen en
+    jaarrekeningen. Idempotent — vergelijkt de grootte bij de bron met wat er lokaal staat en
+    downloadt enkel wat nieuw of vervangen is. Dit is meteen de wachtpost op die pagina: de
+    stad publiceert er twee à vier keer per jaar iets, en het script meldt wat er veranderde.
+    Faalt het (pagina onbereikbaar of anders opgebouwd), dan stopt de bouw NIET: de
+    begrotingskoppeling valt dan gewoon terug op wat er al binnengehaald was."""
+    try:
+        run("fetch_budgetten.py")
+    except subprocess.CalledProcessError:
+        print("  (overgeslagen: fetch_budgetten.py faalde — geen nieuwe budgetstukken.)")
+
+
+def koppel_mjp_acties():
+    """De begrotingslijn achter elke MJP-code die in de besluiten staat. Draait ná
+    delf_verwijzingen (dezelfde code-oogst, gedeelde cache) en vóór build. Zonder
+    budgetstukken of bij een fout: netjes overslaan, de rest van de bouw gaat door."""
+    try:
+        run("parse_mjp_acties.py")
+    except subprocess.CalledProcessError:
+        print("  (overgeslagen: parse_mjp_acties.py faalde — besluiten blijven zonder budgetlijn.)")
+
+
 def haal_zittingen():
     """De geplande zittingen van mechelen.be. Faalt dit (de stad wijzigt de opbouw van haar
     pagina), dan stopt de bouw NIET: het is één kaart op de site, geen kerngegeven. Zonder deze
@@ -193,6 +218,10 @@ def main():
     # 1d) individuele uittreksels/bijlagen per zitting ophalen (volledige besluit-tekst).
     #     Idempotent; de koppeling aan de besluiten gebeurt in stap 3b2, ná de assemblage.
     haal_uittreksels()
+
+    # 1e) budgetstukken (meerjarenplannen, budgetwijzigingen, jaarrekeningen). Levert de tabel
+    #     waarin staat wat een MJP-code uit een besluit werkelijk betekent; stap 3g leest die.
+    haal_budgetten()
 
     # 2) tijdigheid + sessies uit de opgehaalde index
     run("maak_data.py")
@@ -286,6 +315,10 @@ def main():
     # 3f) Harde verwijzingen delven (MJP-actiecodes, zaaknummers, OMV-nummers): voedt de
     #     "verwante dossiers" in het dossierpaneel. build.py voegt verwijzingen.json in de site.
     run("delf_verwijzingen.py")
+
+    # 3g) De begrotingslijn achter elke MJP-code: doelstelling, actie, dienst en de bedragen
+    #     per jaar uit het meerjarenplan. Ná 3f (zelfde code-oogst) en vóór build.
+    koppel_mjp_acties()
 
     # 4) bouwen
     run("build.py")
