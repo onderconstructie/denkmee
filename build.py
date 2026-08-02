@@ -74,6 +74,14 @@ if synoniemen_pad.exists():
     data["synoniemen"] = syn.get("groepen", [])
     print(f"Synoniemen geladen: {len(data['synoniemen'])} groepen.")
 
+# 2c) Schriftelijke vragen: de letterlijke vraag- en antwoordteksten blijven UIT de
+#     gepubliceerde pagina. De samenvatting plus de directe bron-link volstaan; de
+#     zoekindex leest de pdf's apart. data.json zelf houdt de velden: de AI-tagging
+#     leest ze daar als input.
+for _v in data.get("schriftelijke_vragen", []):
+    for _veld in ("vraag", "antwoord", "brontekst"):
+        _v.pop(_veld, None)
+
 data_json = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 html = template.replace("__DENKMEE_DATA__", data_json)
 

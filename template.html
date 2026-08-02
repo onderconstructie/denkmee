@@ -1408,31 +1408,6 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .prc-link:hover{ color:var(--pink); }
 
-/* ---------- Schriftelijke vraag: uitklap van vraag + antwoord (in de dossier-modal) ---------- */
-.vr-details{ margin:.2rem 0 .55rem; }
-/* Zelfde chipvorm als de acties eronder, zodat de rij één taal spreekt. Bewust neutraal grijs
-   en niet roze: dit is de onbewerkte tekst van de stad, geen leesbare samenvatting, en die
-   belofte mag de chip niet wekken. Het blijft een <details>: de tekst vouwt hier open, je
-   navigeert niet weg. Het chevron toont dat er iets uitklapt. */
-.vr-details summary{
-  display:inline-flex; align-items:center; gap:.38rem;
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.68rem; letter-spacing:.02em;
-  line-height:1.35;
-  color:var(--ink-dim); background:transparent;
-  border:1px solid var(--line-strong); border-radius:999px;
-  padding:.34rem .7rem; cursor:pointer; list-style:none; transition:.15s;
-}
-.vr-details summary::-webkit-details-marker{ display:none; }
-.vr-details summary::after{ content:'▾'; font-size:.72em; display:inline-block; opacity:.8; transition:transform .15s; }
-.vr-details[open] summary::after{ transform:rotate(180deg); }
-.vr-details summary:hover{ color:#fff; background:var(--ink); border-color:var(--ink); }
-.vr-details[open] summary{ color:var(--ink); border-color:var(--ink); }
-/* Eerlijk kader boven de brontekst: de lezer komt van een samenvatting en moet weten dat
-   hier iets anders begint. */
-.vr-note{ font-size:.72rem; color:var(--ink-faint); margin:.7rem 0 .2rem; line-height:1.5; }
-.vr-detail-blok{ margin:.55rem 0; }
-.vr-detail-lbl{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:.3rem; }
-.vr-detail-blok p{ font-size:.85rem; line-height:1.55; color:var(--ink-2); margin:0; white-space:pre-line; }
 
 /* College mini-list in personal feed */
 .college-mini-list{
@@ -8113,16 +8088,8 @@ function openDossier(id){
       ? `<div class="dosm-ev-indiener">Schriftelijke vraag van ${escape(it.indiener)}</div>` : '';
     // Voor een schriftelijke vraag: de volledige vraag + het college-antwoord uitklapbaar,
     // zodat je het hele stuk in het dossier kunt lezen zonder de site te verlaten.
-    let vraagDetails = '';
-    if(it.src === 'vraag' && (it.vraag || it.antwoord)){
-      const vBlok = it.vraag ? `<div class="vr-detail-blok"><div class="vr-detail-lbl">De vraag</div><p>${escape(it.vraag)}</p></div>` : '';
-      const aBlok = (it.heeftAntwoord && it.antwoord) ? `<div class="vr-detail-blok"><div class="vr-detail-lbl">Antwoord van het college</div><p>${escape(it.antwoord)}</p></div>` : '';
-      // "Originele tekst" en niet "Vraag en antwoord": wat hier uitklapt is de letterlijke,
-      // onbewerkte tekst van de stad (mediaan ruim 1.500 tekens, soms 16.000), niet de
-      // samenvatting die erboven staat. De naam moet dat verschil meteen duidelijk maken.
-      vraagDetails = `<details class="vr-details"><summary><svg class="dosm-ev-ic" aria-hidden="true"><use href="#ic-origineel"/></svg><span>Originele tekst</span></summary>`
-        + `<p class="vr-note">Hieronder staat de letterlijke tekst van de stad, niet onze samenvatting.</p>${vBlok}${aBlok}</details>`;
-    }
+    // De letterlijke vraag- en antwoordtekst tonen we niet meer: de samenvatting
+    // plus de directe link naar het officiële stuk volstaan.
     return `
       <div class="dosm-event ${oc}">
         <div class="dosm-ev-top">
@@ -8134,7 +8101,6 @@ function openDossier(id){
         ${ftSet && ftSet.has(it.id) ? '<div class="dosm-ev-ft">zoekterm gevonden in het volledige stuk</div>' : ''}
         ${indiener}
         ${decoded}
-        ${vraagDetails}
         ${stemBalkHTML(it.stemming, it)}
         ${actions.length?`<div class="dosm-ev-actions">${actions.join('')}</div>`:''}
       </div>`;
