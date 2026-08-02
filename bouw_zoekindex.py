@@ -217,11 +217,18 @@ def main():
         extra[ap["id"]] = "\n".join(s for s in stukken if s)
 
     n_vraag_pdf = 0
+    # De vraagteksten komen uit de lokale cache (staan niet meer in data.json); de
+    # maskeer_namen-stap verderop redigeert alles wat hier binnenkomt, cache incluis.
+    vragen_cache = {}
+    _vc_pad = BASE / "data" / "schriftelijke_vragen.json"
+    if _vc_pad.exists():
+        vragen_cache = {r["id"]: r for r in json.loads(_vc_pad.read_text(encoding="utf-8"))}
     for sv in data.get("schriftelijke_vragen", []):
+        _vc = vragen_cache.get(sv["id"], {})
         stukken = [
-            sv.get("vraag") or "",
-            sv.get("antwoord") or "",
-            sv.get("brontekst") or "",
+            sv.get("vraag") or _vc.get("vraag") or "",
+            sv.get("antwoord") or _vc.get("antwoord") or "",
+            sv.get("brontekst") or _vc.get("brontekst") or "",
             " ".join(sv.get("kernbegrippen") or []),
         ]
         pdf = sv.get("pdf")

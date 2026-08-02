@@ -498,6 +498,24 @@ def main():
     buurten = [b["naam"] for b in register.get("buurten", [])] + register.get("deelgemeenten", [])
     buurten_set = set(buurten)
 
+    # De letterlijke vraagteksten staan niet meer in data.json (wel in de lokale cache):
+    # vul ze hier in het GEHEUGEN aan, zodat de tag-input en de content_key byte-identiek
+    # blijven aan vroeger. strip_vraagteksten() haalt ze er vóór elke schrijf weer uit.
+    _vc_pad = BASE / "data" / "schriftelijke_vragen.json"
+    if _vc_pad.exists():
+        _vc = {r["id"]: r for r in json.loads(_vc_pad.read_text(encoding="utf-8"))}
+        for _it in data.get("schriftelijke_vragen", []):
+            _bron = _vc.get(_it.get("id"))
+            if _bron and not _it.get("brontekst"):
+                for _veld in ("vraag", "antwoord", "brontekst"):
+                    if _bron.get(_veld):
+                        _it[_veld] = _bron[_veld]
+
+    def strip_vraagteksten(d):
+        for _it in d.get("schriftelijke_vragen", []):
+            for _veld in ("vraag", "antwoord", "brontekst"):
+                _it.pop(_veld, None)
+
     doelen = []
     if args.only in ("raad", "all"):
         doelen += data.get("agendapunten", [])
@@ -522,6 +540,7 @@ def main():
             if key in batched and key in cache:
                 merge(item, schoon(cache[key], themes_set, straten, buurten_set), overwrite=True)
         DATA.with_suffix(".json.bak").write_text(DATA.read_text(encoding="utf-8"), encoding="utf-8")
+        strip_vraagteksten(data)
         DATA.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"Klaar — {nieuw} stukken (her)getagd via batch; {len(doelen)} bekeken; data.json bijgewerkt.")
         return
@@ -562,6 +581,7 @@ def main():
 
     if not args.dry_run:
         DATA.with_suffix(".json.bak").write_text(DATA.read_text(encoding="utf-8"), encoding="utf-8")
+    strip_vraagteksten(data)
     DATA.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
     modus = "DRY-RUN (niets betaald)" if args.dry_run else f"{nieuw} nieuw getagd, {uit_cache} uit cache"

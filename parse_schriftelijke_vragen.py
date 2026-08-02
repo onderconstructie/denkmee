@@ -199,7 +199,14 @@ def main():
     # Invouwen in data.json onder 'schriftelijke_vragen', zodat de AI-tagging en build.py ze
     # verderop in de pijplijn meenemen.
     if data:
-        data["schriftelijke_vragen"] = records
+        # Tekstloos invouwen: de letterlijke vraag/antwoord/brontekst blijven in de lokale
+        # cache hierboven (OUT, staat in .gitignore) en gaan NIET mee naar data.json/git.
+        # Tagging, zoekindex en verwijzingen-delver lezen ze uit die cache; gepubliceerd
+        # worden enkel de samenvatting en de directe bron-link.
+        data["schriftelijke_vragen"] = [
+            {k: v for k, v in r.items() if k not in ("vraag", "antwoord", "brontekst")}
+            for r in records
+        ]
         dpad.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"  in data.json gezet onder 'schriftelijke_vragen' ({len(records)} records)")
 
