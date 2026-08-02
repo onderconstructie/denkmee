@@ -38,6 +38,10 @@ def main():
 
     alle = {p["id"]: p for p in data.get("agendapunten", [])}
     alle.update({p["id"]: p for p in data.get("schriftelijke_vragen", [])})
+    vragen_cache = {}
+    _vc_pad = BASE / "data" / "schriftelijke_vragen.json"
+    if _vc_pad.exists():
+        vragen_cache = {r["id"]: r for r in json.loads(_vc_pad.read_text(encoding="utf-8"))}
 
     # ------- 1. het gat, geteld -------
     print("=== HET ZOEKGAT ===")
@@ -56,9 +60,10 @@ def main():
         p = alle.get(item_id, {})
         zoekbaar = bz.norm((p.get("titel") or "") + " " + (p.get("decoded") or ""))
         # volledige tekst opnieuw samenstellen, zoals de bouwer maar los ervan herteld
-        vol = [p.get("brontekst") or "", (p.get("result") or {}).get("text") or "",
+        _vc = vragen_cache.get(p.get("id"), {})
+        vol = [p.get("brontekst") or _vc.get("brontekst") or "", (p.get("result") or {}).get("text") or "",
                " ".join(p.get("kernbegrippen") or []),
-               p.get("vraag") or "", p.get("antwoord") or ""]
+               p.get("vraag") or _vc.get("vraag") or "", p.get("antwoord") or _vc.get("antwoord") or ""]
         nt = notulen.get((p.get("sessie_id"), str(p.get("nummer"))))
         if nt:
             vol.append(bz.STEMLIJST_RX.sub(" ", nt))

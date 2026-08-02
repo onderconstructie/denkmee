@@ -76,10 +76,18 @@ def verzamel_codes(data=None):
         ])
         registreer(ap["id"], tekst)
 
+    # De vraagteksten komen uit de lokale cache (staan niet meer in data.json).
+    vragen_cache = {}
+    _vc_pad = BASE / "data" / "schriftelijke_vragen.json"
+    if _vc_pad.exists():
+        vragen_cache = {r["id"]: r for r in json.loads(_vc_pad.read_text(encoding="utf-8"))}
     for sv in data.get("schriftelijke_vragen", []):
+        _vc = vragen_cache.get(sv["id"], {})
         tekst = " ".join([
-            sv.get("titel") or "", sv.get("decoded") or "", sv.get("brontekst") or "",
-            sv.get("vraag") or "", sv.get("antwoord") or "",
+            sv.get("titel") or "", sv.get("decoded") or "",
+            sv.get("brontekst") or _vc.get("brontekst") or "",
+            sv.get("vraag") or _vc.get("vraag") or "",
+            sv.get("antwoord") or _vc.get("antwoord") or "",
         ])
         pdf = sv.get("pdf")
         if pdf and (BASE / pdf).exists():
