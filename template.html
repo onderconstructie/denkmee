@@ -3687,6 +3687,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .stem-groep.g-tegen .stem-groep-lbl{color:#c8102e}
 .stem-groep.g-onth .stem-groep-lbl{color:#756a00}
 .arch-org{display:inline-block;font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;padding:.08rem .4rem;border:1px solid var(--pink);color:var(--pink-text);border-radius:3px;margin-right:.35rem;vertical-align:middle}
+/* Actuadebat-badge: het punttype dat de raad zelf agendeert rond de actualiteit. */
+.badge-actua{ display:inline-block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; padding:.1rem .45rem; border:1px solid var(--pink); border-radius:999px; color:var(--pink-text); background:var(--pink-soft); margin-right:.4rem; vertical-align:.1em; white-space:nowrap; }
 
 /* =====================================================================
    HUIDLAAG — de familietaal van asgaupaust.be en Lees mee (dag-editie, zie :root):
@@ -5325,7 +5327,7 @@ function personalRecentCardHTML(p){
         <span class="prc-date">${formatShort(date)}</span>
         <span class="prc-status status-${besluitKlasse(decision)}">${escape(decisionLabel)}</span>
       </header>
-      <h5 class="prc-titel">${escape(p.titel)}</h5>
+      <h5 class="prc-titel">${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${escape(p.titel)}</h5>
       ${decoded}
       <footer class="prc-foot">
         <div class="prc-themes">${themes}</div>
@@ -5907,7 +5909,7 @@ function renderArchief(){
             <summary>
               <span class="arch-date">${formatShort(date)}</span>
               <span class="arch-title">
-                ${escape(p.titel)}
+                ${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${escape(p.titel)}
                 <div class="arch-themes">${orgaan?`<span class="arch-org">${escape(orgaan)}</span>`:''}${themes}</div>
               </span>
               <span class="arch-outcome ${besluitKlasse(decision)}">${escape(decisionLabel)}</span>
@@ -6993,7 +6995,7 @@ function dosAllItems(){
   (D.agendapunten||[]).forEach(a => {
     const org = (a.sessie_id||'').startsWith('rmw') ? 'RMW' : 'Gemeenteraad';
     out.push({
-      src:'agenda', org, id:a.id, date:a.sessie_date, titel:a.titel||'',
+      src:'agenda', org, id:a.id, date:a.sessie_date, titel:a.titel||'', type:a.type||'gewoon',
       decoded:a.decoded||'', themes:a.themes||[], streets:a.streets||[],
       hood:a.neighborhood||null, schepen:a.schepen||null, url:a.url||null, uittreksel_url:a.uittreksel_url||null, kernbegrippen:a.kernbegrippen||[],
       result:a.result||null, status:a.status||null, stemming:a.stemming||null,
@@ -8128,7 +8130,7 @@ function openDossier(id){
           <span class="dosm-ev-org ${oc}">${escape(it.org)}</span>
           ${resultPill}
         </div>
-        <div class="dosm-ev-titel">${escape(it.titel)}</div>
+        <div class="dosm-ev-titel">${it.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${escape(it.titel)}</div>
         ${ftSet && ftSet.has(it.id) ? '<div class="dosm-ev-ft">zoekterm gevonden in het volledige stuk</div>' : ''}
         ${indiener}
         ${decoded}
