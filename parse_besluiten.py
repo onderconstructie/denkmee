@@ -131,15 +131,18 @@ def parse(pdf_path):
             k = KOP.match(rest)
             if k:
                 categorie, titel_start = k.group(1).strip(), k.group(2).strip()
-            # 'toegevoegd' wordt afgeleid uit het punt zelf, niet uit de tussenzin
+            # 'toegevoegd' en 'actuadebat' worden afgeleid uit het punt zelf, niet uit de tussenzin
             aanvullend = nummer.startswith("TP") or categorie.upper() == "TOEGEVOEGD PUNT"
+            actuadebat = nummer.startswith("ACT") or categorie.upper() == "ACTUALITEITSDEBAT"
             if aanvullend:
                 categorie = ""                              # 'toegevoegd punt' is geen domein
                 if " - " in titel_start:                    # "Naam - onderwerp"
                     indiener, titel_start = [x.strip() for x in titel_start.split(" - ", 1)]
+            if actuadebat:
+                categorie = ""                              # 'actualiteitsdebat' is geen domein
             meta = {"nummer": nummer, "categorie": categorie, "zitting": zitting,
                     "aanvullend": aanvullend, "indiener": indiener,
-                    "type": "toegevoegd" if aanvullend else "gewoon"}
+                    "type": "actuadebat" if actuadebat else ("toegevoegd" if aanvullend else "gewoon")}
             blok = [titel_start]
         elif meta is not None:
             blok.append(l)
