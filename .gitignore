@@ -32,6 +32,7 @@ notulen.notulen.json
 
 # Lokale tooling / scratch (niet voor de repo)
 .claude/
+CLAUDE.local.md
 _*.py
 _*.png
 
