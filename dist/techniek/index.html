@@ -68,10 +68,13 @@
   --pink-deep:    #b3004a;        /* hover state op pink-knoppen */
   --pink-soft:    rgba(255,0,102,.09);
 
-  /* De donkere eilanden (banner, meldingen, accentblokken): altijd warme inkt */
+  /* De donkere eilanden (banner, meldingen, accentblokken): altijd warme inkt.
+     De trap is heropend: het grote eiland-vlak (--black-2) staat een tikje boven de
+     basisinkt en de zwevende donkere kaarten (--black-3, toasts en menuprofiel) nog
+     een tikje hoger, gespiegeld aan papier → kaart aan de lichte kant. */
   --black:        #1a1712;
-  --black-2:      #1a1712;
-  --black-3:      #1a1712;
+  --black-2:      #201b15;
+  --black-3:      #272119;
   --bone:         #1a1712;
   --bone-2:       #514a40;
   --bone-dim:     #635a4d;
@@ -84,6 +87,8 @@
   --op-eiland-30: rgba(245,241,232,.3);
   --op-eiland-25: rgba(245,241,232,.25);
   --eiland-pink:  rgb(255,77,148);
+  /* Haarlijn op donker: de kaartlijn-logica van de lichte kant, gespiegeld. */
+  --line-eiland:  rgba(245,241,232,.14);
   /* Roze VLAKKEN: kaartjes, de cockpit, knoppen en chips, alles met witte tekst erop.
      Waarom niet het merkroze #FF0066 zelf: dat haalt met wit 3,86:1 en blijft onder AA.
      Waarom niet --pink-deep #b3004a: dat zit op 35% helderheid en leest als bordeaux.
@@ -242,12 +247,25 @@ section:not(:last-of-type){ border-bottom:1px solid var(--line); }
    ============================================================ */
 .nav{
   position:sticky; top:0; z-index:100;
-  background:rgba(245,241,232,.82);
-  backdrop-filter:blur(20px) saturate(140%);
-  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  /* Krantlijn, geen matglas: de balk is dicht papier met eigen korrel (hij ligt boven
+     de ruislaag van body::before en stond anders als vlakke plek in het vel). De
+     masthead-regel (::after) zet aan zodra je scrolt: 2px inkt over de haarlijn,
+     zoals de kaplijn onder een krantenkop. Geen schaduw: een krant werpt er geen. */
+  background-color:var(--paper);
+  background-image:var(--grain-stip);
+  background-size:3px 3px;
   border-bottom:1px solid var(--line);
-  box-shadow:0 1px 0 rgba(10,10,10,.03), 0 10px 28px -18px rgba(10,10,10,.12);
 }
+.nav::before{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  opacity:.05; background-image:var(--grain-ruis); mix-blend-mode:multiply;
+}
+.nav::after{
+  content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px;
+  background:var(--ink); transform:scaleY(0); transform-origin:bottom;
+  transition:transform .22s ease; pointer-events:none;
+}
+.nav.krant::after{ transform:scaleY(1); }
 .nav-inner{
   max-width:var(--max); margin:0 auto;
   padding:.9rem var(--pad-x);
@@ -325,7 +343,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 /* Fullscreen menu overlay */
 .menu-overlay{
   position:fixed; inset:0; z-index:200;
-  background:rgba(10,10,10,.55);
+  background:rgba(26,23,18,.55);
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
   display:flex; justify-content:flex-end;
@@ -340,7 +358,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   height:100%;
   display:flex; flex-direction:column;
   border-left:1px solid var(--ink);
-  box-shadow:-32px 0 80px -10px rgba(10,10,10,.3);
+  box-shadow:-32px 0 80px -10px rgba(72,56,38,.3);
   overflow-y:auto;
   animation:slideIn .3s cubic-bezier(.16,1,.3,1);
 }
@@ -569,16 +587,24 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   position:relative; z-index:2;
   /* Steviger kader (2px), in lijn met de techniek-pagina; de schaduw geeft diepte. */
   border:2px solid var(--ink);
-  box-shadow:0 1px 0 rgba(0,0,0,.05), 0 14px 30px -16px rgba(10,10,10,.28), 0 38px 78px -28px rgba(10,10,10,.55);
+  /* Warm licht, familie-breed: schaduwen in rgba(72,56,38,...), nooit neutraal grijs. */
+  box-shadow:0 1px 0 rgba(72,56,38,.06), 0 14px 30px -16px rgba(72,56,38,.28), 0 38px 78px -28px rgba(72,56,38,.55);
 }
 /* Het diepere roze, niet het felle. Wit op --pink haalt 3,86:1 en blijft onder AA; op
    --pink-deep is dat 6,96:1. Op een groot gevuld vlak met lopende tekst weegt dat, terwijl
    het felle roze zijn werk blijft doen waar het klein en decoratief is (bolletjes, chips,
    knoppen). Zelfde keuze als het accentkaartje bij 'Wat je hier leest'. */
 .hero-cockpit{
+  position:relative;
   background:var(--pink-vlak); color:#fff;
   padding:1rem 1.2rem 1.05rem;
   opacity:0; animation:rise .9s .45s ease-out forwards;
+}
+/* Riso-korrel op het roze vlak: multiply drukt de ruis licht in het roze, zoals inkt
+   op papier. Donkerder kan alleen het contrast van de witte tekst verhogen, nooit verlagen. */
+.hero-cockpit::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:var(--grain-ruis); mix-blend-mode:multiply; opacity:.05;
 }
 .hero-cockpit[hidden]{ display:none; }
 /* Cockpit staat ónder de zittingskaart: stevige scheidingslijn zodra hij zichtbaar is. */
@@ -675,7 +701,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 }
 .hero-actions .btn:hover{
   transform:translateY(-3px);
-  box-shadow:0 10px 24px -12px rgba(10,10,10,.45);
+  box-shadow:0 10px 24px -12px rgba(72,56,38,.45);
 }
 .btn{
   display:inline-flex; align-items:center; gap:.6rem;
@@ -739,7 +765,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   border-right:2px solid var(--pink);
 }
 .meeting-card.is-clickable{ cursor:pointer; transition:transform .2s, box-shadow .2s; }
-.meeting-card.is-clickable:hover{ transform:translateY(-3px); box-shadow:0 1px 0 rgba(0,0,0,.04), 0 34px 74px -26px rgba(10,10,10,.55); }
+.meeting-card.is-clickable:hover{ transform:translateY(-3px); box-shadow:0 1px 0 rgba(72,56,38,.05), 0 34px 74px -26px rgba(72,56,38,.55); }
 .meeting-card.is-clickable:focus-visible{ outline:2px solid var(--pink); outline-offset:3px; }
 .mc-tag{
   font-family:'JetBrains Mono', ui-monospace, monospace;
@@ -933,6 +959,14 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 }
 
 /* Inverted (zwarte) sectie — Bauhaus contrast */
+/* Riso-korrel op het donkere vlak: dezelfde ruis als het papier, maar omgekeerd
+   (invert + screen licht óp in plaats van af). Zo toont ook de solid zijn materiaal
+   in plaats van als digitale vulling op korrelig papier te liggen. */
+section.inverted::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:var(--grain-ruis); filter:invert(1);
+  mix-blend-mode:screen; opacity:.05;
+}
 section.inverted{
   position:relative;
   background:var(--black-2);
@@ -1163,7 +1197,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .item-card:hover{
   border-color:var(--pink);
   transform:translateY(-1px);
-  box-shadow:0 8px 24px -16px rgba(10,10,10,.15);
+  box-shadow:0 8px 24px -16px rgba(72,56,38,.15);
 }
 .item-card .topline{
   display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;
@@ -2728,7 +2762,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Modal */
 .ov-modal{ position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:1rem; }
 .ov-modal[hidden]{ display:none; }
-.ov-modal-overlay{ position:absolute; inset:0; background:rgba(10,10,10,.55); backdrop-filter:blur(4px); }
+.ov-modal-overlay{ position:absolute; inset:0; background:rgba(26,23,18,.55); backdrop-filter:blur(4px); }
 .ov-modal-card{
   position:relative;
   background:var(--paper);
@@ -2736,7 +2770,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   padding:2rem 1.85rem 1.6rem;
   width:100%; max-width:560px;
   max-height:90vh; overflow:auto;
-  box-shadow:0 24px 80px -20px rgba(10,10,10,.4);
+  box-shadow:0 24px 80px -20px rgba(72,56,38,.4);
 }
 .ov-modal-card h3{
   font-family:'JetBrains Mono', ui-monospace, monospace;
@@ -3131,10 +3165,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    =================================================================== */
 .dosm-overlay{ position:fixed; inset:0; z-index:300; display:flex; justify-content:flex-end; }
 .dosm-overlay[hidden]{ display:none; }
-.dosm-scrim{ position:absolute; inset:0; background:rgba(10,10,10,.5); animation:fadeIn .25s ease-out; backdrop-filter:blur(2px); }
+.dosm-scrim{ position:absolute; inset:0; background:rgba(26,23,18,.5); animation:fadeIn .25s ease-out; backdrop-filter:blur(2px); }
 .dosm-panel{
   position:relative; width:min(640px,100%); height:100%; background:var(--paper); overflow-y:auto;
-  box-shadow:-20px 0 60px -20px rgba(10,10,10,.5); animation:dosmIn .4s cubic-bezier(.16,1,.3,1);
+  box-shadow:-20px 0 60px -20px rgba(72,56,38,.5); animation:dosmIn .4s cubic-bezier(.16,1,.3,1);
   display:flex; flex-direction:column;
 }
 @keyframes dosmIn{ from{ transform:translateX(40px); opacity:.4 } to{ transform:none; opacity:1 } }
@@ -3311,11 +3345,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    ===================================================================== */
 .wiz-overlay{ position:fixed; inset:0; z-index:400; display:flex; align-items:center; justify-content:center; padding:clamp(.5rem,3vw,2rem); }
 .wiz-overlay[hidden]{ display:none; }
-.wiz-scrim{ position:absolute; inset:0; background:rgba(10,10,10,.62); backdrop-filter:blur(3px); animation:fadeIn .25s ease-out; }
+.wiz-scrim{ position:absolute; inset:0; background:rgba(26,23,18,.62); backdrop-filter:blur(3px); animation:fadeIn .25s ease-out; }
 .wiz-panel{
   position:relative; width:min(620px,100%); max-height:min(760px,94vh);
   background:var(--paper); display:flex; flex-direction:column;
-  box-shadow:0 40px 100px -30px rgba(10,10,10,.6); animation:wizIn .4s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 40px 100px -30px rgba(72,56,38,.6); animation:wizIn .4s cubic-bezier(.16,1,.3,1);
   border:1px solid var(--ink);
 }
 @keyframes wizIn{ from{ transform:translateY(24px) scale(.98); opacity:0 } to{ transform:none; opacity:1 } }
@@ -3411,7 +3445,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .menu-profile{
   display:flex; align-items:center; gap:1rem; width:100%; text-align:left;
   background:var(--black-3); color:var(--paper); padding:1rem 1.4rem;
-  border:1px solid var(--line-kaart, var(--line)); cursor:pointer; transition:.18s;
+  border:1px solid var(--line-eiland); cursor:pointer; transition:.18s;
 }
 .menu-profile:hover{ background:var(--pink); border-color:var(--pink); }
 .menu-profile .mp-ic{ color:var(--pink); line-height:1; transition:.18s; }
@@ -3462,8 +3496,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   display:flex; align-items:flex-start; gap:.5rem;
   padding:1rem .9rem 1.05rem 1.25rem;
   background:var(--black-3); color:rgba(245,241,232,.88);
-  border-left:3px solid var(--pink);
-  box-shadow:0 16px 44px rgba(10,10,10,.38);
+  border:1px solid var(--line-eiland); border-left:3px solid var(--pink);
+  box-shadow:0 16px 44px rgba(72,56,38,.38);
   font-size:.92rem; line-height:1.5;
   transform:translateY(-150%); opacity:0;
   transition:transform .35s cubic-bezier(.16,1,.3,1), opacity .3s;
@@ -3491,8 +3525,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   display:flex; align-items:flex-start; gap:.5rem;
   padding:1rem .9rem 1.05rem 1.25rem;
   background:var(--black-3); color:rgba(245,241,232,.88);
-  border-left:3px solid var(--pink);
-  box-shadow:0 16px 44px rgba(10,10,10,.38);
+  border:1px solid var(--line-eiland); border-left:3px solid var(--pink);
+  box-shadow:0 16px 44px rgba(72,56,38,.38);
   font-size:.92rem; line-height:1.5;
 }
 .redactie-melding .rm-body{ flex:1; }
@@ -3508,7 +3542,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   position:fixed; right:1rem; bottom:1rem; z-index:158;
   width:min(320px, calc(100vw - 2rem));
   padding:1rem 1.1rem 1.1rem; background:var(--black-3); color:rgba(245,241,232,.9);
-  border-left:3px solid var(--pink); box-shadow:0 16px 44px rgba(10,10,10,.4);
+  border:1px solid var(--line-eiland); border-left:3px solid var(--pink); box-shadow:0 16px 44px rgba(72,56,38,.4);
   font-size:.9rem; line-height:1.5;
 }
 .curator-paneel .cur-kop{
@@ -3628,7 +3662,7 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
   display:flex; align-items:center; gap:1rem;
   padding:.9rem 1.1rem;
   background:var(--ink); color:var(--paper);
-  box-shadow:0 8px 30px rgba(10,10,10,.28);
+  box-shadow:0 8px 30px rgba(72,56,38,.28);
   font-size:.82rem; line-height:1.45;
 }
 .cookie-note[hidden]{ display:none; }
@@ -4166,6 +4200,16 @@ body{ background:var(--paper-3); }
   <a href="https://asgaupaust.be/en-meer/"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" stroke-dasharray="3 2.4"/><line x1="12" y1="8.5" x2="12" y2="15.5"/><line x1="8.5" y1="12" x2="15.5" y2="12"/></svg><span>En meer</span></a>
   <a href="https://asgaupaust.be/#contact"><svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.6 7l8.4 6.4L20.4 7"/></svg><span>Contact</span></a>
 </nav>
+
+<script>
+// Krantlijn-nav: de masthead-regel zet aan zodra je scrolt, zelfde gedrag als de hoofdpagina.
+(function(){
+  var nv = document.querySelector('.nav');
+  if(!nv) return;
+  var zet = function(){ nv.classList.toggle('krant', window.scrollY > 4); };
+  window.addEventListener('scroll', zet, {passive:true}); zet();
+})();
+</script>
 
 </body>
 </html>
