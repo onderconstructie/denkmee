@@ -1,7 +1,7 @@
 {
   "name": "Denk mee met Mechelen",
   "short_name": "Denk mee",
-  "description": "Volg wat Mechelen beslist. De besluitenradar van As Gau Paust.",
+  "description": "Volg wat Mechelen beslist. Een burgerjournalistiek experiment van As Gau Paust.",
   "lang": "nl",
   "start_url": "/",
   "scope": "/",

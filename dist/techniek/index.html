@@ -3258,6 +3258,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   padding:1rem clamp(1.5rem,4vw,2.5rem); display:flex; gap:.75rem; flex-wrap:wrap;
 }
 .dosm-foot .btn{ font-size:.8rem; padding:.7rem 1.1rem; }
+/* Op mobiel draagt de hoofdactie de rij: volgen op volle breedte, delen compact ernaast.
+   Sluiten hoeft hier niet meer: het kruisje, de tik naast het venster en de veeg doen dat. */
+@media (max-width:700px){
+  .dosm-foot #dosmFollow{ flex:1 1 auto; justify-content:center; }
+}
 @media (max-width:560px){
   .dosm-summary{ flex-wrap:wrap; }
   .dosm-sum-cell{ flex:1 1 50%; border-bottom:1px solid var(--line); }
