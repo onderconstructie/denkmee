@@ -619,26 +619,15 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 /* Brede schermen (2-koloms hero): de vier tellingen op één rij, zodat het hele kader
    ook op een kleiner breed scherm zonder scrollen past. */
 @media (min-width:900px){ .hc-stats{ grid-template-columns:repeat(4,1fr); gap:.7rem .8rem; } }
-/* Voorproefje zonder profiel: drie stadsbrede tellers naast elkaar (op elk scherm) plus
-   de instel-regel eronder: zin links, 'stel in →' rechts, gespiegeld aan de kop van de
-   echte cockpit ('Mijn Mechelen' links, 'pas aan →' rechts). */
+/* Voorproefje zonder profiel: dezelfde kopregel als de echte cockpit, maar links de
+   status-zin in plaats van de naam, en rechts 'stel in →' op exact de pas-aan-plek.
+   Daaronder de drie stadsbrede tellers naast elkaar (op elk scherm). */
 .hc-stats.hct-3{ grid-template-columns:repeat(3,1fr); }
-.hct-cta{
-  display:flex; align-items:center; justify-content:space-between; gap:.8rem; width:100%; text-align:left;
-  margin-top:.8rem; padding:0; background:none; border:none; cursor:pointer;
+.hct-zin{
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.03em;
-  color:#fff; line-height:1.5;
+  color:#fff; line-height:1.45;
 }
-.hct-cta strong{ font-weight:600; }
-/* Rechterhelft in de taal van de pas-aan-knop: klein kapitaal, zelfde pijl. */
-.hct-doe{
-  display:inline-flex; align-items:center; gap:.35rem; flex-shrink:0;
-  font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
-  transition:transform .15s, opacity .15s;
-}
-.hct-doe .hce-arr{ font-size:1.05rem; }
-.hct-cta:hover .hct-doe{ transform:translateX(2px); opacity:.85; }
-.hct-cta:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+.hct-zin strong{ font-weight:600; }
 /* Smal scherm: compacter, zodat de zittingskaart en de cockpit (de clou) meteen in beeld
    staan. De pitch-lede wijkt voor wie al een profiel heeft; die kent de uitleg al. */
 @media (max-width:700px){
@@ -4800,16 +4789,15 @@ function renderHeroCockpit(){
     const recentAl = rb.gr.length + rb.rmw.length + rb.col.length + rb.vb.length + rb.bm.length;
     const statAl = (num, lbl, href) => `<a class="hc-stat" href="${href}"><span class="hc-num">${num}</span><span class="hc-lbl">${lbl}</span></a>`;
     el.innerHTML =
-        `<div class="hc-head"><span class="hc-title">Heel Mechelen</span></div>`
+        `<div class="hc-head">`
+      +   `<span class="hct-zin">Je hebt <strong>Mijn Mechelen</strong> nog niet ingesteld</span>`
+      +   `<button class="hc-edit" type="button" onclick="openWizard()" aria-label="Stel Mijn Mechelen in" title="Stel Mijn Mechelen in">stel in <span class="hce-arr" aria-hidden="true">→</span></button>`
+      + `</div>`
       + `<div class="hc-stats hct-3">`
       +   statAl(agendaAl, 'op de agenda', '#agenda')
       +   statAl(recentAl, 'recent beslist', '#recent')
       +   statAl(alKlaar ? DOSSIERS.length : 0, 'dossiers', '#dossiers')
-      + `</div>`
-      + `<button class="hct-cta" type="button" onclick="openWizard()">`
-      +   `<span class="hct-zin">Stel <strong>Mijn Mechelen</strong> in</span>`
-      +   `<span class="hct-doe">stel in <span class="hce-arr" aria-hidden="true">→</span></span>`
-      + `</button>`;
+      + `</div>`;
     el.hidden = false;
     if(acties) acties.style.display = '';
     if(hero) hero.classList.remove('met-profiel');
