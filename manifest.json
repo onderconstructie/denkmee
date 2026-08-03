@@ -1,0 +1,15 @@
+{
+  "name": "Denk mee met Mechelen",
+  "short_name": "Denk mee",
+  "description": "Volg wat Mechelen beslist. De besluitenradar van As Gau Paust.",
+  "lang": "nl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f1e8",
+  "theme_color": "#FF0066",
+  "icons": [
+    { "src": "/beelden/toren-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/beelden/toren-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
