@@ -314,6 +314,14 @@ if beelden_src.exists():
             b_kopie += 1
     print(f"       beelden gekopieerd naar dist/beelden/: {b_kopie} bestand(en)")
 
+# 5b-ter) App-bestanden: het webmanifest en de service worker maken de site installeerbaar
+#     op het beginscherm (zelfde patroon als asgaupaust.be: netwerk-eerst, geen trackers).
+for app_bestand in ("manifest.json", "sw.js"):
+    bron = BASE / app_bestand
+    if bron.exists():
+        shutil.copy2(bron, out_dir / app_bestand)
+print("       app-bestanden gekopieerd: manifest.json + sw.js")
+
 # 5c) Volledige-tekstindex voor de zoekbalk meekopiëren (gemaakt door bouw_zoekindex.py).
 #     De site laadt hem pas bij de eerste zoekopdracht, dus de pagina zelf blijft licht.
 zoekindex = BASE / "zoekindex.json"
