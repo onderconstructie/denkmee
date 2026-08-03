@@ -304,7 +304,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.06em;
   text-transform:uppercase; padding:.55rem 1.1rem;
   border:1px solid var(--pink); color:var(--pink-text);
-  transition:all .15s;
+  transition:background .15s, color .15s;
 }
 .nav-cta:hover{ background:var(--pink-vlak-hover); color:#fff; }
 .nav-cta{ white-space:nowrap; }
@@ -531,7 +531,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   width:7px; height:7px; border-radius:50%;
   background:var(--pink);
   box-shadow:0 0 0 0 var(--pink);
-  animation:pulse 2s infinite;
+  animation:pulse 2s 4;   /* eindige hartslag: vier tellen, dan ligt hij; levend, niet zeurend */
 }
 @keyframes pulse{
   0%   { box-shadow:0 0 0 0 rgba(255,0,102,.5); }
@@ -625,7 +625,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 /* 'Nieuw sinds vorig bezoek': volle ink-balk binnen het roze, de blikvanger. */
 .hc-nieuw{ display:flex; align-items:center; gap:.6rem; margin-top:.7rem; padding:.5rem .75rem; background:var(--ink); color:var(--paper); text-decoration:none; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.02em; transition:background .15s; }
 .hc-nieuw:hover{ background:var(--ink-2); }
-.hc-nieuw .hcn-dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); flex-shrink:0; box-shadow:0 0 0 0 var(--pink); animation:pulse 2s infinite; }
+.hc-nieuw .hcn-dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); flex-shrink:0; box-shadow:0 0 0 0 var(--pink); animation:pulse 2s 4; }
 .hc-nieuw .hcn-txt{ flex:1; }
 .hc-nieuw .hcn-txt strong{ font-weight:600; }
 .hc-nieuw .hcn-arr{ flex-shrink:0; }
@@ -709,7 +709,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
   border:1px solid var(--line-strong);
-  transition:all .2s ease;
+  transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .btn-pink{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); box-shadow:0 6px 18px -9px rgba(255,0,102,.5); }
 .btn-pink:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); transform:translate(0,-2px); box-shadow:var(--shadow-pink); }
@@ -924,13 +924,18 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 .sec-titles{ padding-top:.4rem; }
 .sec-titles h2{
   font-size:var(--h1);
-  letter-spacing:-.03em;
+  letter-spacing:-.02em;
   margin-bottom:.7rem;
-  font-weight:600;
+  /* Duet: de kop praat licht, zoals de cijfers van de datalaag (gewicht 300), en het
+     roze accentwoord draagt het gewicht. Zelfde variabele font, nul bytes extra. */
+  font-weight:300;
 }
+/* Smal scherm: een fractie steviger, zodat licht mono op low-DPI niet vervaagt. */
+@media (max-width:700px){ .sec-titles h2{ font-weight:350; } }
 .sec-titles h2 em{
   color:var(--pink);
   font-style:normal;
+  font-weight:700;
 }
 /* Nadruk in de uitleg: spaarzaam, vetjes logo-roze, nooit cursief */
 .sec-lede em, .sec-lede strong, .hero-lede em, .hero-lede strong,
@@ -1142,7 +1147,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-size:.7rem; letter-spacing:.04em;
   color:var(--bone-dim);
   border:1px solid var(--line-strong);
-  transition:all .15s;
+  transition:color .15s, border-color .15s, background .15s;
 }
 .tch:hover{ color:var(--bone); border-color:var(--bone-dim); }
 .tch.active{
@@ -1162,7 +1167,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
   border:1px solid var(--line-strong);
-  transition:all .15s;
+  transition:background .15s, color .15s, border-color .15s;
 }
 .kw-row button:hover{ background:var(--pink-vlak-hover); color:#fff; border-color:var(--pink-vlak-hover); }
 .kw-list{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.7rem; }
@@ -1590,7 +1595,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border:1px solid var(--line-strong);
   color:var(--ink-2);
   cursor:pointer;
-  transition:all .12s;
+  transition:background .12s, color .12s, border-color .12s;
 }
 .fc:hover{ border-color:var(--ink); }
 .fc.on{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
@@ -2384,7 +2389,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border:1px solid var(--line-strong);
   color:var(--ink-dim);
   background:var(--paper);
-  transition:all .15s;
+  transition:color .15s, border-color .15s, background .15s;
 }
 .of-btn:hover{ color:var(--bone); border-color:var(--bone-dim); }
 .of-btn.active{ color:#fff; background:var(--pink-vlak); border-color:var(--pink-vlak); }
@@ -2608,7 +2613,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border:1px solid var(--line-strong);
   color:var(--bone-dim);
   cursor:pointer;
-  transition:all .15s;
+  transition:color .15s, border-color .15s, background .15s;
 }
 .notif-opt:hover{ color:var(--ink); }
 .notif-opt.active{ color:var(--paper); background:var(--ink); border-color:var(--ink); }
@@ -2626,7 +2631,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   background:var(--paper-2);
   color:var(--ink);
   cursor:pointer;
-  transition:all .15s;
+  transition:background .15s, border-color .15s, color .15s;
 }
 .btn-perm:hover{ background:var(--paper-3); }
 .btn-perm.granted{ background:var(--pink-soft); border-color:var(--pink); color:var(--pink-text); }
@@ -2703,7 +2708,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   background:transparent;
   color:var(--ink);
   cursor:pointer;
-  transition:all .15s;
+  transition:background .15s, color .15s;
   white-space:nowrap;
 }
 .ci-action:hover{ background:var(--ink); color:var(--paper); }
@@ -2876,7 +2881,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   color:var(--paper);
   border:1px solid var(--ink);
   cursor:pointer;
-  transition:all .15s;
+  transition:background .15s, color .15s, border-color .15s;
 }
 .dc-cta:hover{ background:var(--pink-vlak-hover); color:#fff; border-color:var(--pink-vlak-hover); }
 @media (max-width:700px){
@@ -3050,7 +3055,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.02em;
   /* Standaard = 'Alle dossiers' = zwart (het gewone, niet-persoonlijke aanzicht). */
   color:var(--paper); padding:.55rem .85rem; border:1px solid var(--ink); background:var(--ink);
-  transition:.18s;
+  transition:background .18s, color .18s, border-color .18s, opacity .18s;
 }
 .dos-prof-toggle:hover{ opacity:.88; }
 /* 'Alleen mijn thema's' = persoonlijk filter = roze. */
@@ -3063,7 +3068,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   display:inline-flex; align-items:center; gap:.45rem; cursor:pointer;
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.78rem; letter-spacing:.02em;
   padding:.55rem .85rem; border:1px solid var(--pink-vlak); background:var(--pink-vlak); color:#fff;
-  transition:.18s;
+  transition:background .18s, border-color .18s;
 }
 .dos-volg-chip:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
 .dos-volg-chip[hidden]{ display:none; }
@@ -3179,7 +3184,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dosm-head .eyebrow{ color:var(--eiland-pink); margin-bottom:.7rem; }
 .dosm-close{
   position:absolute; top:1.2rem; right:1.2rem; width:38px; height:38px; font-size:1.4rem; line-height:1;
-  color:var(--paper); border:1px solid var(--op-eiland-30); transition:.18s;
+  color:var(--paper); border:1px solid var(--op-eiland-30); transition:background .18s, color .18s, border-color .18s;
 }
 .dosm-close:hover{ background:var(--pink); border-color:var(--pink); }
 .dosm-title{
@@ -3258,7 +3263,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   line-height:1.35;
   color:var(--pink-text); background:var(--pink-soft);
   border:1px solid var(--line-pink); border-radius:999px;
-  padding:.34rem .7rem; transition:.15s; cursor:pointer;
+  padding:.34rem .7rem; transition:background .15s, color .15s, border-color .15s; cursor:pointer;
 }
 .dosm-ev-ic{ width:14px; height:14px; flex:none; display:block; }
 /* Hover naar --pink-deep en niet --pink: wit op #FF0066 haalt 3,86:1 en zakt onder AA,
@@ -3360,7 +3365,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .wiz-progress .wp-dot{ width:22px; height:3px; background:var(--line-strong); transition:background .3s; }
 .wiz-progress .wp-dot.on{ background:var(--pink); }
 .wiz-progress .wp-dot.done{ background:var(--ink); }
-.wiz-close{ width:34px; height:34px; font-size:1.4rem; line-height:1; color:var(--ink-dim); border:1px solid transparent; transition:.15s; }
+.wiz-close{ width:34px; height:34px; font-size:1.4rem; line-height:1; color:var(--ink-dim); border:1px solid transparent; transition:background .15s, color .15s, border-color .15s; }
 .wiz-close:hover{ color:var(--pink); border-color:var(--line-strong); }
 .wiz-body{ flex:1; overflow-y:auto; padding:clamp(1.5rem,4vw,2.5rem); }
 .wiz-step{ animation:wizStepIn .35s cubic-bezier(.16,1,.3,1); }
@@ -3395,18 +3400,18 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .wiz-foot.is-welkom .wiz-stepcount,
 .wiz-foot.is-welkom .wiz-skip{ display:none; }
 .wiz-foot.is-welkom .wiz-next{ width:100%; text-align:center; }
-.wiz-back{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.82rem; color:var(--ink-dim); padding:.6rem .4rem; transition:.15s; }
+.wiz-back{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.82rem; color:var(--ink-dim); padding:.6rem .4rem; transition:background .15s, color .15s, border-color .15s; }
 .wiz-back:hover{ color:var(--ink); }
 .wiz-back[hidden]{ display:inline-block; visibility:hidden; pointer-events:none; }
 .wiz-stepcount{ margin-left:auto; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; color:var(--ink-faint); letter-spacing:.04em; }
-.wiz-skip{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.82rem; color:var(--ink-dim); padding:.6rem .8rem; border:1px solid var(--line-strong); transition:.15s; }
+.wiz-skip{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.82rem; color:var(--ink-dim); padding:.6rem .8rem; border:1px solid var(--line-strong); transition:background .15s, color .15s, border-color .15s; }
 .wiz-skip:hover{ border-color:var(--ink); color:var(--ink); }
 /* Onzichtbaar maar de plek blijft bezet: zo verspringen de andere knoppen nooit
    wanneer 'Overslaan' er op een stap wel of niet is. */
 .wiz-skip[hidden]{ display:inline-block; visibility:hidden; pointer-events:none; }
 .wiz-next{
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.85rem; font-weight:500; letter-spacing:.01em;
-  background:var(--pink-vlak); color:#fff; border:1px solid var(--pink-vlak); padding:.7rem 1.3rem; transition:.18s;
+  background:var(--pink-vlak); color:#fff; border:1px solid var(--pink-vlak); padding:.7rem 1.3rem; transition:background .18s, color .18s, border-color .18s;
 }
 .wiz-next:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
 .wiz-summary{ display:flex; flex-direction:column; gap:0; border:1px solid var(--line-strong); }
@@ -3445,10 +3450,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .menu-profile{
   display:flex; align-items:center; gap:1rem; width:100%; text-align:left;
   background:var(--black-3); color:var(--paper); padding:1rem 1.4rem;
-  border:1px solid var(--line-eiland); cursor:pointer; transition:.18s;
+  border:1px solid var(--line-eiland); cursor:pointer; transition:background .18s, color .18s, border-color .18s;
 }
 .menu-profile:hover{ background:var(--pink); border-color:var(--pink); }
-.menu-profile .mp-ic{ color:var(--pink); line-height:1; transition:.18s; }
+.menu-profile .mp-ic{ color:var(--pink); line-height:1; transition:color .18s; }
 .menu-profile .mp-ic svg{ width:22px; height:22px; display:block; }
 .menu-profile:hover .mp-ic{ color:#fff; }
 .menu-profile .mp-text{ display:flex; flex-direction:column; gap:.15rem; }
@@ -3571,9 +3576,31 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Bol op de hamburger als blijvend signaal dat er nieuw nieuws is. */
 .burger-dot{
   position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%;
-  background:var(--pink); box-shadow:0 0 0 0 var(--pink); animation:pulse 2s infinite;
+  background:var(--pink); box-shadow:0 0 0 0 var(--pink); animation:pulse 2s 4;
 }
 .burger-dot[hidden]{ display:none; }
+
+/* =====================================================================
+   EXIT-CHOREOGRAFIE: sluiten zoals openen, maar korter
+   Menu, dossierpaneel en wizard animeren wél binnen maar hielden abrupt
+   op te bestaan. De uitgang is het spiegelbeeld van de entree, iets
+   sneller; de veeg-sluit op mobiel deed dit al voor.
+   ===================================================================== */
+@keyframes fadeUit{ to{ opacity:0 } }
+@keyframes slideUit{ to{ transform:translateX(40px); opacity:0 } }
+@keyframes dosmUit{ to{ transform:translateX(48px); opacity:0 } }
+@keyframes dosmDaal{ to{ transform:translateY(100%); opacity:.65 } }
+@keyframes wizUit{ to{ transform:translateY(16px) scale(.985); opacity:0 } }
+.menu-overlay.sluit{ animation:fadeUit .18s ease-out forwards; }
+.menu-overlay.sluit .menu-card{ animation:slideUit .22s ease-in forwards; }
+.dosm-overlay.sluit .dosm-scrim{ animation:fadeUit .2s ease-out forwards; }
+.dosm-overlay.sluit .dosm-panel{ animation:dosmUit .24s ease-in forwards; }
+.wiz-overlay.sluit .wiz-scrim{ animation:fadeUit .2s ease-out forwards; }
+.wiz-overlay.sluit .wiz-panel{ animation:wizUit .22s ease-in forwards; }
+@media (max-width:700px){
+  /* Het bottom-sheet daalt af, zoals de veeg-sluit het doet. */
+  .dosm-overlay.sluit .dosm-panel{ animation:dosmDaal .26s ease-in forwards; }
+}
 
 /* =====================================================================
    LOOK & FEEL POLISH, scroll-progress, back-to-top, focus, anchors
@@ -3582,7 +3609,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwoording{ scroll-margin-top:80px; }
 
 /* dunne scroll-voortgangsbalk bovenaan */
-.scroll-progress{ position:fixed; top:0; left:0; height:2px; width:0; background:var(--pink); z-index:150; transition:width .08s linear; }
+/* Geen width-transition: de rAF-lus smootht al, en samen gaven ze een elastiekje bij snel scrollen. */
+.scroll-progress{ position:fixed; top:0; left:0; height:2px; width:0; background:var(--pink); z-index:150; }
 
 /* terug-naar-boven knop: rond en glazig/licht transparant, net als op het portaal */
 .to-top{
@@ -6651,18 +6679,34 @@ function openWizard(step){
   renderWizardStep();
   overlayGeopend($('wizOverlay'));
 }
+// Sluiten zoals openen: speel de uitgangsanimatie (het spiegelbeeld van de entree, korter)
+// en verberg daarna pas echt. animationend op het paneel is het signaal; de safety-timeout
+// vangt alles wat dat event nooit stuurt, en bij prefers-reduced-motion sluiten we direct.
+function sluitMetAnimatie(overlay, paneel, klaar){
+  if(overlay.hidden) return;
+  const rustig = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(rustig || !paneel){ klaar(); return; }
+  if(overlay.classList.contains('sluit')) return;   // sluit al; de eerste aanroep rondt af
+  overlay.classList.add('sluit');
+  let af = false;
+  const rond = () => { if(af) return; af = true; overlay.classList.remove('sluit'); klaar(); };
+  paneel.addEventListener('animationend', rond, { once:true });
+  setTimeout(rond, 340);
+}
 function closeWizard(){
   // bewaar wat al ingevuld is, ook bij sluiten
   saveProfile();
   captureWizardNotify(); persistProfile();
-  // eerst overlay sluiten en scroll vrijgeven, dán pas her-renderen (voorkomt layout-flash)
-  $('wizOverlay').hidden = true;
-  document.body.style.overflow = '';
-  // De privacybalk weer tonen als ze nog niet weggeklikt was toen de wizard openging.
-  const _ck = $('cookieNote');
-  if(_ck && _ck.dataset.terug === '1'){ delete _ck.dataset.terug; if(!_privacyOpgeslagen()) _ck.hidden = false; }
-  overlayGesloten();
-  renderResults();
+  sluitMetAnimatie($('wizOverlay'), document.querySelector('.wiz-panel'), () => {
+    // eerst overlay sluiten en scroll vrijgeven, dán pas her-renderen (voorkomt layout-flash)
+    $('wizOverlay').hidden = true;
+    document.body.style.overflow = '';
+    // De privacybalk weer tonen als ze nog niet weggeklikt was toen de wizard openging.
+    const _ck = $('cookieNote');
+    if(_ck && _ck.dataset.terug === '1'){ delete _ck.dataset.terug; if(!_privacyOpgeslagen()) _ck.hidden = false; }
+    overlayGesloten();
+    renderResults();
+  });
 }
 function renderWizardStep(){
   document.querySelectorAll('.wiz-step').forEach(s => { s.hidden = (+s.dataset.step !== WIZ_STEP); });
@@ -7019,11 +7063,14 @@ function toggleMenu(){
   const bd = $('burgerDot'); if(bd) bd.hidden = true;   // menu geopend = nieuw-signaal gezien
   const isOpen = !overlay.hidden;
   if(isOpen){
-    overlay.hidden = true;
     burger.classList.remove('open');
     burger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-    overlayGesloten();
+    // Sluiten zoals openen: de kaart glijdt terug, de overlay dooft, dan pas echt weg.
+    sluitMetAnimatie(overlay, overlay.querySelector('.menu-card'), () => {
+      overlay.hidden = true;
+      document.body.style.overflow = '';
+      overlayGesloten();
+    });
   } else {
     updateMenuProfile();
     overlay.hidden = false;
@@ -8279,6 +8326,16 @@ function openDossier(id){
   overlayGeopend($('dosmOverlay'));
 }
 function closeDossier(){
+  const ov = $('dosmOverlay');
+  const paneel = $('dosmPanel');
+  // De veeg-sluit op mobiel heeft het paneel al zelf weggeanimeerd (inline transform):
+  // dan niet nóg eens spelen, direct opruimen.
+  const alWeg = paneel && paneel.style.transform;
+  const klaar = () => { dossierEchtDicht(); };
+  if(alWeg){ if(!ov.hidden) klaar(); return; }
+  sluitMetAnimatie(ov, paneel, klaar);
+}
+function dossierEchtDicht(){
   $('dosmOverlay').hidden = true;
   document.body.style.overflow = '';
   // Kwam je via een gedeelde link binnen, dan hoort die link niet te blijven plakken:
