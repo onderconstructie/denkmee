@@ -3781,6 +3781,21 @@ a, button, summary, input, label{ touch-action:manipulation; }
 @media (prefers-reduced-motion:reduce){
   .dosm-panel{ animation:fadeIn .2s ease-out; }
 }
+/* Installatie-uitnodiging: verschijnt één keer, alleen op mobiel, ná de privacymelding
+   (zelfde patroon en toon als op asgaupaust.be, met de toren als app-gezicht). */
+.install-note{
+  position:fixed; left:1rem; right:1rem; bottom:calc(74px + env(safe-area-inset-bottom)); z-index:160;
+  max-width:520px; margin:0 auto; display:flex; align-items:center; gap:.75rem;
+  padding:.7rem .85rem; background:var(--paper-2); border:1px solid var(--line-kaart); border-radius:var(--r-chip);
+  box-shadow:0 12px 36px rgba(72,56,38,.2); font-size:.86rem; line-height:1.4;
+}
+.install-note .in-toren{ width:36px; height:36px; flex:none; border-radius:50%; }
+.install-note .in-txt{ flex:1; min-width:0; margin:0; color:var(--ink-2); }
+.install-note .in-txt strong{ color:var(--ink); }
+.install-note .in-ok{ flex:none; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; background:var(--pink); color:#fff; border:1px solid var(--pink); border-radius:999px; padding:.5rem .85rem; cursor:pointer; }
+.install-note .in-ok:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
+.install-note .in-close{ flex:none; background:none; border:0; color:var(--ink-faint); font-size:1.3rem; line-height:1; cursor:pointer; padding:.1rem .35rem; }
+@media (min-width:701px){ .install-note{ bottom:1.5rem; } }
 </style>
 </head>
 <body>
