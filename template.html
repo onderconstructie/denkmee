@@ -454,7 +454,10 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
      De achtergrond-vorm wordt in een eigen .hero-bg-laag geclipt (zie hieronder). */
 }
 .hero-bg{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
-.hero-content{ position:relative; z-index:2; }
+/* Geen z-index meer: dat isoleerde de blend van de titel, waardoor de overdruk de bol
+   (in .hero-bg) niet kon bereiken. Zonder z-index blijft de inhoud gewoon boven de
+   achtergrond (DOM-volgorde) en valt hij onder de korrellaag: één vel, zoals de kaarten. */
+.hero-content{ position:relative; }
 @media (max-width:900px){ .hero{ grid-template-columns:1fr; } }
 
 /* Bauhaus geometrische vormen */
@@ -546,6 +549,9 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   letter-spacing:-.04em;
   font-weight:500;
   opacity:0; animation:rise 1s .25s ease-out forwards;
+  /* Overdruk: waar de titel de toren-bol raakt, drúkt hij erin (multiply), zoals inkt
+     op een riso-vel. Op kaal papier verandert er niets: inkt op papier blijft inkt. */
+  mix-blend-mode:multiply;
 }
 /* Het kader (de 'box') rond de subdomeinnaam in de hoofdtitel: pink op inkt. Zo komt de
    deelsite (Denk mee) terug in de hoofdtitel, terwijl bovenaan As Gau Paust met de mug staat. */
