@@ -3258,6 +3258,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   padding:1rem clamp(1.5rem,4vw,2.5rem); display:flex; gap:.75rem; flex-wrap:wrap;
 }
 .dosm-foot .btn{ font-size:.8rem; padding:.7rem 1.1rem; }
+/* Op mobiel draagt de hoofdactie de rij: volgen op volle breedte, delen compact ernaast.
+   Sluiten hoeft hier niet meer: het kruisje, de tik naast het venster en de veeg doen dat. */
+@media (max-width:700px){
+  .dosm-foot #dosmFollow{ flex:1 1 auto; justify-content:center; }
+}
 @media (max-width:560px){
   .dosm-summary{ flex-wrap:wrap; }
   .dosm-sum-cell{ flex:1 1 50%; border-bottom:1px solid var(--line); }
@@ -8198,13 +8203,15 @@ function openDossier(id){
       curKnop += `<button class="btn btn-ghost dosm-cur-btn" onclick="curatorZetHier('${d.id}', this)">→ Zet het gekozen stuk hier</button>`;
     }
   }
+  // Twee knoppen, geen drie: sluiten kan al via het kruisje, de tik naast het venster en
+  // (op mobiel) de veeg naar beneden. De deelknop heet enkel 'Deel' als het toestel een
+  // echt deelmenu heeft; anders blijft het eerlijk 'Kopieer link'.
   $('dosmFoot').innerHTML = `
     <button class="btn ${followed?'btn-ghost':'btn-pink'}" id="dosmFollow" onclick="toggleFollowDossier('${d.id}')">
       ${followed?'✓ Ik volg dit dossier':'Volg dit dossier'}
     </button>
-    <button class="btn btn-ghost" onclick="kopieerDossierLink('${d.id}', this)">Kopieer link</button>
-    ${curKnop}
-    <button class="btn btn-ghost" onclick="closeDossier()">Sluiten</button>`;
+    <button class="btn btn-ghost" id="dosmDeel" onclick="deelDossier('${d.id}', this)">${navigator.share?'Deel':'Kopieer link'}</button>
+    ${curKnop}`;
 
   $('dosmOverlay').hidden = false;
   document.body.style.overflow = 'hidden';
@@ -8272,6 +8279,22 @@ async function kopieerDossierLink(id, knop){
     clearTimeout(knop._t);
     knop._t = setTimeout(() => { knop.textContent = oud; }, 2400);
   }
+}
+// Delen zoals een app: waar het toestel een deelmenu heeft (telefoons, ook Windows en
+// macOS in Chrome-achtige browsers) opent de knop dat menu. Zonder deelmenu valt hij
+// terug op de kopieerknop hierboven, met dezelfde bevestiging.
+async function deelDossier(id, knop){
+  if(navigator.share){
+    const d = (DOSSIERS || []).find(x => x.id === id);
+    try {
+      await navigator.share({ title: d ? (d.title || d.name) : 'Denk mee met Mechelen', url: dossierLink(id) });
+      return;
+    } catch(e) {
+      // Annuleren van het deelmenu is geen fout; alleen bij een echte weigering kopiëren we.
+      if(e && e.name === 'AbortError') return;
+    }
+  }
+  kopieerDossierLink(id, knop);
 }
 // Een gedeelde link openen. Alleen als het dossier echt bestaat: een oude of verzonnen
 // link mag geen leeg paneel opentrekken.
