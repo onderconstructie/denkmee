@@ -1987,13 +1987,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .dvb-chart{ --dvb-strook:8px; height:240px; }   /* de gewonnen hoogte gaat naar de balken */
   .dvb-lbl{ display:none; }
   .dash-viz-legend{ display:none; }   /* de as en de uitleg-regel dragen de kleuren al */
-  .dvb-uitleg{
-    display:flex; flex-direction:column; gap:.35rem;
-    margin-top:.7rem;
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-size:.72rem; line-height:1.45;
-    color:var(--ink-dim);
-  }
+  /* De uitleg-regel blijft hier verborgen: op een telefoon zegt de as zelf 'deadline' bij
+     de 0-lijn, en de kopregel boven de orgaanknoppen noemt de termijn al voluit
+     ('Besluitenlijst, 10 dagen nadien'). Een vierde herhaling van dezelfde regel is geen
+     uitleg meer maar ruis. Op een breed scherm draagt de labelstrook rechts dat werk. */
+  .dvb-uitleg{ display:none; }
   .dvb-uitleg .u-rij{ display:flex; align-items:baseline; gap:.5rem; }
   .dvb-uitleg .u-staal{
     flex-shrink:0; width:10px; height:10px; align-self:center;
@@ -2073,32 +2071,20 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 /* .dvb-knip en .dvb-meer zijn opgegaan in de actiebalk hieronder: de melding over wat je
    niet ziet staat nu als subregel op de knop die het wél toont. */
-/* De twee wegen naar de volledige data, als één balk met echte knoppen. Ze stonden eerder
-   als drie fluisterdoelen verspreid (een pil van 22px bovenaan, een dode meldregel en een
-   tekstlink), alle drie ver onder de 44px die een vinger nodig heeft. Zelfde grammatica als
-   .tij-tabs: één omhulsel met de rand, een scheidingslijn ertussen. De subregel vertelt wat
-   je krijgt, inclusief hoeveel zittingen je nú niet ziet: die melding is geen ruis maar
-   eerlijkheid, want een ingekorte grafiek leest anders als het volledige verhaal. */
-.dvb-acties{
-  display:flex; margin-top:.9rem;
-  border:1.5px solid var(--ink); border-radius:var(--r-chip); overflow:hidden;
-}
-.dvb-acties button{
-  flex:1; min-width:0; display:flex; flex-direction:column; gap:.15rem;
-  padding:.7rem .9rem; text-align:left; background:none; border:none; cursor:pointer;
-  font-family:inherit; transition:background .15s;
-}
-.dvb-acties button + button{ border-left:1.5px solid var(--ink); }
-.dvb-acties button:hover{ background:var(--paper-3); }
-.dvb-acties button:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
-.dva-doe{
+/* Eén regel onder de grafiek, en alleen wanneer er iets te melden valt: dat de reeks
+   ingekort is. Die melding is niet optioneel (zonder haar leest een ingekorte grafiek als
+   het volledige verhaal), en ze is meteen de deur naar de volledige weergave. Zo staat er
+   geen knop naast de zin die hetzelfde zegt: de zin ís de knop. Verschijnt niet op een
+   breed scherm, want daar staan alle zittingen er al. */
+.dvb-knip{
+  display:block; width:100%; text-align:left;
+  margin-top:.7rem; padding:.55rem 0; background:none; border:none; cursor:pointer;
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.74rem; font-weight:500; color:var(--ink);
+  font-size:.7rem; line-height:1.5; letter-spacing:.02em; color:var(--ink-dim);
 }
-.dva-sub{
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.62rem; letter-spacing:.02em; line-height:1.35; color:var(--ink-faint);
-}
+.dvb-knip .dk-doe{ color:var(--pink-text); border-bottom:1px solid var(--line-pink); padding-bottom:1px; white-space:nowrap; }
+.dvb-knip:hover .dk-doe{ color:var(--pink); border-color:var(--pink); }
+.dvb-knip:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
 .dvb-modal-card{ max-width:min(1140px, 96vw); width:96vw; }
 .dvb-scroll{ overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
 /* Meer hoogte, de labelstrook en de as-cijfers terug (ook op smal scherm), stevigere balken.
@@ -2115,6 +2101,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 #dashBars .dvb-chart{ touch-action:pan-y; }
 /* De grafiek is één tabstop (zie dvbToetsen), dus ze moet ook zichtbaar focus krijgen. */
 .dvb-chart:focus-visible{ outline:2px solid var(--pink); outline-offset:3px; }
+/* Met een muis is de grafiek zelf de vergrootknop (zweven wijst al aan, dus de klik is vrij). */
+@media (hover:hover){ #dashBars .dvb-chart{ cursor:zoom-in; } }
 .dvb-readout .hint{ color:var(--ink-faint); }
 .dvb-readout strong{ color:var(--ink); font-weight:600; }
 .dvb-readout .ok{ color:var(--pink-text); }
@@ -3928,7 +3916,7 @@ html{ -webkit-tap-highlight-color:transparent; }
 a, button, summary, input, label{ touch-action:manipulation; }
 @media (hover:none){
   .btn:active, .hc-chip:active, .hc-stat:active, .hc-edit:active, .tij-tab:active,
-  .dvb-acties button:active,
+  .dvb-knip:active,
   .seg-opt:active, .tch:active, .dos-card:active, .dc-card:active, .item-card:active,
   .prc-card:active, .sch-card:active, .menu-list a:active, .tabbar a:active,
   .cml-action:active, .dos-volg-chip:active, .fc:active, .menu-profile:active,
@@ -5849,16 +5837,7 @@ function renderDashboard(){
         <span class="u-rij"><i class="u-staal s-lijn" aria-hidden="true"></i><span>de 0-lijn is de <strong>wettelijke deadline</strong>: ${docLabel} ${deadlineDays} dagen ${direction === 'before' ? 'op voorhand' : 'nadien'}</span></span>
       </div>
       <div class="dvb-readout" id="dvbReadout" aria-live="polite"></div>
-      <div class="dvb-acties">
-        <button type="button" onclick="openDvbVergroot()" aria-haspopup="dialog">
-          <span class="dva-doe">Vergroot de grafiek</span>
-          <span class="dva-sub">${dvbKort ? `nu de laatste ${DVB_SMAL_AANTAL} van ${sortedAsc.length} zittingen` : `alle ${sortedAsc.length} zittingen`}</span>
-        </button>
-        <button type="button" onclick="dvbNaarTabel()">
-          <span class="dva-doe">Bekijk de lijst</span>
-          <span class="dva-sub">datum, publicatie en bron per zitting</span>
-        </button>
-      </div>
+      ${dvbKort ? `<button type="button" class="dvb-knip" onclick="openDvbVergroot()" aria-haspopup="dialog">Je ziet de laatste ${DVB_SMAL_AANTAL} van ${sortedAsc.length} zittingen. <span class="dk-doe">Toon ze allemaal <span aria-hidden="true">→</span></span></button>` : ''}
     </div>
     <div class="dvb-recent">${recentHTML}</div>`;
 
@@ -6073,12 +6052,6 @@ function sluitDvbVergroot(){
   document.body.style.overflow = '';
   overlayGesloten();
 }
-function dvbNaarTabel(){
-  const d = $('dashDetail');
-  if(!d) return;
-  d.open = true;
-  d.scrollIntoView({ behavior:'smooth', block:'start' });
-}
 
 function positionTijdDashboard(){
   const tabs = document.getElementById('tijTabs');
@@ -6157,7 +6130,14 @@ function setupTijdTabs(){
     const stop = () => { sleept = false; const r = readout(); if(r) r.setAttribute('aria-live', 'polite'); };
     bars.addEventListener('pointerup', stop);
     bars.addEventListener('pointercancel', stop);
-    bars.addEventListener('click', e => { const b = e.target.closest('.dvb-bar'); if(b) show(b); });
+    // Met een muis wijst zweven al de zitting aan, dus is de klik vrij: die vergroot de
+    // grafiek. Zo is de grafiek zélf de knop en hoeft er geen knop naast te staan. Op een
+    // aanraakscherm blijft tikken kiezen; daar is de meldregel onder de grafiek de deur.
+    bars.addEventListener('click', e => {
+      if(!e.target.closest('.dvb-chart')) return;
+      if(window.matchMedia('(hover:hover)').matches){ openDvbVergroot(); return; }
+      const b = e.target.closest('.dvb-bar'); if(b) show(b);
+    });
     dvbToetsen(bars, readout);
   }
   // Zelfde readout-gedrag in de vergrote weergave (eigen container, eigen regel).
