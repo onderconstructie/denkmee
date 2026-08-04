@@ -1783,15 +1783,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    wordt afgeknipt en de toetsenbordgebruiker ziet niets. */
 .tij-tab:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
 .tij-tabs-hint{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:var(--ink-dim); margin:1.4rem 0 .7rem; }
-/* Het antwoord op de kopvraag. Staat los van de uitleg-alinea en spreekt de datastem van de
-   site (mono, tabulaire cijfers), zodat het leest als een meting en niet als een bewering. */
-.tijd-antwoord{
-  margin:1.5rem 0 0; max-width:62ch;
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.86rem; line-height:1.65; letter-spacing:.01em; color:var(--ink-2);
-  font-variant-numeric:tabular-nums;
-}
-.tijd-antwoord strong{ color:var(--ink); font-weight:600; }
+/* Er stond hier een samenvattende regel met totalen. Geschrapt: een tekstregel vol aantallen
+   naast een blok dat diezelfde aantallen al toont, is dubbel werk in twee stemmen. Het
+   antwoord komt van de cijfers op de knoppen zelf. */
 .tij-tab.active{
   background:var(--ink);
   color:var(--paper);
@@ -1827,20 +1821,27 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    terugscrollen om te vergelijken, terwijl de cijfers al klaarstaan. Alleen op smal scherm:
    boven 900px staan de vijf standen op één rij en is daar geen breedte voor. */
 .tij-tab-score{ display:none; }
-/* De kop boven elk blok zegt wát er gemeten wordt. Een echte h3, niet alleen omdat het er
-   een is, maar ook omdat een schermlezer de sectie anders als één ononderbroken blok kreeg.
-   Groot genoeg om gelezen te worden: dit is de enige plek waar de meetlat staat. */
+/* De kop boven elk blok zegt wát er gemeten wordt, en is het enige dat dat zegt: er staat
+   geen uitleg-zin meer naast. Een echte h3, ook omdat een schermlezer de sectie anders als
+   één ononderbroken blok kreeg. Het cijfer ervoor telt de twee metingen zoals de reuzen-
+   sectienummers elders op de site: het maakt zichtbaar dat dit er twee zijn, geen lijst. */
 .tij-groep{
-  margin:1.5rem 0 .55rem;
+  display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  margin:2rem 0 .6rem; padding-bottom:.5rem;
+  border-bottom:2px solid var(--ink);
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.8rem; font-weight:600; letter-spacing:.02em; color:var(--ink);
+  font-weight:400; letter-spacing:0;
 }
 .tij-groep:first-child{ margin-top:0; }
-.tij-voetnoot{
-  margin:.55rem 0 0; max-width:60ch;
-  font-size:.86rem; line-height:1.55; color:var(--ink-dim);
+.tg-num{
+  font-size:1.5rem; font-weight:300; line-height:1; color:var(--pink);
+  font-variant-numeric:tabular-nums;
 }
-.tij-voetnoot strong{ color:var(--ink-2); font-weight:600; }
+.tg-wat{ font-size:1rem; font-weight:600; color:var(--ink); letter-spacing:-.01em; }
+.tg-termijn{
+  font-size:.74rem; color:var(--ink-dim); letter-spacing:.02em;
+  margin-left:auto; white-space:nowrap;
+}
 @media (max-width:900px){
   .tij-tabs{ flex-direction:column; }
   .tij-tab + .tij-tab{ border-left:none; }
@@ -1853,16 +1854,25 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .tij-tab-meta{ display:none; }
   .lede-detail{ display:none; }   /* de kopregels hieronder dragen deze twee zinnen al */
   .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
+  /* Het percentage is de uitkomst, dus het krijgt de maat van een cijfer en niet van een
+     label. Licht gezet zoals de andere grote getallen op de site (de datastem praat in
+     gewicht 300), met het procentteken kleiner: het getal telt, het teken niet. */
   .tij-tab-score{
     display:block; flex-shrink:0; text-align:right;
     font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-size:.7rem; letter-spacing:.02em; color:var(--ink-dim); font-variant-numeric:tabular-nums;
+    color:var(--ink); font-variant-numeric:tabular-nums; line-height:1;
   }
-  .tij-tab-score strong{ font-size:.95rem; font-weight:600; color:var(--ink); }
-  .tij-tab-score .tts-breuk{ display:block; font-size:.6rem; color:var(--ink-faint); }
-  .tij-tab.active .tij-tab-score{ color:var(--op-eiland-65); }
-  .tij-tab.active .tij-tab-score strong{ color:var(--paper); }
+  .tij-tab-score strong{ font-size:1.65rem; font-weight:300; letter-spacing:-.02em; }
+  .tij-tab-score .tts-pct{ font-size:.85rem; font-weight:400; margin-left:.06em; color:var(--ink-dim); }
+  .tij-tab-score .tts-breuk{ display:block; margin-top:.3rem; font-size:.66rem; color:var(--ink-faint); }
+  .tij-tab.active .tij-tab-score{ color:var(--paper); }
+  .tij-tab.active .tij-tab-score .tts-pct{ color:var(--op-eiland-65); }
   .tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
+  .tij-tab-name{ font-size:1rem; }
+  /* De termijn krijgt op smal scherm altijd zijn eigen regel, links uitgelijnd. Liet je hem
+     natuurlijk aflopen, dan paste de ene kop wél op één regel en de andere niet, en stond de
+     tweede rechts uitgelijnd onder zijn eigen kop. Twee koppen horen dezelfde vorm te hebben. */
+  .tg-termijn{ margin-left:0; flex-basis:100%; }
 }
 
 .dashboard{
@@ -4306,12 +4316,6 @@ a, button, summary, input, label{ touch-action:manipulation; }
     </div>
   </div>
 
-  <!-- Het antwoord op de vraag in de kop, over alle vijf de organen samen. Bewust BUITEN de
-       uitleg-alinea en in de datastem (mono): uitleg is uitleg, cijfers horen bij de cijfers.
-       Zonder deze regel leverde de sectie vijf losse percentages met noemers van 17 tot 117,
-       en moest de lezer zelf een totaal schatten. -->
-  <p class="tijd-antwoord" id="tijdAntwoord"></p>
-
   <!-- De vijf bestuursorganen, in twee blokken naar wat er gemeten wordt. De aansporing
        "Kies een bestuursorgaan om te zien of het de wettelijke deadline haalt" stond hier
        eerder; die is geschrapt omdat elke knop zijn score nu al draagt, en omdat ze over
@@ -5797,53 +5801,10 @@ function tijdStats(orgaan){
   return { deadlineDays, direction, docLabel: data.doc_label,
            computed, past, onTime, late, wait, pct, avg };
 }
-// Het antwoord op de kopvraag "Haalt de stad de wettelijke deadlines?", over alle vijf de
-// organen samen. Eén meting is één wettelijke publicatietermijn, of dat nu een agenda vooraf
-// of een besluitenlijst nadien is; zo blijft de optelling eerlijk. De misgelopen keren staan
-// erbij, want een percentage van 98 zonder de vijf uitzonderingen zegt te weinig.
-function renderTijdAntwoord(){
-  const el = $('tijdAntwoord');
-  if(!el) return;
-  const tpo = D.tijdigheid_per_orgaan || {};
-  let totaal = 0, opTijd = 0, zwaarste = 0, vroegste = null;
-  Object.keys(tpo).forEach(naam => {
-    const st = tijdStats(naam);
-    if(!st) return;
-    totaal += st.past.length;
-    opTijd += st.onTime;
-    st.past.forEach(s => {
-      const afw = dvbAfwijking(s, st.direction, st.deadlineDays);
-      if(afw > zwaarste) zwaarste = afw;
-      if(!vroegste || s.date < vroegste) vroegste = s.date;
-    });
-  });
-  if(!totaal){ el.textContent = ''; return; }
-  const mis = totaal - opTijd;
-  // Maand en jaar, niet de exacte dag: dit is een periode, geen gebeurtenis.
-  const MAAND = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
-  const vanaf = vroegste ? `${MAAND[+vroegste.slice(5, 7) - 1]} ${vroegste.slice(0, 4)}` : '';
-  el.innerHTML = `Sinds ${escape(vanaf)} haalde de stad <strong>${opTijd} van de ${totaal}</strong> wettelijke `
-    + `publicatietermijnen. `
-    + (mis
-        ? `Het ging <strong>${mis} keer</strong> mis, het zwaarst met ${dgn(zwaarste)} te laat.`
-        : `Er ging geen enkele keer iets mis.`);
-}
-// De vijf orgaanknoppen dragen hun eigen score, plus twee kopregels die zeggen dat het om
-// twee verschillende metingen gaat. Dezelfde helper als het dashboard, dus de knop kan
-// nooit iets anders beweren dan de grafiek eronder. De volgorde blijft institutioneel:
-// sorteren op score zou van de keuzelijst een ranglijst maken, en dat is ze niet.
-// Hoe vaak haalde dit orgaan de besluitenlijst-termijn (10 dagen na de zitting)? De raad en
-// de RMW worden op de agenda gemeten, maar ze hebben óók deze plicht, en de data ervoor zit
-// al in elke zitting. Zonder dat cijfer leest hun agenda-score als 'slechtste van de vijf'.
-function besluitenlijstScore(naam){
-  const d = (D.tijdigheid_per_orgaan || {})[naam];
-  if(!d) return null;
-  const z = (d.zittingen || []).filter(s => s.besluiten && s.besluiten.published);
-  if(!z.length) return null;
-  const binnen = z.filter(s =>
-    Math.round((new Date(s.besluiten.published) - new Date(s.date)) / 86400000) <= 10).length;
-  return { aantal: z.length, binnen };
-}
+// De vijf orgaanknoppen dragen hun eigen score. Dezelfde helper als het dashboard, dus de
+// knop kan nooit iets anders beweren dan de grafiek eronder. De volgorde blijft
+// institutioneel: sorteren op score zou van de keuzelijst een ranglijst maken, en dat is ze
+// niet. Wat er gemeten wordt, staat in de kop boven elke groep, niet in een losse zin.
 function renderTijdTabScores(){
   const wrap = $('tijTabs');
   if(!wrap) return;
@@ -5854,45 +5815,28 @@ function renderTijdTabScores(){
   // lat van de andere drie juist voluit scoort. Twee blokken, twee koppen, geen kolom.
   if(!wrap.querySelector('.tij-blok')){
     const tabs = Array.from(wrap.querySelectorAll('.tij-tab'));
-    const maakGroep = (kopTekst, leden, voorNode, metVoetnoot) => {
+    const maakGroep = (nummer, wat, termijn, leden, voorNode) => {
       const h = document.createElement('h3');
       h.className = 'tij-groep';
-      h.textContent = kopTekst;
+      h.innerHTML = `<span class="tg-num" aria-hidden="true">${nummer}</span>`
+        + `<span class="tg-wat">${wat}</span><span class="tg-termijn">${termijn}</span>`;
       wrap.insertBefore(h, voorNode);
       const blok = document.createElement('div');
       blok.className = 'tij-blok';
       wrap.insertBefore(blok, voorNode);
       leden.forEach(t => blok.appendChild(t));     // verplaatst de knop, behoudt zijn listeners
-      if(metVoetnoot){
-        const p = document.createElement('p');
-        p.className = 'tij-voetnoot';
-        p.id = 'tijVoetnoot';
-        blok.insertAdjacentElement('afterend', p);
-      }
     };
-    if(tabs[0]) maakGroep('Meting 1: de agenda, 8 dagen vóór de zitting', tabs.slice(0, 2), tabs[0], true);
-    if(tabs[2]) maakGroep('Meting 2: de besluitenlijst, 10 dagen erna', tabs.slice(2), tabs[2], false);
+    if(tabs[0]) maakGroep('1', 'De agenda', '8 dagen vóór de zitting', tabs.slice(0, 2), tabs[0]);
+    if(tabs[2]) maakGroep('2', 'De besluitenlijst', '10 dagen na de zitting', tabs.slice(2), tabs[2]);
   }
   wrap.querySelectorAll('.tij-tab').forEach(tab => {
     let el = tab.querySelector('.tij-tab-score');
     if(!el){ el = document.createElement('span'); el.className = 'tij-tab-score'; tab.appendChild(el); }
     const st = tijdStats(tab.dataset.orgaan);
     el.innerHTML = (st && st.past.length)
-      ? `<strong>${st.pct}%</strong> op tijd<span class="tts-breuk">${st.onTime} van ${st.past.length}</span>`
+      ? `<strong>${st.pct}<span class="tts-pct">%</span></strong><span class="tts-breuk">${st.onTime}/${st.past.length}</span>`
       : '—';
   });
-  // De voetnoot onder meting 1: wat diezelfde twee organen op de ándere lat presteren.
-  const voet = $('tijVoetnoot');
-  if(voet){
-    const gr = besluitenlijstScore('Gemeenteraad');
-    const rmw = besluitenlijstScore('Raad voor maatschappelijk welzijn');
-    if(gr && rmw){
-      const samen = gr.binnen + rmw.binnen, totaal = gr.aantal + rmw.aantal;
-      voet.innerHTML = samen === totaal
-        ? `Deze twee hebben óók de besluitenlijst-termijn, en die halen ze allebei: <strong>${totaal} van de ${totaal}</strong>. De percentages hierboven en hieronder meten dus niet hetzelfde.`
-        : `Deze twee hebben óók de besluitenlijst-termijn: <strong>${samen} van de ${totaal}</strong> op tijd. De percentages hierboven en hieronder meten dus niet hetzelfde.`;
-    }
-  }
 }
 function renderDashboard(){
   const orgaan = TIJD_ACTIVE_ORGAAN;
@@ -6248,11 +6192,7 @@ function positionTijdDashboard(){
   // Het dashboard schuift onder de hele GROEP, niet tussen twee knoppen in. Tussen de
   // knoppen belandde de tweede knop van een groep ruim 700px onder zijn eigen kopregel,
   // en sloot hij onderaan aan op de kop van de ándere meting.
-  const blok = active ? active.closest('.tij-blok') : null;
-  let anker = blok;
-  if(anker && anker.nextElementSibling && anker.nextElementSibling.classList.contains('tij-voetnoot')){
-    anker = anker.nextElementSibling;
-  }
+  const anker = active ? active.closest('.tij-blok') : null;
   if(mobiel && anker){
     if(anker.nextElementSibling !== dash) anker.insertAdjacentElement('afterend', dash);
   } else if(tabs.nextElementSibling !== dash){
@@ -6269,7 +6209,6 @@ function setupTijdTabs(){
   const zetToestand = () => tabs.forEach(t =>
     t.setAttribute('aria-pressed', t.classList.contains('active') ? 'true' : 'false'));
   zetToestand();
-  renderTijdAntwoord();
   renderTijdTabScores();
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
