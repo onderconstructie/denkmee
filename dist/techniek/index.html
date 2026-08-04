@@ -2033,6 +2033,24 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border-bottom:1px solid var(--line-pink); padding-bottom:1px;
 }
 .dvb-meer:hover{ color:var(--pink); border-color:var(--pink); }
+/* Vergroot-knop + vergrote weergave: dezelfde grafiek, vol formaat, alle zittingen. */
+.dvb-vergroot{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-dim); background:none;
+  border:1px solid var(--line-strong); border-radius:999px; padding:.22rem .6rem; cursor:pointer;
+  transition:color .15s, border-color .15s;
+}
+.dvb-vergroot:hover{ color:var(--pink-text); border-color:var(--pink); }
+.dvb-modal-card{ max-width:min(1140px, 96vw); width:96vw; }
+.dvb-scroll{ overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+/* Meer hoogte, de labelstrook en de as-cijfers terug (ook op smal scherm), stevigere balken.
+   Op een telefoon wordt de tijdas scrolbaar: elke balk houdt een minimumbreedte. */
+.dvb-modal-card .dvb-chart{ height:min(58vh, 460px); --dvb-strook:146px;
+  min-width:max(100%, calc(var(--dvb-n, 0) * 9px + 210px)); }
+.dvb-modal-card .dvb-lbl{ display:block; }
+.dvb-modal-card .dvb-tick{ font-size:.7rem; }
+.dvb-modal-card .dvb-chart::after{ font-size:.7rem; }
+.dvb-modal-card .dvb-bar{ max-width:26px; min-width:7px; }
 .dvb-readout .hint{ color:var(--ink-faint); }
 .dvb-readout strong{ color:var(--ink); font-weight:600; }
 .dvb-readout .ok{ color:var(--pink-text); }
