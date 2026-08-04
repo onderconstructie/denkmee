@@ -1802,12 +1802,37 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    De regel .tij-tab.active::before die hier stond is geschrapt: er was nergens een basisregel
    met content, dus dat pseudo-element rendeerde nooit. Dood spoor van een oud actief-streepje;
    de volle inktvulling zegt het nu duidelijker dan een streepje ooit kon. */
+/* De score op de knop zelf. Zonder dit moest je vijf keer tikken en telkens een scherm
+   terugscrollen om te vergelijken, terwijl de cijfers al klaarstaan. Alleen op smal scherm:
+   boven 900px staan de vijf standen op één rij en is daar geen breedte voor. */
+.tij-tab-score{ display:none; }
+.tij-groep{ display:none; }
 @media (max-width:900px){
   .tij-tabs{ flex-direction:column; }
   .tij-tab + .tij-tab{ border-left:none; }
   /* Op elk kind, niet op .tij-tab + .tij-tab: in de accordeon schuift het dashboard tussen de
      tabs, en dan is de tab eronder niet meer aangrenzend en zou zijn scheidingslijn wegvallen. */
   .tij-tabs > * + *{ border-top:1.5px solid var(--ink); }
+  /* De kopregel zegt welk regime hieronder gemeten wordt, zodat 88% en 100% niet als
+     dezelfde meting lezen. Daarmee is de meta-regel per knop dubbel en mag ze weg. */
+  .tij-groep{
+    display:block; padding:.5rem 1.2rem;
+    background:var(--paper-3);
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+    font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim);
+  }
+  .tij-tab-meta{ display:none; }
+  .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
+  .tij-tab-score{
+    display:block; flex-shrink:0; text-align:right;
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+    font-size:.7rem; letter-spacing:.02em; color:var(--ink-dim); font-variant-numeric:tabular-nums;
+  }
+  .tij-tab-score strong{ font-size:.95rem; font-weight:600; color:var(--ink); }
+  .tij-tab-score .tts-breuk{ display:block; font-size:.6rem; color:var(--ink-faint); }
+  .tij-tab.active .tij-tab-score{ color:var(--op-eiland-65); }
+  .tij-tab.active .tij-tab-score strong{ color:var(--paper); }
+  .tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
 }
 
 .dashboard{
@@ -2046,30 +2071,34 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.74rem; line-height:1.5; color:var(--ink-2); min-height:2.4em;
 }
-/* De uitklap onder de grafiek op smal scherm, plus het regeltje dat zegt wat we weglieten.
-   Dat regeltje is niet optioneel: een ingekorte grafiek zonder melding leest als "dit is
-   alles wat er is". */
-.dvb-knip{
-  margin-top:.6rem;
+/* .dvb-knip en .dvb-meer zijn opgegaan in de actiebalk hieronder: de melding over wat je
+   niet ziet staat nu als subregel op de knop die het wél toont. */
+/* De twee wegen naar de volledige data, als één balk met echte knoppen. Ze stonden eerder
+   als drie fluisterdoelen verspreid (een pil van 22px bovenaan, een dode meldregel en een
+   tekstlink), alle drie ver onder de 44px die een vinger nodig heeft. Zelfde grammatica als
+   .tij-tabs: één omhulsel met de rand, een scheidingslijn ertussen. De subregel vertelt wat
+   je krijgt, inclusief hoeveel zittingen je nú niet ziet: die melding is geen ruis maar
+   eerlijkheid, want een ingekorte grafiek leest anders als het volledige verhaal. */
+.dvb-acties{
+  display:flex; margin-top:.9rem;
+  border:1.5px solid var(--ink); border-radius:var(--r-chip); overflow:hidden;
+}
+.dvb-acties button{
+  flex:1; min-width:0; display:flex; flex-direction:column; gap:.15rem;
+  padding:.7rem .9rem; text-align:left; background:none; border:none; cursor:pointer;
+  font-family:inherit; transition:background .15s;
+}
+.dvb-acties button + button{ border-left:1.5px solid var(--ink); }
+.dvb-acties button:hover{ background:var(--paper-3); }
+.dvb-acties button:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
+.dva-doe{
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.66rem; color:var(--ink-faint); letter-spacing:.02em;
+  font-size:.74rem; font-weight:500; color:var(--ink);
 }
-.dvb-meer{
-  margin-top:.45rem;
+.dva-sub{
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.68rem; letter-spacing:.04em;
-  color:var(--pink-text);
-  border-bottom:1px solid var(--line-pink); padding-bottom:1px;
+  font-size:.62rem; letter-spacing:.02em; line-height:1.35; color:var(--ink-faint);
 }
-.dvb-meer:hover{ color:var(--pink); border-color:var(--pink); }
-/* Vergroot-knop + vergrote weergave: dezelfde grafiek, vol formaat, alle zittingen. */
-.dvb-vergroot{
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.06em;
-  text-transform:uppercase; color:var(--ink-dim); background:none;
-  border:1px solid var(--line-strong); border-radius:999px; padding:.22rem .6rem; cursor:pointer;
-  transition:color .15s, border-color .15s;
-}
-.dvb-vergroot:hover{ color:var(--pink-text); border-color:var(--pink); }
 .dvb-modal-card{ max-width:min(1140px, 96vw); width:96vw; }
 .dvb-scroll{ overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
 /* Meer hoogte, de labelstrook en de as-cijfers terug (ook op smal scherm), stevigere balken.
@@ -2084,6 +2113,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    dichtstbijzijnde balk); verticaal scrollen blijft van de pagina. In de vergrote weergave
    NIET: daar moet horizontaal vegen de tijdas scrollen. */
 #dashBars .dvb-chart{ touch-action:pan-y; }
+/* De grafiek is één tabstop (zie dvbToetsen), dus ze moet ook zichtbaar focus krijgen. */
+.dvb-chart:focus-visible{ outline:2px solid var(--pink); outline-offset:3px; }
 .dvb-readout .hint{ color:var(--ink-faint); }
 .dvb-readout strong{ color:var(--ink); font-weight:600; }
 .dvb-readout .ok{ color:var(--pink-text); }
@@ -2137,6 +2168,15 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   /* Compactere pct-tegel: op mobiel is hij een samenvattingsstrook, niet de blikvanger. */
   .dash-stat{ padding:1.3rem 1.3rem !important; }
   .dash-num{ font-size:3rem; }
+  /* Het hoofdgetal staat sinds kort op de knop waarop je net tikte (zie .tij-tab-score),
+     dus deze tegel herhaalt zichzelf, en dat nog ná de grafiek die ze moest samenvatten.
+     Idem voor 'keer te laat': de breuk op de knop (91 van 92) zegt dat al. In CSS
+     verbergen, niet slopen: de desktopweergave en renderDashboard blijven onaangeroerd.
+     De twee overblijvende cellen krijgen daardoor bijna 50% meer breedte, en hun labels
+     breken niet langer in drie regels. */
+  .dash-stat{ display:none; }
+  .dash-secondary{ grid-template-columns:repeat(2,1fr); }
+  .dash-cell.cel-telaat{ display:none; }
 }
 
 /* ============================================================
@@ -3888,6 +3928,7 @@ html{ -webkit-tap-highlight-color:transparent; }
 a, button, summary, input, label{ touch-action:manipulation; }
 @media (hover:none){
   .btn:active, .hc-chip:active, .hc-stat:active, .hc-edit:active, .tij-tab:active,
+  .dvb-acties button:active,
   .seg-opt:active, .tch:active, .dos-card:active, .dc-card:active, .item-card:active,
   .prc-card:active, .sch-card:active, .menu-list a:active, .tabbar a:active,
   .cml-action:active, .dos-volg-chip:active, .fc:active, .menu-profile:active,
@@ -4255,7 +4296,7 @@ a, button, summary, input, label{ touch-action:manipulation; }
         <div class="dash-cell-num tnum" id="dashAvg">—</div>
         <div class="dash-cell-lbl" id="dashAvgLbl">dagen op voorsprong<br>gemiddeld</div>
       </div>
-      <div class="dash-cell">
+      <div class="dash-cell cel-telaat">
         <div class="dash-cell-num tnum" id="dashLate">—</div>
         <div class="dash-cell-lbl">keer te laat<br>sinds dec 2024</div>
       </div>
@@ -4269,7 +4310,6 @@ a, button, summary, input, label{ touch-action:manipulation; }
       <div class="dash-viz-lbl">
         <span id="dashVizLbl">Per zitting · dagen voor / na deadline</span>
         <span class="dash-viz-legend"><span class="dot tijdig"></span>tijdig <span class="dot late"></span>te laat</span>
-        <button type="button" class="dvb-vergroot" onclick="openDvbVergroot()" aria-haspopup="dialog" title="Vergroot de grafiek">vergroot ⤢</button>
       </div>
       <div class="dash-viz-bars" id="dashBars"></div>
     </div>
@@ -4284,7 +4324,7 @@ a, button, summary, input, label{ touch-action:manipulation; }
         <div class="dash-viz-lbl"><span id="dvbModalLbl"></span>
           <span class="dash-viz-legend"><span class="dot tijdig"></span>tijdig <span class="dot late"></span>te laat</span></div>
         <div class="dvb-scroll" id="dvbModalScroll"><div id="dvbModalChart"></div></div>
-        <div class="dvb-readout" id="dvbModalReadout"></div>
+        <div class="dvb-readout" id="dvbModalReadout" aria-live="polite"></div>
       </div>
     </div>
 
@@ -5652,25 +5692,19 @@ let TIJD_ACTIVE_ORGAAN = 'Gemeenteraad';
 
 // "1 dag" en niet "1 dagen": overal waar we dagen tellen in het dashboard.
 function dgn(n){ return `${n} ${n === 1 ? 'dag' : 'dagen'}`; }
-function renderDashboard(){
-  const tpo = D.tijdigheid_per_orgaan || {};
-  const orgaan = TIJD_ACTIVE_ORGAAN;
-  const data = tpo[orgaan];
-  if(!data){
-    $('dashPct').textContent = '—';
-    return;
-  }
-
+// De rekenkern van de tijdigheidsmeting, apart gezet omdat twee plekken hem nodig hebben:
+// het dashboard zelf én de score op elke orgaanknop. Zo kan de knop nooit iets anders
+// beweren dan de tegel eronder: het is letterlijk dezelfde noemer.
+function tijdStats(orgaan){
+  const data = (D.tijdigheid_per_orgaan || {})[orgaan];
+  if(!data) return null;
   const deadlineDays = data.deadline_days;
   const direction = data.deadline_direction;  // "before" of "after"
-  const docLabel = data.doc_label;  // "agenda" of "besluitenlijst"
-  const wetLabel = data.wet_label;
-  const zittingen = data.zittingen || [];
 
-  // Bereken status voor elke zitting (consistent, herbereken op basis van datums)
+  // Status per zitting (consistent, herberekend uit de datums).
   // Voor "before": days = (zitting - published), tijdig als days >= deadlineDays
   // Voor "after":  days = (published - zitting), tijdig als days <= deadlineDays
-  const computed = zittingen.map(z => {
+  const computed = (data.zittingen || []).map(z => {
     if(!z.published){
       return { ...z, _days: null, _status: 'verwacht' };
     }
@@ -5701,6 +5735,40 @@ function renderDashboard(){
   // Gemiddelde voorsprong / achterstand
   const allDays = past.map(s => s._days).filter(d => d !== null);
   const avg = allDays.length ? (allDays.reduce((a,b)=>a+b,0) / allDays.length).toFixed(1) : '—';
+
+  return { deadlineDays, direction, docLabel: data.doc_label,
+           computed, past, onTime, late, wait, pct, avg };
+}
+// De vijf orgaanknoppen dragen hun eigen score, plus twee kopregels die zeggen dat het om
+// twee verschillende metingen gaat. Dezelfde helper als het dashboard, dus de knop kan
+// nooit iets anders beweren dan de grafiek eronder. De volgorde blijft institutioneel:
+// sorteren op score zou van de keuzelijst een ranglijst maken, en dat is ze niet.
+function renderTijdTabScores(){
+  const wrap = $('tijTabs');
+  if(!wrap) return;
+  if(!wrap.querySelector('.tij-groep')){
+    const kop = tekst => { const d = document.createElement('div'); d.className = 'tij-groep'; d.textContent = tekst; return d; };
+    const tabs = wrap.querySelectorAll('.tij-tab');
+    if(tabs[0]) wrap.insertBefore(kop('Agenda, 8 dagen vóór de zitting'), tabs[0]);
+    if(tabs[2]) wrap.insertBefore(kop('Besluitenlijst, 10 dagen nadien'), tabs[2]);
+  }
+  wrap.querySelectorAll('.tij-tab').forEach(tab => {
+    let el = tab.querySelector('.tij-tab-score');
+    if(!el){ el = document.createElement('span'); el.className = 'tij-tab-score'; tab.appendChild(el); }
+    const st = tijdStats(tab.dataset.orgaan);
+    el.innerHTML = (st && st.past.length)
+      ? `<strong>${st.pct}%</strong> op tijd<span class="tts-breuk">${st.onTime} van ${st.past.length}</span>`
+      : '—';
+  });
+}
+function renderDashboard(){
+  const orgaan = TIJD_ACTIVE_ORGAAN;
+  const st = tijdStats(orgaan);
+  if(!st){
+    $('dashPct').textContent = '—';
+    return;
+  }
+  const { deadlineDays, direction, docLabel, computed, past, onTime, late, wait, pct, avg } = st;
 
   $('dashPct').textContent = past.length ? pct + '%' : '—';
   $('dashSub').innerHTML = past.length
@@ -5765,7 +5833,9 @@ function renderDashboard(){
 
   $('dashBars').innerHTML = `
     <div class="dvb-chartwrap">
-      <div class="dvb-chart" style="--deadline-top:${ZERO_TOP}%">
+      <div class="dvb-chart" tabindex="0" role="group"
+           aria-label="Grafiek per zitting. Gebruik de pijltjestoetsen om zitting per zitting te lezen."
+           style="--deadline-top:${ZERO_TOP}%">
         <div class="dvb-zone" aria-hidden="true"></div>
         <div class="dvb-axis" aria-hidden="true"></div>
         <div class="dvb-deadline" aria-hidden="true"></div>
@@ -5778,9 +5848,17 @@ function renderDashboard(){
       <div class="dvb-uitleg">
         <span class="u-rij"><i class="u-staal s-lijn" aria-hidden="true"></i><span>de 0-lijn is de <strong>wettelijke deadline</strong>: ${docLabel} ${deadlineDays} dagen ${direction === 'before' ? 'op voorhand' : 'nadien'}</span></span>
       </div>
-      <div class="dvb-readout" id="dvbReadout"></div>
-      ${dvbKort ? `<div class="dvb-knip">De laatste ${DVB_SMAL_AANTAL} van ${sortedAsc.length} zittingen.</div>
-      <button type="button" class="dvb-meer" onclick="dvbNaarTabel()">Alle ${sortedAsc.length} in de tabel →</button>` : ''}
+      <div class="dvb-readout" id="dvbReadout" aria-live="polite"></div>
+      <div class="dvb-acties">
+        <button type="button" onclick="openDvbVergroot()" aria-haspopup="dialog">
+          <span class="dva-doe">Vergroot de grafiek</span>
+          <span class="dva-sub">${dvbKort ? `nu de laatste ${DVB_SMAL_AANTAL} van ${sortedAsc.length} zittingen` : `alle ${sortedAsc.length} zittingen`}</span>
+        </button>
+        <button type="button" onclick="dvbNaarTabel()">
+          <span class="dva-doe">Bekijk de lijst</span>
+          <span class="dva-sub">datum, publicatie en bron per zitting</span>
+        </button>
+      </div>
     </div>
     <div class="dvb-recent">${recentHTML}</div>`;
 
@@ -5919,6 +5997,28 @@ function dvbKiesDichtstbij(container, readout, clientX){
   });
   if(best) dvbReadoutToon(container, readout, best);
 }
+// Toetsenbord: de grafiek is ÉÉN tabstop, want elke balk een eigen tabstop geven zou van
+// 92 zittingen een muur maken. Met de pijltjes loop je van zitting naar zitting, Home en
+// End springen naar het begin en het eind. Dezelfde readout als bij muis en vinger.
+function dvbToetsen(container, readoutFn){
+  if(!container) return;
+  container.addEventListener('keydown', e => {
+    const chart = e.target.closest && e.target.closest('.dvb-chart');
+    if(!chart) return;
+    const balken = Array.from(chart.querySelectorAll('.dvb-bar'));
+    if(!balken.length) return;
+    let i = balken.findIndex(b => b.classList.contains('active'));
+    if(i < 0) i = balken.length - 1;
+    let n = null;
+    if(e.key === 'ArrowRight' || e.key === 'ArrowUp') n = Math.min(balken.length - 1, i + 1);
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowDown') n = Math.max(0, i - 1);
+    else if(e.key === 'Home') n = 0;
+    else if(e.key === 'End') n = balken.length - 1;
+    if(n === null) return;
+    e.preventDefault();
+    dvbReadoutToon(container, readoutFn(), balken[n]);
+  });
+}
 // Readout-regel onder een grafiek: markeer de gekozen balk en toon zijn details.
 // Gedeeld door het dashboard (hover én tik) en de vergrote weergave.
 function dvbReadoutToon(container, readout, el){
@@ -5938,9 +6038,18 @@ function dvbReadoutToon(container, readout, el){
 function openDvbVergroot(){
   if(!DVB_STAND) return;
   const st = DVB_STAND;
+  // Het venster hoort rechtstreeks onder <body>, niet in het dashboard. Daar stond het
+  // eerst, en dat gaf drie problemen tegelijk: '.dashboard > *' schilderde er een dekkend
+  // papiervlak overheen (dus vervaagde de achtergrondlaag een egaal vlak in plaats van de
+  // pagina), achtergrondInert() zou de sectie mét venster op inert zetten, en
+  // positionTijdDashboard() versleepte het bij elke orgaanwissel mee.
+  const modal = $('dvbModal');
+  if(modal.parentElement !== document.body) document.body.appendChild(modal);
   $('dvbModalLbl').textContent = `${st.label} · alle ${st.zittingen.length} zittingen`;
   $('dvbModalChart').innerHTML = `
-    <div class="dvb-chart" style="--deadline-top:${st.ZERO_TOP}%; --dvb-n:${st.zittingen.length}">
+    <div class="dvb-chart" tabindex="0" role="group"
+         aria-label="Grafiek per zitting. Gebruik de pijltjestoetsen om zitting per zitting te lezen."
+         style="--deadline-top:${st.ZERO_TOP}%; --dvb-n:${st.zittingen.length}">
       <div class="dvb-zone" aria-hidden="true"></div>
       <div class="dvb-axis" aria-hidden="true"></div>
       <div class="dvb-deadline" aria-hidden="true"></div>
@@ -5951,14 +6060,18 @@ function openDvbVergroot(){
       ${dvbBouwBalken(st.zittingen, st.direction, st.deadlineDays, st.UP_MAX, st.DOWN_MAX, st.ZERO_TOP)}
     </div>`;
   dvbVulReadoutMetLaatste($('dvbModalChart'), $('dvbModalReadout'));
-  $('dvbModal').hidden = false;
+  modal.hidden = false;
   document.body.style.overflow = 'hidden';
   const sc = $('dvbModalScroll');
   if(sc) sc.scrollLeft = sc.scrollWidth;   // start bij de jongste zittingen (rechts)
+  // Zelfde vensterbehandeling als de vijf andere overlays: achtergrond buiten bereik,
+  // focus naar binnen, Tab draait rond, en bij sluiten keert de focus terug.
+  overlayGeopend(modal);
 }
 function sluitDvbVergroot(){
   $('dvbModal').hidden = true;
   document.body.style.overflow = '';
+  overlayGesloten();
 }
 function dvbNaarTabel(){
   const d = $('dashDetail');
@@ -5991,6 +6104,7 @@ function setupTijdTabs(){
   const zetToestand = () => tabs.forEach(t =>
     t.setAttribute('aria-pressed', t.classList.contains('active') ? 'true' : 'false'));
   zetToestand();
+  renderTijdTabScores();
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       // Onder 900px schuift het dashboard als accordeon ónder de aangetikte tab. Elke
@@ -6033,21 +6147,28 @@ function setupTijdTabs(){
     bars.addEventListener('pointerdown', e => {
       if(!e.target.closest('.dvb-chart')) return;
       sleept = true;
+      // Tijdens het slepen de aankondiging uit: anders ratelt een schermlezer bij elke
+      // pixel. Hij komt terug zodra de vinger stilstaat (pointerup).
+      const r = readout(); if(r) r.setAttribute('aria-live', 'off');
       try { bars.setPointerCapture(e.pointerId); } catch(_){ }
       dvbKiesDichtstbij(bars, readout(), e.clientX);
     });
     bars.addEventListener('pointermove', e => { if(sleept) dvbKiesDichtstbij(bars, readout(), e.clientX); });
-    const stop = () => { sleept = false; };
+    const stop = () => { sleept = false; const r = readout(); if(r) r.setAttribute('aria-live', 'polite'); };
     bars.addEventListener('pointerup', stop);
     bars.addEventListener('pointercancel', stop);
     bars.addEventListener('click', e => { const b = e.target.closest('.dvb-bar'); if(b) show(b); });
+    dvbToetsen(bars, readout);
   }
   // Zelfde readout-gedrag in de vergrote weergave (eigen container, eigen regel).
   const groot = $('dvbModalChart');
   if(groot){
-    const toon = el => dvbReadoutToon(groot, document.getElementById('dvbModalReadout'), el);
+    const mReadout = () => document.getElementById('dvbModalReadout');
+    const toon = el => dvbReadoutToon(groot, mReadout(), el);
     groot.addEventListener('pointerover', e => { const b = e.target.closest('.dvb-bar'); if(b) toon(b); });
     groot.addEventListener('click', e => { const b = e.target.closest('.dvb-bar'); if(b) toon(b); });
+    // Hier GEEN dichtstbijzijnde-balk-sleep: horizontaal vegen scrolt daar de tijdas.
+    dvbToetsen(groot, mReadout);
   }
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('dvbModal').hidden) sluitDvbVergroot(); });
 }
