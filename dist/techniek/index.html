@@ -1912,20 +1912,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   --deadline-days:8;
 }
 /* De hoogste y-as-waarde tonen we bewust niet meer als label: dat gaf te veel ruis
-   op de as. Enkel de deadline-lijn houdt haar waarde (zie ::after). */
+   op de as. Enkel de deadline-lijn houdt haar waarde (zie .tick-nul). */
 .dvb-chart::before{ content:none; }
-/* Y-as label op deadline-niveau, dynamisch */
-.dvb-chart::after{
-  content:attr(data-deadline);
-  position:absolute; left:0; top:var(--deadline-top, 50%); width:48px; text-align:right;
-  transform:translateY(-50%);
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.62rem; letter-spacing:.04em;
-  color:var(--pink-text);
-  font-variant-numeric:tabular-nums;
-  font-weight:500;
-  pointer-events:none;
-}
+/* De 0-waarde stond als ::after met attr(data-deadline). Nu een echt element (.tick-nul),
+   want er hoort een woord onder: op een telefoon is 'deadline' de sleutel tot het beeld. */
+.dvb-chart::after{ content:none; }
 /* ÉÉN visuele taal voor beide regimes: de 0-LIJN IS DE WETTELIJKE DEADLINE.
    Alles BOVEN nul = dagen te laat (roze zone), alles ONDER nul = binnen de termijn.
    Bij de agenda betekent 0 "8 dagen op voorhand" (negatief = nog vroeger, dus goed);
@@ -1943,9 +1934,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   pointer-events:none;
 }
 /* De te-laat-zone: alles boven de 0-lijn. */
+/* Lichter dan vroeger (.08): nu de as het woord 'te laat' draagt, hoeft dit vlak het niet
+   meer alleen te zeggen. Bij een orgaan met één late zitting op twintig was dat lege roze
+   vlak anders het grootste element in beeld, en dat leest als veel mis. */
 .dvb-zone{
   position:absolute; left:56px; right:0; top:0; height:var(--deadline-top, 50%);
-  background:rgba(255,0,102,.08);
+  background:rgba(255,0,102,.035);
   pointer-events:none;
 }
 /* De labels wonen in de gereserveerde strook rechts (de padding van de chart): daar komen
@@ -1959,15 +1953,15 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-lbl.lbl-telaat{ right:8px; top:8px; color:var(--pink-text); }
 .dvb-lbl.lbl-nul{ right:8px; top:calc(var(--deadline-top, 50%) + 6px); color:var(--pink-text); }
 .dvb-lbl.lbl-ok{ right:8px; bottom:8px; color:var(--ink-faint); }
-/* Bijschrift onder de grafiek: de mobiele plek voor de uitleg. Op smal scherm past geen
-   labelstrook naast 100+ balken (de rij met tussenruimtes is breder dan het scherm), dus
-   daar krijgen de balken de volle breedte en staat de uitleg eronder: drie heldere regels
-   met een kleurstaal, die meteen ook de legenda vervangen (die verbergen we daar). */
+/* Bijschrift onder de grafiek: op smal scherm past geen labelstrook naast de balken, dus
+   daar krijgen ze de volle breedte. De woorden 'te laat' en 'op tijd' staan sinds kort ín
+   de as (zie .dvb-tick i), dus hier blijft nog één regel over: wat de 0-lijn betekent.
+   Dat is precies wat het beeld zelf nooit kan zeggen. */
 .dvb-uitleg{ display:none; }
 @media (max-width:560px){
-  .dvb-chart{ --dvb-strook:8px; }
+  .dvb-chart{ --dvb-strook:8px; height:240px; }   /* de gewonnen hoogte gaat naar de balken */
   .dvb-lbl{ display:none; }
-  .dash-viz-legend{ display:none; }   /* de uitleg-regels hieronder dragen de kleuren al */
+  .dash-viz-legend{ display:none; }   /* de as en de uitleg-regel dragen de kleuren al */
   .dvb-uitleg{
     display:flex; flex-direction:column; gap:.35rem;
     margin-top:.7rem;
@@ -1979,17 +1973,31 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .dvb-uitleg .u-staal{
     flex-shrink:0; width:10px; height:10px; align-self:center;
   }
-  .dvb-uitleg .u-staal.s-laat{ background:var(--pink); }
-  .dvb-uitleg .u-staal.s-ok{ background:rgba(82,74,63,.35); }
   .dvb-uitleg .u-staal.s-lijn{ height:0; border-top:2px dashed rgba(200,32,84,.6); }
   .dvb-uitleg strong{ color:var(--ink); font-weight:600; }
+  /* Het antwoord hoort bóven de grafiek: tik je onderaan een balk, dan verschijnt het
+     anders precies achter je eigen duim. De wrap is al een flex-kolom. */
+  .dvb-readout{
+    order:-1; margin-top:0; margin-bottom:.7rem; padding-top:0; padding-bottom:.6rem;
+    border-top:none; border-bottom:1px solid var(--line);
+  }
 }
-/* As-waarden in de linkermarge: +6 boven, −6 onder (0 staat al op de lijn zelf). */
+/* As-waarden in de linkermarge, met het woord eronder. Die 56px gutter stond op een
+   telefoon vrijwel leeg terwijl de betekenis van de as ver eronder in een tekstblok zat.
+   Nu staat ze wáár ze hoort: bij de as zelf, en dat kost geen enkele pixel balkbreedte. */
 .dvb-tick{
   position:absolute; left:0; width:48px; text-align:right; pointer-events:none;
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.62rem; color:var(--ink-faint); font-variant-numeric:tabular-nums;
 }
+.dvb-tick i{
+  display:block; font-style:normal; font-size:.56rem; letter-spacing:.01em;
+  line-height:1.25; color:var(--ink-faint);
+}
+.dvb-tick.tick-nul{
+  color:var(--pink-text); font-weight:500; transform:translateY(-50%);
+}
+.dvb-tick.tick-nul i{ color:var(--pink-text); }
 .dvb-bar{
   flex:1 1 0; min-width:0; max-width:16px;
   position:relative;
@@ -2010,6 +2018,27 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.35); border-radius:0 0 2px 2px; }
 .dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:2px 2px 0 0; }
 .dvb-bar.active .dvb-bar-inner{ filter:brightness(1.2); box-shadow:0 0 0 1.5px var(--ink); }
+/* Geleidelijn over de volle hoogte bij de gekozen balk. De ring rond de balk alleen was
+   onvindbaar bij een zitting die exact op de deadline valt: die balk is maar 2px hoog. */
+.dvb-bar.active::before{
+  content:''; position:absolute; left:50%; top:0; bottom:0; width:1px;
+  transform:translateX(-50%);
+  background:var(--ink); opacity:.3; pointer-events:none;
+}
+/* Knipteken: de echte waarde valt buiten de schaal, dus onderbreken we de balk vlak vóór
+   de punt. Krantenconventie: het beeld geeft toe dat het niet verder kan, in plaats van
+   een uitschieter van 22 dagen even hoog te tekenen als een van 6. De exacte waarde staat
+   in de readout en in de tabel. Horizontale banden, dus ook op 9px breed leesbaar. */
+.dvb-bar.geknipt.late .dvb-bar-inner{
+  background:linear-gradient(to top,
+    var(--pink) calc(100% - 8px), transparent calc(100% - 8px),
+    transparent calc(100% - 5px), var(--pink) calc(100% - 5px));
+}
+.dvb-bar.geknipt.tijdig .dvb-bar-inner{
+  background:linear-gradient(to bottom,
+    rgba(82,74,63,.35) calc(100% - 8px), transparent calc(100% - 8px),
+    transparent calc(100% - 5px), rgba(82,74,63,.35) calc(100% - 5px));
+}
 /* Readout onder de grafiek: toont de gekozen zitting — werkt op hover én tik (mobiel) */
 .dvb-readout{
   margin-top:.85rem; padding-top:.7rem;
@@ -2051,6 +2080,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-modal-card .dvb-tick{ font-size:.7rem; }
 .dvb-modal-card .dvb-chart::after{ font-size:.7rem; }
 .dvb-modal-card .dvb-bar{ max-width:26px; min-width:7px; }
+/* Alleen in het dashboard vangt de grafiek de horizontale beweging op (kiezen van de
+   dichtstbijzijnde balk); verticaal scrollen blijft van de pagina. In de vergrote weergave
+   NIET: daar moet horizontaal vegen de tijdas scrollen. */
+#dashBars .dvb-chart{ touch-action:pan-y; }
 .dvb-readout .hint{ color:var(--ink-faint); }
 .dvb-readout strong{ color:var(--ink); font-weight:600; }
 .dvb-readout .ok{ color:var(--pink-text); }
