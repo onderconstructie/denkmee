@@ -1912,20 +1912,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   --deadline-days:8;
 }
 /* De hoogste y-as-waarde tonen we bewust niet meer als label: dat gaf te veel ruis
-   op de as. Enkel de deadline-lijn houdt haar waarde (zie ::after). */
+   op de as. Enkel de deadline-lijn houdt haar waarde (zie .tick-nul). */
 .dvb-chart::before{ content:none; }
-/* Y-as label op deadline-niveau, dynamisch */
-.dvb-chart::after{
-  content:attr(data-deadline);
-  position:absolute; left:0; top:var(--deadline-top, 50%); width:48px; text-align:right;
-  transform:translateY(-50%);
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.62rem; letter-spacing:.04em;
-  color:var(--pink-text);
-  font-variant-numeric:tabular-nums;
-  font-weight:500;
-  pointer-events:none;
-}
+/* De 0-waarde stond als ::after met attr(data-deadline). Nu een echt element (.tick-nul),
+   want er hoort een woord onder: op een telefoon is 'deadline' de sleutel tot het beeld. */
+.dvb-chart::after{ content:none; }
 /* ÉÉN visuele taal voor beide regimes: de 0-LIJN IS DE WETTELIJKE DEADLINE.
    Alles BOVEN nul = dagen te laat (roze zone), alles ONDER nul = binnen de termijn.
    Bij de agenda betekent 0 "8 dagen op voorhand" (negatief = nog vroeger, dus goed);
@@ -1943,9 +1934,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   pointer-events:none;
 }
 /* De te-laat-zone: alles boven de 0-lijn. */
+/* Lichter dan vroeger (.08): nu de as het woord 'te laat' draagt, hoeft dit vlak het niet
+   meer alleen te zeggen. Bij een orgaan met één late zitting op twintig was dat lege roze
+   vlak anders het grootste element in beeld, en dat leest als veel mis. */
 .dvb-zone{
   position:absolute; left:56px; right:0; top:0; height:var(--deadline-top, 50%);
-  background:rgba(255,0,102,.08);
+  background:rgba(255,0,102,.035);
   pointer-events:none;
 }
 /* De labels wonen in de gereserveerde strook rechts (de padding van de chart): daar komen
@@ -1959,15 +1953,15 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-lbl.lbl-telaat{ right:8px; top:8px; color:var(--pink-text); }
 .dvb-lbl.lbl-nul{ right:8px; top:calc(var(--deadline-top, 50%) + 6px); color:var(--pink-text); }
 .dvb-lbl.lbl-ok{ right:8px; bottom:8px; color:var(--ink-faint); }
-/* Bijschrift onder de grafiek: de mobiele plek voor de uitleg. Op smal scherm past geen
-   labelstrook naast 100+ balken (de rij met tussenruimtes is breder dan het scherm), dus
-   daar krijgen de balken de volle breedte en staat de uitleg eronder: drie heldere regels
-   met een kleurstaal, die meteen ook de legenda vervangen (die verbergen we daar). */
+/* Bijschrift onder de grafiek: op smal scherm past geen labelstrook naast de balken, dus
+   daar krijgen ze de volle breedte. De woorden 'te laat' en 'op tijd' staan sinds kort ín
+   de as (zie .dvb-tick i), dus hier blijft nog één regel over: wat de 0-lijn betekent.
+   Dat is precies wat het beeld zelf nooit kan zeggen. */
 .dvb-uitleg{ display:none; }
 @media (max-width:560px){
-  .dvb-chart{ --dvb-strook:8px; }
+  .dvb-chart{ --dvb-strook:8px; height:240px; }   /* de gewonnen hoogte gaat naar de balken */
   .dvb-lbl{ display:none; }
-  .dash-viz-legend{ display:none; }   /* de uitleg-regels hieronder dragen de kleuren al */
+  .dash-viz-legend{ display:none; }   /* de as en de uitleg-regel dragen de kleuren al */
   .dvb-uitleg{
     display:flex; flex-direction:column; gap:.35rem;
     margin-top:.7rem;
@@ -1979,17 +1973,31 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .dvb-uitleg .u-staal{
     flex-shrink:0; width:10px; height:10px; align-self:center;
   }
-  .dvb-uitleg .u-staal.s-laat{ background:var(--pink); }
-  .dvb-uitleg .u-staal.s-ok{ background:rgba(82,74,63,.35); }
   .dvb-uitleg .u-staal.s-lijn{ height:0; border-top:2px dashed rgba(200,32,84,.6); }
   .dvb-uitleg strong{ color:var(--ink); font-weight:600; }
+  /* Het antwoord hoort bóven de grafiek: tik je onderaan een balk, dan verschijnt het
+     anders precies achter je eigen duim. De wrap is al een flex-kolom. */
+  .dvb-readout{
+    order:-1; margin-top:0; margin-bottom:.7rem; padding-top:0; padding-bottom:.6rem;
+    border-top:none; border-bottom:1px solid var(--line);
+  }
 }
-/* As-waarden in de linkermarge: +6 boven, −6 onder (0 staat al op de lijn zelf). */
+/* As-waarden in de linkermarge, met het woord eronder. Die 56px gutter stond op een
+   telefoon vrijwel leeg terwijl de betekenis van de as ver eronder in een tekstblok zat.
+   Nu staat ze wáár ze hoort: bij de as zelf, en dat kost geen enkele pixel balkbreedte. */
 .dvb-tick{
   position:absolute; left:0; width:48px; text-align:right; pointer-events:none;
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.62rem; color:var(--ink-faint); font-variant-numeric:tabular-nums;
 }
+.dvb-tick i{
+  display:block; font-style:normal; font-size:.56rem; letter-spacing:.01em;
+  line-height:1.25; color:var(--ink-faint);
+}
+.dvb-tick.tick-nul{
+  color:var(--pink-text); font-weight:500; transform:translateY(-50%);
+}
+.dvb-tick.tick-nul i{ color:var(--pink-text); }
 .dvb-bar{
   flex:1 1 0; min-width:0; max-width:16px;
   position:relative;
@@ -2010,6 +2018,27 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.35); border-radius:0 0 2px 2px; }
 .dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:2px 2px 0 0; }
 .dvb-bar.active .dvb-bar-inner{ filter:brightness(1.2); box-shadow:0 0 0 1.5px var(--ink); }
+/* Geleidelijn over de volle hoogte bij de gekozen balk. De ring rond de balk alleen was
+   onvindbaar bij een zitting die exact op de deadline valt: die balk is maar 2px hoog. */
+.dvb-bar.active::before{
+  content:''; position:absolute; left:50%; top:0; bottom:0; width:1px;
+  transform:translateX(-50%);
+  background:var(--ink); opacity:.3; pointer-events:none;
+}
+/* Knipteken: de echte waarde valt buiten de schaal, dus onderbreken we de balk vlak vóór
+   de punt. Krantenconventie: het beeld geeft toe dat het niet verder kan, in plaats van
+   een uitschieter van 22 dagen even hoog te tekenen als een van 6. De exacte waarde staat
+   in de readout en in de tabel. Horizontale banden, dus ook op 9px breed leesbaar. */
+.dvb-bar.geknipt.late .dvb-bar-inner{
+  background:linear-gradient(to top,
+    var(--pink) calc(100% - 8px), transparent calc(100% - 8px),
+    transparent calc(100% - 5px), var(--pink) calc(100% - 5px));
+}
+.dvb-bar.geknipt.tijdig .dvb-bar-inner{
+  background:linear-gradient(to bottom,
+    rgba(82,74,63,.35) calc(100% - 8px), transparent calc(100% - 8px),
+    transparent calc(100% - 5px), rgba(82,74,63,.35) calc(100% - 5px));
+}
 /* Readout onder de grafiek: toont de gekozen zitting — werkt op hover én tik (mobiel) */
 .dvb-readout{
   margin-top:.85rem; padding-top:.7rem;
@@ -2051,6 +2080,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-modal-card .dvb-tick{ font-size:.7rem; }
 .dvb-modal-card .dvb-chart::after{ font-size:.7rem; }
 .dvb-modal-card .dvb-bar{ max-width:26px; min-width:7px; }
+/* Alleen in het dashboard vangt de grafiek de horizontale beweging op (kiezen van de
+   dichtstbijzijnde balk); verticaal scrollen blijft van de pagina. In de vergrote weergave
+   NIET: daar moet horizontaal vegen de tijdas scrollen. */
+#dashBars .dvb-chart{ touch-action:pan-y; }
 .dvb-readout .hint{ color:var(--ink-faint); }
 .dvb-readout strong{ color:var(--ink); font-weight:600; }
 .dvb-readout .ok{ color:var(--pink-text); }
@@ -5689,15 +5722,20 @@ function renderDashboard(){
   // Per zitting tekenen we de AFWIJKING t.o.v. de wettelijke termijn:
   //   · agenda (before):  afwijking = 8 − (dagen vooraf)  → positief = te laat
   //   · besluiten (after): afwijking = (dagen nadien) − 10 → positief = te laat
-  // Boven nul = de roze te-laat-zone, onder nul = binnen de termijn. Schaal: ±6 dagen
-  // (uitschieters klemmen we af; de echte waarde staat in de tooltip en de tabel).
-  const UP_MAX = 6, DOWN_MAX = 6;
-  const ZERO_TOP = UP_MAX / (UP_MAX + DOWN_MAX) * 100;   // 0-lijn op 50%
+  // Boven nul = de roze te-laat-zone, onder nul = binnen de termijn.
 
   // Enkel gepubliceerde stukken in de grafiek: een 'verwacht'-stipje zegt niets. Het
   // tegeltje 'nog niet gepubliceerd' bovenaan houdt die telling wél bij.
   const sortedAsc = [...computed].filter(s => s._days !== null)
     .sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  // De schaal rekent op ALLE zittingen van dit orgaan, niet op de twintig die op een smal
+  // scherm getoond worden: zo verspringt de y-as niet als je de grafiek vergroot, en blijft
+  // het beeld dat je uitvergroot hetzelfde beeld. Wat er dan nog buiten valt, krijgt een
+  // knipteken (zie dvbBouwBalken).
+  const SCHAAL = dvbSchaal(sortedAsc, direction, deadlineDays);
+  const UP_MAX = SCHAAL, DOWN_MAX = SCHAAL;
+  const ZERO_TOP = UP_MAX / (UP_MAX + DOWN_MAX) * 100;   // 0-lijn op 50%
 
   // Op een telefoon is de strook ongeveer 220px breed. Met 114 balken eist de tussenruimte
   // alleen al 226px op, en krimpt elke balk tot 0,00px: een lege doos onder de belofte
@@ -5727,27 +5765,29 @@ function renderDashboard(){
 
   $('dashBars').innerHTML = `
     <div class="dvb-chartwrap">
-      <div class="dvb-chart" data-deadline="0" style="--deadline-top:${ZERO_TOP}%">
+      <div class="dvb-chart" style="--deadline-top:${ZERO_TOP}%">
         <div class="dvb-zone" aria-hidden="true"></div>
         <div class="dvb-axis" aria-hidden="true"></div>
         <div class="dvb-deadline" aria-hidden="true"></div>
-        <span class="dvb-tick" style="top:2px" aria-hidden="true">+${UP_MAX}</span>
-        <span class="dvb-tick" style="bottom:6px" aria-hidden="true">−${DOWN_MAX}</span>
+        ${dvbAsHTML(UP_MAX, DOWN_MAX, ZERO_TOP)}
         <span class="dvb-lbl lbl-telaat" aria-hidden="true">dagen te laat</span>
         <span class="dvb-lbl lbl-nul" aria-hidden="true">${nulLabel}</span>
         <span class="dvb-lbl lbl-ok" aria-hidden="true">binnen de termijn</span>
         ${barsHTML}
       </div>
-      <div class="dvb-uitleg" aria-hidden="true">
-        <span class="u-rij"><i class="u-staal s-lijn"></i><span>de 0-lijn is de <strong>wettelijke deadline</strong>: ${docLabel} ${deadlineDays} dagen ${direction === 'before' ? 'op voorhand' : 'nadien'}</span></span>
-        <span class="u-rij"><i class="u-staal s-laat"></i><span>steekt een balk erbóven uit, dan is de stad <strong>te laat</strong></span></span>
-        <span class="u-rij"><i class="u-staal s-ok"></i><span>hangt hij eronder, dan is het <strong>binnen de termijn</strong></span></span>
+      <div class="dvb-uitleg">
+        <span class="u-rij"><i class="u-staal s-lijn" aria-hidden="true"></i><span>de 0-lijn is de <strong>wettelijke deadline</strong>: ${docLabel} ${deadlineDays} dagen ${direction === 'before' ? 'op voorhand' : 'nadien'}</span></span>
       </div>
-      <div class="dvb-readout" id="dvbReadout"><span class="hint">Beweeg of tik op een balk voor de details van die zitting.</span></div>
+      <div class="dvb-readout" id="dvbReadout"></div>
       ${dvbKort ? `<div class="dvb-knip">De laatste ${DVB_SMAL_AANTAL} van ${sortedAsc.length} zittingen.</div>
       <button type="button" class="dvb-meer" onclick="dvbNaarTabel()">Alle ${sortedAsc.length} in de tabel →</button>` : ''}
     </div>
     <div class="dvb-recent">${recentHTML}</div>`;
+
+  // De readout begint niet leeg en niet met een instructie ("beweeg" bestaat niet op een
+  // telefoon), maar met de jongste zitting. Zo staat er meteen een feit, en toont de
+  // gemarkeerde balk vanzelf wat een tik oplevert.
+  dvbVulReadoutMetLaatste($('dashBars'), $('dvbReadout'));
 
   // Voor de vergrote weergave: de VOLLEDIGE reeks + de context van de huidige tab.
   DVB_STAND = { zittingen: sortedAsc, direction, deadlineDays, nulLabel,
@@ -5800,14 +5840,38 @@ const TIJD_STATUS_LBL = { 'tijdig': 'tijdig', 'te-laat': 'te laat', 'verwacht': 
 const DVB_SMAL_AANTAL = 20;
 let DVB_STAND = null;   // laatste render-context, voor de vergrote weergave
 
+// De afwijking van één zitting t.o.v. de wettelijke termijn, in dagen.
+// Positief = te laat, negatief = binnen de termijn. Eén definitie voor schaal en balk.
+function dvbAfwijking(s, direction, deadlineDays){
+  return direction === 'before' ? deadlineDays - s._days : s._days - deadlineDays;
+}
+// De schaal van de y-as komt uit de data, maar groeit alleen: 6 dagen blijft de bodem.
+// Waarom niet krimpen: dan zou een orgaan dat structureel één dag binnen de termijn zit
+// even dramatisch ogen als een dat er vijftien over gaat, en dat is een hiërarchie die er
+// niet is. Waarom op het 90e percentiel en niet op het maximum: zo houden de gewone
+// zittingen hun onderlinge verschil zichtbaar, en valt een echte uitschieter op als
+// uitschieter (met knipteken) in plaats van de hele grafiek plat te drukken. Vaste trap,
+// zodat de as-waarden leesbare getallen blijven.
+const DVB_TRAP = [6, 10, 15, 25];
+function dvbSchaal(zittingen, direction, deadlineDays){
+  const afw = zittingen.map(s => Math.abs(dvbAfwijking(s, direction, deadlineDays)))
+                       .sort((a, b) => a - b);
+  if(!afw.length) return DVB_TRAP[0];
+  const p90 = afw[Math.min(afw.length - 1, Math.floor(afw.length * 0.9))];
+  return DVB_TRAP.find(t => t >= p90) || DVB_TRAP[DVB_TRAP.length - 1];
+}
 // Bouwt de balken van de deadline-grafiek. Gedeeld door het dashboard en de vergrote
 // weergave, zodat de twee nooit uit elkaar kunnen groeien.
 function dvbBouwBalken(zittingen, direction, deadlineDays, UP_MAX, DOWN_MAX, ZERO_TOP){
   return zittingen.map(s => {
     let tip = `${formatShort(s.date)}, `;
-    const afwijking = direction === 'before' ? deadlineDays - s._days : s._days - deadlineDays;
-    const h = Math.min(Math.abs(afwijking), afwijking > 0 ? UP_MAX : DOWN_MAX) / (UP_MAX + DOWN_MAX) * 100;
-    const cls = s._status === 'tijdig' ? 'tijdig' : 'late';
+    const afwijking = dvbAfwijking(s, direction, deadlineDays);
+    const grens = afwijking > 0 ? UP_MAX : DOWN_MAX;
+    // Valt de echte waarde buiten de schaal, dan tekent de balk de grens en zegt hij dat
+    // ook: zonder knipteken lijkt 22 dagen te laat precies even erg als 6.
+    const geknipt = Math.abs(afwijking) > grens;
+    const h = Math.min(Math.abs(afwijking), grens) / (UP_MAX + DOWN_MAX) * 100;
+    const cls = (s._status === 'tijdig' ? 'tijdig' : 'late') + (geknipt ? ' geknipt' : '');
     const stijl = afwijking > 0
       ? `bottom:${(100 - ZERO_TOP).toFixed(1)}%; height:${h.toFixed(1)}%`   // te laat: omhoog de zone in
       : `top:${ZERO_TOP.toFixed(1)}%; height:${h.toFixed(1)}%`;             // binnen termijn: omlaag
@@ -5820,6 +5884,7 @@ function dvbBouwBalken(zittingen, direction, deadlineDays, UP_MAX, DOWN_MAX, ZER
         ? `besluitenlijst ${dgn(s._days)} na zitting (binnen ${deadlineDays} dagen)`
         : `besluitenlijst ${dgn(s._days)} na zitting (${dgn(s._days - deadlineDays)} te laat)`;
     }
+    if(geknipt) tip += ', valt buiten de schaal';
     return `
       <div class="dvb-bar ${cls}" data-tip="${escape(tip)}">
         <div class="dvb-bar-inner" style="${stijl}"></div>
@@ -5827,6 +5892,33 @@ function dvbBouwBalken(zittingen, direction, deadlineDays, UP_MAX, DOWN_MAX, ZER
   }).join('');
 }
 
+// De y-as: het getal én het woord dat zegt wat dat getal betekent. Gedeeld door het
+// dashboard en de vergrote weergave.
+function dvbAsHTML(UP_MAX, DOWN_MAX, ZERO_TOP){
+  return `
+    <span class="dvb-tick" style="top:2px" aria-hidden="true">+${UP_MAX}<i>te laat</i></span>
+    <span class="dvb-tick tick-nul" style="top:${ZERO_TOP}%" aria-hidden="true">0<i>deadline</i></span>
+    <span class="dvb-tick" style="bottom:6px" aria-hidden="true">−${DOWN_MAX}<i>op tijd</i></span>`;
+}
+// Zet de readout meteen op de jongste zitting (de laatste balk), zodat er een feit staat
+// waar anders een instructie of leegte stond.
+function dvbVulReadoutMetLaatste(container, readout){
+  if(!container || !readout) return;
+  const balken = container.querySelectorAll('.dvb-bar');
+  if(balken.length) dvbReadoutToon(container, readout, balken[balken.length - 1]);
+}
+// Op een telefoon is een balk ongeveer 9px breed: precies mikken is onbegonnen werk, en
+// tussen de balken ligt dode ruimte. Daarom kiest een aanraking (of een sleep) de
+// DICHTSTBIJZIJNDE balk: de hele strook is raak, en slepen leest de reeks af.
+function dvbKiesDichtstbij(container, readout, clientX){
+  let best = null, bestAfstand = Infinity;
+  container.querySelectorAll('.dvb-bar').forEach(b => {
+    const r = b.getBoundingClientRect();
+    const d = Math.abs((r.left + r.right) / 2 - clientX);
+    if(d < bestAfstand){ bestAfstand = d; best = b; }
+  });
+  if(best) dvbReadoutToon(container, readout, best);
+}
 // Readout-regel onder een grafiek: markeer de gekozen balk en toon zijn details.
 // Gedeeld door het dashboard (hover én tik) en de vergrote weergave.
 function dvbReadoutToon(container, readout, el){
@@ -5848,18 +5940,17 @@ function openDvbVergroot(){
   const st = DVB_STAND;
   $('dvbModalLbl').textContent = `${st.label} · alle ${st.zittingen.length} zittingen`;
   $('dvbModalChart').innerHTML = `
-    <div class="dvb-chart" data-deadline="0" style="--deadline-top:${st.ZERO_TOP}%; --dvb-n:${st.zittingen.length}">
+    <div class="dvb-chart" style="--deadline-top:${st.ZERO_TOP}%; --dvb-n:${st.zittingen.length}">
       <div class="dvb-zone" aria-hidden="true"></div>
       <div class="dvb-axis" aria-hidden="true"></div>
       <div class="dvb-deadline" aria-hidden="true"></div>
-      <span class="dvb-tick" style="top:2px" aria-hidden="true">+${st.UP_MAX}</span>
-      <span class="dvb-tick" style="bottom:6px" aria-hidden="true">−${st.DOWN_MAX}</span>
+      ${dvbAsHTML(st.UP_MAX, st.DOWN_MAX, st.ZERO_TOP)}
       <span class="dvb-lbl lbl-telaat" aria-hidden="true">dagen te laat</span>
       <span class="dvb-lbl lbl-nul" aria-hidden="true">${st.nulLabel}</span>
       <span class="dvb-lbl lbl-ok" aria-hidden="true">binnen de termijn</span>
       ${dvbBouwBalken(st.zittingen, st.direction, st.deadlineDays, st.UP_MAX, st.DOWN_MAX, st.ZERO_TOP)}
     </div>`;
-  $('dvbModalReadout').innerHTML = '<span class="hint">Beweeg of tik op een balk voor de details van die zitting.</span>';
+  dvbVulReadoutMetLaatste($('dvbModalChart'), $('dvbModalReadout'));
   $('dvbModal').hidden = false;
   document.body.style.overflow = 'hidden';
   const sc = $('dvbModalScroll');
@@ -5928,8 +6019,27 @@ function setupTijdTabs(){
   // Gedelegeerd op #dashBars (blijft staan, ook al herbouwt renderDashboard de inhoud).
   const bars = $('dashBars');
   if(bars){
-    const show = el => dvbReadoutToon(bars, document.getElementById('dvbReadout'), el);
-    bars.addEventListener('pointerover', e => { const b = e.target.closest('.dvb-bar'); if(b) show(b); });
+    const readout = () => document.getElementById('dvbReadout');
+    const show = el => dvbReadoutToon(bars, readout(), el);
+    // Muis: exact het staafje onder de aanwijzer (daar is precisie gratis).
+    bars.addEventListener('pointerover', e => {
+      if(e.pointerType && e.pointerType !== 'mouse') return;
+      const b = e.target.closest('.dvb-bar'); if(b) show(b);
+    });
+    // Vinger of pen: de dichtstbijzijnde balk, en wie sleept leest de reeks af. De
+    // pointer-capture houdt het slepen bij de grafiek; begint de pagina toch verticaal
+    // te scrollen (touch-action:pan-y), dan komt er een pointercancel en stoppen we.
+    let sleept = false;
+    bars.addEventListener('pointerdown', e => {
+      if(!e.target.closest('.dvb-chart')) return;
+      sleept = true;
+      try { bars.setPointerCapture(e.pointerId); } catch(_){ }
+      dvbKiesDichtstbij(bars, readout(), e.clientX);
+    });
+    bars.addEventListener('pointermove', e => { if(sleept) dvbKiesDichtstbij(bars, readout(), e.clientX); });
+    const stop = () => { sleept = false; };
+    bars.addEventListener('pointerup', stop);
+    bars.addEventListener('pointercancel', stop);
     bars.addEventListener('click', e => { const b = e.target.closest('.dvb-bar'); if(b) show(b); });
   }
   // Zelfde readout-gedrag in de vergrote weergave (eigen container, eigen regel).
