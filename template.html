@@ -1751,14 +1751,39 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    want de twee groepen meten iets anders. Het omhulsel #tijTabs draagt daarom zelf geen
    kader; elk .tij-blok draagt het. (De andere gebruikers van .tij-tabs, de tabbladen van
    'Op de agenda' en 'Recent beslist', blijven ongemoeid: die meten wél hetzelfde.) */
-#tijTabs{ display:block; border:none; border-radius:0; overflow:visible; margin-bottom:0; }
+#tijTabs{ display:block; border:none; border-radius:0; overflow:visible; margin-bottom:1.6rem; }
+/* Het blok is zo breed als zijn knoppen, niet zo breed als de pagina. Rekten de knoppen
+   mee, dan werd één knop op een laptop 654px met een naam van 105px erin: een lege doos.
+   Vaste module van 16rem, dus twee blokken van verschillende lengte met dezelfde maat. */
 .tij-blok{
   display:flex; gap:0; flex-wrap:nowrap;
+  width:max-content; max-width:100%;
   border:1.5px solid var(--ink);
   border-radius:var(--r-chip);
   overflow:hidden;
 }
+#tijTabs .tij-tab{ flex:0 0 16rem; }
 .tij-blok .tij-tab + .tij-tab{ border-left:1.5px solid var(--ink); }
+/* De knop toont overal hetzelfde: de naam links, de uitkomst rechts. Op een laptop stond
+   daar alleen een naam met een regeltje dat de kop erboven herhaalde, dus zonder cijfer.
+   Eén ontwerp voor beide schermen leest rustiger dan twee. */
+#tijTabs .tij-tab{
+  flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem;
+  padding:.85rem 1.1rem;
+}
+.tij-tab-score{
+  display:block; flex-shrink:0; text-align:right;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  color:var(--ink); font-variant-numeric:tabular-nums; line-height:1;
+}
+.tij-tab-score strong{ font-size:1.65rem; font-weight:300; letter-spacing:-.02em; }
+.tij-tab-score .tts-pct{ font-size:.85rem; font-weight:400; margin-left:.06em; color:var(--ink-dim); }
+.tij-tab-score .tts-breuk{ display:block; margin-top:.3rem; font-size:.66rem; color:var(--ink-faint); }
+.tij-tab.active .tij-tab-score{ color:var(--paper); }
+.tij-tab.active .tij-tab-score .tts-pct{ color:var(--op-eiland-65); }
+.tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
+/* De meta-regel in deze knoppen ('8 dagen · agenda') staat sinds de groepskoppen dubbel. */
+#tijTabs .tij-tab-meta{ display:none; }
 .tij-tab{
   flex:1; min-width:0;
   display:flex; flex-direction:column;
@@ -1820,7 +1845,6 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* De score op de knop zelf. Zonder dit moest je vijf keer tikken en telkens een scherm
    terugscrollen om te vergelijken, terwijl de cijfers al klaarstaan. Alleen op smal scherm:
    boven 900px staan de vijf standen op één rij en is daar geen breedte voor. */
-.tij-tab-score{ display:none; }
 /* De kop boven elk blok zegt wát er gemeten wordt, en is het enige dat dat zegt: er staat
    geen uitleg-zin meer naast. Een echte h3, ook omdat een schermlezer de sectie anders als
    één ononderbroken blok kreeg. Het cijfer ervoor telt de twee metingen zoals de reuzen-
@@ -1833,10 +1857,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-weight:400; letter-spacing:0;
 }
 .tij-groep:first-child{ margin-top:0; }
-.tg-num{
-  font-size:1.5rem; font-weight:300; line-height:1; color:var(--pink);
-  font-variant-numeric:tabular-nums;
-}
+.tg-ic{ width:20px; height:20px; flex:none; color:var(--pink); align-self:center; }
 .tg-wat{ font-size:1rem; font-weight:600; color:var(--ink); letter-spacing:-.01em; }
 .tg-termijn{
   font-size:.74rem; color:var(--ink-dim); letter-spacing:.02em;
@@ -1848,7 +1869,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   /* Op elk kind, niet op .tij-tab + .tij-tab: in de accordeon schuift het dashboard tussen de
      tabs, en dan is de tab eronder niet meer aangrenzend en zou zijn scheidingslijn wegvallen. */
   .rb-tabs > * + *{ border-top:1.5px solid var(--ink); }
-  .tij-blok{ flex-direction:column; }
+  /* Op een telefoon staan de knoppen onder elkaar en nemen ze de volle breedte: de vaste
+     module van 16rem is een breedschermregel, hier zou ze een smalle kolom maken. */
+  .tij-blok{ flex-direction:column; width:auto; }
+  #tijTabs .tij-tab{ flex:0 0 auto; }
   .tij-blok .tij-tab + .tij-tab{ border-left:none; }
   .tij-blok > * + *{ border-top:1.5px solid var(--ink); }
   .tij-tab-meta{ display:none; }
@@ -1970,7 +1994,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   position:relative;
   min-width:0;
   height:170px;
-  display:flex; align-items:end; gap:2px;
+  /* space-between, niet flex-start: elke balk is geplafonneerd op 16px, dus bij een korte
+     reeks (17 zittingen op een breed scherm) klonterden ze links samen en bleef rechts een
+     lege helft over. Nu spannen ze altijd de volle breedte, en dus klopt de tijdas eronder:
+     het eerste label staat boven de eerste balk, het laatste boven de laatste. */
+  display:flex; align-items:end; justify-content:space-between; gap:2px;
   /* Linkergutter voor de as-waarden; rechts een GERESERVEERDE labelstrook waar de balken
      nooit komen: zo staat er gegarandeerd geen tekst bovenop een balk, ook niet in een
      dichtbevolkte grafiek. Geen bodempadding: balken en 0-lijn delen één coördinatenstelsel. */
@@ -2026,7 +2054,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    werd verborgen met precies dat dode blok als motivering. De as draagt nu de woorden
    ('te laat', 'deadline', 'op tijd'); de legenda draagt de kleuren en blijft dus staan. */
 @media (max-width:560px){
-  .dvb-chart{ --dvb-strook:8px; height:240px; }   /* de gewonnen hoogte gaat naar de balken */
+  /* De strookbreedte op de WRAP en niet alleen op de grafiek: de tijdas is een zusje van de
+     grafiek, geen kind, en erfde de smalle strook dus niet. Ze viel terug op de brede
+     labelstrook van 146px, waardoor het einddatum-label los van de laatste balk stond. */
+  .dvb-chartwrap{ --dvb-strook:8px; }
+  .dvb-chart{ height:240px; }   /* de gewonnen hoogte gaat naar de balken */
   .dvb-lbl{ display:none; }
   /* Enige plek waar grijs en roze een betekenis krijgen, dus hier NIET verbergen. */
   .dash-viz-legend{ font-size:.66rem; gap:.9rem; }
@@ -2112,7 +2144,13 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border-radius:var(--r-chip);
   font-family:'JetBrains Mono', ui-monospace, monospace;
   line-height:1.5; color:var(--ink-2); min-height:3.4em;
+  transition:background .18s, border-color .18s;
 }
+/* De kleur van de gekozen dag, in dezelfde zeer lichte tinten als de grafiek: de roze zone
+   boven de deadline (rgba(255,0,102,.035)) en het warmgrijs van de tijdige balken. Iets
+   voller dan in de grafiek, want hier is het een vlak van één regel en geen halve grafiek. */
+.dvb-readout.is-laat{ background:rgba(255,0,102,.07); border-color:rgba(255,0,102,.22); }
+.dvb-readout.is-tijdig{ background:rgba(82,74,63,.06); border-color:rgba(82,74,63,.18); }
 .dvr-datum{
   display:block; font-size:.95rem; font-weight:600; color:var(--ink); letter-spacing:-.01em;
   font-variant-numeric:tabular-nums;
@@ -2123,11 +2161,17 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    De linkermarge is dezelfde 56px als de y-as, zodat de eerste datum onder de eerste balk
    staat. */
 .dvb-tijdas{
-  display:flex; justify-content:space-between;
-  margin-top:.4rem; padding:0 var(--dvb-strook, 146px) 0 56px;
+  display:flex; justify-content:space-between; align-items:center; gap:.8rem;
+  margin-top:.55rem; padding:0 var(--dvb-strook, 146px) 0 56px;
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.64rem; letter-spacing:.04em; color:var(--ink-faint);
+  font-size:.66rem; letter-spacing:.04em; color:var(--ink-faint);
+  white-space:nowrap;
 }
+/* Een haarlijn tussen begin en eind maakt er een as van in plaats van twee losse datums. */
+.dvb-tijdas::before{
+  content:''; order:1; flex:1 1 auto; height:1px; background:var(--line);
+}
+.dvb-tijdas span:last-child{ order:2; }
 .dvb-modal-card .dvb-tijdas{ padding:0 146px 0 56px; }
 /* .dvb-knip en .dvb-meer zijn opgegaan in de actiebalk hieronder: de melding over wat je
    niet ziet staat nu als subregel op de knop die het wél toont. */
@@ -5854,7 +5898,7 @@ function renderTijdTabScores(){
     const maakGroep = (nummer, wat, termijn, leden, voorNode) => {
       const h = document.createElement('h3');
       h.className = 'tij-groep';
-      h.innerHTML = `<span class="tg-num" aria-hidden="true">${nummer}</span>`
+      h.innerHTML = `<svg class="tg-ic" aria-hidden="true"><use href="#${nummer}"/></svg>`
         + `<span class="tg-wat">${wat}</span><span class="tg-termijn">${termijn}</span>`;
       wrap.insertBefore(h, voorNode);
       const blok = document.createElement('div');
@@ -5862,8 +5906,11 @@ function renderTijdTabScores(){
       wrap.insertBefore(blok, voorNode);
       leden.forEach(t => blok.appendChild(t));     // verplaatst de knop, behoudt zijn listeners
     };
-    if(tabs[0]) maakGroep('1', 'De agenda', '8 dagen vóór de zitting', tabs.slice(0, 2), tabs[0]);
-    if(tabs[2]) maakGroep('2', 'De besluitenlijst', '10 dagen na de zitting', tabs.slice(2), tabs[2]);
+    // Het icoon zegt wélk stuk gemeten wordt: de kalender voor de agenda, de afvinklijst
+    // voor de besluitenlijst. Dat leest sneller dan een telcijfer, en het zijn de iconen
+    // die elders op de site al voor die twee stukken staan.
+    if(tabs[0]) maakGroep('ic-agenda', 'De agenda', '8 dagen vóór de zitting', tabs.slice(0, 2), tabs[0]);
+    if(tabs[2]) maakGroep('ic-doc-lijst', 'De besluitenlijst', '10 dagen na de zitting', tabs.slice(2), tabs[2]);
   }
   wrap.querySelectorAll('.tij-tab').forEach(tab => {
     let el = tab.querySelector('.tij-tab-score');
@@ -6163,7 +6210,13 @@ function dvbReadoutToon(container, readout, el){
   const i = tip.indexOf(', ');
   const head = i >= 0 ? tip.slice(0, i) : tip;
   const rest = i >= 0 ? tip.slice(i + 2) : '';
-  const cls = el.classList.contains('late') ? 'bad' : el.classList.contains('tijdig') ? 'ok' : 'hint';
+  const laat = el.classList.contains('late');
+  const cls = laat ? 'bad' : el.classList.contains('tijdig') ? 'ok' : 'hint';
+  // Het kadertje neemt de kleur van de gekozen balk over, in de zeer lichte versie die de
+  // grafiek zelf gebruikt: koos je een late zitting, dan kleurt het als de roze zone; koos
+  // je een tijdige, dan als het warmgrijs van die balken. Zo hoort het bij wat je aantikte.
+  readout.classList.toggle('is-laat', laat);
+  readout.classList.toggle('is-tijdig', !laat);
   // Datum op zijn eigen regel en groter: dit is het antwoord op je tik, geen lopende tekst.
   readout.innerHTML = `<span class="dvr-datum">${escape(head)}</span>`
     + (rest ? `<span class="dvr-detail ${cls}">${escape(rest)}</span>` : '');
