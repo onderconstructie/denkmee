@@ -1873,6 +1873,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
      natuurlijk aflopen, dan paste de ene kop wél op één regel en de andere niet, en stond de
      tweede rechts uitgelijnd onder zijn eigen kop. Twee koppen horen dezelfde vorm te hebben. */
   .tg-termijn{ margin-left:0; flex-basis:100%; }
+  /* De grafiektitel herhaalde in kapitalen wat de kop hierboven al zegt; op 375px kostte dat
+     drie regels. Alleen 'Per zitting' blijft staan. */
+  .viz-detail{ display:none; }
 }
 
 .dashboard{
@@ -2029,10 +2032,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .dash-viz-legend{ font-size:.66rem; gap:.9rem; }
   /* Het antwoord hoort bóven de grafiek: tik je onderaan een balk, dan verschijnt het
      anders precies achter je eigen duim. De wrap is al een flex-kolom. */
-  .dvb-readout{
-    order:-1; margin-top:0; margin-bottom:.7rem; padding-top:0; padding-bottom:.6rem;
-    border-top:none; border-bottom:1px solid var(--line);
-  }
+  .dvb-readout{ order:-1; margin-top:0; margin-bottom:.8rem; }
 }
 /* As-waarden in de linkermarge, met het woord eronder. Die 56px gutter stond op een
    telefoon vrijwel leeg terwijl de betekenis van de as ver eronder in een tekstblok zat.
@@ -2102,13 +2102,33 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
     rgba(82,74,63,.65) calc(100% - 8px), transparent calc(100% - 8px),
     transparent calc(100% - 5px), rgba(82,74,63,.65) calc(100% - 5px));
 }
-/* Readout onder de grafiek: toont de gekozen zitting — werkt op hover én tik (mobiel) */
+/* De gekozen zitting: het antwoord op je tik of je muis. Stond hier als gewone tekstregel
+   tussen twee haarlijnen en verdween daardoor in het blok, terwijl het het enige element is
+   dat op jouw handeling reageert. Nu een eigen kaartje op papier-2, met de datum als kop. */
 .dvb-readout{
-  margin-top:.85rem; padding-top:.7rem;
-  border-top:1px solid var(--line);
+  margin-top:.85rem; padding:.6rem .8rem;
+  background:var(--paper-2);
+  border:1px solid var(--line-kaart);
+  border-radius:var(--r-chip);
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.74rem; line-height:1.5; color:var(--ink-2); min-height:2.4em;
+  line-height:1.5; color:var(--ink-2); min-height:3.4em;
 }
+.dvr-datum{
+  display:block; font-size:.95rem; font-weight:600; color:var(--ink); letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+}
+.dvr-detail{ display:block; margin-top:.15rem; font-size:.74rem; }
+/* Tijdas onder de grafiek: van wanneer tot wanneer loopt deze reeks. Stond er niet, dus je
+   kon niet zien of de balken twee maanden of twee jaar beslaan. Twee datums, geen zin.
+   De linkermarge is dezelfde 56px als de y-as, zodat de eerste datum onder de eerste balk
+   staat. */
+.dvb-tijdas{
+  display:flex; justify-content:space-between;
+  margin-top:.4rem; padding:0 var(--dvb-strook, 146px) 0 56px;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.64rem; letter-spacing:.04em; color:var(--ink-faint);
+}
+.dvb-modal-card .dvb-tijdas{ padding:0 146px 0 56px; }
 /* .dvb-knip en .dvb-meer zijn opgegaan in de actiebalk hieronder: de melding over wat je
    niet ziet staat nu als subregel op de knop die het wél toont. */
 /* Eén regel onder de grafiek, en alleen wanneer er iets te melden valt: dat de reeks
@@ -2168,7 +2188,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-family:inherit; font-size:.7rem; line-height:1.5; color:var(--ink-dim);
   transition:color .15s;
 }
+/* De datum krijgt een stippellijn onder zich: zonder dat zag niemand dat je deze regels kunt
+   aantikken om de bijbehorende balk aan te wijzen. Geen knopvorm, wel een leesbaar signaal. */
+.dvb-recent-link .dvr-datum-l{ border-bottom:1px dotted var(--line-strong); padding-bottom:1px; }
 .dvb-recent-link .dvr-laat{ color:var(--pink-text); }
+.dvb-recent-link:hover .dvr-datum-l{ border-bottom-color:var(--pink); }
 .dvb-recent-link:hover{ color:var(--ink); }
 .dvb-recent-link:hover .dvr-laat{ color:var(--pink); }
 .dvb-recent-link:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
@@ -2228,6 +2252,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .dash-secondary{ display:block; background:var(--paper); padding:1.1rem 1.3rem; }
   .dash-cell{ display:none; }
   .dash-kort{ display:block; }
+  .dash-kort[hidden]{ display:none; }
+  /* Niets te melden, dus ook geen lege doos: het blok verdwijnt mee. De klasse komt uit
+     renderDashboard, zodat dit ook werkt zonder :has()-ondersteuning. */
+  .dash-secondary.leeg-op-smal{ display:none; }
 }
 
 /* ============================================================
@@ -4351,10 +4379,13 @@ a, button, summary, input, label{ touch-action:manipulation; }
     </div>
 
     <div class="dash-secondary">
-      <!-- Op smal scherm vervangt deze ene regel de tegels hiernaast: dezelfde cijfers,
-           maar als zin, want de labels braken daar in drie regels van 10px. -->
+      <!-- Op smal scherm vervangt deze ene regel de tegels hiernaast. Ze verschijnt alleen
+           als er iets te melden valt: staat alles online, dan is zwijgen het juiste bericht. -->
       <p class="dash-kort" id="dashKort"></p>
-      <div class="dash-cell">
+      <!-- De tegel 'dagen gemiddeld' is geschrapt. Bij de raden publiceert de stad vrijwel
+           altijd exact op de laatste toegelaten dag, dus dat gemiddelde landt per definitie
+           op de termijn zelf en voegt niets toe aan het percentage ernaast. -->
+      <div class="dash-cell" hidden>
         <div class="dash-cell-num tnum" id="dashAvg">—</div>
         <div class="dash-cell-lbl" id="dashAvgLbl">dagen op voorsprong<br>gemiddeld</div>
       </div>
@@ -5754,6 +5785,11 @@ let TIJD_ACTIVE_ORGAAN = 'Gemeenteraad';
 
 // "1 dag" en niet "1 dagen": overal waar we dagen tellen in het dashboard.
 function dgn(n){ return `${n} ${n === 1 ? 'dag' : 'dagen'}`; }
+// "mrt 2026" voor de tijdas onder de grafiek: de periode is een maand, geen dag.
+const MAAND_KORT = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+function maandJaar(iso){
+  return iso ? `${MAAND_KORT[+iso.slice(5, 7) - 1]} ${iso.slice(0, 4)}` : '';
+}
 // De rekenkern van de tijdigheidsmeting, apart gezet omdat twee plekken hem nodig hebben:
 // het dashboard zelf én de score op elke orgaanknop. Zo kan de knop nooit iets anders
 // beweren dan de tegel eronder: het is letterlijk dezelfde noemer.
@@ -5857,18 +5893,23 @@ function renderDashboard(){
     : `dagen ná zitting<br>gemiddeld`;
   $('dashLate').textContent = late;
   $('dashWait').textContent = wait;
-  // Dezelfde twee cijfers als één zin, voor het smalle scherm (zie .dash-kort).
-  const avgNl = String(avg).replace('.', ',');
-  $('dashKort').innerHTML = past.length
-    ? `Gemiddeld <strong>${avgNl} dagen</strong> ${direction === 'before' ? 'vóór de zitting' : 'ná de zitting'}. `
-      + (wait ? `<strong>${wait}</strong> ${wait === 1 ? 'zitting is' : 'zittingen zijn'} nog niet gepubliceerd.`
-              : 'Alles is gepubliceerd.')
-    : 'Nog geen voltooide zittingen.';
+  // Alleen melden wat er te melden valt. 'Alles is gepubliceerd' is geen nieuws; een stuk
+  // dat nog ontbreekt wél. Staat er niets open, dan blijft deze regel leeg en verdwijnt ze.
+  const kort = $('dashKort');
+  kort.innerHTML = wait
+    ? `<strong>${wait}</strong> ${wait === 1 ? 'zitting wacht' : 'zittingen wachten'} nog op publicatie.`
+    : '';
+  kort.hidden = !wait;
+  // Ook het omhullende blok mee laten verdwijnen op smal scherm, waar het alleen deze regel
+  // draagt. Niet via CSS alleen: een browser zonder :has() zou dan een lege doos tonen.
+  const sec2 = document.querySelector('#vergaderingen .dash-secondary');
+  if(sec2) sec2.classList.toggle('leeg-op-smal', !wait);
 
-  // Update viz-label
-  $('dashVizLbl').textContent = direction === 'before'
-    ? `Per zitting · t.o.v. de deadline: ${docLabel} ${deadlineDays} dagen op voorhand`
-    : `Per zitting · t.o.v. de deadline: ${docLabel} ${deadlineDays} dagen nadien`;
+  // Update viz-label. Het deel na 'Per zitting' herhaalt de kop boven de orgaanknoppen en
+  // gaat op een telefoon weg: daar kost die regel drie regels in kapitalen. De vergrote
+  // weergave leest de VOLLEDIGE tekst (textContent), dus die houdt haar titel.
+  $('dashVizLbl').innerHTML = `Per zitting<span class="viz-detail"> · t.o.v. de deadline: `
+    + `${escape(docLabel)} ${deadlineDays} dagen ${direction === 'before' ? 'op voorhand' : 'nadien'}</span>`;
 
   // Visualisatie: de 0-LIJN IS DE DEADLINE, voor beide regimes dezelfde leesrichting.
   // Per zitting tekenen we de AFWIJKING t.o.v. de wettelijke termijn:
@@ -5914,7 +5955,7 @@ function renderDashboard(){
   const recentHTML = recentLate.length
     ? `<div class="dvb-recent-title">Te laat</div>` + recentLate.map(s => {
         const lateBy = direction === 'before' ? deadlineDays - s._days : s._days - deadlineDays;
-        return `<button type="button" class="dvb-recent-link" data-datum="${escape(s.date)}">${formatShort(s.date)} <span class="dvr-laat">(${dgn(lateBy)} te laat)</span></button>`;
+        return `<button type="button" class="dvb-recent-link" data-datum="${escape(s.date)}"><span class="dvr-datum-l">${formatShort(s.date)}</span> <span class="dvr-laat">(${dgn(lateBy)} te laat)</span></button>`;
       }).join('')
     : `<div class="dvb-recent-title">Status</div>Geen enkele keer te laat.`;
 
@@ -5931,6 +5972,10 @@ function renderDashboard(){
         <span class="dvb-lbl lbl-nul" aria-hidden="true">${nulLabel}</span>
         <span class="dvb-lbl lbl-ok" aria-hidden="true">binnen de termijn</span>
         ${barsHTML}
+      </div>
+      <div class="dvb-tijdas" aria-hidden="true">
+        <span>${escape(maandJaar(getoondeZittingen[0] && getoondeZittingen[0].date))}</span>
+        <span>${escape(maandJaar(getoondeZittingen[getoondeZittingen.length - 1] && getoondeZittingen[getoondeZittingen.length - 1].date))}</span>
       </div>
       <div class="dvb-readout" id="dvbReadout" aria-live="polite"></div>
       ${dvbKort ? `<button type="button" class="dvb-knip" onclick="openDvbVergroot()" aria-haspopup="dialog">Je ziet de laatste ${DVB_SMAL_AANTAL} van ${sortedAsc.length} zittingen. <span class="dk-doe">Toon ze allemaal <span aria-hidden="true">→</span></span></button>` : ''}
@@ -6119,7 +6164,9 @@ function dvbReadoutToon(container, readout, el){
   const head = i >= 0 ? tip.slice(0, i) : tip;
   const rest = i >= 0 ? tip.slice(i + 2) : '';
   const cls = el.classList.contains('late') ? 'bad' : el.classList.contains('tijdig') ? 'ok' : 'hint';
-  readout.innerHTML = `<strong>${escape(head)}</strong>${rest ? ` · <span class="${cls}">${escape(rest)}</span>` : ''}`;
+  // Datum op zijn eigen regel en groter: dit is het antwoord op je tik, geen lopende tekst.
+  readout.innerHTML = `<span class="dvr-datum">${escape(head)}</span>`
+    + (rest ? `<span class="dvr-detail ${cls}">${escape(rest)}</span>` : '');
 }
 
 // Eén zitting aanwijzen in de grafiek, gevraagd vanuit het te-laat-lijstje ernaast. Staat
@@ -6165,6 +6212,10 @@ function openDvbVergroot(){
       <span class="dvb-lbl lbl-nul" aria-hidden="true">${st.nulLabel}</span>
       <span class="dvb-lbl lbl-ok" aria-hidden="true">binnen de termijn</span>
       ${dvbBouwBalken(st.zittingen, st.direction, st.deadlineDays, st.UP_MAX, st.DOWN_MAX, st.ZERO_TOP)}
+    </div>
+    <div class="dvb-tijdas" aria-hidden="true">
+      <span>${escape(maandJaar(st.zittingen[0] && st.zittingen[0].date))}</span>
+      <span>${escape(maandJaar(st.zittingen[st.zittingen.length - 1] && st.zittingen[st.zittingen.length - 1].date))}</span>
     </div>`;
   dvbVulReadoutMetLaatste($('dvbModalChart'), $('dvbModalReadout'));
   modal.hidden = false;

@@ -1873,6 +1873,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
      natuurlijk aflopen, dan paste de ene kop wél op één regel en de andere niet, en stond de
      tweede rechts uitgelijnd onder zijn eigen kop. Twee koppen horen dezelfde vorm te hebben. */
   .tg-termijn{ margin-left:0; flex-basis:100%; }
+  /* De grafiektitel herhaalde in kapitalen wat de kop hierboven al zegt; op 375px kostte dat
+     drie regels. Alleen 'Per zitting' blijft staan. */
+  .viz-detail{ display:none; }
 }
 
 .dashboard{
@@ -2029,10 +2032,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .dash-viz-legend{ font-size:.66rem; gap:.9rem; }
   /* Het antwoord hoort bóven de grafiek: tik je onderaan een balk, dan verschijnt het
      anders precies achter je eigen duim. De wrap is al een flex-kolom. */
-  .dvb-readout{
-    order:-1; margin-top:0; margin-bottom:.7rem; padding-top:0; padding-bottom:.6rem;
-    border-top:none; border-bottom:1px solid var(--line);
-  }
+  .dvb-readout{ order:-1; margin-top:0; margin-bottom:.8rem; }
 }
 /* As-waarden in de linkermarge, met het woord eronder. Die 56px gutter stond op een
    telefoon vrijwel leeg terwijl de betekenis van de as ver eronder in een tekstblok zat.
@@ -2102,13 +2102,33 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
     rgba(82,74,63,.65) calc(100% - 8px), transparent calc(100% - 8px),
     transparent calc(100% - 5px), rgba(82,74,63,.65) calc(100% - 5px));
 }
-/* Readout onder de grafiek: toont de gekozen zitting — werkt op hover én tik (mobiel) */
+/* De gekozen zitting: het antwoord op je tik of je muis. Stond hier als gewone tekstregel
+   tussen twee haarlijnen en verdween daardoor in het blok, terwijl het het enige element is
+   dat op jouw handeling reageert. Nu een eigen kaartje op papier-2, met de datum als kop. */
 .dvb-readout{
-  margin-top:.85rem; padding-top:.7rem;
-  border-top:1px solid var(--line);
+  margin-top:.85rem; padding:.6rem .8rem;
+  background:var(--paper-2);
+  border:1px solid var(--line-kaart);
+  border-radius:var(--r-chip);
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.74rem; line-height:1.5; color:var(--ink-2); min-height:2.4em;
+  line-height:1.5; color:var(--ink-2); min-height:3.4em;
 }
+.dvr-datum{
+  display:block; font-size:.95rem; font-weight:600; color:var(--ink); letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+}
+.dvr-detail{ display:block; margin-top:.15rem; font-size:.74rem; }
+/* Tijdas onder de grafiek: van wanneer tot wanneer loopt deze reeks. Stond er niet, dus je
+   kon niet zien of de balken twee maanden of twee jaar beslaan. Twee datums, geen zin.
+   De linkermarge is dezelfde 56px als de y-as, zodat de eerste datum onder de eerste balk
+   staat. */
+.dvb-tijdas{
+  display:flex; justify-content:space-between;
+  margin-top:.4rem; padding:0 var(--dvb-strook, 146px) 0 56px;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.64rem; letter-spacing:.04em; color:var(--ink-faint);
+}
+.dvb-modal-card .dvb-tijdas{ padding:0 146px 0 56px; }
 /* .dvb-knip en .dvb-meer zijn opgegaan in de actiebalk hieronder: de melding over wat je
    niet ziet staat nu als subregel op de knop die het wél toont. */
 /* Eén regel onder de grafiek, en alleen wanneer er iets te melden valt: dat de reeks
@@ -2168,7 +2188,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-family:inherit; font-size:.7rem; line-height:1.5; color:var(--ink-dim);
   transition:color .15s;
 }
+/* De datum krijgt een stippellijn onder zich: zonder dat zag niemand dat je deze regels kunt
+   aantikken om de bijbehorende balk aan te wijzen. Geen knopvorm, wel een leesbaar signaal. */
+.dvb-recent-link .dvr-datum-l{ border-bottom:1px dotted var(--line-strong); padding-bottom:1px; }
 .dvb-recent-link .dvr-laat{ color:var(--pink-text); }
+.dvb-recent-link:hover .dvr-datum-l{ border-bottom-color:var(--pink); }
 .dvb-recent-link:hover{ color:var(--ink); }
 .dvb-recent-link:hover .dvr-laat{ color:var(--pink); }
 .dvb-recent-link:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
@@ -2228,6 +2252,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .dash-secondary{ display:block; background:var(--paper); padding:1.1rem 1.3rem; }
   .dash-cell{ display:none; }
   .dash-kort{ display:block; }
+  .dash-kort[hidden]{ display:none; }
+  /* Niets te melden, dus ook geen lege doos: het blok verdwijnt mee. De klasse komt uit
+     renderDashboard, zodat dit ook werkt zonder :has()-ondersteuning. */
+  .dash-secondary.leeg-op-smal{ display:none; }
 }
 
 /* ============================================================
