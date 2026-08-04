@@ -1783,10 +1783,13 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    wordt afgeknipt en de toetsenbordgebruiker ziet niets. */
 .tij-tab:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
 .tij-tabs-hint{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:var(--ink-dim); margin:1.4rem 0 .7rem; }
-/* Het antwoord op de kopvraag, in leestekst en niet in mono: dit is een zin, geen data. */
+/* Het antwoord op de kopvraag. Staat los van de uitleg-alinea en spreekt de datastem van de
+   site (mono, tabulaire cijfers), zodat het leest als een meting en niet als een bewering. */
 .tijd-antwoord{
-  margin-top:.9rem; max-width:60ch;
-  font-size:1.02rem; line-height:1.6; color:var(--ink-2);
+  margin:1.5rem 0 0; max-width:62ch;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.86rem; line-height:1.65; letter-spacing:.01em; color:var(--ink-2);
+  font-variant-numeric:tabular-nums;
 }
 .tijd-antwoord strong{ color:var(--ink); font-weight:600; }
 .tij-tab.active{
@@ -4300,12 +4303,14 @@ a, button, summary, input, label{ touch-action:manipulation; }
         beschikbaar zijn. De <strong>besluiten</strong> van alle vijf de organen moeten uiterlijk
         10 dagen ná de zitting of de beslissing bekend zijn.</span>
       </p>
-      <!-- Het antwoord op de vraag in de kop, over alle vijf de organen samen. Zonder deze
-           regel leverde de sectie vijf losse percentages met noemers van 17 tot 117, en
-           moest de lezer zelf een totaal schatten. -->
-      <p class="tijd-antwoord" id="tijdAntwoord"></p>
     </div>
   </div>
+
+  <!-- Het antwoord op de vraag in de kop, over alle vijf de organen samen. Bewust BUITEN de
+       uitleg-alinea en in de datastem (mono): uitleg is uitleg, cijfers horen bij de cijfers.
+       Zonder deze regel leverde de sectie vijf losse percentages met noemers van 17 tot 117,
+       en moest de lezer zelf een totaal schatten. -->
+  <p class="tijd-antwoord" id="tijdAntwoord"></p>
 
   <!-- De vijf bestuursorganen, in twee blokken naar wat er gemeten wordt. De aansporing
        "Kies een bestuursorgaan om te zien of het de wettelijke deadline haalt" stond hier
