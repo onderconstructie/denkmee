@@ -1822,6 +1822,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
     font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim);
   }
   .tij-tab-meta{ display:none; }
+  .lede-detail{ display:none; }   /* de kopregels hieronder dragen deze twee zinnen al */
   .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
   .tij-tab-score{
     display:block; flex-shrink:0; text-align:right;
@@ -2120,6 +2121,25 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   color:var(--ink-faint);
   margin-bottom:.6rem;
 }
+/* Elke late zitting wijst haar eigen balk aan. Bewust geen knopvorm: het blijft een
+   opsomming die je kunt aantikken, geen nieuwe bedieningsknop naast de grafiek. */
+.dvb-recent-link{
+  display:block; width:100%; text-align:left;
+  padding:.5rem 0; background:none; border:none; cursor:pointer;
+  font-family:inherit; font-size:.7rem; line-height:1.5; color:var(--ink-dim);
+  transition:color .15s;
+}
+.dvb-recent-link .dvr-laat{ color:var(--pink-text); }
+.dvb-recent-link:hover{ color:var(--ink); }
+.dvb-recent-link:hover .dvr-laat{ color:var(--pink); }
+.dvb-recent-link:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+/* De compacte samenvatting van de cijfertegels, alleen op smal scherm (zie de media-query). */
+.dash-kort{
+  display:none; margin:0;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.76rem; line-height:1.6; color:var(--ink-2);
+}
+.dash-kort strong{ color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
 
 .dash-detail{
   grid-row:3; grid-column:1 / -1;
@@ -2163,8 +2183,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
      De twee overblijvende cellen krijgen daardoor bijna 50% meer breedte, en hun labels
      breken niet langer in drie regels. */
   .dash-stat{ display:none; }
-  .dash-secondary{ grid-template-columns:repeat(2,1fr); }
-  .dash-cell.cel-telaat{ display:none; }
+  /* De drie cijfertegels werden op 375px drie kokers van ~105px waarin elk label in drie
+     regels van 10px brak. Als zin lezen dezelfde cijfers in één oogopslag, en het scheelt
+     een blok. De tegels blijven in de DOM voor de brede weergave. */
+  .dash-secondary{ display:block; background:var(--paper); padding:1.1rem 1.3rem; }
+  .dash-cell{ display:none; }
+  .dash-kort{ display:block; }
 }
 
 /* ============================================================
@@ -3916,7 +3940,7 @@ html{ -webkit-tap-highlight-color:transparent; }
 a, button, summary, input, label{ touch-action:manipulation; }
 @media (hover:none){
   .btn:active, .hc-chip:active, .hc-stat:active, .hc-edit:active, .tij-tab:active,
-  .dvb-knip:active,
+  .dvb-knip:active, .dvb-recent-link:active,
   .seg-opt:active, .tch:active, .dos-card:active, .dc-card:active, .item-card:active,
   .prc-card:active, .sch-card:active, .menu-list a:active, .tabbar a:active,
   .cml-action:active, .dos-volg-chip:active, .fc:active, .menu-profile:active,
