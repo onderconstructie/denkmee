@@ -61,8 +61,9 @@ def main():
 
     nieuwe = []
     for it in per_nummer.values():
-        if it.get("zitting") == "besloten":          # besloten zitting niet publiceren
-            continue
+        # Besloten zitting: de agenda publiceert enkel de titel; die gaat mee mét label
+        # (zelfde afweging als in assembleer_agendapunten.py).
+        besloten = it.get("zitting") == "besloten"
         nr = it["nummer"]
         nieuwe.append({
             "id": f"{sessie_id}-{nr}",
@@ -85,6 +86,7 @@ def main():
             "indiener": it.get("indiener"),
             "stemming": None,
             "brontekst": it["titel"],                # agenda heeft geen volledige tekst → titel
+            **({"zitting": "besloten"} if besloten else {}),
         })
 
     # vervang de punten van deze zitting, behoud de rest

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31",
+  "generated_at": "2026-08-04",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -2809,6 +2809,39 @@
       ]
     },
     {
+      "id": "gemeenteraad-20250127-55",
+      "sessie_id": "gemeenteraad-20250127",
+      "sessie_date": "2025-01-27",
+      "nummer": "55",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "goedgekeurd",
+        "text": "Goedgekeurd",
+        "published": "2025-01-27"
+      },
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Aanstelling vaststellers in het kader van de reglementering omtrent de gemeentelijke administratieve sancties (GAS) en aanstelling tot beëdigd ambtenaar in het kader van het retributiereglement inname openbaar domein.",
+      "decoded": "De gemeenteraad stelt vaststellers aan voor de regels over gemeentelijke administratieve sancties (GAS). De gemeenteraad stelt ook een beëdigd ambtenaar aan voor het retributiereglement over de inname van het openbaar domein.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "zitting": "besloten",
+      "kernbegrippen": [
+        "GAS",
+        "retributiereglement inname openbaar domein"
+      ]
+    },
+    {
       "id": "gemeenteraad-20250224-ACT1",
       "sessie_id": "gemeenteraad-20250224",
       "sessie_date": "2025-02-24",
@@ -4426,6 +4459,68 @@
       "indiener": "D. Tuypens",
       "stemming": null,
       "brontekst": null
+    },
+    {
+      "id": "gemeenteraad-20250224-48",
+      "sessie_id": "gemeenteraad-20250224",
+      "sessie_date": "2025-02-24",
+      "nummer": "48",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "afgevoerd van agenda",
+        "text": "Afgevoerd van agenda",
+        "published": "2025-02-24"
+      },
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring overeenkomst met uitbater garage.",
+      "decoded": "De gemeenteraad keurt een overeenkomst met de uitbater van een garage goed.",
+      "themes": [
+        "Economie"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "zitting": "besloten"
+    },
+    {
+      "id": "gemeenteraad-20250224-49",
+      "sessie_id": "gemeenteraad-20250224",
+      "sessie_date": "2025-02-24",
+      "nummer": "49",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "aktename / goedgekeurd",
+        "text": "Aktename / Goedgekeurd",
+        "published": "2025-02-24"
+      },
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Aktename brief Audit Vlaanderen en beslissing tot nemen maatregelen ter versterking organisatiebeheersing.",
+      "decoded": "De gemeenteraad neemt akte van de brief van Audit Vlaanderen. De gemeenteraad beslist om maatregelen te nemen die de organisatiebeheersing versterken.",
+      "themes": [
+        "Financiën"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "zitting": "besloten",
+      "kernbegrippen": [
+        "Audit Vlaanderen",
+        "organisatiebeheersing"
+      ]
     },
     {
       "id": "gemeenteraad-20250324-1",
@@ -9613,6 +9708,45 @@
       "kernbegrippen": [
         "Aperotime",
         "Grote Markt"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20250625-51",
+      "sessie_id": "gemeenteraad-20250625",
+      "sessie_date": "2025-06-25",
+      "nummer": "51",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "goedgekeurd",
+        "text": "Goedgekeurd",
+        "published": "2025-06-25"
+      },
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring voorwaarden (finaal bod) minnelijke aankoop/onteigening woningen gelegen te Nekkerspoelstraat 5/7, 9, 11/13, 15 en Sint-Rumoldusstraat 33.",
+      "decoded": "De gemeenteraad keurt de voorwaarden goed van het finale bod voor de minnelijke aankoop of onteigening van woningen. Het gaat om de panden Nekkerspoelstraat 5/7, 9, 11/13 en 15, en Sint-Rumoldusstraat 33.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Nekkerspoelstraat",
+        "Sint-Rumoldusstraat"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "zitting": "besloten",
+      "kernbegrippen": [
+        "Nekkerspoelstraat 5/7",
+        "Nekkerspoelstraat 9",
+        "Nekkerspoelstraat 11/13",
+        "Nekkerspoelstraat 15",
+        "Sint-Rumoldusstraat 33"
       ]
     },
     {
@@ -22224,6 +22358,40 @@
       ]
     },
     {
+      "id": "gemeenteraad-20260428-24",
+      "sessie_id": "gemeenteraad-20260428",
+      "sessie_date": "2026-04-28",
+      "nummer": "24",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "goedgekeurd",
+        "text": "Goedgekeurd",
+        "published": "2026-04-28"
+      },
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring dading naar aanleiding van een geschil betreffende meerdere verrekeningen in het kader van werken aan de Tangent - Stationsomgeving.",
+      "decoded": "De gemeenteraad keurt een dading goed. Die dading regelt een geschil over meerdere verrekeningen bij de werken aan de Tangent in de Stationsomgeving.",
+      "themes": [
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "zitting": "besloten",
+      "kernbegrippen": [
+        "Tangent",
+        "Stationsomgeving",
+        "dading"
+      ]
+    },
+    {
       "id": "gemeenteraad-20260526-1",
       "sessie_id": "gemeenteraad-20260526",
       "sessie_date": "2026-05-26",
@@ -25025,6 +25193,40 @@
       "brontekst": null,
       "kernbegrippen": [
         "algemeen directeur"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20260623-50",
+      "sessie_id": "gemeenteraad-20260623",
+      "sessie_date": "2026-06-23",
+      "nummer": "50",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "goedgekeurd",
+        "text": "Goedgekeurd",
+        "published": "2026-06-23"
+      },
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring aangepaste dading naar aanleiding van een geschil betreffende meerdere verrekeningen in het kader van werken aan de Tangent - Stationsomgeving.",
+      "decoded": "De gemeenteraad keurt een aangepaste dading goed. Deze dading regelt een geschil over meerdere verrekeningen bij de werken aan de Tangent in de Stationsomgeving.",
+      "themes": [
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "zitting": "besloten",
+      "kernbegrippen": [
+        "Tangent",
+        "Stationsomgeving",
+        "dading"
       ]
     },
     {
@@ -28472,6 +28674,40 @@
       "kernbegrippen": [
         "SK Heffen",
         "huurovereenkomst d.d. 20 juni 2008"
+      ]
+    },
+    {
+      "id": "rmw-20260623-11",
+      "sessie_id": "rmw-20260623",
+      "sessie_date": "2026-06-23",
+      "nummer": "11",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "goedgekeurd",
+        "text": "Goedgekeurd",
+        "published": "2026-06-23"
+      },
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring vaststellingsovereenkomst m.b.t. Hof van Egmont tussen OCMW Mechelen en 3D Real Estate.",
+      "decoded": "De raad voor maatschappelijk welzijn keurt een vaststellingsovereenkomst goed over Hof van Egmont. De overeenkomst regelt de zaak tussen OCMW Mechelen en 3D Real Estate.",
+      "themes": [
+        "Wonen"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "zitting": "besloten",
+      "kernbegrippen": [
+        "Hof van Egmont",
+        "3D Real Estate",
+        "OCMW Mechelen"
       ]
     }
   ],

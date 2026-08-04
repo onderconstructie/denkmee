@@ -60,8 +60,11 @@ def main():
     sessie_id = f"{SLUG.get(orgaan, 'gemeenteraad')}-{datum.replace('-','')}"
     nieuwe = []
     for it in besluiten:
-        if it.get("zitting") == "besloten":          # besloten zitting niet publiceren (zoals bij college/agenda)
-            continue
+        # Besloten zitting: de stad publiceert in de openbare besluitenlijst enkel de TITEL
+        # (geen stukken, geen stemming). Die titel is dus al publiek en gaat gewoon mee;
+        # de site labelt het punt als 'besloten zitting' zodat de lezer weet waarom er
+        # niets achter zit. De documenten zelf bestaan publiek niet en blijven dus weg.
+        besloten = it.get("zitting") == "besloten"
         nr = it["nummer"]
         note = notulen.get(nr, {})
         nieuwe.append({
@@ -86,6 +89,7 @@ def main():
             "indiener": it.get("indiener"),
             "stemming": note.get("stemming"),             # incl. per_fractie + kleur
             "brontekst": note.get("tekst"),               # volledige notulentekst → input AI-tagging + 'Toon originele tekst'
+            **({"zitting": "besloten"} if besloten else {}),
         })
 
     # verwijder eventuele eerdere punten van deze zitting, voeg de echte toe
