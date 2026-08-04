@@ -1802,12 +1802,37 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    De regel .tij-tab.active::before die hier stond is geschrapt: er was nergens een basisregel
    met content, dus dat pseudo-element rendeerde nooit. Dood spoor van een oud actief-streepje;
    de volle inktvulling zegt het nu duidelijker dan een streepje ooit kon. */
+/* De score op de knop zelf. Zonder dit moest je vijf keer tikken en telkens een scherm
+   terugscrollen om te vergelijken, terwijl de cijfers al klaarstaan. Alleen op smal scherm:
+   boven 900px staan de vijf standen op één rij en is daar geen breedte voor. */
+.tij-tab-score{ display:none; }
+.tij-groep{ display:none; }
 @media (max-width:900px){
   .tij-tabs{ flex-direction:column; }
   .tij-tab + .tij-tab{ border-left:none; }
   /* Op elk kind, niet op .tij-tab + .tij-tab: in de accordeon schuift het dashboard tussen de
      tabs, en dan is de tab eronder niet meer aangrenzend en zou zijn scheidingslijn wegvallen. */
   .tij-tabs > * + *{ border-top:1.5px solid var(--ink); }
+  /* De kopregel zegt welk regime hieronder gemeten wordt, zodat 88% en 100% niet als
+     dezelfde meting lezen. Daarmee is de meta-regel per knop dubbel en mag ze weg. */
+  .tij-groep{
+    display:block; padding:.5rem 1.2rem;
+    background:var(--paper-3);
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+    font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim);
+  }
+  .tij-tab-meta{ display:none; }
+  .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
+  .tij-tab-score{
+    display:block; flex-shrink:0; text-align:right;
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+    font-size:.7rem; letter-spacing:.02em; color:var(--ink-dim); font-variant-numeric:tabular-nums;
+  }
+  .tij-tab-score strong{ font-size:.95rem; font-weight:600; color:var(--ink); }
+  .tij-tab-score .tts-breuk{ display:block; font-size:.6rem; color:var(--ink-faint); }
+  .tij-tab.active .tij-tab-score{ color:var(--op-eiland-65); }
+  .tij-tab.active .tij-tab-score strong{ color:var(--paper); }
+  .tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
 }
 
 .dashboard{
@@ -2046,30 +2071,34 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.74rem; line-height:1.5; color:var(--ink-2); min-height:2.4em;
 }
-/* De uitklap onder de grafiek op smal scherm, plus het regeltje dat zegt wat we weglieten.
-   Dat regeltje is niet optioneel: een ingekorte grafiek zonder melding leest als "dit is
-   alles wat er is". */
-.dvb-knip{
-  margin-top:.6rem;
+/* .dvb-knip en .dvb-meer zijn opgegaan in de actiebalk hieronder: de melding over wat je
+   niet ziet staat nu als subregel op de knop die het wél toont. */
+/* De twee wegen naar de volledige data, als één balk met echte knoppen. Ze stonden eerder
+   als drie fluisterdoelen verspreid (een pil van 22px bovenaan, een dode meldregel en een
+   tekstlink), alle drie ver onder de 44px die een vinger nodig heeft. Zelfde grammatica als
+   .tij-tabs: één omhulsel met de rand, een scheidingslijn ertussen. De subregel vertelt wat
+   je krijgt, inclusief hoeveel zittingen je nú niet ziet: die melding is geen ruis maar
+   eerlijkheid, want een ingekorte grafiek leest anders als het volledige verhaal. */
+.dvb-acties{
+  display:flex; margin-top:.9rem;
+  border:1.5px solid var(--ink); border-radius:var(--r-chip); overflow:hidden;
+}
+.dvb-acties button{
+  flex:1; min-width:0; display:flex; flex-direction:column; gap:.15rem;
+  padding:.7rem .9rem; text-align:left; background:none; border:none; cursor:pointer;
+  font-family:inherit; transition:background .15s;
+}
+.dvb-acties button + button{ border-left:1.5px solid var(--ink); }
+.dvb-acties button:hover{ background:var(--paper-3); }
+.dvb-acties button:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
+.dva-doe{
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.66rem; color:var(--ink-faint); letter-spacing:.02em;
+  font-size:.74rem; font-weight:500; color:var(--ink);
 }
-.dvb-meer{
-  margin-top:.45rem;
+.dva-sub{
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.68rem; letter-spacing:.04em;
-  color:var(--pink-text);
-  border-bottom:1px solid var(--line-pink); padding-bottom:1px;
+  font-size:.62rem; letter-spacing:.02em; line-height:1.35; color:var(--ink-faint);
 }
-.dvb-meer:hover{ color:var(--pink); border-color:var(--pink); }
-/* Vergroot-knop + vergrote weergave: dezelfde grafiek, vol formaat, alle zittingen. */
-.dvb-vergroot{
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; letter-spacing:.06em;
-  text-transform:uppercase; color:var(--ink-dim); background:none;
-  border:1px solid var(--line-strong); border-radius:999px; padding:.22rem .6rem; cursor:pointer;
-  transition:color .15s, border-color .15s;
-}
-.dvb-vergroot:hover{ color:var(--pink-text); border-color:var(--pink); }
 .dvb-modal-card{ max-width:min(1140px, 96vw); width:96vw; }
 .dvb-scroll{ overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
 /* Meer hoogte, de labelstrook en de as-cijfers terug (ook op smal scherm), stevigere balken.
@@ -2084,6 +2113,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    dichtstbijzijnde balk); verticaal scrollen blijft van de pagina. In de vergrote weergave
    NIET: daar moet horizontaal vegen de tijdas scrollen. */
 #dashBars .dvb-chart{ touch-action:pan-y; }
+/* De grafiek is één tabstop (zie dvbToetsen), dus ze moet ook zichtbaar focus krijgen. */
+.dvb-chart:focus-visible{ outline:2px solid var(--pink); outline-offset:3px; }
 .dvb-readout .hint{ color:var(--ink-faint); }
 .dvb-readout strong{ color:var(--ink); font-weight:600; }
 .dvb-readout .ok{ color:var(--pink-text); }
@@ -2137,6 +2168,15 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   /* Compactere pct-tegel: op mobiel is hij een samenvattingsstrook, niet de blikvanger. */
   .dash-stat{ padding:1.3rem 1.3rem !important; }
   .dash-num{ font-size:3rem; }
+  /* Het hoofdgetal staat sinds kort op de knop waarop je net tikte (zie .tij-tab-score),
+     dus deze tegel herhaalt zichzelf, en dat nog ná de grafiek die ze moest samenvatten.
+     Idem voor 'keer te laat': de breuk op de knop (91 van 92) zegt dat al. In CSS
+     verbergen, niet slopen: de desktopweergave en renderDashboard blijven onaangeroerd.
+     De twee overblijvende cellen krijgen daardoor bijna 50% meer breedte, en hun labels
+     breken niet langer in drie regels. */
+  .dash-stat{ display:none; }
+  .dash-secondary{ grid-template-columns:repeat(2,1fr); }
+  .dash-cell.cel-telaat{ display:none; }
 }
 
 /* ============================================================
@@ -3888,6 +3928,7 @@ html{ -webkit-tap-highlight-color:transparent; }
 a, button, summary, input, label{ touch-action:manipulation; }
 @media (hover:none){
   .btn:active, .hc-chip:active, .hc-stat:active, .hc-edit:active, .tij-tab:active,
+  .dvb-acties button:active,
   .seg-opt:active, .tch:active, .dos-card:active, .dc-card:active, .item-card:active,
   .prc-card:active, .sch-card:active, .menu-list a:active, .tabbar a:active,
   .cml-action:active, .dos-volg-chip:active, .fc:active, .menu-profile:active,
