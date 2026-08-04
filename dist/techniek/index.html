@@ -1783,15 +1783,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    wordt afgeknipt en de toetsenbordgebruiker ziet niets. */
 .tij-tab:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
 .tij-tabs-hint{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:var(--ink-dim); margin:1.4rem 0 .7rem; }
-/* Het antwoord op de kopvraag. Staat los van de uitleg-alinea en spreekt de datastem van de
-   site (mono, tabulaire cijfers), zodat het leest als een meting en niet als een bewering. */
-.tijd-antwoord{
-  margin:1.5rem 0 0; max-width:62ch;
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.86rem; line-height:1.65; letter-spacing:.01em; color:var(--ink-2);
-  font-variant-numeric:tabular-nums;
-}
-.tijd-antwoord strong{ color:var(--ink); font-weight:600; }
+/* Er stond hier een samenvattende regel met totalen. Geschrapt: een tekstregel vol aantallen
+   naast een blok dat diezelfde aantallen al toont, is dubbel werk in twee stemmen. Het
+   antwoord komt van de cijfers op de knoppen zelf. */
 .tij-tab.active{
   background:var(--ink);
   color:var(--paper);
@@ -1827,20 +1821,27 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    terugscrollen om te vergelijken, terwijl de cijfers al klaarstaan. Alleen op smal scherm:
    boven 900px staan de vijf standen op één rij en is daar geen breedte voor. */
 .tij-tab-score{ display:none; }
-/* De kop boven elk blok zegt wát er gemeten wordt. Een echte h3, niet alleen omdat het er
-   een is, maar ook omdat een schermlezer de sectie anders als één ononderbroken blok kreeg.
-   Groot genoeg om gelezen te worden: dit is de enige plek waar de meetlat staat. */
+/* De kop boven elk blok zegt wát er gemeten wordt, en is het enige dat dat zegt: er staat
+   geen uitleg-zin meer naast. Een echte h3, ook omdat een schermlezer de sectie anders als
+   één ononderbroken blok kreeg. Het cijfer ervoor telt de twee metingen zoals de reuzen-
+   sectienummers elders op de site: het maakt zichtbaar dat dit er twee zijn, geen lijst. */
 .tij-groep{
-  margin:1.5rem 0 .55rem;
+  display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  margin:2rem 0 .6rem; padding-bottom:.5rem;
+  border-bottom:2px solid var(--ink);
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.8rem; font-weight:600; letter-spacing:.02em; color:var(--ink);
+  font-weight:400; letter-spacing:0;
 }
 .tij-groep:first-child{ margin-top:0; }
-.tij-voetnoot{
-  margin:.55rem 0 0; max-width:60ch;
-  font-size:.86rem; line-height:1.55; color:var(--ink-dim);
+.tg-num{
+  font-size:1.5rem; font-weight:300; line-height:1; color:var(--pink);
+  font-variant-numeric:tabular-nums;
 }
-.tij-voetnoot strong{ color:var(--ink-2); font-weight:600; }
+.tg-wat{ font-size:1rem; font-weight:600; color:var(--ink); letter-spacing:-.01em; }
+.tg-termijn{
+  font-size:.74rem; color:var(--ink-dim); letter-spacing:.02em;
+  margin-left:auto; white-space:nowrap;
+}
 @media (max-width:900px){
   .tij-tabs{ flex-direction:column; }
   .tij-tab + .tij-tab{ border-left:none; }
@@ -1853,16 +1854,25 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .tij-tab-meta{ display:none; }
   .lede-detail{ display:none; }   /* de kopregels hieronder dragen deze twee zinnen al */
   .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
+  /* Het percentage is de uitkomst, dus het krijgt de maat van een cijfer en niet van een
+     label. Licht gezet zoals de andere grote getallen op de site (de datastem praat in
+     gewicht 300), met het procentteken kleiner: het getal telt, het teken niet. */
   .tij-tab-score{
     display:block; flex-shrink:0; text-align:right;
     font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-size:.7rem; letter-spacing:.02em; color:var(--ink-dim); font-variant-numeric:tabular-nums;
+    color:var(--ink); font-variant-numeric:tabular-nums; line-height:1;
   }
-  .tij-tab-score strong{ font-size:.95rem; font-weight:600; color:var(--ink); }
-  .tij-tab-score .tts-breuk{ display:block; font-size:.6rem; color:var(--ink-faint); }
-  .tij-tab.active .tij-tab-score{ color:var(--op-eiland-65); }
-  .tij-tab.active .tij-tab-score strong{ color:var(--paper); }
+  .tij-tab-score strong{ font-size:1.65rem; font-weight:300; letter-spacing:-.02em; }
+  .tij-tab-score .tts-pct{ font-size:.85rem; font-weight:400; margin-left:.06em; color:var(--ink-dim); }
+  .tij-tab-score .tts-breuk{ display:block; margin-top:.3rem; font-size:.66rem; color:var(--ink-faint); }
+  .tij-tab.active .tij-tab-score{ color:var(--paper); }
+  .tij-tab.active .tij-tab-score .tts-pct{ color:var(--op-eiland-65); }
   .tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
+  .tij-tab-name{ font-size:1rem; }
+  /* De termijn krijgt op smal scherm altijd zijn eigen regel, links uitgelijnd. Liet je hem
+     natuurlijk aflopen, dan paste de ene kop wél op één regel en de andere niet, en stond de
+     tweede rechts uitgelijnd onder zijn eigen kop. Twee koppen horen dezelfde vorm te hebben. */
+  .tg-termijn{ margin-left:0; flex-basis:100%; }
 }
 
 .dashboard{
