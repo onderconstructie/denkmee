@@ -74,8 +74,10 @@ def main():
     nieuwe = []
     gezien_id = set()
     for it in besluiten:
-        if it.get("zitting") == "besloten":          # besloten zitting niet publiceren
-            continue
+        # Besloten punten: enkel de titel is publiek en gaat mee mét label (zelfde
+        # afweging als in assembleer_agendapunten.py). Komt bij deze organen in de
+        # praktijk niet voor, maar de route is dezelfde.
+        besloten = it.get("zitting") == "besloten"
         titel = (it.get("titel") or "").strip()
         if not titel or titel.upper().startswith("GESCHRAPT"):   # geschrapte punten overslaan
             continue
@@ -98,6 +100,7 @@ def main():
             "orgaan": orgaan,
             "categorie": thema(it.get("categorie", "")),
             "titel": titel,
+            **({"zitting": "besloten"} if besloten else {}),
         })
 
     # College én vast bureau leven in dezelfde lijst, uit elkaar gehouden door 'orgaan'.
