@@ -1747,6 +1747,18 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border-radius:var(--r-chip);
   overflow:hidden;
 }
+/* De tijdigheidskeuze is GEEN enkele lijst meer: ze bestaat uit twee gescheiden blokken,
+   want de twee groepen meten iets anders. Het omhulsel #tijTabs draagt daarom zelf geen
+   kader; elk .tij-blok draagt het. (De andere gebruikers van .tij-tabs, de tabbladen van
+   'Op de agenda' en 'Recent beslist', blijven ongemoeid: die meten wél hetzelfde.) */
+#tijTabs{ display:block; border:none; border-radius:0; overflow:visible; margin-bottom:0; }
+.tij-blok{
+  display:flex; gap:0; flex-wrap:nowrap;
+  border:1.5px solid var(--ink);
+  border-radius:var(--r-chip);
+  overflow:hidden;
+}
+.tij-blok .tij-tab + .tij-tab{ border-left:1.5px solid var(--ink); }
 .tij-tab{
   flex:1; min-width:0;
   display:flex; flex-direction:column;
@@ -1771,6 +1783,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    wordt afgeknipt en de toetsenbordgebruiker ziet niets. */
 .tij-tab:focus-visible{ outline:2px solid var(--pink); outline-offset:-2px; }
 .tij-tabs-hint{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.04em; color:var(--ink-dim); margin:1.4rem 0 .7rem; }
+/* Het antwoord op de kopvraag, in leestekst en niet in mono: dit is een zin, geen data. */
+.tijd-antwoord{
+  margin-top:.9rem; max-width:60ch;
+  font-size:1.02rem; line-height:1.6; color:var(--ink-2);
+}
+.tijd-antwoord strong{ color:var(--ink); font-weight:600; }
 .tij-tab.active{
   background:var(--ink);
   color:var(--paper);
@@ -1806,21 +1824,29 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    terugscrollen om te vergelijken, terwijl de cijfers al klaarstaan. Alleen op smal scherm:
    boven 900px staan de vijf standen op één rij en is daar geen breedte voor. */
 .tij-tab-score{ display:none; }
-.tij-groep{ display:none; }
+/* De kop boven elk blok zegt wát er gemeten wordt. Een echte h3, niet alleen omdat het er
+   een is, maar ook omdat een schermlezer de sectie anders als één ononderbroken blok kreeg.
+   Groot genoeg om gelezen te worden: dit is de enige plek waar de meetlat staat. */
+.tij-groep{
+  margin:1.5rem 0 .55rem;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.8rem; font-weight:600; letter-spacing:.02em; color:var(--ink);
+}
+.tij-groep:first-child{ margin-top:0; }
+.tij-voetnoot{
+  margin:.55rem 0 0; max-width:60ch;
+  font-size:.86rem; line-height:1.55; color:var(--ink-dim);
+}
+.tij-voetnoot strong{ color:var(--ink-2); font-weight:600; }
 @media (max-width:900px){
   .tij-tabs{ flex-direction:column; }
   .tij-tab + .tij-tab{ border-left:none; }
   /* Op elk kind, niet op .tij-tab + .tij-tab: in de accordeon schuift het dashboard tussen de
      tabs, en dan is de tab eronder niet meer aangrenzend en zou zijn scheidingslijn wegvallen. */
-  .tij-tabs > * + *{ border-top:1.5px solid var(--ink); }
-  /* De kopregel zegt welk regime hieronder gemeten wordt, zodat 88% en 100% niet als
-     dezelfde meting lezen. Daarmee is de meta-regel per knop dubbel en mag ze weg. */
-  .tij-groep{
-    display:block; padding:.5rem 1.2rem;
-    background:var(--paper-3);
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim);
-  }
+  .rb-tabs > * + *{ border-top:1.5px solid var(--ink); }
+  .tij-blok{ flex-direction:column; }
+  .tij-blok .tij-tab + .tij-tab{ border-left:none; }
+  .tij-blok > * + *{ border-top:1.5px solid var(--ink); }
   .tij-tab-meta{ display:none; }
   .lede-detail{ display:none; }   /* de kopregels hieronder dragen deze twee zinnen al */
   .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
@@ -1979,26 +2005,15 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-lbl.lbl-telaat{ right:8px; top:8px; color:var(--pink-text); }
 .dvb-lbl.lbl-nul{ right:8px; top:calc(var(--deadline-top, 50%) + 6px); color:var(--pink-text); }
 .dvb-lbl.lbl-ok{ right:8px; bottom:8px; color:var(--ink-faint); }
-/* Bijschrift onder de grafiek: op smal scherm past geen labelstrook naast de balken, dus
-   daar krijgen ze de volle breedte. De woorden 'te laat' en 'op tijd' staan sinds kort ín
-   de as (zie .dvb-tick i), dus hier blijft nog één regel over: wat de 0-lijn betekent.
-   Dat is precies wat het beeld zelf nooit kan zeggen. */
-.dvb-uitleg{ display:none; }
+/* Het bijschriftblok onder de grafiek is geschrapt. Het stond op display:none in zowel de
+   basisregel als de media-query, dus het rendeerde op geen enkel scherm, en de kleurenlegenda
+   werd verborgen met precies dat dode blok als motivering. De as draagt nu de woorden
+   ('te laat', 'deadline', 'op tijd'); de legenda draagt de kleuren en blijft dus staan. */
 @media (max-width:560px){
   .dvb-chart{ --dvb-strook:8px; height:240px; }   /* de gewonnen hoogte gaat naar de balken */
   .dvb-lbl{ display:none; }
-  .dash-viz-legend{ display:none; }   /* de as en de uitleg-regel dragen de kleuren al */
-  /* De uitleg-regel blijft hier verborgen: op een telefoon zegt de as zelf 'deadline' bij
-     de 0-lijn, en de kopregel boven de orgaanknoppen noemt de termijn al voluit
-     ('Besluitenlijst, 10 dagen nadien'). Een vierde herhaling van dezelfde regel is geen
-     uitleg meer maar ruis. Op een breed scherm draagt de labelstrook rechts dat werk. */
-  .dvb-uitleg{ display:none; }
-  .dvb-uitleg .u-rij{ display:flex; align-items:baseline; gap:.5rem; }
-  .dvb-uitleg .u-staal{
-    flex-shrink:0; width:10px; height:10px; align-self:center;
-  }
-  .dvb-uitleg .u-staal.s-lijn{ height:0; border-top:2px dashed rgba(200,32,84,.6); }
-  .dvb-uitleg strong{ color:var(--ink); font-weight:600; }
+  /* Enige plek waar grijs en roze een betekenis krijgen, dus hier NIET verbergen. */
+  .dash-viz-legend{ font-size:.66rem; gap:.9rem; }
   /* Het antwoord hoort bóven de grafiek: tik je onderaan een balk, dan verschijnt het
      anders precies achter je eigen duim. De wrap is al een flex-kolom. */
   .dvb-readout{
@@ -2039,7 +2054,18 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-bar:hover .dvb-bar-inner{ filter:brightness(1.15); }
 /* Kleurtaal zoals op de rest van de site: roze = aandacht. Het tijdige gros is licht
    warmgrijs (rustige achtergrond); de laatkomers kleuren vol roze en springen eruit. */
-.dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.35); border-radius:0 0 2px 2px; }
+/* Dekking van .35 naar .65: op papier haalde de tijdige balk 1,77:1 en was hij bij kleine
+   afwijkingen nauwelijks van het vel te onderscheiden. Op .65 is dat 3,28:1. De hiërarchie
+   blijft: het roze van de late balken springt er nog altijd uit. */
+.dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.65); border-radius:0 0 2px 2px; }
+/* PRECIES OP DE DEADLINE. Een afwijking van nul dagen tekende als een streepje van 2px en
+   las daardoor als 'geen data', terwijl het op de startpagina de meest voorkomende uitkomst
+   is: de stad publiceert stelselmatig op de laatste toegelaten dag. Die zittingen krijgen
+   nu een eigen vorm, een blokje dat schrijlings op de nullijn ligt, zodat het beeld zegt
+   wat het is: geraakt, niet gemist en niet ruim gehaald. */
+.dvb-bar.opdelijn .dvb-bar-inner{
+  background:rgba(82,74,63,.65); border-radius:1px;
+}
 .dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:2px 2px 0 0; }
 .dvb-bar.active .dvb-bar-inner{ filter:brightness(1.2); box-shadow:0 0 0 1.5px var(--ink); }
 /* Geleidelijn over de volle hoogte bij de gekozen balk. De ring rond de balk alleen was
@@ -2060,8 +2086,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .dvb-bar.geknipt.tijdig .dvb-bar-inner{
   background:linear-gradient(to bottom,
-    rgba(82,74,63,.35) calc(100% - 8px), transparent calc(100% - 8px),
-    transparent calc(100% - 5px), rgba(82,74,63,.35) calc(100% - 5px));
+    rgba(82,74,63,.65) calc(100% - 8px), transparent calc(100% - 8px),
+    transparent calc(100% - 5px), rgba(82,74,63,.65) calc(100% - 5px));
 }
 /* Readout onder de grafiek: toont de gekozen zitting — werkt op hover én tik (mobiel) */
 .dvb-readout{
@@ -2106,7 +2132,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 @media (hover:hover){ #dashBars .dvb-chart{ cursor:zoom-in; } }
 .dvb-readout .hint{ color:var(--ink-faint); }
 .dvb-readout strong{ color:var(--ink); font-weight:600; }
-.dvb-readout .ok{ color:var(--pink-text); }
+.dvb-readout .ok{ color:var(--ink-2); }   /* op tijd = neutraal; roze blijft voor te laat */
 .dvb-readout .bad{ color:#c8102e; }
 
 .dvb-recent{
@@ -2224,7 +2250,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
   border:1px solid;
 }
-.s-pill.tijdig    { color:var(--pink-text); border-color:var(--pink); background:var(--pink-soft); }
+/* 'Tijdig' is neutrale inkt, niet roze. Roze betekent op deze site 'let op', en die kleur
+   stond binnen één scherm zowel bij een geslaagde meting als bij een overschrijding. Nu
+   draagt alleen 'te laat' de aandachtkleur. */
+.s-pill.tijdig    { color:var(--ink-2); border-color:var(--line-strong); background:transparent; }
 .s-pill.te-laat   { color:#c4006a; border-color:#c4006a; background:rgba(196,0,106,.06); }
 .s-pill.verwacht  { color:var(--bone-dim); border-color:var(--line-strong); }
 .s-pill.beslist   { color:var(--bone-dim); border-color:var(--line-strong); background:transparent; }
