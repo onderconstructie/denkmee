@@ -1822,6 +1822,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
     font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim);
   }
   .tij-tab-meta{ display:none; }
+  .lede-detail{ display:none; }   /* de kopregels hieronder dragen deze twee zinnen al */
   .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
   .tij-tab-score{
     display:block; flex-shrink:0; text-align:right;
@@ -2120,6 +2121,25 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   color:var(--ink-faint);
   margin-bottom:.6rem;
 }
+/* Elke late zitting wijst haar eigen balk aan. Bewust geen knopvorm: het blijft een
+   opsomming die je kunt aantikken, geen nieuwe bedieningsknop naast de grafiek. */
+.dvb-recent-link{
+  display:block; width:100%; text-align:left;
+  padding:.5rem 0; background:none; border:none; cursor:pointer;
+  font-family:inherit; font-size:.7rem; line-height:1.5; color:var(--ink-dim);
+  transition:color .15s;
+}
+.dvb-recent-link .dvr-laat{ color:var(--pink-text); }
+.dvb-recent-link:hover{ color:var(--ink); }
+.dvb-recent-link:hover .dvr-laat{ color:var(--pink); }
+.dvb-recent-link:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+/* De compacte samenvatting van de cijfertegels, alleen op smal scherm (zie de media-query). */
+.dash-kort{
+  display:none; margin:0;
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.76rem; line-height:1.6; color:var(--ink-2);
+}
+.dash-kort strong{ color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
 
 .dash-detail{
   grid-row:3; grid-column:1 / -1;
@@ -2163,8 +2183,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
      De twee overblijvende cellen krijgen daardoor bijna 50% meer breedte, en hun labels
      breken niet langer in drie regels. */
   .dash-stat{ display:none; }
-  .dash-secondary{ grid-template-columns:repeat(2,1fr); }
-  .dash-cell.cel-telaat{ display:none; }
+  /* De drie cijfertegels werden op 375px drie kokers van ~105px waarin elk label in drie
+     regels van 10px brak. Als zin lezen dezelfde cijfers in één oogopslag, en het scheelt
+     een blok. De tegels blijven in de DOM voor de brede weergave. */
+  .dash-secondary{ display:block; background:var(--paper); padding:1.1rem 1.3rem; }
+  .dash-cell{ display:none; }
+  .dash-kort{ display:block; }
 }
 
 /* ============================================================
@@ -3916,7 +3940,7 @@ html{ -webkit-tap-highlight-color:transparent; }
 a, button, summary, input, label{ touch-action:manipulation; }
 @media (hover:none){
   .btn:active, .hc-chip:active, .hc-stat:active, .hc-edit:active, .tij-tab:active,
-  .dvb-knip:active,
+  .dvb-knip:active, .dvb-recent-link:active,
   .seg-opt:active, .tch:active, .dos-card:active, .dc-card:active, .item-card:active,
   .prc-card:active, .sch-card:active, .menu-list a:active, .tabbar a:active,
   .cml-action:active, .dos-volg-chip:active, .fc:active, .menu-profile:active,
@@ -4238,11 +4262,14 @@ a, button, summary, input, label{ touch-action:manipulation; }
     <div class="sec-num met-ic"><svg class="sec-ic" aria-hidden="true"><use href="#ic-optijd"/></svg>Op tijd?</div>
     <div class="sec-titles">
       <h2>Haalt de stad de wettelijke <em>deadlines</em>?</h2>
+      <!-- De twee termijnen staan hieronder ook al als kopregel boven de orgaanknoppen
+           ("Agenda, 8 dagen vóór de zitting"). Op een telefoon lees je anders 260px uitleg
+           voor je bij de eerste knop bent, dus daar blijft alleen de eerste zin staan. -->
       <p class="sec-lede" id="tijdSecLede">
-        Twee soorten documenten, elk met een eigen wettelijke termijn. De <strong>agenda</strong> van de
+        Twee soorten documenten, elk met een eigen wettelijke termijn.<span class="lede-detail"> De <strong>agenda</strong> van de
         gemeenteraad en de raad voor maatschappelijk welzijn moet minstens 8 dagen vóór de zitting
         beschikbaar zijn. De <strong>besluiten</strong> van alle vijf de organen moeten uiterlijk
-        10 dagen ná de zitting of de beslissing bekend zijn.
+        10 dagen ná de zitting of de beslissing bekend zijn.</span>
       </p>
     </div>
   </div>
@@ -4280,6 +4307,9 @@ a, button, summary, input, label{ touch-action:manipulation; }
     </div>
 
     <div class="dash-secondary">
+      <!-- Op smal scherm vervangt deze ene regel de tegels hiernaast: dezelfde cijfers,
+           maar als zin, want de labels braken daar in drie regels van 10px. -->
+      <p class="dash-kort" id="dashKort"></p>
       <div class="dash-cell">
         <div class="dash-cell-num tnum" id="dashAvg">—</div>
         <div class="dash-cell-lbl" id="dashAvgLbl">dagen op voorsprong<br>gemiddeld</div>
@@ -5768,6 +5798,13 @@ function renderDashboard(){
     : `dagen ná zitting<br>gemiddeld`;
   $('dashLate').textContent = late;
   $('dashWait').textContent = wait;
+  // Dezelfde twee cijfers als één zin, voor het smalle scherm (zie .dash-kort).
+  const avgNl = String(avg).replace('.', ',');
+  $('dashKort').innerHTML = past.length
+    ? `Gemiddeld <strong>${avgNl} dagen</strong> ${direction === 'before' ? 'vóór de zitting' : 'ná de zitting'}. `
+      + (wait ? `<strong>${wait}</strong> ${wait === 1 ? 'zitting is' : 'zittingen zijn'} nog niet gepubliceerd.`
+              : 'Alles is gepubliceerd.')
+    : 'Nog geen voltooide zittingen.';
 
   // Update viz-label
   $('dashVizLbl').textContent = direction === 'before'
@@ -5812,12 +5849,15 @@ function renderDashboard(){
   const recentLate = past.filter(s => s._status === 'te-laat')
     .sort((a,b) => new Date(b.date) - new Date(a.date))
     .slice(0,3);
+  // Elke datum wijst zijn eigen balk aan in de grafiek: zo staat dit blok niet langer als
+  // dood tekstje naast het beeld waar het over gaat. Zit die zitting niet in de getoonde
+  // reeks (op een telefoon zie je de laatste twintig), dan opent de volledige weergave.
   const recentHTML = recentLate.length
     ? `<div class="dvb-recent-title">Te laat</div>` + recentLate.map(s => {
         const lateBy = direction === 'before' ? deadlineDays - s._days : s._days - deadlineDays;
-        return `${formatShort(s.date)} <span style="color:var(--pink-text)">(${dgn(lateBy)} te laat)</span>`;
-      }).join('<br>')
-    : `<div class="dvb-recent-title">Status</div>Geen overtredingen geregistreerd.`;
+        return `<button type="button" class="dvb-recent-link" data-datum="${escape(s.date)}">${formatShort(s.date)} <span class="dvr-laat">(${dgn(lateBy)} te laat)</span></button>`;
+      }).join('')
+    : `<div class="dvb-recent-title">Status</div>Geen enkele keer te laat.`;
 
   $('dashBars').innerHTML = `
     <div class="dvb-chartwrap">
@@ -5943,7 +5983,7 @@ function dvbBouwBalken(zittingen, direction, deadlineDays, UP_MAX, DOWN_MAX, ZER
     }
     if(geknipt) tip += ', valt buiten de schaal';
     return `
-      <div class="dvb-bar ${cls}" data-tip="${escape(tip)}">
+      <div class="dvb-bar ${cls}" data-tip="${escape(tip)}" data-datum="${escape(s.date)}">
         <div class="dvb-bar-inner" style="${stijl}"></div>
       </div>`;
   }).join('');
@@ -6012,6 +6052,24 @@ function dvbReadoutToon(container, readout, el){
   readout.innerHTML = `<strong>${escape(head)}</strong>${rest ? ` · <span class="${cls}">${escape(rest)}</span>` : ''}`;
 }
 
+// Eén zitting aanwijzen in de grafiek, gevraagd vanuit het te-laat-lijstje ernaast. Staat
+// ze niet in de getoonde reeks (op een telefoon zie je de laatste twintig), dan opent de
+// volledige weergave en wijzen we haar dáár aan: nooit een tik die niets doet.
+function dvbWijsZittingAan(datum){
+  if(!datum) return;
+  const inDash = document.querySelector(`#dashBars .dvb-bar[data-datum="${datum}"]`);
+  if(inDash){
+    dvbReadoutToon($('dashBars'), $('dvbReadout'), inDash);
+    inDash.scrollIntoView({ block:'nearest', inline:'nearest' });
+    return;
+  }
+  openDvbVergroot();
+  const inGroot = document.querySelector(`#dvbModalChart .dvb-bar[data-datum="${datum}"]`);
+  if(inGroot){
+    dvbReadoutToon($('dvbModalChart'), $('dvbModalReadout'), inGroot);
+    inGroot.scrollIntoView({ block:'nearest', inline:'center' });
+  }
+}
 // De vergrote weergave: dezelfde grafiek op vol formaat, met álle zittingen. Op een
 // telefoon scrolt de tijdas horizontaal en beginnen we bij de jongste zittingen.
 function openDvbVergroot(){
@@ -6134,6 +6192,9 @@ function setupTijdTabs(){
     // grafiek. Zo is de grafiek zélf de knop en hoeft er geen knop naast te staan. Op een
     // aanraakscherm blijft tikken kiezen; daar is de meldregel onder de grafiek de deur.
     bars.addEventListener('click', e => {
+      // Een late zitting uit het lijstje ernaast wijst haar eigen balk aan.
+      const link = e.target.closest('.dvb-recent-link');
+      if(link){ dvbWijsZittingAan(link.dataset.datum); return; }
       if(!e.target.closest('.dvb-chart')) return;
       if(window.matchMedia('(hover:hover)').matches){ openDvbVergroot(); return; }
       const b = e.target.closest('.dvb-bar'); if(b) show(b);
