@@ -1796,8 +1796,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .tts-meter i{ display:block; height:100%; background:var(--ink); border-radius:999px; }
 .tts-meter[hidden]{ display:none; }
+/* Op de gekozen knop is de vulling niet vol papierwit maar gedempt: een volle lichte balk
+   op inkt trekt harder dan het cijfer ernaast, en het cijfer is de boodschap. */
 .tij-tab.active .tts-meter{ background:var(--op-eiland-25); }
-.tij-tab.active .tts-meter i{ background:var(--paper); }
+.tij-tab.active .tts-meter i{ background:var(--op-eiland-65); }
 /* De meta-regel in deze knoppen ('8 dagen · agenda') staat sinds de groepskoppen dubbel. */
 #tijTabs .tij-tab-meta{ display:none; }
 .tij-tab{
@@ -1905,10 +1907,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .viz-detail{ display:none; }
 }
 
+/* Eén kolom op élk formaat. Sinds de cijfertegels weg zijn is er niets meer dat naast de
+   grafiek hoort te staan, en op een breed scherm werd de grafiek anders nodeloos smal. */
 .dashboard{
   display:grid;
-  grid-template-columns:1.2fr 1fr;
-  grid-template-rows:auto auto;
+  grid-template-columns:1fr;
   gap:1px;
   background:var(--line-strong);
   border:1px solid var(--line-strong);
@@ -1920,60 +1923,14 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    eigen rand en marge vallen zodat het naadloos onder de tab aansluit. */
 #tijTabs > .dashboard{ border:none; margin:0; }
 
-/* De grafiek staat op ELK formaat vooraan, meteen onder de knop die je aantikte. Ze stond
-   op een breed scherm achter de cijfertegels, en sinds de knoppen in twee groepen staan
-   betekende dat: kies je de agenda, dan begint de grafiek 272px lager en valt ze buiten
-   beeld. De tegels zijn een samenvatting; die mogen na het bewijs komen. */
-.dash-stat{
-  display:flex; flex-direction:column;
-  justify-content:center;
-  grid-row:2; grid-column:1;
-  background:var(--ink) !important;
-  color:var(--paper);
-  padding:2.2rem 2rem !important;
-}
-.dash-num{
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:clamp(4rem, 8vw, 6.5rem);
-  line-height:.9;
-  font-weight:300;
-  letter-spacing:-.04em;
-  font-variant-numeric:tabular-nums;
-  color:var(--pink);
-  margin-bottom:.2rem;
-}
-.dash-lbl{
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--op-eiland-85);
-  margin-bottom:.5rem;
-}
-.dash-sub{
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.78rem;
-  color:var(--op-eiland-55);
-}
-
+/* Het dashboard is nog twee dingen: de grafiek, en één regel die zegt wat er nog ontbreekt.
+   De cijfertegels die hier stonden zijn geschrapt; zie de toelichting in de HTML. */
 .dash-secondary{
-  grid-row:2; grid-column:2;
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:1px; padding:0 !important;
-  background:var(--line);
+  grid-row:2; grid-column:1 / -1;
+  display:block; background:var(--paper);
+  padding:1.1rem 1.4rem !important;
 }
-.dash-cell{ background:var(--paper); padding:1.4rem 1.2rem; display:flex; flex-direction:column; justify-content:center; }
-.dash-cell-num{
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:2.2rem; line-height:1;
-  font-weight:400; letter-spacing:-.02em;
-  color:var(--ink);
-  margin-bottom:.5rem;
-}
-.dash-cell-lbl{
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--ink-dim);
-  line-height:1.5;
-}
+.dash-secondary.leeg-op-smal{ display:none; }
 
 .dash-viz{
   grid-row:1; grid-column:1 / -1;
@@ -2232,12 +2189,13 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-recent-link:hover{ color:var(--ink); }
 .dvb-recent-link:hover .dvr-laat{ color:var(--pink); }
 .dvb-recent-link:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
-/* De compacte samenvatting van de cijfertegels, alleen op smal scherm (zie de media-query). */
+/* De enige tekstregel die het dashboard nog draagt, op élk formaat: wat er nog ontbreekt. */
 .dash-kort{
-  display:none; margin:0;
+  display:block; margin:0;
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.76rem; line-height:1.6; color:var(--ink-2);
 }
+.dash-kort[hidden]{ display:none; }
 .dash-kort strong{ color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
 
 .dash-detail{
@@ -2262,36 +2220,31 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dash-detail[open] summary::before{ content:'− '; }
 .dash-detail .sessions-table{ border:none; border-top:1px solid var(--line); }
 
+/* Breed scherm: sinds de cijfertegels weg zijn loopt de grafiek over de volle breedte. Met
+   balken van 16px stonden er dan 32px lucht tussen elke balk en las het beeld als een kam.
+   Bredere balken vullen die ruimte, en de grafiek mag ietsje hoger nu ze zoveel breder is. */
+@media (min-width:901px){
+  .dvb-bar{ max-width:24px; }
+  .dvb-chart{ height:190px; }
+}
+
 @media (max-width:900px){
-  .dashboard{ grid-template-columns:1fr; }
-  /* Smal scherm: de GRAFIEK eerst, meteen onder de orgaan-tabs. Wie een orgaan aantikt
-     ziet direct het antwoord in beeld; de cijfertegels volgen eronder. */
-  .dash-viz{ grid-row:1; grid-column:1; }
-  .dash-stat{ grid-row:2; grid-column:1; }
-  .dash-secondary{ grid-row:3; grid-column:1; }
-  .dash-detail{ grid-row:4; }
+  .dash-viz{ padding:1.2rem 1.3rem !important; }
+  .dash-secondary{ padding:1.1rem 1.3rem !important; }
   .dash-viz-bars{ grid-template-columns:1fr; }
   .dvb-recent{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:1rem; }
-  /* Compactere pct-tegel: op mobiel is hij een samenvattingsstrook, niet de blikvanger. */
-  .dash-stat{ padding:1.3rem 1.3rem !important; }
-  .dash-num{ font-size:3rem; }
-  /* Het hoofdgetal staat sinds kort op de knop waarop je net tikte (zie .tij-tab-score),
-     dus deze tegel herhaalt zichzelf, en dat nog ná de grafiek die ze moest samenvatten.
-     Idem voor 'keer te laat': de breuk op de knop (91 van 92) zegt dat al. In CSS
-     verbergen, niet slopen: de desktopweergave en renderDashboard blijven onaangeroerd.
-     De twee overblijvende cellen krijgen daardoor bijna 50% meer breedte, en hun labels
-     breken niet langer in drie regels. */
-  .dash-stat{ display:none; }
-  /* De drie cijfertegels werden op 375px drie kokers van ~105px waarin elk label in drie
-     regels van 10px brak. Als zin lezen dezelfde cijfers in één oogopslag, en het scheelt
-     een blok. De tegels blijven in de DOM voor de brede weergave. */
-  .dash-secondary{ display:block; background:var(--paper); padding:1.1rem 1.3rem; }
-  .dash-cell{ display:none; }
-  .dash-kort{ display:block; }
-  .dash-kort[hidden]{ display:none; }
-  /* Niets te melden, dus ook geen lege doos: het blok verdwijnt mee. De klasse komt uit
-     renderDashboard, zodat dit ook werkt zonder :has()-ondersteuning. */
-  .dash-secondary.leeg-op-smal{ display:none; }
+}
+
+/* Tablet zit tussen twee stoelen: aanraakbaar zoals een telefoon, maar met de breedte van
+   een laptop. Het kreeg de telefoonopmaak en werd daardoor het hoogste blok van alle drie:
+   een grafiek van 240px met de late zittingen eronder in plaats van ernaast. Hier krijgt
+   het de laptopindeling terug (twee kolommen, lagere grafiek), maar houdt het het antwoord
+   bóven de grafiek, want tikken doe je ook op een tablet met een vinger. Deze regels staan
+   ná het smalle blok hierboven: bij gelijke specificiteit wint de laatste. */
+@media (min-width:601px) and (max-width:900px){
+  .dvb-chart{ height:200px; }
+  .dash-viz-bars{ grid-template-columns:minmax(0,1fr) 200px; gap:1.2rem 1.6rem; }
+  .dvb-recent{ border-left:1px solid var(--line); border-top:none; padding-left:1.2rem; padding-top:0; }
 }
 
 /* ============================================================
@@ -4410,40 +4363,22 @@ a, button, summary, input, label{ touch-action:manipulation; }
     </button>
   </div>
 
+  <!-- De cijfertegels zijn geschrapt, op élk formaat. Ze herhaalden wat de knop hierboven
+       al zegt (percentage en breuk), en het gemiddelde aantal dagen zei niets: bij de raden
+       publiceert de stad vrijwel altijd exact op de laatste toegelaten dag, dus dat cijfer
+       landt per definitie op de termijn zelf. Wat overblijft is de grafiek, plus één regel
+       die alleen verschijnt als er echt iets openstaat. -->
   <div class="dashboard">
-    <div class="dash-stat">
-      <div class="dash-num" id="dashPct">—</div>
-      <div class="dash-lbl">op tijd gepubliceerd</div>
-      <div class="dash-sub" id="dashSub">— van — zittingen</div>
-    </div>
-
-    <div class="dash-secondary">
-      <!-- Op smal scherm vervangt deze ene regel de tegels hiernaast. Ze verschijnt alleen
-           als er iets te melden valt: staat alles online, dan is zwijgen het juiste bericht. -->
-      <p class="dash-kort" id="dashKort"></p>
-      <!-- De tegel 'dagen gemiddeld' is geschrapt. Bij de raden publiceert de stad vrijwel
-           altijd exact op de laatste toegelaten dag, dus dat gemiddelde landt per definitie
-           op de termijn zelf en voegt niets toe aan het percentage ernaast. -->
-      <div class="dash-cell" hidden>
-        <div class="dash-cell-num tnum" id="dashAvg">—</div>
-        <div class="dash-cell-lbl" id="dashAvgLbl">dagen op voorsprong<br>gemiddeld</div>
-      </div>
-      <div class="dash-cell cel-telaat">
-        <div class="dash-cell-num tnum" id="dashLate">—</div>
-        <div class="dash-cell-lbl">keer te laat<br>sinds dec 2024</div>
-      </div>
-      <div class="dash-cell">
-        <div class="dash-cell-num tnum" id="dashWait">—</div>
-        <div class="dash-cell-lbl">nog niet<br>gepubliceerd</div>
-      </div>
-    </div>
-
     <div class="dash-viz">
       <div class="dash-viz-lbl">
         <span id="dashVizLbl">Per zitting · dagen voor / na deadline</span>
         <span class="dash-viz-legend"><span class="dot tijdig"></span>tijdig <span class="dot late"></span>te laat</span>
       </div>
       <div class="dash-viz-bars" id="dashBars"></div>
+    </div>
+
+    <div class="dash-secondary">
+      <p class="dash-kort" id="dashKort"></p>
     </div>
 
     <!-- Vergrote deadline-grafiek: exact dezelfde grafiek en taal, maar op vol formaat en
@@ -5934,31 +5869,18 @@ function renderTijdTabScores(){
 function renderDashboard(){
   const orgaan = TIJD_ACTIVE_ORGAAN;
   const st = tijdStats(orgaan);
-  if(!st){
-    $('dashPct').textContent = '—';
-    return;
-  }
-  const { deadlineDays, direction, docLabel, computed, past, onTime, late, wait, pct, avg } = st;
+  if(!st) return;
+  const { deadlineDays, direction, docLabel, computed, past, wait } = st;
 
-  $('dashPct').textContent = past.length ? pct + '%' : '—';
-  $('dashSub').innerHTML = past.length
-    ? `<strong>${onTime}</strong> / ${past.length} zittingen sinds dec 2024`
-    : 'nog geen voltooide zittingen';
-  $('dashAvg').textContent = avg;
-  $('dashAvgLbl').innerHTML = direction === 'before'
-    ? `dagen vóór zitting<br>gemiddeld`
-    : `dagen ná zitting<br>gemiddeld`;
-  $('dashLate').textContent = late;
-  $('dashWait').textContent = wait;
   // Alleen melden wat er te melden valt. 'Alles is gepubliceerd' is geen nieuws; een stuk
-  // dat nog ontbreekt wél. Staat er niets open, dan blijft deze regel leeg en verdwijnt ze.
+  // dat nog ontbreekt wél. Staat er niets open, dan blijft deze regel leeg en verdwijnt ze,
+  // samen met haar omhullende blok. Niet via CSS alleen: een browser zonder :has() zou dan
+  // een lege doos tonen.
   const kort = $('dashKort');
   kort.innerHTML = wait
     ? `<strong>${wait}</strong> ${wait === 1 ? 'zitting wacht' : 'zittingen wachten'} nog op publicatie.`
     : '';
   kort.hidden = !wait;
-  // Ook het omhullende blok mee laten verdwijnen op smal scherm, waar het alleen deze regel
-  // draagt. Niet via CSS alleen: een browser zonder :has() zou dan een lege doos tonen.
   const sec2 = document.querySelector('#vergaderingen .dash-secondary');
   if(sec2) sec2.classList.toggle('leeg-op-smal', !wait);
 
