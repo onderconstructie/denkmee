@@ -86,6 +86,17 @@ AANSPREEK_RX = re.compile(
     r"(?:[A-Z][\w'’-]*\.?\s+){0,2}[A-Z][\w'’-]+",
     re.UNICODE)
 
+# Twee rolaanduidingen die in deze stukken vrijwel altijd een PARTICULIER aanwijzen en die de
+# aanspreekvorm hierboven niet vangt, omdat er geen 'de heer' of 'mevrouw' bij staat:
+#   'OGV Denteneer'    de aanvrager van een omgevingsvergunning, in de vergunningentabel
+#   'Meester Lammar'   de advocaat van een burger in een bezwaardossier
+# Gemeten aanleiding: beide vormen leverden werkende zoektermen op die naar precies één stuk
+# leidden. Zelfde aanpak en zelfde beperking als hierboven: we knippen de CONTEXT weg, niet de
+# persoon. Draagt een naam elders betekenis, dan blijft ze vindbaar. Bewust géén regel voor de
+# tabelvorm 'VAN NAAM Voornaam': die is op deze teksten niet van gewone kopregels te
+# onderscheiden ('VAN DE KREDIETEN', 'VAN GESCHILLEN') en zou echte zoekwoorden opeten.
+ROL_RX = re.compile(r"\b(?:OGV|Meester)\s+(?:[A-Z][\w'’-]*\.?\s+){0,2}[A-Z][\w'’-]+")
+
 # Woorden zonder zoekwaarde. Bewust kort gehouden: de document-frequentie-drempel
 # hieronder vangt de ambtelijke boilerplate ("gelet", "overwegende", "artikel") vanzelf,
 # in elke variant, zonder dat we ze allemaal hoeven te raden.
@@ -101,6 +112,17 @@ STOPWOORDEN = {
     "september", "oktober", "november", "december",
 }
 MIN_LENGTE = 3
+# Een schriftelijke vraag is een paar bladzijden. Duikt er onder één vraag een pdf op die daar
+# veelvouden boven zit, dan is dat geen vraag meer maar een BUNDEL: de stad hangt er dan andere
+# stukken aan die niets met de vraag te maken hebben. Zo'n bundel indexeren doet twee dingen
+# fout tegelijk. Ze maakt van dat ene punt een magneet die op zowat elke zoekterm bovenkomt, en
+# ze sleept de persoonsgegevens mee die in die andere stukken staan (bezwaarindieners,
+# vergunningsaanvragers en hun advocaten). Gemeten op dit corpus: de mediane vraag-pdf telt
+# 3.298 tekens, de grootste ECHTE vraag 23.613, en één uitschieter 520.911. Die uitschieter
+# droeg in z'n eentje 6.616 indexwoorden (mediaan per punt: 55) en 23% van de woordenlijst wees
+# ernaar. De vraag zelf verdwijnt niet uit de zoek: vraag, antwoord en brontekst zet de parser
+# al apart en die blijven gewoon doorzoekbaar, net als de samenvatting en de link naar de bron.
+VRAAG_PDF_MAX = 50_000
 # Een woord dat in meer dan zoveel punten voorkomt, is geen naald meer maar hooi:
 # wie erop zoekt, krijgt honderden treffers en vindt niets. Gemeten op dit corpus ligt
 # de grens tussen echte termen en ambtelijke vulling ("betreffende", "toepassing",
@@ -111,6 +133,7 @@ MAX_PUNTEN_PER_WOORD = 120
 def tokens(tekst):
     tekst = EMAIL_RX.sub(" ", tekst)
     tekst = AANSPREEK_RX.sub(" ", tekst)   # 'de heer X' / 'mevrouw Y' → geen zoekterm
+    tekst = ROL_RX.sub(" ", tekst)         # 'OGV X' / 'Meester Y'     → geen zoekterm
     uit = set()
     for t in TOKEN_RX.findall(norm(tekst)):
         if len(t) < MIN_LENGTE or t in STOPWOORDEN:
@@ -217,6 +240,7 @@ def main():
         extra[ap["id"]] = "\n".join(s for s in stukken if s)
 
     n_vraag_pdf = 0
+    n_vraag_bundel = 0
     # De vraagteksten komen uit de lokale cache (staan niet meer in data.json); de
     # maskeer_namen-stap verderop redigeert alles wat hier binnenkomt, cache incluis.
     vragen_cache = {}
@@ -234,8 +258,14 @@ def main():
         pdf = sv.get("pdf")
         if pdf and (BASE / pdf).exists():
             try:
-                stukken.append(pdf_tekst(BASE / pdf))
-                n_vraag_pdf += 1
+                _t = pdf_tekst(BASE / pdf)
+                if len(_t) > VRAAG_PDF_MAX:
+                    n_vraag_bundel += 1
+                    print(f"  (bundel niet geïndexeerd: {sv['id']} telt {len(_t):,} tekens, "
+                          f"grens {VRAAG_PDF_MAX:,}; vraag en antwoord blijven doorzoekbaar)")
+                else:
+                    stukken.append(_t)
+                    n_vraag_pdf += 1
             except Exception as e:
                 print(f"  (pdf overgeslagen: {pdf}: {e})")
         extra[sv["id"]] = "\n".join(s for s in stukken if s)
@@ -304,6 +334,9 @@ def main():
           f"-> zoekindex.json ({kb:,.0f} kB)")
     print(f"       boilerplate-drempel: {len(boilerplate):,} woorden geschrapt "
           f"(in >{MAX_PUNTEN_PER_WOORD} punten)")
+    if n_vraag_bundel:
+        print(f"       bundelgrens: {n_vraag_bundel} vraag-pdf('s) niet geïndexeerd "
+              f"(boven {VRAAG_PDF_MAX:,} tekens)")
 
 
 if __name__ == "__main__":
