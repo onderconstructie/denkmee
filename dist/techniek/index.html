@@ -1752,25 +1752,29 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    kader; elk .tij-blok draagt het. (De andere gebruikers van .tij-tabs, de tabbladen van
    'Op de agenda' en 'Recent beslist', blijven ongemoeid: die meten wél hetzelfde.) */
 #tijTabs{ display:block; border:none; border-radius:0; overflow:visible; margin-bottom:1.6rem; }
-/* Het blok is zo breed als zijn knoppen, niet zo breed als de pagina. Rekten de knoppen
-   mee, dan werd één knop op een laptop 654px met een naam van 105px erin: een lege doos.
-   Vaste module van 16rem, dus twee blokken van verschillende lengte met dezelfde maat. */
+/* De blokken vullen de rij. Een vaste knopmaat maakte ze tot twee smalle eilandjes boven
+   een paginabrede grafiek; nu delen de knoppen van een groep de volle breedte. Dat kan,
+   omdat elke knop sinds kort iets te tonen heeft: naam, meterbalkje en percentage. */
 .tij-blok{
   display:flex; gap:0; flex-wrap:nowrap;
-  width:max-content; max-width:100%;
   border:1.5px solid var(--ink);
   border-radius:var(--r-chip);
   overflow:hidden;
 }
-#tijTabs .tij-tab{ flex:0 0 16rem; }
+#tijTabs .tij-tab{ flex:1 1 0; min-width:0; }
 .tij-blok .tij-tab + .tij-tab{ border-left:1.5px solid var(--ink); }
-/* De knop toont overal hetzelfde: de naam links, de uitkomst rechts. Op een laptop stond
-   daar alleen een naam met een regeltje dat de kop erboven herhaalde, dus zonder cijfer.
-   Eén ontwerp voor beide schermen leest rustiger dan twee. */
+/* De knop toont overal hetzelfde: naam links, meter in het midden, uitkomst rechts. De
+   ruststand krijgt een opgetild vlak (paper-2): een segment dat gewoon op het paginapapier
+   ligt leest als tekst, niet als iets dat je kunt indrukken. */
 #tijTabs .tij-tab{
-  flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem;
+  flex-direction:row; align-items:center; justify-content:space-between; gap:.9rem;
   padding:.85rem 1.1rem;
+  background:var(--paper-2);
 }
+#tijTabs .tij-tab:not(.active):hover{ background:#fff; }
+/* Even specifiek als de regel hierboven, anders wint het opgetilde papier van de volle
+   inktvulling en staat er lichte tekst op licht papier. */
+#tijTabs .tij-tab.active{ background:var(--ink); color:var(--paper); }
 .tij-tab-score{
   display:block; flex-shrink:0; text-align:right;
   font-family:'JetBrains Mono', ui-monospace, monospace;
@@ -1782,6 +1786,16 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .tij-tab.active .tij-tab-score{ color:var(--paper); }
 .tij-tab.active .tij-tab-score .tts-pct{ color:var(--op-eiland-65); }
 .tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
+/* Het meterbalkje: dezelfde verhouding als het percentage, maar zichtbaar in één oogopslag.
+   Vult de knop op een breed scherm zonder iets te beweren wat er niet staat. */
+.tts-meter{
+  flex:1 1 auto; min-width:1.5rem; height:5px; align-self:center;
+  background:var(--line-strong); border-radius:999px; overflow:hidden;
+}
+.tts-meter i{ display:block; height:100%; background:var(--ink); border-radius:999px; }
+.tts-meter[hidden]{ display:none; }
+.tij-tab.active .tts-meter{ background:var(--op-eiland-25); }
+.tij-tab.active .tts-meter i{ background:var(--paper); }
 /* De meta-regel in deze knoppen ('8 dagen · agenda') staat sinds de groepskoppen dubbel. */
 #tijTabs .tij-tab-meta{ display:none; }
 .tij-tab{
@@ -1877,21 +1891,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   .tij-blok > * + *{ border-top:1.5px solid var(--ink); }
   .tij-tab-meta{ display:none; }
   .lede-detail{ display:none; }   /* de kopregels hieronder dragen deze twee zinnen al */
-  .tij-tab{ flex-direction:row; align-items:baseline; justify-content:space-between; gap:.8rem; padding:.85rem 1.2rem; }
-  /* Het percentage is de uitkomst, dus het krijgt de maat van een cijfer en niet van een
-     label. Licht gezet zoals de andere grote getallen op de site (de datastem praat in
-     gewicht 300), met het procentteken kleiner: het getal telt, het teken niet. */
-  .tij-tab-score{
-    display:block; flex-shrink:0; text-align:right;
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-    color:var(--ink); font-variant-numeric:tabular-nums; line-height:1;
-  }
-  .tij-tab-score strong{ font-size:1.65rem; font-weight:300; letter-spacing:-.02em; }
-  .tij-tab-score .tts-pct{ font-size:.85rem; font-weight:400; margin-left:.06em; color:var(--ink-dim); }
-  .tij-tab-score .tts-breuk{ display:block; margin-top:.3rem; font-size:.66rem; color:var(--ink-faint); }
-  .tij-tab.active .tij-tab-score{ color:var(--paper); }
-  .tij-tab.active .tij-tab-score .tts-pct{ color:var(--op-eiland-65); }
-  .tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
+  /* De knop-opmaak zelf (rij, score, meter) staat in de basisregels: die geldt op élk
+     scherm. Hier alleen wat op een smal scherm anders moet. */
   .tij-tab-name{ font-size:1rem; }
   /* De termijn krijgt op smal scherm altijd zijn eigen regel, links uitgelijnd. Liet je hem
      natuurlijk aflopen, dan paste de ene kop wél op één regel en de andere niet, en stond de
