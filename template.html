@@ -8329,6 +8329,7 @@ function dosBlurb(d){
 let ITEM2DOS = null;          // punt-id → dossier (gevuld in buildDossiers)
 let FT_INDEX = null;          // {items:[...], tokens:{woord:[idx,...]}} zodra geladen
 let FT_VOCAB = null;          // woordenlijst, één keer afgeleid
+let FT_GRENS = null;          // woordenlijst + de boilerplate/stopwoorden, enkel voor de grenstoets
 let FT_LADEN = null;          // fetch-promise, éénmalig
 const FT_CACHE = new Map();   // zoekterm → {items:Set, dossiers:Set}
 let FT_QUERY = null;          // huidige zoekopdracht: Map dossier-id → Set(punt-id's)
@@ -8342,6 +8343,7 @@ function ftLaad(){
       if(!j || !j.tokens) return null;
       FT_INDEX = j;
       FT_VOCAB = Object.keys(j.tokens);
+      FT_GRENS = new Set(FT_VOCAB.concat(j.grens || []));
       // stond er al een zoekterm toen de index binnenkwam: verrijk de resultaten meteen
       const s = $('dosSearch');
       if(s && s.value.trim()) renderDossiers(true);
@@ -8353,6 +8355,22 @@ function ftLaad(){
 // Treffers voor één term: substring-match over de woordenlijst, dezelfde semantiek als de
 // gewone zoek ("overlast" vindt ook "geluidsoverlast"). Eén scan over ~20k woorden per
 // nieuwe term is enkele milliseconden; het resultaat wordt per term gecachet.
+// Ligt de zoekterm op een WOORDGRENS in dit woord? De volledige-tekstzoek matcht bewust ook
+// binnenin een woord, zodat "lijst" de kandidatenlijst vindt en "start" het opgestarte dossier.
+// Maar zonder rem vindt "pfas" ook "ontwerpfase", en dat is geen samenstelling: de letters
+// liggen dwars over de naad tussen "ontwerp" en "fase". Drie gevallen tellen als een grens:
+// het woord begint met de term, het eindigt erop, of wat ervóór staat is zelf een woord. Die
+// laatste toets leest ook de boilerplate- en stopwoorden mee (zie 'grens' in de index): "deel"
+// staat niet in de zoekwoorden, maar zonder dat woord verloor "fiets" zijn "deelfietsen".
+function ftOpGrens(term, w){
+  if(w.startsWith(term) || w.endsWith(term)) return true;
+  let i = w.indexOf(term);
+  while(i > 0){
+    if(FT_GRENS.has(w.slice(0, i))) return true;
+    i = w.indexOf(term, i + 1);
+  }
+  return false;
+}
 function ftHits(term){
   if(!FT_INDEX || term.length < 3) return null;
   const key = kwNorm(term);
@@ -8367,7 +8385,7 @@ function ftHits(term){
   const perItem = new Map();
   const exact = new Set();
   for(const w of FT_VOCAB){
-    if(!w.includes(key)) continue;
+    if(!w.includes(key) || !ftOpGrens(key, w)) continue;
     for(const i of FT_INDEX.tokens[w]){
       const id = FT_INDEX.items[i];
       items.add(id);
