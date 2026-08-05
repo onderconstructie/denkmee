@@ -1917,10 +1917,14 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    eigen rand en marge vallen zodat het naadloos onder de tab aansluit. */
 #tijTabs > .dashboard{ border:none; margin:0; }
 
+/* De grafiek staat op ELK formaat vooraan, meteen onder de knop die je aantikte. Ze stond
+   op een breed scherm achter de cijfertegels, en sinds de knoppen in twee groepen staan
+   betekende dat: kies je de agenda, dan begint de grafiek 272px lager en valt ze buiten
+   beeld. De tegels zijn een samenvatting; die mogen na het bewijs komen. */
 .dash-stat{
   display:flex; flex-direction:column;
   justify-content:center;
-  grid-row:1; grid-column:1;
+  grid-row:2; grid-column:1;
   background:var(--ink) !important;
   color:var(--paper);
   padding:2.2rem 2rem !important;
@@ -1948,7 +1952,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 
 .dash-secondary{
-  grid-row:1; grid-column:2;
+  grid-row:2; grid-column:2;
   display:grid; grid-template-columns:repeat(3,1fr);
   gap:1px; padding:0 !important;
   background:var(--line);
@@ -1969,7 +1973,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 
 .dash-viz{
-  grid-row:2; grid-column:1 / -1;
+  grid-row:1; grid-column:1 / -1;
   padding:1.6rem 1.8rem !important;
 }
 .dash-viz-lbl{
@@ -6289,15 +6293,15 @@ function positionTijdDashboard(){
   const tabs = document.getElementById('tijTabs');
   const dash = document.querySelector('#vergaderingen .dashboard');
   if(!tabs || !dash) return;
-  // 900px, gelijk aan het breekpunt waarop de knoppen een kolom worden (zie .tij-blok in de
-  // CSS). Stond die op 680, dan was er tussen 680 en 900 wel een kolom maar geen accordeon.
-  const mobiel = window.matchMedia('(max-width:900px)').matches;
+  // Het dashboard schuift onder de GROEP waarvan je een knop aantikt, op élk schermformaat.
+  // Niet tussen twee knoppen in: dan belandde de tweede knop van een groep ruim 700px onder
+  // zijn eigen kopregel. En niet onder álle knoppen samen: sinds er twee groepen zijn, stond
+  // de grafiek dan bij een keuze in de eerste groep onder de tweede groep, dus buiten beeld
+  // op een laptop. Vóór de groepen bestond dat verschil niet, want toen was 'onder de tabs'
+  // hetzelfde als 'onder de actieve tab'.
   const active = tabs.querySelector('.tij-tab.active');
-  // Het dashboard schuift onder de hele GROEP, niet tussen twee knoppen in. Tussen de
-  // knoppen belandde de tweede knop van een groep ruim 700px onder zijn eigen kopregel,
-  // en sloot hij onderaan aan op de kop van de ándere meting.
   const anker = active ? active.closest('.tij-blok') : null;
-  if(mobiel && anker){
+  if(anker){
     if(anker.nextElementSibling !== dash) anker.insertAdjacentElement('afterend', dash);
   } else if(tabs.nextElementSibling !== dash){
     tabs.insertAdjacentElement('afterend', dash);

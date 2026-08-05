@@ -1917,10 +1917,14 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    eigen rand en marge vallen zodat het naadloos onder de tab aansluit. */
 #tijTabs > .dashboard{ border:none; margin:0; }
 
+/* De grafiek staat op ELK formaat vooraan, meteen onder de knop die je aantikte. Ze stond
+   op een breed scherm achter de cijfertegels, en sinds de knoppen in twee groepen staan
+   betekende dat: kies je de agenda, dan begint de grafiek 272px lager en valt ze buiten
+   beeld. De tegels zijn een samenvatting; die mogen na het bewijs komen. */
 .dash-stat{
   display:flex; flex-direction:column;
   justify-content:center;
-  grid-row:1; grid-column:1;
+  grid-row:2; grid-column:1;
   background:var(--ink) !important;
   color:var(--paper);
   padding:2.2rem 2rem !important;
@@ -1948,7 +1952,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 
 .dash-secondary{
-  grid-row:1; grid-column:2;
+  grid-row:2; grid-column:2;
   display:grid; grid-template-columns:repeat(3,1fr);
   gap:1px; padding:0 !important;
   background:var(--line);
@@ -1969,7 +1973,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 
 .dash-viz{
-  grid-row:2; grid-column:1 / -1;
+  grid-row:1; grid-column:1 / -1;
   padding:1.6rem 1.8rem !important;
 }
 .dash-viz-lbl{
