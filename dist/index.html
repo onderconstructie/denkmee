@@ -2003,10 +2003,10 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
      lege helft over. Nu spannen ze altijd de volle breedte, en dus klopt de tijdas eronder:
      het eerste label staat boven de eerste balk, het laatste boven de laatste. */
   display:flex; align-items:end; justify-content:space-between; gap:2px;
-  /* Linkergutter voor de as-waarden; rechts een GERESERVEERDE labelstrook waar de balken
-     nooit komen: zo staat er gegarandeerd geen tekst bovenop een balk, ook niet in een
-     dichtbevolkte grafiek. Geen bodempadding: balken en 0-lijn delen één coördinatenstelsel. */
-  padding:0 var(--dvb-strook, 146px) 0 56px;
+  /* Linkergutter voor de as-waarden, rechts alleen nog wat lucht: de brede labelstrook is
+     geschrapt sinds de as haar eigen woorden draagt. Geen bodempadding: balken en 0-lijn
+     delen één coördinatenstelsel. */
+  padding:0 var(--dvb-strook, 8px) 0 56px;
   border-bottom:1px solid var(--line-strong);
   --max-days:16;
   --deadline-days:8;
@@ -2042,29 +2042,16 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   background:rgba(255,0,102,.035);
   pointer-events:none;
 }
-/* De labels wonen in de gereserveerde strook rechts (de padding van de chart): daar komen
-   geen balken, dus de tekst staat altijd vrij. De zone en de 0-lijn lopen er wél onderdoor. */
-.dvb-lbl{
-  position:absolute; z-index:2; pointer-events:none;
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.6rem; letter-spacing:.12em; text-transform:uppercase;
-  text-align:right;
-}
-.dvb-lbl.lbl-telaat{ right:8px; top:8px; color:var(--pink-text); }
-.dvb-lbl.lbl-nul{ right:8px; top:calc(var(--deadline-top, 50%) + 6px); color:var(--pink-text); }
-.dvb-lbl.lbl-ok{ right:8px; bottom:8px; color:var(--ink-faint); }
-/* Het bijschriftblok onder de grafiek is geschrapt. Het stond op display:none in zowel de
-   basisregel als de media-query, dus het rendeerde op geen enkel scherm, en de kleurenlegenda
-   werd verborgen met precies dat dode blok als motivering. De as draagt nu de woorden
-   ('te laat', 'deadline', 'op tijd'); de legenda draagt de kleuren en blijft dus staan. */
-@media (max-width:560px){
-  /* De strookbreedte op de WRAP en niet alleen op de grafiek: de tijdas is een zusje van de
-     grafiek, geen kind, en erfde de smalle strook dus niet. Ze viel terug op de brede
-     labelstrook van 146px, waardoor het einddatum-label los van de laatste balk stond. */
-  .dvb-chartwrap{ --dvb-strook:8px; }
-  .dvb-chart{ height:240px; }   /* de gewonnen hoogte gaat naar de balken */
-  .dvb-lbl{ display:none; }
-  /* Enige plek waar grijs en roze een betekenis krijgen, dus hier NIET verbergen. */
+/* De labelstrook rechts van de grafiek is geschrapt. Ze dateerde van vóór de aswoorden: nu
+   de as zelf 'te laat', 'deadline' en 'op tijd' draagt, stond dezelfde uitleg twee keer in
+   één beeld, aan beide uiteinden. Erger nog, op tabletbreedte liep het langste label
+   ('0 = 8 dagen op voorhand', 159px) over zijn eigen strook van 146px heen en dus over de
+   laatste balken. Zonder die strook krijgen de balken op élk scherm de volle breedte. */
+@media (max-width:900px){
+  /* Alles wat aanraakbaar en enkelkoloms is, krijgt dezelfde grafiek als de telefoon: een
+     hogere grafiek en het antwoord bóven het beeld. Dit liep tot voor kort tot 560px, maar
+     op een tablet tik je net zo goed met een vinger als op een telefoon. */
+  .dvb-chart{ height:240px; }
   .dash-viz-legend{ font-size:.66rem; gap:.9rem; }
   /* Het antwoord hoort bóven de grafiek: tik je onderaan een balk, dan verschijnt het
      anders precies achter je eigen duim. De wrap is al een flex-kolom. */
@@ -2166,7 +2153,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    staat. */
 .dvb-tijdas{
   display:flex; justify-content:space-between; align-items:center; gap:.8rem;
-  margin-top:.55rem; padding:0 var(--dvb-strook, 146px) 0 56px;
+  margin-top:.55rem; padding:0 var(--dvb-strook, 8px) 0 56px;
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.66rem; letter-spacing:.04em; color:var(--ink-faint);
   white-space:nowrap;
@@ -2176,7 +2163,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   content:''; order:1; flex:1 1 auto; height:1px; background:var(--line);
 }
 .dvb-tijdas span:last-child{ order:2; }
-.dvb-modal-card .dvb-tijdas{ padding:0 146px 0 56px; }
+.dvb-modal-card .dvb-tijdas{ padding:0 8px 0 56px; }
 /* .dvb-knip en .dvb-meer zijn opgegaan in de actiebalk hieronder: de melding over wat je
    niet ziet staat nu als subregel op de knop die het wél toont. */
 /* Eén regel onder de grafiek, en alleen wanneer er iets te melden valt: dat de reeks
@@ -2195,13 +2182,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-knip:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
 .dvb-modal-card{ max-width:min(1140px, 96vw); width:96vw; }
 .dvb-scroll{ overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
-/* Meer hoogte, de labelstrook en de as-cijfers terug (ook op smal scherm), stevigere balken.
-   Op een telefoon wordt de tijdas scrolbaar: elke balk houdt een minimumbreedte. */
-.dvb-modal-card .dvb-chart{ height:min(58vh, 460px); --dvb-strook:146px;
+/* Meer hoogte en grotere as-cijfers, stevigere balken. Op een telefoon wordt de tijdas
+   scrolbaar: elke balk houdt een minimumbreedte. */
+.dvb-modal-card .dvb-chart{ height:min(58vh, 460px);
   min-width:max(100%, calc(var(--dvb-n, 0) * 9px + 210px)); }
-.dvb-modal-card .dvb-lbl{ display:block; }
 .dvb-modal-card .dvb-tick{ font-size:.7rem; }
-.dvb-modal-card .dvb-chart::after{ font-size:.7rem; }
 .dvb-modal-card .dvb-bar{ max-width:26px; min-width:7px; }
 /* Alleen in het dashboard vangt de grafiek de horizontale beweging op (kiezen van de
    dichtstbijzijnde balk); verticaal scrollen blijft van de pagina. In de vergrote weergave
@@ -5992,11 +5977,6 @@ function renderDashboard(){
 
   const barsHTML = dvbBouwBalken(getoondeZittingen, direction, deadlineDays, UP_MAX, DOWN_MAX, ZERO_TOP);
 
-  // Wat betekent de 0-lijn hier? Bij de agenda: 8 dagen op voorhand; bij besluiten: 10 nadien.
-  const nulLabel = direction === 'before'
-    ? `0 = ${deadlineDays} dagen op voorhand`
-    : `0 = ${deadlineDays} dagen nadien`;
-
   // Recent issues, laatste 3 zittingen die te laat waren
   const recentLate = past.filter(s => s._status === 'te-laat')
     .sort((a,b) => new Date(b.date) - new Date(a.date))
@@ -6020,9 +6000,6 @@ function renderDashboard(){
         <div class="dvb-axis" aria-hidden="true"></div>
         <div class="dvb-deadline" aria-hidden="true"></div>
         ${dvbAsHTML(UP_MAX, DOWN_MAX, ZERO_TOP)}
-        <span class="dvb-lbl lbl-telaat" aria-hidden="true">dagen te laat</span>
-        <span class="dvb-lbl lbl-nul" aria-hidden="true">${nulLabel}</span>
-        <span class="dvb-lbl lbl-ok" aria-hidden="true">binnen de termijn</span>
         ${barsHTML}
       </div>
       <div class="dvb-tijdas" aria-hidden="true">
@@ -6040,7 +6017,7 @@ function renderDashboard(){
   dvbVulReadoutMetLaatste($('dashBars'), $('dvbReadout'));
 
   // Voor de vergrote weergave: de VOLLEDIGE reeks + de context van de huidige tab.
-  DVB_STAND = { zittingen: sortedAsc, direction, deadlineDays, nulLabel,
+  DVB_STAND = { zittingen: sortedAsc, direction, deadlineDays,
                 UP_MAX, DOWN_MAX, ZERO_TOP, label: $('dashVizLbl').textContent };
 
   // Vul ook de detail-tabel in
@@ -6266,9 +6243,6 @@ function openDvbVergroot(){
       <div class="dvb-axis" aria-hidden="true"></div>
       <div class="dvb-deadline" aria-hidden="true"></div>
       ${dvbAsHTML(st.UP_MAX, st.DOWN_MAX, st.ZERO_TOP)}
-      <span class="dvb-lbl lbl-telaat" aria-hidden="true">dagen te laat</span>
-      <span class="dvb-lbl lbl-nul" aria-hidden="true">${st.nulLabel}</span>
-      <span class="dvb-lbl lbl-ok" aria-hidden="true">binnen de termijn</span>
       ${dvbBouwBalken(st.zittingen, st.direction, st.deadlineDays, st.UP_MAX, st.DOWN_MAX, st.ZERO_TOP)}
     </div>
     <div class="dvb-tijdas" aria-hidden="true">
