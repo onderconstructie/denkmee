@@ -5913,8 +5913,9 @@ function renderTijdTabScores(){
     // Het icoon zegt wélk stuk gemeten wordt: de kalender voor de agenda, de afvinklijst
     // voor de besluitenlijst. Dat leest sneller dan een telcijfer, en het zijn de iconen
     // die elders op de site al voor die twee stukken staan.
-    if(tabs[0]) maakGroep('ic-agenda', 'De agenda', '8 dagen vóór de zitting', tabs.slice(0, 2), tabs[0]);
-    if(tabs[2]) maakGroep('ic-doc-lijst', 'De besluitenlijst', '10 dagen na de zitting', tabs.slice(2), tabs[2]);
+    // Zonder lidwoord: dit zijn labels boven een blok, geen zinnen.
+    if(tabs[0]) maakGroep('ic-agenda', 'Agenda', '8 dagen vóór de zitting', tabs.slice(0, 2), tabs[0]);
+    if(tabs[2]) maakGroep('ic-doc-lijst', 'Besluitenlijst', '10 dagen na de zitting', tabs.slice(2), tabs[2]);
   }
   wrap.querySelectorAll('.tij-tab').forEach(tab => {
     let el = tab.querySelector('.tij-tab-score');
