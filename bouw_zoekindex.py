@@ -320,11 +320,21 @@ def main():
     for lijst in posting.values():
         lijst.sort()
 
+    # Woordgrens-lijst voor de zoek. De frontend laat een zoekterm alleen midden in een langer
+    # woord tellen als die daar op een woordgrens ligt: "lijst" mag "kandidatenlijst" vinden,
+    # "pfas" mag niet "ontwerpfase" vinden (ont-wer|pfas|e ligt dwars over de lettergreep). Die
+    # toets kijkt of het stuk vóór de term zelf een woord is, en dan mist ze precies de woorden
+    # die hierboven als boilerplate of stopwoord uit de index vielen: zonder "deel" in de lijst
+    # zou "fiets" zijn "deelfietsen" verliezen. Die woorden gaan dus apart mee. Ze zijn géén
+    # zoekbare termen, enkel bouwstenen voor die toets, en het kost een paar kB.
+    grens = sorted(set(boilerplate) | STOPWOORDEN)
+
     uit = {
         "v": 1,
         "gen": data.get("generated_at", ""),
         "items": ids,
         "tokens": posting,
+        "grens": grens,
     }
     UIT.write_text(json.dumps(uit, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
