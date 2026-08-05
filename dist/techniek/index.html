@@ -58,6 +58,7 @@
      De namen blijven semantisch: --paper is het vlak, --ink is de tekst. */
   --paper:        #f5f1e8;        /* familiepapier, de grond */
   --paper-2:      #fffdf7;        /* kaart/hover — tilt bóven het papier uit */
+  --paper-kaart:  #faf6ef;        /* grote kaartvlakken: halfweg tussen --paper-2 en het papier */
   --paper-3:      #ece7db;        /* afwijkende band / recess */
   --ink:          #1a1712;        /* warme inkt, geen hard zwart */
   --ink-2:        #514a40;        /* secundaire tekst */
@@ -3956,9 +3957,12 @@ body{
    14,7px is de norm 4,5. Het dieproze haalt 6,96:1 en oogt bovendien rustiger. */
 /* Zuiver #fff is de enige tint op deze site die geen papier meer is: naast het warme
    #f5f1e8 lichten drie zulke vlakken op als lampen, en dat aan het rustige einde van de
-   pagina. De kaarttint van de familie (--paper-2) tilt ze net genoeg op zonder te schreeuwen. */
+   pagina. Eerst ging dit naar --paper-2, maar dat is met #fffdf7 nauwelijks van wit te
+   onderscheiden: acht punten blauw, twee punten groen. Deze kaarten zijn de grootste
+   lichte vlakken van de pagina, dus ze zakken een stap verder, naar halfweg tussen de
+   kaarttint en het papier. De haarlijn en de zachte schaduw dragen de kaartvorm. */
 .dc-card{
-  background:var(--paper-2);
+  background:var(--paper-kaart);
   border-color:rgba(200,0,84,.16);
 }
 .dc-card.dc-accent{
