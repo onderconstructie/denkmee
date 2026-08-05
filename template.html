@@ -1785,7 +1785,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .tij-tab-score strong{ font-size:1.65rem; font-weight:300; letter-spacing:-.02em; }
 .tij-tab-score .tts-pct{ font-size:.85rem; font-weight:400; margin-left:.06em; color:var(--ink-dim); }
-.tij-tab-score .tts-breuk{ display:block; margin-top:.3rem; font-size:.66rem; color:var(--ink-faint); }
+.tij-tab-score .tts-breuk{ display:block; margin-top:.3rem; font-size:.72rem; color:var(--ink-dim); }
 .tij-tab.active .tij-tab-score{ color:var(--paper); }
 .tij-tab.active .tij-tab-score .tts-pct{ color:var(--op-eiland-65); }
 .tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
@@ -2021,14 +2021,21 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* As-waarden in de linkermarge, met het woord eronder. Die 56px gutter stond op een
    telefoon vrijwel leeg terwijl de betekenis van de as ver eronder in een tekstblok zat.
    Nu staat ze wáár ze hoort: bij de as zelf, en dat kost geen enkele pixel balkbreedte. */
+/* Deze as draagt twee dingen tegelijk, en ze stond op 9,9 en 9 pixels. Ze zegt hoe je de
+   grafiek leest (boven nul te laat, eronder op tijd), en ze is het ENIGE teken dat de schaal
+   per orgaan verschilt: bij de burgemeester loopt ze tot 10 dagen, bij de raden tot 6. Wie
+   twee organen na elkaar bekijkt en dat cijfer niet leest, vergelijkt twee beelden die niet
+   dezelfde maat hebben. Daarom groter, en het getal zwaarder dan het woord eronder. */
 .dvb-tick{
-  position:absolute; left:0; width:48px; text-align:right; pointer-events:none;
+  /* 52 en niet 48: op de grotere letter loopt 'deadline' precies 50px, en dat werd afgekapt.
+     Er blijft 4px lucht tot de y-as, dus de balken houden hun volle breedte. */
+  position:absolute; left:0; width:52px; text-align:right; pointer-events:none;
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.62rem; color:var(--ink-faint); font-variant-numeric:tabular-nums;
+  font-size:.74rem; font-weight:500; color:var(--ink-dim); font-variant-numeric:tabular-nums;
 }
 .dvb-tick i{
-  display:block; font-style:normal; font-size:.56rem; letter-spacing:.01em;
-  line-height:1.25; color:var(--ink-faint);
+  display:block; font-style:normal; font-size:.64rem; font-weight:400; letter-spacing:.01em;
+  line-height:1.3; color:var(--ink-faint);
 }
 .dvb-tick.tick-nul{
   color:var(--pink-text); font-weight:500; transform:translateY(-50%);
@@ -2116,7 +2123,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   display:flex; justify-content:space-between; align-items:center; gap:.8rem;
   margin-top:.55rem; padding:0 var(--dvb-strook, 8px) 0 56px;
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.66rem; letter-spacing:.04em; color:var(--ink-faint);
+  font-size:.72rem; letter-spacing:.04em; color:var(--ink-dim);
   white-space:nowrap;
 }
 /* Een haarlijn tussen begin en eind maakt er een as van in plaats van twee losse datums. */
@@ -2170,8 +2177,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   color:var(--ink-dim);
 }
 .dvb-recent-title{
-  font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--ink-faint);
+  font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-dim);
   margin-bottom:.6rem;
 }
 /* Elke late zitting wijst haar eigen balk aan. Bewust geen knopvorm: het blijft een
@@ -6286,13 +6293,20 @@ function setupTijdTabs(){
     bars.addEventListener('pointerdown', e => {
       if(!e.target.closest('.dvb-chart')) return;
       sleept = true;
-      // Tijdens het slepen de aankondiging uit: anders ratelt een schermlezer bij elke
-      // pixel. Hij komt terug zodra de vinger stilstaat (pointerup).
-      const r = readout(); if(r) r.setAttribute('aria-live', 'off');
       try { bars.setPointerCapture(e.pointerId); } catch(_){ }
       dvbKiesDichtstbij(bars, readout(), e.clientX);
     });
-    bars.addEventListener('pointermove', e => { if(sleept) dvbKiesDichtstbij(bars, readout(), e.clientX); });
+    // Dempen doen we pas bij de eerste BEWEGING, niet al bij het aanraken. Stond het dempen
+    // op pointerdown, dan viel de update van een gewone tik precies in dat stille venster en
+    // kondigde een schermlezer nooit aan welke zitting je koos: bij het loslaten ging de
+    // regel weer aan, maar er veranderde dan niets meer. Slepen blijft wél stil, anders
+    // ratelt de voorlezer bij elke pixel.
+    bars.addEventListener('pointermove', e => {
+      if(!sleept) return;
+      const r = readout();
+      if(r && r.getAttribute('aria-live') !== 'off') r.setAttribute('aria-live', 'off');
+      dvbKiesDichtstbij(bars, readout(), e.clientX);
+    });
     const stop = () => { sleept = false; const r = readout(); if(r) r.setAttribute('aria-live', 'polite'); };
     bars.addEventListener('pointerup', stop);
     bars.addEventListener('pointercancel', stop);

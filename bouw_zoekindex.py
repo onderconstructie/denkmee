@@ -97,6 +97,33 @@ AANSPREEK_RX = re.compile(
 # onderscheiden ('VAN DE KREDIETEN', 'VAN GESCHILLEN') en zou echte zoekwoorden opeten.
 ROL_RX = re.compile(r"\b(?:OGV|Meester)\s+(?:[A-Z][\w'’-]*\.?\s+){0,2}[A-Z][\w'’-]+")
 
+# Twee lijstvormen waarin een burger met naam én huisadres in de stukken staat. De audit
+# (audit_namen.py) wees ze aan als de grootste bron van namen die overbleef:
+#   'penningmeester: Van Cammeren Daniël Gentsesteenweg 3'   het bestuur van een kerkfabriek,
+#                                        met adres, telefoon en privé-mailadres erachter
+#   'Aanvrager 2 Steven Nuis' / 'Exploitant: Michel Barremaecker'  in de vergunningentabellen
+# We houden het functiewoord en het adres, en knippen alleen de naam: zonder naam is de
+# combinatie niet meer herleidbaar, en 'penningmeester' of een straatnaam blijft een zinvolle
+# zoekterm. Ook een organisatie op die plek verdwijnt; dat is de prijs, en die is klein.
+#
+# Een naamdeel is één hoofdletterwoord dat geen veldnaam is en geen straat. Zonder die twee
+# uitsluitingen leest de regel 'Adres' als een naam, of eet ze de straatnaam op die er meteen
+# achter staat. Mét die uitsluitingen mag ze gerust drie woorden nemen ("Van Cammeren Daniël")
+# en stopt ze vanzelf bij het adres. Let op: GEEN re.IGNORECASE op het geheel, want dat maakt
+# [A-Z] gelijk aan [a-z] en dan is de hoofdletter-eis weg; alleen het functiewoord zelf mag
+# hoofdletter-ongevoelig zijn.
+_NAAMDEEL = (r"(?!Adres|Aanvrager|Exploitant|Onderneming|Bus|Afdeling|Sectie)"
+             r"(?![\w'’-]*(?:straat|laan|weg|kaai|dreef|plein|baan|lei|vest|markt)\b)"
+             r"[A-Z][\w'’-]+")
+BESTUURSLIJST_RX = re.compile(
+    r"\b((?i:(?:onder)?voorzitter|penningmeester|secretaris|contactpersoon))(\s*:\s*)"
+    r"(?:" + _NAAMDEEL + r"\s+){1,3}")
+# De lookbehind houdt 'Adres aanvrager: <straat>' buiten schot: daar volgt geen naam maar het
+# adres, en dat is een zinvolle zoekterm die mag blijven.
+AANVRAGER_RX = re.compile(
+    r"(?<!Adres )\b((?i:aanvrager|exploitant))(\s?\d{0,2}\s*:?\s+)"
+    r"(?:" + _NAAMDEEL + r"\s+){1,3}")
+
 # Woorden zonder zoekwaarde. Bewust kort gehouden: de document-frequentie-drempel
 # hieronder vangt de ambtelijke boilerplate ("gelet", "overwegende", "artikel") vanzelf,
 # in elke variant, zonder dat we ze allemaal hoeven te raden.
@@ -134,6 +161,8 @@ def tokens(tekst):
     tekst = EMAIL_RX.sub(" ", tekst)
     tekst = AANSPREEK_RX.sub(" ", tekst)   # 'de heer X' / 'mevrouw Y' → geen zoekterm
     tekst = ROL_RX.sub(" ", tekst)         # 'OGV X' / 'Meester Y'     → geen zoekterm
+    tekst = BESTUURSLIJST_RX.sub(r"\1\2", tekst)   # 'penningmeester: Naam Voornaam Adres'
+    tekst = AANVRAGER_RX.sub(r"\1\2", tekst)       # 'Aanvrager 2 Naam Voornaam'
     uit = set()
     for t in TOKEN_RX.findall(norm(tekst)):
         if len(t) < MIN_LENGTE or t in STOPWOORDEN:
