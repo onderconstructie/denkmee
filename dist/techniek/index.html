@@ -3296,6 +3296,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text);
 }
 .dos-ft::before{ content:''; width:.45em; height:.45em; background:var(--pink); flex:none; }
+/* De tekst zit in één span, anders maakt flex van elk stuk tekst en van elk vetgezet woord
+   een eigen kind met de gap ertussen, en breekt de regel niet meer netjes af. Het woord
+   waarlangs de treffer binnenkwam staat vet: dat is het antwoord op 'waarom staat dit hier?'. */
+.dos-ft > span, .dosm-ev-ft > span{ min-width:0; }
+.dos-ft b, .dosm-ev-ft b{ font-weight:600; color:var(--pink); }
 .dos-themes{ display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:auto; }
 .dos-theme{
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.02em;

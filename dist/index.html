@@ -3296,6 +3296,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text);
 }
 .dos-ft::before{ content:''; width:.45em; height:.45em; background:var(--pink); flex:none; }
+/* De tekst zit in één span, anders maakt flex van elk stuk tekst en van elk vetgezet woord
+   een eigen kind met de gap ertussen, en breekt de regel niet meer netjes af. Het woord
+   waarlangs de treffer binnenkwam staat vet: dat is het antwoord op 'waarom staat dit hier?'. */
+.dos-ft > span, .dosm-ev-ft > span{ min-width:0; }
+.dos-ft b, .dosm-ev-ft b{ font-weight:600; color:var(--pink); }
 .dos-themes{ display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:auto; }
 .dos-theme{
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.02em;
@@ -8327,6 +8332,7 @@ let FT_VOCAB = null;          // woordenlijst, één keer afgeleid
 let FT_LADEN = null;          // fetch-promise, éénmalig
 const FT_CACHE = new Map();   // zoekterm → {items:Set, dossiers:Set}
 let FT_QUERY = null;          // huidige zoekopdracht: Map dossier-id → Set(punt-id's)
+let FT_WOORD = null;          // en via WELK woord: Map punt-id → Set(woord), voor het label
 
 function ftLaad(){
   if(FT_LADEN) return FT_LADEN;
@@ -8353,14 +8359,28 @@ function ftHits(term){
   let hit = FT_CACHE.get(key);
   if(hit) return hit;
   const items = new Set();
+  // Bij welk punt kwam de treffer uit een ANDER woord dan wat je intikte? Die vraag stelt een
+  // lezer zich terecht: wie 'pfas' zoekt en een dossier over de begeleiding van nieuwkomers
+  // ziet, wil weten waarom. Hier staat 'ontwerpfase' in de notulen, en die letters zitten
+  // nu eenmaal in dat woord. We houden die woorden per punt bij en zetten ze op de kaart.
+  // Punten die het getikte woord zelf bevatten hebben geen uitleg nodig en slaan we over.
+  const perItem = new Map();
+  const exact = new Set();
   for(const w of FT_VOCAB){
-    if(w.includes(key)){
-      for(const i of FT_INDEX.tokens[w]) items.add(FT_INDEX.items[i]);
+    if(!w.includes(key)) continue;
+    for(const i of FT_INDEX.tokens[w]){
+      const id = FT_INDEX.items[i];
+      items.add(id);
+      if(w === key){ exact.add(id); continue; }
+      let s = perItem.get(id);
+      if(!s){ s = new Set(); perItem.set(id, s); }
+      s.add(w);
     }
   }
+  exact.forEach(id => perItem.delete(id));
   const dossiers = new Set();
   items.forEach(id => { const d = ITEM2DOS && ITEM2DOS.get(id); if(d) dossiers.add(d.id); });
-  hit = { items, dossiers };
+  hit = { items, dossiers, perItem };
   FT_CACHE.set(key, hit);
   return hit;
 }
@@ -8380,7 +8400,9 @@ function ftHitsWoord(term){
   }
   const dossiers = new Set();
   items.forEach(id => { const d = ITEM2DOS && ITEM2DOS.get(id); if(d) dossiers.add(d.id); });
-  hit = { items, dossiers };
+  // Geen woord-uitleg bij synoniemen: die zijn al verantwoord in de hint onder de zoekbalk
+  // ("Ook gezocht op: voetpad"). Twee verklaringen voor dezelfde treffer is er één te veel.
+  hit = { items, dossiers, perItem: new Map() };
   FT_CACHE.set(key, hit);
   return hit;
 }
@@ -8464,7 +8486,10 @@ function dossierCardHTML(d){
       </div>
       <div class="dos-name">${escape(d.title||d.name)}</div>
       ${blurb ? `<div class="dos-blurb">${escape(blurb)}</div>` : ''}
-      ${FT_QUERY && d._ftN ? `<div class="dos-ft">ook in het volledige stuk${d._ftN>1?` · ${d._ftN} punten`:''}</div>` : ''}
+      ${FT_QUERY && d._ftN ? `<div class="dos-ft"><span>ook in het volledige stuk${
+        d._ftVia && d._ftVia.length
+          ? `, via <b>${d._ftVia.map(escape).join('</b> en <b>')}</b>`
+          : (d._ftN>1?` · ${d._ftN} punten`:'')}</span></div>` : ''}
       <div class="dos-themes">${themes}${more}</div>
       <div class="dos-track">
         <span class="dos-track-line"></span>
@@ -8535,6 +8560,7 @@ function renderDossiers(keepPage){
   const q = ($('dosSearch').value||'').trim().toLowerCase();
   if(!q){
     FT_QUERY = null;   // geen zoekterm: geen "in het volledige stuk"-labels
+    FT_WOORD = null;
     const synHint = $('dosSynHint');
     if(synHint){ synHint.hidden = true; synHint.textContent = ''; }
   }
@@ -8571,6 +8597,7 @@ function renderDossiers(keepPage){
     // Per dossier: welke punten matchen enkel via het volledige stuk? Dat voedt het label
     // op de kaart, het label per punt in het paneel, en een bescheiden relevantiebijdrage.
     FT_QUERY = new Map();
+    FT_WOORD = new Map();
     const ftVoedt = h => {
       if(!h) return;
       h.items.forEach(id => {
@@ -8579,6 +8606,12 @@ function renderDossiers(keepPage){
         let set = FT_QUERY.get(d.id);
         if(!set){ set = new Set(); FT_QUERY.set(d.id, set); }
         set.add(id);
+        const via = h.perItem && h.perItem.get(id);
+        if(via){
+          let w = FT_WOORD.get(id);
+          if(!w){ w = new Set(); FT_WOORD.set(id, w); }
+          via.forEach(x => w.add(x));
+        }
       });
     };
     perTerm.forEach(({t, syn}) => {
@@ -8613,6 +8646,15 @@ function renderDossiers(keepPage){
       });
       const ft = FT_QUERY.get(d.id);
       d._ftN = ft ? ft.size : 0;
+      // Welke woorden verklaren dit dossier? Kortste eerst: die staat het dichtst bij wat je
+      // intikte en legt dus het meeste uit. Twee is genoeg, een derde leest als een lijst.
+      let via = [];
+      if(ft && FT_WOORD){
+        const bij = new Set();
+        ft.forEach(id => { const w = FT_WOORD.get(id); if(w) w.forEach(x => bij.add(x)); });
+        via = [...bij].sort((a, b) => a.length - b.length || a.localeCompare(b)).slice(0, 2);
+      }
+      d._ftVia = via;
       s += d._ftN;
       d._rel = s;
     });
@@ -8741,7 +8783,10 @@ function openDossier(id){
           ${resultPill}
         </div>
         <div class="dosm-ev-titel">${it.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${it.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${escape(it.titel)}</div>
-        ${ftSet && ftSet.has(it.id) ? '<div class="dosm-ev-ft">zoekterm gevonden in het volledige stuk</div>' : ''}
+        ${ftSet && ftSet.has(it.id) ? `<div class="dosm-ev-ft"><span>zoekterm gevonden in het volledige stuk${(() => {
+          const w = FT_WOORD && FT_WOORD.get(it.id);
+          return w && w.size ? ', als <b>' + [...w].sort((a,b)=>a.length-b.length||a.localeCompare(b)).slice(0,2).map(escape).join('</b> en <b>') + '</b>' : '';
+        })()}</span></div>` : ''}
         ${indiener}
         ${decoded}
         ${stemBalkHTML(it.stemming, it)}
