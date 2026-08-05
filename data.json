@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-04",
+  "generated_at": "2026-08-05",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -97673,6 +97673,12 @@
           "date": "2026-07-22",
           "published": "2026-07-29",
           "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-08-04",
+          "published": null,
+          "status": "geen",
           "late_days": 0
         }
       ],
