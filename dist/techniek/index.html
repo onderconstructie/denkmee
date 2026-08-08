@@ -4027,7 +4027,12 @@ body{
    wat op deze #b3004a-achtergrond wegvalt. Een witte onderrand herstelt de affordance, in het
    idioom dat de site elders al gebruikt (onderrand, geen text-decoration). */
 .dc-card.dc-accent a{ color:#fff; border-bottom-color:rgba(255,255,255,.75); }
-.dc-card.dc-accent a:hover{ border-bottom-color:#fff; }
+/* Ook mét p en :active in de selector, en met een expliciete color. De algemene kaartregel
+   .dc-card p a:hover (color:--pink-deep) is specifieker dan .dc-card.dc-accent a en won
+   daardoor op het moment van zweven of aanklikken: dieproze tekst op het roze vlak, de link
+   verdween precies wanneer je hem gebruikte. Wit blijft wit, alleen de onderrand verstevigt. */
+.dc-card.dc-accent p a:hover,
+.dc-card.dc-accent p a:active{ color:#fff; border-bottom-color:#fff; }
 /* Radius zonder clip: hier scrolt of zweeft iets binnenin (modal-scroll, tooltips). */
 .ov-modal-card, .college-activity, .subscribe-foot{ border-radius:var(--r-kaart); }
 .nieuw-banner, .redactie-melding, .cookie-note, .filter-status, .hc-nieuw{ border-radius:var(--r-chip); }
@@ -4256,11 +4261,14 @@ body{ background:var(--paper-3); }
         <h2>Van officieel stuk tot <em>leesbaar</em> dossier</h2>
         <div class="tech-prose">
           <p>
-            Hoe ontstaat een dossier? We bundelen stukken op hun meest onderscheidende gedeelde woord:
+            Hoe ontstaat een dossier? AI leest elk officieel stuk, vat het samen in mensentaal en
+            haalt er de kernwoorden uit. Daarop bundelen we stukken over dezelfde concrete zaak:
             een besteknummer of adres, een eigennaam zoals een kerk, een buurt of een project, of een
             zeldzaam kernwoord uit de titel. Een breed thema bindt nooit op zichzelf. Het is een
             <strong>vuistregel</strong>, geen absolute waarheid: soms koppelt ze twee losse zaken, soms knipt ze één
-            verhaal in twee.
+            verhaal in twee. Waar dat scheef loopt, passen we de bundeling aan, op eigen nazicht en
+            op meldingen van lezers. Test dus gerust mee: de meldknop zit in elk dossier, en hoe die
+            werkt lees je verderop op deze pagina.
           </p>
           <p>
             In zo'n dossier schuift ook een schriftelijke vraag van een raadslid mee, naast de
@@ -4346,7 +4354,6 @@ body{ background:var(--paper-3); }
           <p>
             Op datzelfde portaal staat een <strong>robots.txt</strong> die alle geautomatiseerde
             bezoekers vraagt weg te blijven, zoekmachines incluis. Wij halen de stukken toch op.
-            Dat verdient uitleg, geen omweg.
           </p>
           <p>
             Deze documenten moet de stad publiceren: openbaarheid is hier geen gunst maar
@@ -4462,6 +4469,27 @@ body{ background:var(--paper-3); }
   if(!nv) return;
   var zet = function(){ nv.classList.toggle('krant', window.scrollY > 4); };
   window.addEventListener('scroll', zet, {passive:true}); zet();
+})();
+</script>
+
+<!-- Zelfde terug-naar-boven-knop als op de hoofdpagina; de .to-top-stijl erft deze
+     pagina al via de gedeelde head. Eigen klein script, want initScrollChrome van de
+     hoofdpagina draait hier niet. -->
+<button class="to-top" id="toTop" aria-label="Terug naar boven" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <span class="tt-arrow" aria-hidden="true">&#8593;</span>
+</button>
+<script>
+(function(){
+  var top = document.getElementById('toTop');
+  var bezig = false;
+  function update(){
+    bezig = false;
+    top.classList.toggle('show', (window.scrollY || document.documentElement.scrollTop) > 600);
+  }
+  window.addEventListener('scroll', function(){
+    if(!bezig){ bezig = true; requestAnimationFrame(update); }
+  }, {passive:true});
+  update();
 })();
 </script>
 
