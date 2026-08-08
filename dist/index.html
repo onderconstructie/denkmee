@@ -1764,20 +1764,34 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 #tijTabs .tij-tab{ flex:1 1 0; min-width:0; }
 .tij-blok .tij-tab + .tij-tab{ border-left:1.5px solid var(--ink); }
-/* De knop toont overal hetzelfde: naam links, meter in het midden, uitkomst rechts. De
-   ruststand is een warme VERDIEPING (paper-3), niet een lichte verhoging: op dit papier
-   licht de kaarttint als wit op, en vijf witte dozen naast elkaar schreeuwen harder dan de
-   grafiek eronder. Verdiept leest als een toets die je kunt indrukken. Drie standen:
-   verdiept (rust), opgelicht (onder de aanwijzer), volle inkt (gekozen). */
+/* De knop is een RASTER met vaste kolommen: naam, meter, uitkomst. Dat is geen stijlkeuze
+   maar een meetkwestie. In de vorige opzet (flex, meter pakt de restbreedte) begon elke
+   meter waar de naam toevallig eindigde, en loog de lengte: 99% van het college tekende
+   167px terwijl 100% van de burgemeester 106px kreeg, en dezelfde 88% was bij de ene raad
+   107px en bij de andere 182px. Met vaste kolommen begint elke meter op dezelfde x en is
+   hij overal even breed, dus is lengte weer betekenis, ook als de knoppen op een telefoon
+   onder elkaar staan en je ze als kolom leest.
+   De ruststand is een warme VERDIEPING (paper-3): op dit papier licht de kaarttint als wit
+   op, en vijf witte dozen schreeuwen harder dan de grafiek eronder. Drie standen: verdiept
+   (rust), kaarttint (onder de aanwijzer), papier-2 met roze rail (gekozen). */
 #tijTabs .tij-tab{
-  flex-direction:row; align-items:center; justify-content:space-between; gap:.9rem;
+  display:grid;
+  grid-template-columns:7.5rem minmax(0,1fr) 3.9rem;
+  align-items:center; gap:.9rem;
   padding:.85rem 1.1rem;
   background:var(--paper-3);
 }
-#tijTabs .tij-tab:not(.active):hover{ background:var(--paper-2); }
-/* Even specifiek als de regel hierboven, anders wint het opgetilde papier van de volle
-   inktvulling en staat er lichte tekst op licht papier. */
-#tijTabs .tij-tab.active{ background:var(--ink); color:var(--paper); }
+#tijTabs .tij-tab:not(.active):hover{ background:var(--paper-kaart); }
+/* De gekozen knop was een vol inktblok. Te hard: het was het donkerste vlak van de hele
+   sectie, voor een knop die alleen 'deze staat open' hoeft te zeggen. Nu licht de knop op
+   naar de kaarttint met een roze rail aan de binnenrand; de accordeon eronder maakt de
+   keuze toch al zichtbaar. Even specifiek als de hover-regel hierboven, anders wint die. */
+#tijTabs .tij-tab.active{
+  background:var(--paper-2);
+  color:var(--ink);
+  box-shadow:inset 4px 0 0 var(--pink);
+}
+#tijTabs .tij-tab.active .tij-tab-name{ font-weight:600; }
 .tij-tab-score{
   display:block; flex-shrink:0; text-align:right;
   font-family:'JetBrains Mono', ui-monospace, monospace;
@@ -1786,21 +1800,19 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .tij-tab-score strong{ font-size:1.65rem; font-weight:300; letter-spacing:-.02em; }
 .tij-tab-score .tts-pct{ font-size:.85rem; font-weight:400; margin-left:.06em; color:var(--ink-dim); }
 .tij-tab-score .tts-breuk{ display:block; margin-top:.3rem; font-size:.72rem; color:var(--ink-dim); }
-.tij-tab.active .tij-tab-score{ color:var(--paper); }
-.tij-tab.active .tij-tab-score .tts-pct{ color:var(--op-eiland-65); }
-.tij-tab.active .tij-tab-score .tts-breuk{ color:var(--op-eiland-55); }
-/* Het meterbalkje: dezelfde verhouding als het percentage, maar zichtbaar in één oogopslag.
-   Vult de knop op een breed scherm zonder iets te beweren wat er niet staat. */
+/* Het meterbalkje spreekt nu de kleurtaal van de grafiek eronder. De vulling (het aandeel
+   op tijd) is hetzelfde warmgrijs als een tijdige grafiekbalk; het restje (het aandeel te
+   laat) is zacht roze, want roze betekent op deze site 'te laat'. Elke knop is zo een
+   miniatuur van de grafiek: bij 100% is er geen roze en leest de balk vanzelf als rust.
+   De vorige vulling was volle inkt, en vijf van die zwarte staven onder elkaar waren het
+   hardste element van de sectie. Het roze is steviger aangezet dan het dashboardroze
+   (rgba .07): op een balkje van 6px zou die tint onzichtbaar zijn. */
 .tts-meter{
-  flex:1 1 auto; min-width:1.5rem; height:5px; align-self:center;
-  background:var(--line-strong); border-radius:999px; overflow:hidden;
+  height:6px; align-self:center;
+  background:rgba(255,0,102,.26); border-radius:999px; overflow:hidden;
 }
-.tts-meter i{ display:block; height:100%; background:var(--ink); border-radius:999px; }
+.tts-meter i{ display:block; height:100%; background:rgba(82,74,63,.65); border-radius:999px; }
 .tts-meter[hidden]{ display:none; }
-/* Op de gekozen knop is de vulling niet vol papierwit maar gedempt: een volle lichte balk
-   op inkt trekt harder dan het cijfer ernaast, en het cijfer is de boodschap. */
-.tij-tab.active .tts-meter{ background:var(--op-eiland-25); }
-.tij-tab.active .tts-meter i{ background:var(--op-eiland-65); }
 /* De meta-regel in deze knoppen ('8 dagen · agenda') staat sinds de groepskoppen dubbel. */
 #tijTabs .tij-tab-meta{ display:none; }
 .tij-tab{
