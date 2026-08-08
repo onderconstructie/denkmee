@@ -1781,13 +1781,15 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   padding:.85rem 1.1rem;
   background:var(--paper-3);
 }
-#tijTabs .tij-tab:not(.active):hover{ background:var(--paper-kaart); }
-/* De gekozen knop was een vol inktblok. Te hard: het was het donkerste vlak van de hele
-   sectie, voor een knop die alleen 'deze staat open' hoeft te zeggen. Nu licht de knop op
-   naar de kaarttint met een roze rail aan de binnenrand; de accordeon eronder maakt de
-   keuze toch al zichtbaar. Even specifiek als de hover-regel hierboven, anders wint die. */
+#tijTabs .tij-tab:not(.active):hover{ background:var(--paper); }
+/* De gekozen knop was eerst een vol inktblok (te donker), daarna paper-2 (te wit: dat is
+   de helderste tint van het palet en lichtte naast de verdiepte buren op als een lamp).
+   Nu een trede lager, --paper-kaart: net los van de rust-stand, en de roze rail plus de
+   accordeon eronder dragen de keuze. De laddder is dus paper-3 (rust), paper (onder de
+   aanwijzer), paper-kaart met rail (gekozen). Even specifiek als de hover-regel hierboven,
+   anders wint die. */
 #tijTabs .tij-tab.active{
-  background:var(--paper-2);
+  background:var(--paper-kaart);
   color:var(--ink);
   box-shadow:inset 4px 0 0 var(--pink);
 }
@@ -2114,7 +2116,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border:1px solid var(--line-kaart);
   border-radius:var(--r-chip);
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  line-height:1.5; color:var(--ink-2); min-height:3.4em;
+  line-height:1.5; color:var(--ink-2);
+  /* Vast op de TWEE-regel-stand (gemeten 82px): de uitlegregel beslaat afhankelijk van de
+     zitting één of twee regels, en met de oude min-height van 3.4em (64px) veerde het
+     kaartje daartussen. Op een telefoon staat het bóven de grafiek, dus elke tik op een
+     balk schoof de hele grafiek 18px op en neer, precies onder je vinger. */
+  min-height:5.15rem;
   transition:background .18s, border-color .18s;
 }
 /* De kleur van de gekozen dag, in dezelfde zeer lichte tinten als de grafiek: de roze zone
