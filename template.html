@@ -1844,10 +1844,14 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Er stond hier een samenvattende regel met totalen. Geschrapt: een tekstregel vol aantallen
    naast een blok dat diezelfde aantallen al toont, is dubbel werk in twee stemmen. Het
    antwoord komt van de cijfers op de knoppen zelf. */
+/* Zelfde gekozen-taal als de orgaanknoppen hierboven: geen inktblok meer, maar de
+   kaarttint met een roze rail aan de binnenrand. Eén selectie-idioom voor de hele pagina. */
 .tij-tab.active{
-  background:var(--ink);
-  color:var(--paper);
+  background:var(--paper-kaart);
+  color:var(--ink);
+  box-shadow:inset 4px 0 0 var(--pink);
 }
+.tij-tab.active .tij-tab-name{ font-weight:600; }
 .tij-tab-name{
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:.92rem; font-weight:500;
@@ -1859,14 +1863,21 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   color:var(--ink-faint);
   text-transform:uppercase;
 }
-.tij-tab.active .tij-tab-meta{ color:var(--op-eiland-65); }
+/* De gekozen knop is licht, dus de meta leest gewoon in inkt-dim; de oude op-eiland-tint
+   was voor het inktblok en zou hier wegvallen tegen het papier. */
+.tij-tab.active .tij-tab-meta{ color:var(--ink-dim); }
 /* Vóór-mij-telling in de tabmeta: roze zodra er treffers zijn, ook op niet-actieve tabs.
    Zo zie je meteen op welk tabblad je overige hits zitten. */
 .tij-tab-meta .mijn-n{ font-style:normal; font-variant-numeric:tabular-nums; }
 .tij-tab-meta .mijn-n.aan{ color:var(--pink-text); font-weight:700; }
-.tij-tab.active .tij-tab-meta .mijn-n.aan{ color:var(--eiland-pink); }
-/* Recent beslist: zelfde tab-taal, met het aantal per orgaan op de tab */
+.tij-tab.active .tij-tab-meta .mijn-n.aan{ color:var(--pink-text); }
+/* Recent beslist: zelfde tab-taal als de orgaanknoppen, dus ook dezelfde ladder van
+   standen: verdiept (rust), papier (onder de aanwijzer), kaarttint met rail (gekozen). */
 .rb-tabs{ margin-bottom:1rem; }
+/* :not(.active) is hier verplicht: deze regel staat ná .tij-tab.active en zou er bij
+   gelijke specificiteit overheen schilderen, waardoor de gekozen tab zijn kaarttint verloor. */
+.rb-tabs .tij-tab:not(.active){ background:var(--paper-3); }
+.rb-tabs .tij-tab:not(.active):hover{ background:var(--paper); }
 .rb-tabs .tij-tab.rb-leeg:not(.active){ opacity:.45; }
 .rb-meta{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; letter-spacing:.04em; color:var(--ink-faint); margin:.35rem 0 1rem; }
 /* Breekpunt op 900 en niet op 680: zonder flex-wrap kunnen de vijf standen niet meer
@@ -1908,7 +1919,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   #tijTabs .tij-tab{ flex:0 0 auto; }
   .tij-blok .tij-tab + .tij-tab{ border-left:none; }
   .tij-blok > * + *{ border-top:1.5px solid var(--ink); }
-  .tij-tab-meta{ display:none; }
+  /* De meta-regel ('34 besluiten', '12 punten') werd hier generiek verborgen, maar dat trof
+     ook de tabbladen van Agenda en Recent beslist: daar is het aantal juist de inhoud, en op
+     een telefoon verdween het. De orgaanknoppen houden hun eigen verbergregel (#tijTabs).
+     Onder elkaar wordt elke tab een rij: naam links, aantal rechts, hetzelfde patroon als
+     naam-links-score-rechts op de orgaanknoppen. */
+  .rb-tabs .tij-tab{ flex-direction:row; align-items:center; justify-content:space-between; gap:.6rem; }
   .lede-detail{ display:none; }   /* de kopregels hieronder dragen deze twee zinnen al */
   /* De knop-opmaak zelf (rij, score, meter) staat in de basisregels: die geldt op élk
      scherm. Hier alleen wat op een smal scherm anders moet. */
