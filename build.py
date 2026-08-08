@@ -250,7 +250,7 @@ PAGINA_404 = """<!doctype html>
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jbmono-var.woff2') format('woff2')}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:#f5f1e8;color:#2b2621;font-family:'Geist',system-ui,sans-serif;line-height:1.6;padding:1.5rem}
+  background:#f5f1e8;background-image:radial-gradient(rgba(26,23,18,.04) 1px, transparent 1px);background-size:3px 3px;color:#2b2621;font-family:'Geist',system-ui,sans-serif;line-height:1.6;padding:1.5rem}
 .doos{max-width:34rem;text-align:center}
 .mug{width:96px;height:96px;border-radius:50%;margin:0 auto 1.6rem;display:block}
 .code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem;letter-spacing:.14em;
