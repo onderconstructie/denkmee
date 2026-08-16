@@ -12,9 +12,16 @@ Waarom dit script bestaat: de besluiten op de site dragen MJP-actiecodes (MJP004
 wat achter zo'n code zit — welke actie, welke dienst, hoeveel geld — staat enkel in deze
 stukken. parse_mjp_acties.py leest dat eruit; dit script zorgt dat de stukken er zijn.
 
-Idempotent en zuinig: één HEAD per pdf om de grootte te vergelijken met wat er lokaal staat.
-Enkel wat ontbreekt of van grootte veranderde, wordt gedownload. Zo kost een run waarin de
-stad niets publiceerde één pagina-ophaling plus wat HEAD-verkeer, en geen enkele download.
+Idempotent en zuinig, in twee snelheden. De pagina zelf halen we altijd op en we nemen er een
+vingerafdruk van (alle links met hun koppen). Is die identiek aan de vorige run, staan alle
+bestanden er nog en is de vorige volledige controle jonger dan een week, dan stoppen we daar:
+dat kost ongeveer één seconde. Anders volgt de volledige ronde met één HEAD per pdf om de
+grootte bij de bron te vergelijken met wat lokaal staat (ongeveer een halve minuut), en
+downloaden we enkel wat ontbreekt of veranderde.
+
+Waarom die wekelijkse volledige ronde er toch moet zijn: een vingerafdruk ziet nieuwe,
+hernoemde en verdwenen stukken meteen, maar niet een pdf die de stad stilletjes vervangt achter
+dezelfde naam. Die vangt alleen de groottevergelijking, dus die blijft periodiek lopen.
 
 Meteen ook de wachtpost: de stad publiceert hier twee à vier keer per jaar (jaarrekening rond
 juni, meerjarenplanaanpassing rond december). Elke run vergelijkt de pagina met de vorige
@@ -27,6 +34,7 @@ Uitvoer: data/raw/budgetten/<entiteit>/<set>/<bestand>.pdf
 
 Draai:  python fetch_budgetten.py            (run_all.py doet dit automatisch, stap 1e)
         python fetch_budgetten.py --enkel-kijken   (niets downloaden, enkel melden)
+        python fetch_budgetten.py --grondig        (altijd de volledige HEAD-ronde)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
@@ -54,6 +62,7 @@ OUT = BASE / "data" / "raw" / "budgetten"
 INDEX = OUT / "_index.json"
 WIJZIGINGEN = OUT / "_wijzigingen.json"
 PAUZE = 0.4                 # seconden tussen aanvragen, om de servers niet te belasten
+VOLLEDIG_NA_DAGEN = 7       # ook zonder zichtbare wijziging af en toe alles natrekken
 
 # De stukken staan op twee hosts: de gewone site en de bestandsserver van de stad. Enkel
 # deze twee mogen; een absolute link naar een ander domein in de bron-HTML wordt geweigerd.
@@ -140,19 +149,30 @@ def lokaal_pad(doc: dict) -> Path | None:
     return pad
 
 
-def vorige_index() -> dict:
+def vorige_bestand() -> dict:
+    """De vorige index als geheel (documenten plus vingerafdruk en controledatum)."""
     if INDEX.exists():
         try:
-            return {d["url"]: d for d in json.loads(INDEX.read_text(encoding="utf-8"))["documenten"]}
+            return json.loads(INDEX.read_text(encoding="utf-8"))
         except Exception:
             pass
     return {}
+
+
+def vingerafdruk(docs) -> str:
+    """Eén hash over alle links met hun koppen. Verandert de stad iets aan de lijst (een stuk
+    erbij, eentje weg, een andere naam of een andere kop), dan verandert deze waarde. Wat ze
+    NIET ziet: een pdf die achter dezelfde naam stilletjes vervangen wordt."""
+    ruw = "\n".join(f'{d["url"]}|{d["entiteit"]}|{d["set"]}|{d["titel"]}' for d in docs)
+    return hashlib.sha1(ruw.encode("utf-8")).hexdigest()
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--enkel-kijken", action="store_true",
                     help="niets downloaden: enkel melden wat er nieuw of gewijzigd is")
+    ap.add_argument("--grondig", action="store_true",
+                    help="sla de snelle controle over en vergelijk elke pdf met de bron")
     args = ap.parse_args()
 
     import requests
@@ -168,7 +188,33 @@ def main():
         # Dan liever luid falen dan stil een lege index wegschrijven over een goede heen.
         raise SystemExit("[fout] geen pdf-links gevonden op de budgetpagina — opbouw gewijzigd?")
 
-    oud = vorige_index()
+    vorig = vorige_bestand()
+    oud = {d["url"]: d for d in vorig.get("documenten", [])}
+    vinger = vingerafdruk(docs)
+
+    # Snelle uitgang: dezelfde lijst als vorige keer, alle bestanden nog aanwezig, en de
+    # volledige controle nog niet verjaard. Dan is er niets te doen en kost deze stap een
+    # seconde in plaats van een halve minuut.
+    zoek = [d for d in vorig.get("documenten", []) if not (OUT / d["bestand"]).exists()]
+    try:
+        dagen = (date.today() - date.fromisoformat(vorig.get("volledig_gecheckt", "2000-01-01"))).days
+    except ValueError:
+        dagen = 9999
+    if (not args.grondig and vorig.get("vingerafdruk") == vinger
+            and not zoek and dagen < VOLLEDIG_NA_DAGEN):
+        # len(docs) telt ook de links die we weigeren (bv. de lblod-notulenlink), dus rapporteer
+        # het aantal uit de index: dat is wat er echt lokaal staat.
+        print(f"Budgetstukken: pagina ongewijzigd ({len(vorig.get('documenten', []))} documenten, "
+              f"vingerafdruk gelijk); volledige controle {dagen} dag(en) geleden, dus overgeslagen.")
+        if not args.enkel_kijken:
+            vorig["gen"] = date.today().isoformat()
+            INDEX.write_text(json.dumps(vorig, ensure_ascii=False, indent=2), encoding="utf-8")
+        return
+    if zoek:
+        print(f"  ({len(zoek)} bestand(en) ontbreken lokaal — volledige controle)")
+    elif vorig.get("vingerafdruk") not in (None, vinger):
+        print("  (de lijst op de pagina is veranderd — volledige controle)")
+
     nieuwe_index, wijzigingen = [], []
     nieuw = bijgewerkt = ongewijzigd = geweigerd = mislukt = 0
 
@@ -241,6 +287,8 @@ def main():
 
     if not args.enkel_kijken:
         INDEX.write_text(json.dumps({"gen": date.today().isoformat(), "bron": URL,
+                                     "vingerafdruk": vinger,
+                                     "volledig_gecheckt": date.today().isoformat(),
                                      "documenten": nieuwe_index},
                                     ensure_ascii=False, indent=2), encoding="utf-8")
         # Een korte geschiedenis van wat de stad wanneer publiceerde of verving. Handig bij
