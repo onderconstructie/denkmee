@@ -1323,6 +1323,17 @@
     "uittreksels": []
   },
   {
+    "organ": "Burgemeester",
+    "date": "2026-08-11",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-08-13",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_11-08-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "College van burgemeester en schepenen",
     "date": "2024-12-03",
     "documenten": {
@@ -3940,8 +3951,24 @@
   },
   {
     "organ": "College van burgemeester en schepenen",
+    "date": "2026-07-28",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-08-07",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_28-07-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "College van burgemeester en schepenen",
     "date": "2026-08-04",
-    "documenten": {},
+    "documenten": {
+      "besluiten": {
+        "published": "2026-08-13",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_04-08-2026_Beslissingenlijst.pdf"
+      }
+    },
     "uittreksels": [
       {
         "titel": "Uittreksels",
@@ -7155,6 +7182,28 @@
       "besluiten": {
         "published": "2026-07-23",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_14-07-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "Vast bureau",
+    "date": "2026-07-28",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-08-07",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_28-07-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "Vast bureau",
+    "date": "2026-08-04",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-08-13",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_04-08-2026_Beslissingenlijst.pdf"
       }
     },
     "uittreksels": []
