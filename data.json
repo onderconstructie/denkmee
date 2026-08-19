@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16",
+  "generated_at": "2026-08-19",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -98771,6 +98771,12 @@
           "published": "2026-08-13",
           "status": "tijdig",
           "late_days": 0
+        },
+        {
+          "date": "2026-08-18",
+          "published": null,
+          "status": "geen",
+          "late_days": 0
         }
       ],
       "deadline_days": 10,
@@ -100376,6 +100382,81 @@
       ]
     },
     {
+      "id": "sv-2026-08-2026-075",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-22",
+      "nummer": "2026/075",
+      "indiener": "Freya Perdaens",
+      "onderwerp": "Overzicht kerkfabrieken en toezicht",
+      "titel": "Overzicht kerkfabrieken en toezicht",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-08/075. F. Perdaens - Overzicht Kerkfabrieken en toezicht.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-08/075.%20F.%20Perdaens%20-%20Overzicht%20Kerkfabrieken%20en%20toezicht.pdf",
+      "decoded": "Raadslid Freya Perdaens vraagt de stad naar het toezicht op de kerkfabrieken in Mechelen. Ze vraagt welke andere elementen naast het grootboek meespelen bij het opstellen van het advies dat de gemeenteraad aan de gouverneur geeft over de rekening van de kerkfabrieken, en vraagt inzage in die stukken van de afgelopen vier jaar. Ze vraagt ook hoe de stad nazicht kan uitoefenen op de staat van het privaat patrimonium van de kerkfabrieken, zoals panden voor jeugdwerk of woningen, en vraagt inzage in eventuele controlestukken van de afgelopen vier jaar. Het college antwoordt dat bij het nazicht van de jaarrekening niet alleen het grootboek wordt bekeken, maar ook stukken zoals toelichtingen, kastoestand, patrimoniumrekeningen, staat van het vermogen, schulden, vorderingen, aflossingstabellen, investeringsfiches en inventaris, volgens het Eredienstendecreet en de afsprakennota met het Centraal Kerkbestuur, goedgekeurd door de gemeenteraad op 16 december 2025. Het beheer van het privaat patrimonium blijft een bevoegdheid van de kerkfabriek zelf: de stad voert geen systematische technische controles uit, maar wil via jaarlijks overleg en het afsprakenkader wel impact hebben op dat beheer, onder meer via een beheersplan voor kerkfabriek Catharina.",
+      "themes": [
+        "Financiën",
+        "Erfgoed"
+      ],
+      "kernbegrippen": [
+        "kerkfabrieken",
+        "Centraal Kerkbestuur",
+        "Eredienstendecreet",
+        "kerkfabriek Catharina",
+        "afsprakennota"
+      ]
+    },
+    {
+      "id": "sv-2026-08-2026-074",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-22",
+      "nummer": "2026/074",
+      "indiener": "Freya Perdaens",
+      "onderwerp": "In kaart brengen eenzaamheid in de dorpen",
+      "titel": "In kaart brengen eenzaamheid in de dorpen",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-08/074. F. Perdaens - Onderzoek eenzaamheid in de dorpen.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-08/074.%20F.%20Perdaens%20-%20Onderzoek%20eenzaamheid%20in%20de%20dorpen.pdf",
+      "decoded": "Raadslid Freya Perdaens vraagt de stad meer uitleg over een project om eenzaamheid bij senioren in kaart te brengen. Ze verwijst naar een toelichting van schepen Rabau eerder dit jaar, en wil weten hoe het project zou verlopen, in welk gebied en met welke aanpak. Het college antwoordt dat de stad eenzaamheid bij ouderen niet apart in kaart brengt, maar zich baseert op bestaand wetenschappelijk onderzoek. Het college kan de toelichting waarnaar het raadslid verwijst niet terugvinden, maar wijst op een toelichting van schepen Rabau Nkandu op de raadscommissie van 24 april 2025 over onderzoek van dr. Leen Heylen naar eenzaamheid, waarin ook leeftijd aan bod kwam. Het college benadrukt dat de strijd tegen eenzaamheid deze legislatuur een belangrijke beleidsprioriteit is, via initiatieven zoals de hervorming van buurtontmoetingsinitiatieven, burendagen, een traject tegen eenzaamheid in de dorpen en Battel, en de ondersteuning van de Mechelse Ouderenraad en haar Team Vereenzaming.",
+      "themes": [
+        "Senioren",
+        "Welzijn"
+      ],
+      "kernbegrippen": [
+        "Rabau Nkandu",
+        "dr. Leen Heylen",
+        "Mechelse Ouderenraad",
+        "Team Vereenzaming",
+        "Battel"
+      ]
+    },
+    {
+      "id": "sv-2026-08-2026-073",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-22",
+      "nummer": "2026/073",
+      "indiener": "Freya Perdaens",
+      "onderwerp": "Inzet klimavelo’s voor mindermobielen",
+      "titel": "Inzet klimavelo’s voor mindermobielen",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-08/073. F. Perdaens - Inzet Klimavelos mindermobielen.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-08/073.%20F.%20Perdaens%20-%20Inzet%20Klimavelos%20mindermobielen.pdf",
+      "decoded": "Raadslid Freya Perdaens vraagt de stad naar cijfers en opvolging over de inzet van klimavelo's, fietstaxi's voor mindermobielen. Ze vraagt hoeveel aanvragen en ritten er waren sinds de opstart, hoeveel unieke gebruikers er waren, welke redenen mensen gaven om geen gebruik te maken van de fietstaxi, en of er alternatieven werden aangeboden bij een mismatch tussen vraag en aanbod. Ze vraagt ook of het probleem van lange wachttijden bij ophaling werd opgelost, hoeveel vrijwilligers en fietstaxi's er nu zijn, en hoe de toegankelijkheid voor mensen met een mobiliteitsbeperking werd verbeterd. Het college antwoordt dat de stad sinds maart 2026 een samenwerkingsovereenkomst heeft met Klimavélo, goedgekeurd op de gemeenteraad van 24 februari 2026, met een toelage van 7.500 euro. De gevraagde cijfers zijn nog niet beschikbaar omdat de jaarlijkse rapportering van Klimavélo nog moet volgen. Klimavélo beschikt momenteel over een viertal fietsriksja's en een veertigtal vrijwilligers, en biedt onder meer gratis begeleiding en plaats voor een opvouwbare rollator aan.",
+      "themes": [
+        "Senioren",
+        "Mobiliteit",
+        "Welzijn"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Klimavelo",
+        "Zorgbedrijf",
+        "Klimaan vzw",
+        "fietstaxi",
+        "Rolkar Rivierenland",
+        "Mobitwin"
+      ]
+    },
+    {
       "id": "sv-2026-08-2026-065",
       "type": "schriftelijke_vraag",
       "date": "2026-07-16",
@@ -100505,6 +100586,32 @@
         "Vlietenkelder",
         "Helicon",
         "Verhaal van Mechelen"
+      ]
+    },
+    {
+      "id": "sv-2026-08-2026-068",
+      "type": "schriftelijke_vraag",
+      "date": "2026-07-07",
+      "nummer": "2026/068",
+      "indiener": "Katleen Den Roover",
+      "onderwerp": "Locatietools en -codes",
+      "titel": "Locatietools en -codes",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-08/068. K. Den Roover - Locatietools en -codes.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-08/068.%20K.%20Den%20Roover%20-%20Locatietools%20en%20-codes.pdf",
+      "decoded": "Raadslid Katleen Den Roover vraagt de stad hoe de Mechelse hulpdiensten omgaan met het probleem dat slachtoffers of omstanders van een ongeval hun exacte locatie soms niet goed kunnen doorgeven. Ze geeft als voorbeelden een fietsongeluk in een rustige straat op het Hombeeks Plateau en een fietsongeluk op een fietsostrade of de fietsroute langs de tangent. Ze vraagt of de stad initiatieven kan nemen om dit probleem te verkleinen, bijvoorbeeld door frequent locatiecodes aan te brengen op drukke fietswegen of door sensibiliseringsacties te voeren over locatiefuncties op smartphones. Het college antwoordt dat bij een noodgeval het noodnummer 112 gebeld wordt en dat de noodcentrale de locatie opvraagt en doorgeeft aan de hulpdiensten. Volgens de ervaring van brandweer en politie is die informatie voldoende nauwkeurig, en de call takers zijn getraind om naar de locatie te vragen. Het college raadt ook de app '112' aan, die de locatie van de beller kan tonen en extra functies biedt, en zal die app verder promoten via de mediakanalen van de stad.",
+      "themes": [
+        "Veiligheid",
+        "Mobiliteit"
+      ],
+      "neighborhood": "Hombeek",
+      "kernbegrippen": [
+        "Locatietools en -codes",
+        "Hombeeks Plateau",
+        "fietsostrade",
+        "tangent",
+        "app 112",
+        "noodnummer 112"
       ]
     },
     {
