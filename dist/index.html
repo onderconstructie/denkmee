@@ -7709,6 +7709,19 @@ const DOS_STOP = new Set('goedkeuring goedkeuren aanvraag aanvragen gemeenteraad
 function dosTokens(s){
   return [...new Set((s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/\b[a-z][a-z\-]{4,}\b/g)||[])].filter(w=>!DOS_STOP.has(w));
 }
+// Maandnamen mogen nooit koppelen: een datum in de titel is tijd, geen onderwerp. Zonder
+// deze uitsluiting bundelde "bevestiging + april" alle besluiten van april, en viel
+// dezelfde reeks per maand uiteen. (Jaartallen en lidwoorden zijn al onschadelijk: de
+// tokenizer neemt alleen woorden van vijf letters of meer, en cijfers helemaal niet.)
+const DOS_MAAND = new Set(['januari','februari','maart','april','augustus','september','oktober','november','december']);
+// Stammen voor de PAAR-handtekening, met twee schoonmaakstappen die de gewone
+// handtekening niet nodig heeft: het routeringsstaartje "Verwijzing naar de gemeenteraad /
+// de raad voor maatschappelijk welzijn" gaat eruit (administratie, geen inhoud; "maatschappelijk"
+// uit dat staartje won anders als vals zeldzaam paar-woord), en maandnamen doen niet mee.
+function dosPaarStems(titel){
+  const kaal = (titel||'').replace(/\bverwijzing naar (?:de|het)\b[^.]*\.?/gi, ' ');
+  return [...new Set(dosTokens(kaal).map(dosStam))].filter(s => !DOS_MAAND.has(s)).sort();
+}
 // Lichte stam, puur voor het TELLEN en KOPPELEN: meervoud en enkelvoud van hetzelfde
 // onderwerp horen bij dezelfde sleutel ("bepaling"/"bepalingen", "fietsenstalling"/
 // "fietsenstallingen"). Bewust simpel en deterministisch; het gestamde woord is intern,
@@ -7786,7 +7799,10 @@ const DOS_FILL = /^(van|de|het|der|den|bij|voor|tot|inzake|een|op|in|met|aan)$/i
 const DOS_CAT  = /^(evenement(en)?)\b/i;
 const DOS_GEN  = new Set(['gemeenteraad','college','vast bureau','raad voor maatschappelijk welzijn']);
 const DOS_DATE = new RegExp('\\s+(\\d{1,2}(\\s+(en|tot|t\\/m|&|-|–|—)\\s+\\d{1,2})?\\s+)?(januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\\s+\\d{4}\\.?$','i');
-const DOS_TAIL = /\s+(nr|nrs|art|op|tijdens|dd|d\.d)$/i;
+// Ook bengelende voeg- en voorzetselwoorden aan het staarteinde: de inkorting op een
+// woordgrens liet "… nominatieve subsidies 2025 die" staan, en een kop die op "die",
+// "van" of "voor" eindigt leest als afgebroken. Alleen aan het einde, nooit middenin.
+const DOS_TAIL = /\s+(nr|nrs|art|op|tijdens|dd|d\.d|die|dat|van|voor|met|aan|tot|naar|inzake|betreffende)$/i;
 function dosTitleCase(w){ return String(w).split('-').map(p => p ? p.charAt(0).toUpperCase()+p.slice(1) : p).join('-'); }
 function dosCap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
 function dosCleanSeg(seg){
@@ -7830,7 +7846,7 @@ function dosTokenPhrase(name, tok){
 }
 // Staart-functiewoorden: na het inkorten laten we geen bengelend voegwoord of voorzetsel
 // staan ("...brasserie volgens", "...Jeugd- en") — die knippen we weg voor een nette kop.
-const DOS_EDGE = /^(van|de|het|der|den|bij|voor|tot|inzake|een|op|in|met|aan|en|of|volgens|conform|zoals|betreffende|naar|over|om|door|uit|per|via|tussen|rond|vanuit|dd)$/i;
+const DOS_EDGE = /^(van|de|het|der|den|bij|voor|tot|inzake|een|op|in|met|aan|en|of|volgens|conform|zoals|betreffende|naar|over|om|door|uit|per|via|tussen|rond|vanuit|dd|die|dat|deze|dit)$/i;
 function dosTrimFill(s){
   let w = (s || '').replace(/[–\-]\s*$/,'').split(' ').filter(Boolean);
   while(w.length>1 && (DOS_EDGE.test(w[w.length-1].replace(/[.,;:]+$/,'')) || /^[–\-]$/.test(w[w.length-1]))) w.pop();
@@ -7872,6 +7888,14 @@ function dosTitle(d){
   const sch = d.name.match(/commissie (schepen [A-ZÀ-Þ][a-zà-ÿ'’\-]+(?: [A-ZÀ-Þ][a-zà-ÿ'’\-]+)?|burgemeester)\b/);
   if(sch && base.toLowerCase().indexOf(sch[1].toLowerCase()) === -1){
     base += ' · ' + sch[1];
+  }
+  // Een dossier dat stukken uit MEERDERE jaren bundelt, mag niet naar één jaartal heten:
+  // "Jaarverslag klachten 2024" met daarin ook de editie 2025 zou als fout lezen. Alleen
+  // een los jaartal aan het staarteinde gaat weg; een bereik ("2026-2031") blijft staan,
+  // want dat is de looptijd van de zaak zelf en geen editie-etiket.
+  if(/\s(?:19|20)\d{2}$/.test(base)){
+    const jaren = new Set(d.items.map(it => String(it.date || it.sessie_date || '').slice(0, 4)).filter(Boolean));
+    if(jaren.size > 1) base = base.replace(/\s+(?:19|20)\d{2}$/, '');
   }
   return base;
 }
@@ -7972,6 +7996,33 @@ function buildDossiers(){
                : (df[stam] <= 9 || it._ent.has(best)) ? ('tok:'+stam)
                : ('tok:'+stam+'@'+it._city);
     it._key = it._track + '::' + subj;
+  });
+  // VANGNET voor eenlingen: het zeldzame WOORDPAAR. "Aktename jaarverslag klachten 2024"
+  // heeft geen geldig handtekeningwoord ("jaarverslag" staat in 20 stukken, "klachten" in
+  // 27, allebei boven de CAP), maar de combinatie komt maar in 8 stukken voor en wijst dus
+  // wél één zaak aan. De ladder loopt bewust van grof naar fijn: het enkelwoord eerst, het
+  // paar alleen als dat er niet is. "Zeldzaamste wint" over de niveaus heen zou een reeks
+  // juist versplinteren, want een paar is per definitie zeldzamer dan zijn losse woorden.
+  // Drietallen zijn gemeten en toegevoegd nul: elk stuk met een geldig drietal had al een
+  // geldig paar. Zelfde bewakers als altijd: df 2..CAP, binnen één kant (het _track zit in
+  // de sleutel), één deterministische sleutel per stuk, dus geen kettingen en geen vergaarbak.
+  const paarDf = {};
+  items.forEach(it => {
+    it._pst = dosPaarStems(it.titel);
+    const st = it._pst;
+    for(let i = 0; i < st.length; i++) for(let j = i+1; j < st.length; j++){
+      const k = st[i]+'|'+st[j]; paarDf[k] = (paarDf[k]||0)+1;
+    }
+  });
+  items.forEach(it => {
+    if(it._token) return;                      // heeft al een enkelwoord-handtekening
+    const st = it._pst; let beste = null;
+    for(let i = 0; i < st.length; i++) for(let j = i+1; j < st.length; j++){
+      const k = st[i]+'|'+st[j], n = paarDf[k];
+      if(n < 2 || n > CAP) continue;
+      if(!beste || n < beste.n || (n === beste.n && k.length > beste.k.length)) beste = {k, n};
+    }
+    if(beste) it._key = it._track + '::paar:' + beste.k;
   });
   const keys = [...new Set(items.map(it=>it._key))];
   const par = {}; keys.forEach(k=>par[k]=k);
@@ -8257,6 +8308,20 @@ function buildDossiers(){
     if(!k || !d.items.every(it => dosSerieKey(it.titel) === k)) return;
     const schoon = d.title.replace(/\s*(week|lijst|nr\.?|kohier)?\s*\d+([\/\-–]\d+)*\s*\.?$/i, '').replace(/[\s·.,;:-]+$/, '');
     if(schoon.length >= 8) d.title = schoon;
+  });
+
+  // Zelfde regel als in dosTitle, maar dan voor ÁLLE naamgevingspaden (ook de reeks-opkuis
+  // hierboven kan een jaartal middenin de kop laten staan dat door de inkorting aan het
+  // eind belandt): een dossier met stukken uit meerdere jaren heet niet naar één jaar.
+  // "Belasting op sluikstorten 2025" met kohieren uit 2025 én 2026 werd anders fout gelezen
+  // als enkel de editie 2025. Een bereik (2026-2031) blijft; dat is een looptijd.
+  DOSSIERS.forEach(d => {
+    if(!/\s(?:19|20)\d{2}$/.test(d.title)) return;
+    const jaren = new Set(d.items.map(it => String(it.date || it.sessie_date || '').slice(0, 4)).filter(Boolean));
+    if(jaren.size > 1){
+      const kaal = d.title.replace(/\s+(?:19|20)\d{2}$/, '').replace(/[\s·.,;:-]+$/, '');
+      if(kaal.length >= 8) d.title = kaal;
+    }
   });
 
   // Titels moeten onderling ONDERSCHEIDEN: botsen twee dossiers op dezelfde kop (de
