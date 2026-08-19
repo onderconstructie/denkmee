@@ -61,7 +61,13 @@ def parse_datum(text):
 
 def parse_uit_bestandsnaam(naam):
     """'048. K. Lauwers - Geluidsschermen Battel - vervolg' -> nummer, indiener, onderwerp."""
-    stam = re.sub(r"\.pdf$", "", naam, flags=re.I)
+    # Het CMS van de stad slaat een bestandsnaam soms HTML-ontsnapt op ("Kiss &amp; Ride"):
+    # de entiteit zit dan letterlijk in de bron-URL en dus in onze lokale bestandsnaam. Het
+    # PAD moet die vorm houden (de URL met echte & geeft een 404, nagemeten 19/08/2026),
+    # maar de titel die een mens leest, hoort de echte ampersand te dragen. Anders ontsnapt
+    # de site hem bij het tonen nóg eens en staat er "&amp;" op het scherm.
+    import html
+    stam = html.unescape(re.sub(r"\.pdf$", "", naam, flags=re.I))
     nummer = None
     m = re.match(r"\s*(\d{1,4})[.\-_\s]+(.*)", stam)
     if m:
