@@ -8324,6 +8324,67 @@ function buildDossiers(){
     }
   });
 
+  // De ZAAK hoort in de kop. De ambtelijke titel zet de eigennaam vaak achteraan
+  // ("Goedkeuring verhoging nominatieve toelage 2025 voor Stadscarnavalgilde De
+  // Maneblussers") en de inkorting op 56 tekens knipte hem daar weg: de kop noemde het
+  // besluitTYPE en verzweeg om wie het gaat. Delen álle stukken van een dossier dezelfde
+  // zeldzame eigennaam en staat die nog niet in de kop, plak hem er dan achter, in het
+  // idioom van de commissie-suffix. Drie poorten houden de valse eigennamen buiten
+  // (nagemeten: zonder die poorten kwamen er suffixen als "· Correctie" en "· Benoeming",
+  // hoofdletters door zinspositie die in élk stuk van een klein dossier terugkeren):
+  //  1. het woord staat ergens MIDDEN in een zin met een hoofdletter (er komt binnen
+  //     hetzelfde titelsegment een kleine letter vóór), niet enkel aan een zinsbegin;
+  //  2. het woord komt uit het EERSTE titelsegment van minstens één stuk: dat is waar de
+  //     kop vandaan komt, dus dan is de identiteit echt door de inkorting weggevallen;
+  //  3. de frase wordt opgeschoond en mag geen algemene plaatsnaam zijn.
+  const ALG_FRASE = new Set(['mechelen', 'stad mechelen', 'ocmw mechelen', 'stad', 'ocmw']);
+  DOSSIERS.forEach(d => {
+    if(d.items.length < 2) return;
+    let deel = null;
+    for(const it of d.items){
+      const s = new Set([...(it._ent || [])].filter(e => { const st = dosStam(e); return df[st] >= 2 && df[st] <= CAP; }));
+      deel = deel === null ? s : new Set([...deel].filter(e => s.has(e)));
+      if(!deel.size) return;
+    }
+    const tl = d.title.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const kandidaten = [...deel].filter(e => !tl.includes(dosStam(e)));
+    if(kandidaten.length !== deel.size || !kandidaten.length) return;   // identiteit staat al (deels) in de kop
+    // Vind het stuk waarin het woord met een HOOFDLETTER staat terwijl er in hetzelfde
+    // titelsegment al een kleine letter vóór kwam: dan is de hoofdletter identiteit, geen
+    // zinspositie. Let op: géén 'i'-vlag op het hele patroon, die zou de hoofdletter-eis
+    // wissen; we zoeken hoofdletter-ongevoelig en toetsen de treffer zelf op zijn kapitaal.
+    const midzinIn = e => {
+      const esc = e.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
+      for(const it of d.items){
+        const t = (it.titel || '').normalize('NFD').replace(/[̀-ͯ]/g, '');
+        const rx = new RegExp('\\b' + esc + '\\b', 'gi');
+        let m;
+        while((m = rx.exec(t))){
+          if(!/[A-ZÀ-Þ]/.test(t[m.index])) continue;
+          const voor = t.slice(0, m.index);
+          const segStart = Math.max(voor.lastIndexOf('. '), voor.lastIndexOf(': '), voor.lastIndexOf('; ')) + 1;
+          // Een WOORD dat met een kleine letter begint, niet zomaar een kleine letter:
+          // "Ontvangst Stadscarnavalgilde" heeft kleine letters zat maar is een zinsbegin.
+          if(/(^|[\s('‘"])[a-zà-ÿ]/.test(voor.slice(segStart))) return it;
+        }
+      }
+      return null;
+    };
+    const inEersteSegment = e => d.items.some(it =>
+      ((it.titel || '').split(/[.:;]\s/)[0] || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(e));
+    let best = null, bron = null;
+    for(const e of kandidaten.sort((a, b) => df[dosStam(a)] - df[dosStam(b)] || b.length - a.length || (a < b ? -1 : 1))){
+      if(!inEersteSegment(e)) continue;
+      const it = midzinIn(e);
+      if(it){ best = e; bron = it; break; }
+    }
+    if(!best) return;
+    let frase = dosTokenPhrase(bron.titel, best) || dosTitleCase(best);
+    frase = frase.replace(/[^\wÀ-ÿ'’.&\- ]/g, ' ').replace(/\s+/g, ' ').trim();
+    if(!frase || ALG_FRASE.has(frase.toLowerCase())) return;
+    d.title += ' · ' + dosPhraseTrunc(frase, 40);
+  });
+
   // Titels moeten onderling ONDERSCHEIDEN: botsen twee dossiers op dezelfde kop (de
   // inkorting maakt van elk evenement "Tijdelijke politieverordening..."), dan krijgt
   // elk een kenmerkend achtervoegsel. De ladder: bij een botsing over de twee kanten

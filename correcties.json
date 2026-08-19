@@ -83,6 +83,35 @@
       "reden": "De windvisie is het beleidskader voor windturbines in Mechelen: de vraag noemt de turbines en de omzendbrief expliciet, zelfde beleidsdomein en actoren. Een winddossier leest als een verhaal.",
       "bron": "lezer",
       "datum": "2026-08-02"
+    },
+    {
+      "items": [
+        "gemeenteraad-20250127-9",
+        "college-20250114-44",
+        "college-20251202-45"
+      ],
+      "reden": "Eén doorlopende reeks: het overzicht van nominatieve subsidies dat het college periodiek aanpast en naar de gemeenteraad verwijst. De titels wisselen (overzicht/aangepast overzicht/lijst, met of zonder 'die verstrekt worden door Stad Mechelen'), maar het is telkens hetzelfde overzicht.",
+      "bron": "curator",
+      "datum": "2026-08-19"
+    },
+    {
+      "items": [
+        "rmw-20250127-7",
+        "vastbureau-20250114-5",
+        "vastbureau-20251125-2"
+      ],
+      "reden": "Zelfde reeks aan de OCMW-kant: het overzicht van nominatieve subsidies dat het vast bureau periodiek aanpast en naar de raad voor maatschappelijk welzijn verwijst.",
+      "bron": "curator",
+      "datum": "2026-08-19"
+    },
+    {
+      "items": [
+        "college-20250318-52",
+        "gemeenteraad-20250429-10"
+      ],
+      "reden": "Zelfde zaak: de nominatieve toelage aan FC Walem voor de drainagewerken, eerst in het college (verwijzing), daarna goedgekeurd door de gemeenteraad. De titels kozen elk een ander zeldzaam woord (Walem versus drainagewerken).",
+      "bron": "curator",
+      "datum": "2026-08-19"
     }
   ],
   "verplaatsen": [
@@ -115,6 +144,20 @@
       "reden": "samengevoegd brugdossier; de brug wordt met beide namen aangeduid (Winketkaaibrug in college-20250408-37, brug over het Keerdok in andere stukken), naar de twee oevers",
       "bron": "curator",
       "datum": "2026-07-18"
+    },
+    {
+      "anker": "gemeenteraad-20250127-9",
+      "naam": "Overzicht nominatieve subsidies",
+      "reden": "De reeks heet naar de zaak, niet naar de toevallige variant (aangepast/lijst) van het eerste stuk.",
+      "bron": "curator",
+      "datum": "2026-08-19"
+    },
+    {
+      "anker": "rmw-20250127-7",
+      "naam": "Overzicht nominatieve subsidies · OCMW",
+      "reden": "Zelfde reeksnaam als aan de stadskant, met het OCMW-kenmerk dat de botsingsladder hier niet meer kan toevoegen (naam-overrides passeren na de ontdubbeling).",
+      "bron": "curator",
+      "datum": "2026-08-19"
     }
   ],
   "alias": {
