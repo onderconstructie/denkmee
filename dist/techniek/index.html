@@ -24,8 +24,8 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <!-- Favicon = hetzelfde toren-in-cirkel-logo (SVG data-URI; maak_toren.py houdt dit mee in sync). -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiNGRjAwNjYiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjRkYwMDY2Ij48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==">
-<meta name="theme-color" content="#FF0066">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiMwMDc5NkIiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjMDA3OTZCIj48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==">
+<meta name="theme-color" content="#00796b">
 
 <!-- Installeerbaar als app op het beginscherm (zelfde patroon als asgaupaust.be). -->
 <link rel="manifest" href="/manifest.json">
@@ -64,10 +64,24 @@
   --ink-2:        #514a40;        /* secundaire tekst */
   --ink-dim:      #635a4d;        /* tertiaire tekst, captions */
   --ink-faint:    #635a4d;        /* eyebrows en labels (niet lichter: leesdrempel) */
-  --pink:         #FF0066;        /* decoratief — knoppen, dots, headlines */
-  --pink-text:    #c80054;        /* leesbaar pink op licht (familie pink-tekst) */
-  --pink-deep:    #b3004a;        /* hover state op pink-knoppen */
-  --pink-soft:    rgba(255,0,102,.09);
+  /* DE APP-KLEUR. Sinds de verzelfstandiging (08/2026) is asgaupaust.be het portaal in
+     het roze, en draagt elke app op dat portaal een eigen basiskleur die ermee accordeert.
+     Denk mee is PETROL. De --pink-tokens hieronder blijven bestaan als ALIASSEN van de
+     app-kleur: honderden regels verwijzen ernaar en de namen zijn historisch; nieuwe code
+     gebruikt --app*. Het echte portaalroze leeft nog op precies twee plekken, als
+     merkteken van de weg terug: het merkwoord in de nav en de portaaltoets in de app-balk
+     (--portaal-*). Contrasten gemeten in de proefbouw: app op papier, app-text op papier
+     en wit op app-vlak halen alle drie AA. */
+  --app:          #00796b;        /* decoratief — knoppen, dots, headlines */
+  --app-text:     #005f51;        /* leesbaar petrol op licht */
+  --app-deep:     #004d40;        /* hover state op petrol-knoppen */
+  --app-soft:     rgba(0,121,107,.09);
+  --portaal-roze:       #FF0066;
+  --portaal-roze-tekst: #c80054;
+  --pink:         var(--app);
+  --pink-text:    var(--app-text);
+  --pink-deep:    var(--app-deep);
+  --pink-soft:    var(--app-soft);
 
   /* De donkere eilanden (banner, meldingen, accentblokken): altijd warme inkt.
      De trap is heropend: het grote eiland-vlak (--black-2) staat een tikje boven de
@@ -87,30 +101,29 @@
   --op-eiland-55: rgba(245,241,232,.55);
   --op-eiland-30: rgba(245,241,232,.3);
   --op-eiland-25: rgba(245,241,232,.25);
-  --eiland-pink:  rgb(255,77,148);
+  --eiland-app:   #4db6ac;        /* leesbaar petrol op de donkere eilanden */
+  --eiland-pink:  var(--eiland-app);
   /* Haarlijn op donker: de kaartlijn-logica van de lichte kant, gespiegeld. */
   --line-eiland:  rgba(245,241,232,.14);
-  /* Roze VLAKKEN: kaartjes, de cockpit, knoppen en chips, alles met witte tekst erop.
-     Waarom niet het merkroze #FF0066 zelf: dat haalt met wit 3,86:1 en blijft onder AA.
-     Waarom niet --pink-deep #b3004a: dat zit op 35% helderheid en leest als bordeaux.
-     #e6005c is het LICHTSTE roze op dezelfde tint dat 4,5:1 haalt (4,66:1), dus zo dicht
-     bij het merkroze als leesbaar kan. Bij hover gaan we een stap DIEPER (5,69:1), niet
-     feller: de knop reageert zichtbaar en de tekst wordt onderweg beter leesbaar in
-     plaats van slechter. */
-  --pink-vlak:#e6005c; --pink-vlak-hover:#cc0052;
+  /* App-VLAKKEN: kaartjes, de cockpit, knoppen en chips, alles met witte tekst erop.
+     Anders dan bij het oude roze (dat pas op #e6005c leesbaar werd) haalt het petrol
+     zelf al ruim AA met wit; het hover-vlak gaat een stap DIEPER, niet feller: de knop
+     reageert zichtbaar en de tekst wordt onderweg beter leesbaar in plaats van slechter. */
+  --app-vlak:var(--app); --app-vlak-hover:#00695c;
+  --pink-vlak:var(--app-vlak); --pink-vlak-hover:var(--app-vlak-hover);
   /* Aliassen: het portaal noemt deze tokens in het Nederlands. Beide namen laten
      bestaan zodat CSS die je tussen de sites kopieert niet stil afbreekt. */
-  --tekst:#1a1712; --tekst-2:#514a40; --pink-tekst:#c80054;
-  --pink-zacht:rgba(255,0,102,.09);
+  --tekst:#1a1712; --tekst-2:#514a40; --pink-tekst:var(--app-text);
+  --pink-zacht:var(--app-soft);
 
   /* Haarlijnen — warme inkt op papier; de kaartlijn draagt de kaartvorm */
   --line:         rgba(26,23,18,.10);
   --line-kaart:   rgba(26,23,18,.12);
   --line-strong:  rgba(26,23,18,.22);
-  --line-pink:    rgba(255,0,102,.4);
-  --shadow-pink:  0 0 0 1px rgba(255,0,102,.3), 0 6px 32px -10px rgba(255,0,102,.4);
+  --line-pink:    rgba(0,121,107,.4);
+  --shadow-pink:  0 0 0 1px rgba(0,121,107,.3), 0 6px 32px -10px rgba(0,121,107,.4);
   --shadow-soft:  0 1px 2px rgba(72,56,38,.05), 0 10px 30px -12px rgba(72,56,38,.16);
-  --shadow-lift:  0 4px 10px rgba(72,56,38,.08), 0 22px 48px -18px rgba(255,0,102,.22);
+  --shadow-lift:  0 4px 10px rgba(72,56,38,.08), 0 22px 48px -18px rgba(0,121,107,.22);
 
   /* Familie-afronding (portaal/Leesmee) */
   --r-kaart: 18px; --r-chip: 14px; --r-input: 10px;
@@ -281,7 +294,9 @@ section:not(:last-of-type){ border-bottom:1px solid var(--line); }
   color:inherit; text-decoration:none;
 }
 a.brand:hover .brand-mark{ filter:brightness(1.05); }
-.brand .pink{ color:var(--pink-text); font-style:normal; font-weight:600; }
+/* Het merkwoord in de nav is het PORTAAL, niet de app: het houdt het portaalroze als
+   merkteken van de weg terug, ook nu de rest van de app petrol spreekt. */
+.brand .pink{ color:var(--portaal-roze-tekst); font-style:normal; font-weight:600; }
 .brand-mark{
   height:34px; width:34px;  /* vierkant: ronde cirkel vult de mark */
   display:block;
@@ -289,7 +304,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 }
 /* Eén centrale background-image voor alle brand-marks — toren IN de pink cirkel, consistent met hero */
 .brand-mark-bg{
-  background-image:url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiNGRjAwNjYiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjRkYwMDY2Ij48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==');
+  background-image:url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiMwMDc5NkIiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjMDA3OTZCIj48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==');
   background-size:contain;
   background-repeat:no-repeat;
   background-position:center;
@@ -470,7 +485,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
      tekst links, paneel rechts, de cirkel ankert het midden. */
   width:clamp(240px, 26vw, 320px);
   aspect-ratio: 1 / 1;
-  background-image:url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiNGRjAwNjYiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjRkYwMDY2Ij48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==');
+  background-image:url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiMwMDc5NkIiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjMDA3OTZCIj48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==');
   background-size:contain;
   background-repeat:no-repeat;
   background-position:center;
@@ -538,9 +553,9 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   animation:pulse 2s 4;   /* eindige hartslag: vier tellen, dan ligt hij; levend, niet zeurend */
 }
 @keyframes pulse{
-  0%   { box-shadow:0 0 0 0 rgba(255,0,102,.5); }
-  70%  { box-shadow:0 0 0 10px rgba(255,0,102,0); }
-  100% { box-shadow:0 0 0 0 rgba(255,0,102,0); }
+  0%   { box-shadow:0 0 0 0 rgba(0,121,107,.5); }
+  70%  { box-shadow:0 0 0 10px rgba(0,121,107,0); }
+  100% { box-shadow:0 0 0 0 rgba(0,121,107,0); }
 }
 
 .hero-title{
@@ -554,12 +569,13 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
      op een riso-vel. Op kaal papier verandert er niets: inkt op papier blijft inkt. */
   mix-blend-mode:multiply;
 }
-/* Het kader (de 'box') rond de subdomeinnaam in de hoofdtitel: pink op inkt. Zo komt de
-   deelsite (Denk mee) terug in de hoofdtitel, terwijl bovenaan As Gau Paust met de mug staat. */
+/* Het kader (de 'box') rond de appnaam in de hoofdtitel: app-kleur op inkt. Bewust de
+   EILAND-variant van het petrol: het gewone --app haalt op inkt maar 3,2:1, de lichte
+   eilandtint 6,9:1, en dit is de belangrijkste titel van de pagina. */
 .hero-title .box{
   font-style:normal;
   font-weight:500;
-  color:var(--pink);
+  color:var(--eiland-app);
   background:var(--ink);
   padding:0 .12em;
   white-space:nowrap;
@@ -718,7 +734,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   border:1px solid var(--line-strong);
   transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
-.btn-pink{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); box-shadow:0 6px 18px -9px rgba(255,0,102,.5); }
+.btn-pink{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); box-shadow:0 6px 18px -9px rgba(0,121,107,.5); }
 .btn-pink:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); transform:translate(0,-2px); box-shadow:var(--shadow-pink); }
 .btn-ghost{ color:var(--ink); border-color:var(--ink); }
 .btn-ghost:hover{ background:var(--ink); color:var(--paper); }
@@ -745,11 +761,12 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
      profiel-blok eronder is de hoofdrol. Rand en schaduw zitten op .hero-panel. */
   position:relative;
   /* Dezelfde logo-mark als in de nav (Sint-Romboutstoren mét raampjes ín de bol), maar
-     monochroom en subtiel als watermerk: de bol is een lichte ink-schaduw, de toren snijdt
-     eruit in de papierkleur, de raampjes zijn iets donkerder. Loopt Bauhaus-gewijs af langs
-     de rechterrand; de datum links blijft vrij en leesbaar. */
+     monochroom en subtiel als watermerk: de bol is sinds de petrol-huid geen kale
+     inktschaduw meer maar een zeer lichte petrolwas (10%), en de raampjes kleuren op
+     dezelfde tint zachtjes mee (16%). De toren snijdt eruit in de papierkleur. Loopt
+     Bauhaus-gewijs af langs de rechterrand; de datum links blijft vrij en leesbaar. */
   background-color:var(--paper-2);
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 480'><circle cx='240' cy='240' r='212' fill='%231a1712' fill-opacity='0.08'/><g transform='translate(-36,-36) scale(1.15)'><g fill='%23fffdf7'><rect x='188' y='150' width='104' height='222'/><rect x='194' y='130' width='16' height='20'/><rect x='218' y='130' width='16' height='20'/><rect x='242' y='130' width='16' height='20'/><rect x='266' y='130' width='16' height='20'/></g><g fill='%231a1712' fill-opacity='0.11'><rect x='218' y='195' width='8' height='85'/><rect x='236' y='182' width='8' height='110'/><rect x='254' y='195' width='8' height='85'/><polygon points='224,372 224,338 240,318 256,338 256,372'/></g></g></svg>");
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 480'><circle cx='240' cy='240' r='212' fill='%2300796b' fill-opacity='0.10'/><g transform='translate(-36,-36) scale(1.15)'><g fill='%23fffdf7'><rect x='188' y='150' width='104' height='222'/><rect x='194' y='130' width='16' height='20'/><rect x='218' y='130' width='16' height='20'/><rect x='242' y='130' width='16' height='20'/><rect x='266' y='130' width='16' height='20'/></g><g fill='%2300796b' fill-opacity='0.16'><rect x='218' y='195' width='8' height='85'/><rect x='236' y='182' width='8' height='110'/><rect x='254' y='195' width='8' height='85'/><polygon points='224,372 224,338 240,318 256,338 256,372'/></g></g></svg>");
   /* Bewust kleiner dan de roze held-bol in de hero: dit is een watermerk (context),
      de roze bol is het merk-statement. Zo klopt de visuele hiërarchie. */
   background-repeat:no-repeat;
@@ -842,7 +859,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   font-size:.72rem; letter-spacing:.04em;
   border:1px solid;
 }
-.pub-ok    { color:var(--pink-text); border-color:var(--pink); background:rgba(255,0,102,.12); }
+.pub-ok    { color:var(--pink-text); border-color:var(--pink); background:rgba(0,121,107,.12); }
 .pub-late  { color:#c4006a; border-color:#c4006a; background:rgba(196,0,106,.06); }
 .pub-wait  { color:var(--ink-dim); border-color:var(--line-strong); }
 .pub-deadline{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink-dim); margin-top:.4rem; }
@@ -1382,7 +1399,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   flex:0 0 auto; width:1.15rem; height:1.15rem; margin-top:.15rem;
   border:1px solid var(--ink); background:var(--paper); position:relative;
 }
-.wiz-all.active{ border-color:var(--pink); background:rgba(255,0,102,.06); }
+.wiz-all.active{ border-color:var(--pink); background:rgba(0,121,107,.06); }
 .wiz-all.active .wa-box{ background:var(--pink); border-color:var(--pink); }
 .wiz-all.active .wa-box::after{ content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.78rem; }
 .wa-text{ display:flex; flex-direction:column; line-height:1.4; color:var(--ink); }
@@ -1811,7 +1828,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    (rgba .07): op een balkje van 6px zou die tint onzichtbaar zijn. */
 .tts-meter{
   height:6px; align-self:center;
-  background:rgba(255,0,102,.26); border-radius:999px; overflow:hidden;
+  background:rgba(0,121,107,.26); border-radius:999px; overflow:hidden;
 }
 .tts-meter i{ display:block; height:100%; background:rgba(82,74,63,.65); border-radius:999px; }
 .tts-meter[hidden]{ display:none; }
@@ -2014,7 +2031,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    bij de besluitenlijsten betekent 0 "10 dagen nadien" (negatief = sneller, dus goed). */
 .dvb-chart > .dvb-deadline{
   position:absolute; left:56px; right:0; top:var(--deadline-top, 50%);
-  border-top:1px dashed rgba(200, 32, 84, .45);
+  border-top:1px dashed rgba(0, 95, 81, .45);
   pointer-events:none;
   z-index:0;
 }
@@ -2030,7 +2047,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    vlak anders het grootste element in beeld, en dat leest als veel mis. */
 .dvb-zone{
   position:absolute; left:56px; right:0; top:0; height:var(--deadline-top, 50%);
-  background:rgba(255,0,102,.035);
+  background:rgba(0,121,107,.035);
   pointer-events:none;
 }
 /* De labelstrook rechts van de grafiek is geschrapt. Ze dateerde van vóór de aswoorden: nu
@@ -2141,9 +2158,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   transition:background .18s, border-color .18s;
 }
 /* De kleur van de gekozen dag, in dezelfde zeer lichte tinten als de grafiek: de roze zone
-   boven de deadline (rgba(255,0,102,.035)) en het warmgrijs van de tijdige balken. Iets
+   boven de deadline (rgba(0,121,107,.035)) en het warmgrijs van de tijdige balken. Iets
    voller dan in de grafiek, want hier is het een vlak van één regel en geen halve grafiek. */
-.dvb-readout.is-laat{ background:rgba(255,0,102,.07); border-color:rgba(255,0,102,.22); }
+.dvb-readout.is-laat{ background:rgba(0,121,107,.07); border-color:rgba(0,121,107,.22); }
 .dvb-readout.is-tijdig{ background:rgba(82,74,63,.06); border-color:rgba(82,74,63,.18); }
 .dvr-datum{
   display:block; font-size:.95rem; font-weight:600; color:var(--ink); letter-spacing:-.01em;
@@ -2744,7 +2761,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .lifecycle-explainer{
   border:1px solid var(--line);
   padding:1.75rem 1.5rem;
-  background:linear-gradient(180deg, rgba(255,0,102,.04), transparent 80%);
+  background:linear-gradient(180deg, rgba(0,121,107,.04), transparent 80%);
 }
 .lifecycle-explainer h3{
   font-family:'JetBrains Mono', ui-monospace, monospace;
@@ -3466,7 +3483,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    vandaan komen. De verantwoording verderop op de pagina is een colofon, geen label. Eén keer
    per dossier, niet per stuk, anders wordt een eerlijk label ruis. */
 .dosm-ai-nota{ margin:.1rem 0 .9rem; font-size:.72rem; line-height:1.45; color:var(--ink-3, #6b6257); }
-.dosm-ai-nota a{ color:var(--pink); border-bottom:1px solid rgba(255,0,102,.35); }
+.dosm-ai-nota a{ color:var(--pink); border-bottom:1px solid rgba(0,121,107,.35); }
 .dosm-ai-nota a:hover{ border-bottom-color:var(--pink); }
 .dosm-ev-actions{ display:flex; flex-wrap:wrap; gap:.45rem; align-items:center; }
 /* Bronstukken als chips: een icoon dat het documenttype toont plus één woord (Besluit,
@@ -3871,12 +3888,15 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
   .tabbar a .tab-mug{ width:22px; height:22px; display:block; flex:none; border-radius:50%; }
   .tabbar a span{
     font-family:'JetBrains Mono', ui-monospace, monospace;
-    /* Kleine mono-caps, net als op het portaal: dit is nu een sitewissel-balk (Start, Denk
-       mee, Lees mee, En meer, Contact), niet meer de enige navigatie. De sectie-navigatie
-       van deze site zit in het menu. "DENK MEE" past met nowrap binnen een vak van 75px. */
+    /* Kleine mono-caps. Sinds de verzelfstandiging is dit weer een APP-balk: de vier
+       onderdelen van deze app plus de portaaltoets als weg terug. De labels blijven
+       kort (Dossiers, Agenda, Beslist, Op tijd?, Portaal) zodat elk vak past. */
     font-size:.55rem; letter-spacing:.03em; text-transform:uppercase; white-space:nowrap;
   }
   .tabbar a:hover{ color:var(--pink-text); }
+  /* De portaaltoets is de enige plek in de app met het portaalroze: de kleur zelf zegt
+     al "hier verlaat je de app". De mug is al roze; het label kleurt mee. */
+  .tabbar .tab-portaal span{ color:var(--portaal-roze-tekst); }
   /* [aria-current] zonder waarde-check: de hoofdpagina zet "page" (dit IS die pagina),
      de techniek-pagina zet "true" (je zit wél in Denk mee, maar niet op die pagina). */
   .tabbar a[aria-current]{ color:var(--pink-text); }
@@ -3985,7 +4005,7 @@ body{
 .hero::before{
   content:''; position:absolute; z-index:-1; pointer-events:none;
   top:0; bottom:0; left:50%; transform:translateX(-50%); width:100vw;
-  background:radial-gradient(1100px 480px at 78% -10%, rgba(255,0,102,.10), transparent 65%);
+  background:radial-gradient(1100px 480px at 78% -10%, rgba(0,121,107,.10), transparent 65%);
 }
 /* Kaarten: familie-afronding; clip zodat koppen en watermerken mee ronden. */
 .hero-panel, .dashboard, .dos-card, .dc-card, .item-card,
@@ -4010,7 +4030,7 @@ body{
    kaarttint en het papier. De haarlijn en de zachte schaduw dragen de kaartvorm. */
 .dc-card{
   background:var(--paper-kaart);
-  border-color:rgba(200,0,84,.16);
+  border-color:rgba(0,95,81,.16);
 }
 .dc-card.dc-accent{
   background:var(--pink-vlak);

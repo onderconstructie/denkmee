@@ -241,7 +241,7 @@ PAGINA_404 = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#FF0066">
+<meta name="theme-color" content="#00796b">
 <title>Pagina niet gevonden, Denk mee met Mechelen</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="/beelden/mug.png">
@@ -254,7 +254,7 @@ body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:c
 .doos{max-width:34rem;text-align:center}
 .mug{width:96px;height:96px;border-radius:50%;margin:0 auto 1.6rem;display:block}
 .code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem;letter-spacing:.14em;
-  text-transform:uppercase;color:#c80054;margin:0 0 .6rem}
+  text-transform:uppercase;color:#005f51;margin:0 0 .6rem}
 h1{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(1.5rem,5vw,2.2rem);
   font-weight:600;letter-spacing:-.02em;margin:0 0 .9rem}
 p{color:#514a40;margin:0 0 1.8rem}
@@ -262,8 +262,8 @@ p{color:#514a40;margin:0 0 1.8rem}
 .wegen a{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.74rem;letter-spacing:.06em;
   text-transform:uppercase;text-decoration:none;padding:.7rem 1.1rem;border-radius:999px;
   border:1px solid rgba(0,0,0,.18);color:#2b2621;transition:.15s}
-.wegen a:hover{border-color:#FF0066;color:#c80054}
-.wegen a.prim{background:#FF0066;border-color:#FF0066;color:#fff}
+.wegen a:hover{border-color:#00796b;color:#005f51}
+.wegen a.prim{background:#00796b;border-color:#00796b;color:#fff}
 .wegen a.prim:hover{background:#b3004a;border-color:#b3004a;color:#fff}
 </style>
 </head>
