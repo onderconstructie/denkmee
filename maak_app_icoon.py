@@ -11,7 +11,7 @@ from pathlib import Path
 BASE = Path(__file__).parent
 UIT = BASE / "beelden"
 
-PINK, CREAM = (255, 0, 102, 255), (245, 241, 232, 255)
+PINK, CREAM = (0, 121, 107, 255), (245, 241, 232, 255)  # petrol: de app-kleur van Denk mee
 BASIS = 480          # het SVG-canvas
 SS = 4               # supersampling tegen kartelranden
 
