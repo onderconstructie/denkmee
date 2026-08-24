@@ -6105,9 +6105,15 @@ const DVB_TRAP = [6, 10, 15, 25];
 function dvbSchaal(zittingen, direction, deadlineDays){
   const afw = zittingen.map(s => Math.abs(dvbAfwijking(s, direction, deadlineDays)))
                        .sort((a, b) => a - b);
-  if(!afw.length) return DVB_TRAP[0];
+  // De BODEM van de schaal is de wettelijke termijn zelf, niet de kleinste traptrede.
+  // Bij de besluitenlijst (10 dagen) is "meteen na de zitting gepubliceerd" 10 dagen vóór
+  // de deadline: dat is de normaalste vroege waarde die er bestaat, en met een bodem van 6
+  // werd die als uitschieter afgeknipt. Zelfde logica bij de agenda (8 dagen): een agenda
+  // die pas op de zittingsdag verschijnt is exact 8 dagen te laat en hoort ín beeld.
+  const bodem = Math.max(deadlineDays, DVB_TRAP[0]);
+  if(!afw.length) return bodem;
   const p90 = afw[Math.min(afw.length - 1, Math.floor(afw.length * 0.9))];
-  return DVB_TRAP.find(t => t >= p90) || DVB_TRAP[DVB_TRAP.length - 1];
+  return Math.max(bodem, DVB_TRAP.find(t => t >= p90) || DVB_TRAP[DVB_TRAP.length - 1]);
 }
 // Bouwt de balken van de deadline-grafiek. Gedeeld door het dashboard en de vergrote
 // weergave, zodat de twee nooit uit elkaar kunnen groeien.
