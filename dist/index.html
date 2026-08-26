@@ -141,12 +141,14 @@
 
   /* Spacing rhythm */
   --gut:       clamp(1rem, 2vw, 1.75rem);
-  --max:       1440px;
-  /* Ondergrens 1,1rem en niet 1rem: op een telefoon valt 4vw (15px bij 375px) onder het
-     minimum, dus dat minimum bepaalt de zijmarge. Stond die op 1rem, dan begon de mug in de
-     bovenbalk hier 1,6px linkser dan op het portaal en Lees mee, en dat zag je verspringen
-     bij het wisselen van site. De bovengrens blijft 4rem: die is van deze site alleen. */
-  --pad-x:     clamp(1.1rem, 4vw, 4rem);
+  /* Het vel en de insprong zijn FAMILIEWAARDEN, identiek aan het portaal en Lees mee
+     (--max 1180px, --pad-x tot 3rem). Denk mee stond op 1440px met een insprong tot 4rem,
+     en daardoor begon het logo en de titel op een breed scherm 40px linkser dan op de
+     zustersites; dat zag je verspringen bij het wisselen (gemeld 24/08/2026). De ondergrens
+     1,1rem en niet 1rem: op een telefoon valt 4vw onder het minimum, en op 1rem begon de
+     mug hier 1,6px linkser dan op het portaal. */
+  --max:       1180px;
+  --pad-x:     clamp(1.1rem, 4vw, 3rem);
   --pad-y:     clamp(3rem, 8vw, 7rem);
 }
 
