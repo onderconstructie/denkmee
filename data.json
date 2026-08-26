@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21",
+  "generated_at": "2026-08-26",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -28711,6 +28711,36 @@
   ],
   "college_beslissingen": [
     {
+      "id": "burgemeester-20260825-1",
+      "date": "2026-08-25",
+      "orgaan": "Burgemeester",
+      "categorie": "Wonen",
+      "titel": "Besluit burgemeester van 25 augustus 2026 betreffende woning niet ongeschikt en niet onbewoonbaar.",
+      "decoded": "De burgemeester besliste op 25 augustus 2026 dat een woning niet ongeschikt en niet onbewoonbaar is.",
+      "themes": [
+        "Wonen"
+      ]
+    },
+    {
+      "id": "burgemeester-20260825-2",
+      "date": "2026-08-25",
+      "orgaan": "Burgemeester",
+      "categorie": "Veiligheid",
+      "titel": "Besluit burgemeester van 25 augustus 2026 betreffende het opleggen van een tijdelijk bestuurlijk plaatsverbod van 1 maand voor het betreden van de site Transit M, gelegen op het Douaneplein, en de fuiven en evenementen op het grondgebied van Mechelen.",
+      "decoded": "De burgemeester legt een tijdelijk bestuurlijk plaatsverbod op van 1 maand. Dit verbod geldt voor het betreden van de site Transit M op het Douaneplein. Het verbod geldt ook voor fuiven en evenementen op het grondgebied van Mechelen.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "streets": [
+        "Douaneplein"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Transit M",
+        "Douaneplein"
+      ]
+    },
+    {
       "id": "burgemeester-20260820-1",
       "date": "2026-08-20",
       "orgaan": "Burgemeester",
@@ -28733,6 +28763,287 @@
       "decoded": "De burgemeester neemt op 20 augustus 2026 een besluit over openbare veiligheid. De bron geeft geen verdere details over de concrete inhoud van dit besluit.",
       "themes": [
         "Veiligheid"
+      ]
+    },
+    {
+      "id": "college-20260818-1",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op sluikstorten 2026 - 1. Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier voor de belasting op sluikstorten voor 2026 vast en verklaart het uitvoerbaar.",
+      "themes": [
+        "Financiën",
+        "Leefmilieu"
+      ],
+      "kernbegrippen": [
+        "Belasting op sluikstorten 2026"
+      ]
+    },
+    {
+      "id": "college-20260818-2",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Uitvoerbaarverklaring kohier administratieve toeslag (contantbelasting). Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier voor de administratieve toeslag, een contantbelasting, vast en verklaart het uitvoerbaar.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "kohier administratieve toeslag",
+        "contantbelasting"
+      ]
+    },
+    {
+      "id": "college-20260818-3",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vastleggingen week 32. Aktename vastleggingen op wekelijkse basis.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de vastleggingen van week 32. Dit gebeurt op wekelijkse basis.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Vastleggingen week 32"
+      ]
+    },
+    {
+      "id": "college-20260818-4",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Brugfiguur in Mechels basisonderwijs. Goedkeuring gunning.",
+      "decoded": "Het college van burgemeester en schepenen keurt de gunning goed voor een opdracht over een brugfiguur in het Mechelse basisonderwijs.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Brugfiguur",
+        "Mechels basisonderwijs"
+      ]
+    },
+    {
+      "id": "college-20260818-5",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "Omgevingsvergunningen. Besluiten en meldingen lijst 34.",
+      "decoded": "Het college van burgemeester en schepenen neemt een lijst met besluiten en meldingen over omgevingsvergunningen aan. De bron vermeldt geen concrete details over specifieke aanvragen, locaties of aanvragers.",
+      "themes": [
+        "Stedenbouw"
+      ]
+    },
+    {
+      "id": "college-20260818-6",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "20260495_OGV. Woonland woonproject Kruisbesstraat en Gagelstraat Hombeek. Aktename sluiting openbaar onderzoek. Goedkeuring behandeling bezwaren.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de sluiting van het openbaar onderzoek over het woonproject Woonland in de Kruisbesstraat en Gagelstraat in Hombeek. Het college keurt ook de behandeling van de bezwaren goed die tijdens dat onderzoek zijn ingediend.",
+      "themes": [
+        "Wonen",
+        "Stedenbouw"
+      ],
+      "streets": [
+        "Kruisbesstraat",
+        "Gagelstraat"
+      ],
+      "neighborhood": "Hombeek",
+      "kernbegrippen": [
+        "Woonland",
+        "Kruisbesstraat",
+        "Gagelstraat"
+      ]
+    },
+    {
+      "id": "college-20260818-7",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Musea",
+      "titel": "Beslissing betreffende aankoopvoorstel kunstwerk.",
+      "decoded": "Het college van burgemeester en schepenen beslist over een voorstel om een kunstwerk aan te kopen.",
+      "themes": [
+        "Cultuur"
+      ]
+    },
+    {
+      "id": "college-20260818-8",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Mobiliteit",
+      "titel": "M-Shuttle. Goedkeuring inrichting nieuwe halte Bruul.",
+      "decoded": "Het college van burgemeester en schepenen keurt de inrichting van een nieuwe halte voor de M-Shuttle aan de Bruul goed.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Bruul"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "M-Shuttle",
+        "Bruul"
+      ]
+    },
+    {
+      "id": "college-20260818-9",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Mobiliteit",
+      "titel": "Laadpalen. Goedkeuring gunning concessie van openbare dienst met als voorwerp het leveren, installeren, onderhouden, overnemen, vervangen en exploiteren van publiek toegankelijke normale laadinfrastructuur voor elektrische voertuigen in Mechelen.",
+      "decoded": "Het college van burgemeester en schepenen keurt de gunning goed van een concessie van openbare dienst. Deze concessie gaat over het leveren, installeren, onderhouden, overnemen, vervangen en exploiteren van publiek toegankelijke normale laadinfrastructuur voor elektrische voertuigen in Mechelen.",
+      "themes": [
+        "Mobiliteit",
+        "Klimaat & energie"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "laadinfrastructuur",
+        "concessie van openbare dienst"
+      ]
+    },
+    {
+      "id": "college-20260818-10",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Bevolkings- en vreemdelingenregister. Ambtshalve inschrijvingen.",
+      "decoded": "Het college van burgemeester en schepenen schrijft mensen ambtshalve in het bevolkings- en vreemdelingenregister in.",
+      "themes": [
+        "Burgerzaken"
+      ]
+    },
+    {
+      "id": "college-20260818-11",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Milieu",
+      "titel": "Aktename indienen beroep bij Raad voor Vergunningsbetwistingen door omwonenden. Besluit tot niet aanstelling advocaat.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van een beroep bij de Raad voor Vergunningsbetwistingen. Omwonenden dienden dit beroep in. Het college beslist geen advocaat aan te stellen in deze zaak.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "kernbegrippen": [
+        "Raad voor Vergunningsbetwistingen"
+      ]
+    },
+    {
+      "id": "college-20260818-12",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Openbare werken",
+      "titel": "Definitieve vaststelling rooilijnplan Kouter (Ter Coose). Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen stelt het rooilijnplan Kouter (Ter Coose) definitief vast. Het college stuurt dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "streets": [
+        "Kouter"
+      ],
+      "kernbegrippen": [
+        "rooilijnplan Kouter",
+        "Ter Coose"
+      ]
+    },
+    {
+      "id": "college-20260818-13",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Openbare werken",
+      "titel": "Definitieve vaststelling rooilijnplan Ragheno. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen stelt het rooilijnplan Ragheno definitief vast. Het college verwijst dit dossier daarna naar de gemeenteraad.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "kernbegrippen": [
+        "rooilijnplan Ragheno"
+      ]
+    },
+    {
+      "id": "college-20260818-14",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Sport",
+      "titel": "Sportclubondersteuning. Erkenning Mechelse sportverenigingen.",
+      "decoded": "Het college van burgemeester en schepenen erkent Mechelse sportverenigingen in het kader van sportclubondersteuning.",
+      "themes": [
+        "Sport"
+      ]
+    },
+    {
+      "id": "college-20260818-16",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Milieu",
+      "titel": "Goedkeuring organiseren proefproject inzamelactie van doornappel voor land- en tuinbouwers."
+    },
+    {
+      "id": "college-20260818-17",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "Beslissing betreffende aanbieding voorkooprecht in kader van Vlaamse Codex Wonen.",
+      "decoded": "Het college van burgemeester en schepenen beslist over het aanbieden van een voorkooprecht volgens de Vlaamse Codex Wonen.",
+      "themes": [
+        "Wonen"
+      ],
+      "kernbegrippen": [
+        "Vlaamse Codex Wonen",
+        "voorkooprecht"
+      ]
+    },
+    {
+      "id": "college-20260818-18",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Evenementen 2026. Beslissingslijst nr. 25.",
+      "decoded": "Het college van burgemeester en schepenen behandelt beslissingslijst nr. 25 over evenementen in 2026.",
+      "themes": [
+        "Cultuur"
+      ],
+      "kernbegrippen": [
+        "Evenementen 2026",
+        "Beslissingslijst nr. 25"
+      ]
+    },
+    {
+      "id": "college-20260818-18A",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast.",
+      "themes": [
+        "Mobiliteit"
+      ]
+    },
+    {
+      "id": "college-20260818-18B",
+      "date": "2026-08-18",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast.",
+      "themes": [
+        "Mobiliteit"
+      ]
+    },
+    {
+      "id": "vastbureau-20260818-1",
+      "date": "2026-08-18",
+      "orgaan": "Vast bureau",
+      "categorie": "Bestuur",
+      "titel": "Vastleggingen week 32. Aktename vastleggingen op wekelijkse basis.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de vastleggingen van week 32. Dit gebeurt op wekelijkse basis.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Vastleggingen week 32"
       ]
     },
     {
@@ -99114,6 +99425,12 @@
         },
         {
           "date": "2026-08-18",
+          "published": "2026-08-26",
+          "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-08-25",
           "published": null,
           "status": "geen",
           "late_days": 0
@@ -99585,6 +99902,12 @@
         {
           "date": "2026-08-04",
           "published": "2026-08-13",
+          "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-08-18",
+          "published": "2026-08-26",
           "status": "tijdig",
           "late_days": 0
         }
@@ -100309,6 +100632,12 @@
           "published": "2026-08-20",
           "status": "tijdig",
           "late_days": 0
+        },
+        {
+          "date": "2026-08-25",
+          "published": "2026-08-26",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 10,
@@ -100677,6 +101006,31 @@
   ],
   "is_demo": false,
   "schriftelijke_vragen": [
+    {
+      "id": "sv-2026-08-2026-079",
+      "type": "schriftelijke_vraag",
+      "date": "2026-08-05",
+      "nummer": "2026/079",
+      "indiener": "Marc HENDRICKX (N-VA)",
+      "onderwerp": "Wat met historisch pand “de witte engel” nu OVAM-site andere",
+      "titel": "Wat met historisch pand “de witte engel” nu OVAM-site andere",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-08/079. M. Hendrickx - Historisch pand De Witte Engel.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-08/079.%20M.%20Hendrickx%20-%20Historisch%20pand%20De%20Witte%20Engel.pdf",
+      "decoded": "Raadslid Marc Hendrickx vraagt de stad wat er gaat gebeuren met het historische pand 'de Witte Engel' in de St.-Katelijnestraat. Dat pand werd ruim 2,5 jaar geleden aangekocht met het oog op de ontwikkeling van de OVAM-site in de Kanunnik Dedeckerstraat. Nu die OVAM-site een andere invulling krijgt dan eerst gepland, wil hij weten wat het stadsbestuur met de Witte Engel van plan is. Het college antwoordt dat de plannen niet gewijzigd zijn. De aankoop diende om een deel van het perceel af te splitsen: het stuk tuinzone dat overlapt met het tracé van de vliet Melaan blijft eigendom van de stad. De verkoop van het overige perceel, met het pand de Witte Engel, staat opgenomen in het meerjarenplan.",
+      "themes": [
+        "Erfgoed",
+        "Stedenbouw"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "de Witte Engel",
+        "OVAM-site",
+        "Kanunnik Dedeckerstraat",
+        "St.-Katelijnestraat",
+        "Melaan"
+      ]
+    },
     {
       "id": "sv-2026-08-2026-078",
       "type": "schriftelijke_vraag",
@@ -105870,6 +106224,7 @@
     "Burgemeester|2026-07-29|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_29-07-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-08-11|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_11-08-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-08-20|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_20-08-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-08-25|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_25-08-2026_Beslissingenlijst.pdf",
     "College|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_10-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_17-12-2024_Beslissingenlijst.pdf",
@@ -105965,6 +106320,7 @@
     "College|2026-07-28|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_28-07-2026_Beslissingenlijst.pdf",
     "College|2026-08-04|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_04-08-2026_Beslissingenlijst.pdf",
     "College|2026-08-11|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_11-08-2026_Beslissingenlijst.pdf",
+    "College|2026-08-18|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_18-08-2026_Beslissingenlijst.pdf",
     "Gemeenteraad|2024-12-02|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_02-12-2024_Beslissingslijst%20toezicht.pdf",
     "Gemeenteraad|2024-12-02|notulen": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Notulen_Gemeenteraad_02-12-2024_Notulen%20-%20openbare%20zitting.pdf",
     "Gemeenteraad|2024-12-02|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_02-12-2024_Agenda.pdf",
@@ -106141,6 +106497,7 @@
     "Vast bureau|2026-07-07|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_07-07-2026_Beslissingenlijst.pdf",
     "Vast bureau|2026-07-14|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_14-07-2026_Beslissingenlijst.pdf",
     "Vast bureau|2026-07-28|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_28-07-2026_Beslissingenlijst.pdf",
-    "Vast bureau|2026-08-04|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_04-08-2026_Beslissingenlijst.pdf"
+    "Vast bureau|2026-08-04|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_04-08-2026_Beslissingenlijst.pdf",
+    "Vast bureau|2026-08-18|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_18-08-2026_Beslissingenlijst.pdf"
   }
 }
