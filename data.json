@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26",
+  "generated_at": "2026-09-01",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -28711,6 +28711,17 @@
   ],
   "college_beslissingen": [
     {
+      "id": "burgemeester-20260828-1",
+      "date": "2026-08-28",
+      "orgaan": "Burgemeester",
+      "categorie": "Natuur en Groenontwikkeling",
+      "titel": "Besluit burgemeester van 28 augustus 2026 betreffende beslissing kappen van een boom omwille van acuut gevaar.",
+      "decoded": "De burgemeester beslist op 28 augustus 2026 om een boom te kappen. De reden is acuut gevaar.",
+      "themes": [
+        "Veiligheid"
+      ]
+    },
+    {
       "id": "burgemeester-20260825-1",
       "date": "2026-08-25",
       "orgaan": "Burgemeester",
@@ -28978,7 +28989,15 @@
       "date": "2026-08-18",
       "orgaan": "College",
       "categorie": "Milieu",
-      "titel": "Goedkeuring organiseren proefproject inzamelactie van doornappel voor land- en tuinbouwers."
+      "titel": "Goedkeuring organiseren proefproject inzamelactie van doornappel voor land- en tuinbouwers.",
+      "decoded": "Het college van burgemeester en schepenen keurt een proefproject goed. Het project zamelt doornappel in bij land- en tuinbouwers.",
+      "themes": [
+        "Leefmilieu"
+      ],
+      "kernbegrippen": [
+        "proefproject",
+        "doornappel"
+      ]
     },
     {
       "id": "college-20260818-17",
@@ -99425,7 +99444,7 @@
         },
         {
           "date": "2026-08-18",
-          "published": "2026-08-26",
+          "published": "2026-08-28",
           "status": "tijdig",
           "late_days": 0
         },
@@ -100638,6 +100657,12 @@
           "published": "2026-08-26",
           "status": "tijdig",
           "late_days": 0
+        },
+        {
+          "date": "2026-08-28",
+          "published": "2026-08-28",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 10,
@@ -101006,6 +101031,32 @@
   ],
   "is_demo": false,
   "schriftelijke_vragen": [
+    {
+      "id": "sv-2026-09-2026-065",
+      "type": "schriftelijke_vraag",
+      "date": "2026-08-07",
+      "nummer": "2026/065",
+      "indiener": "Marc HENDRICKX (N-VA)",
+      "onderwerp": "Oud Gasthuis en de betaalde vergoeding en nadien afrekening",
+      "titel": "Oud Gasthuis en de betaalde vergoeding en nadien afrekening",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-09/080. M. Hendrickx - Oud Gasthuis - vergoeding en afrekening.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-09/080.%20M.%20Hendrickx%20-%20Oud%20Gasthuis%20-%20vergoeding%20en%20afrekening.pdf",
+      "decoded": "Raadslid Marc Hendrickx (N-VA) vraagt de stad naar de vergoeding en afrekening rond het Oud Gasthuis. Het gaat om het addendum van 30 maart 2024 op de overeenkomst 'bezetting ter bede' van 18 december 2023 tussen welzijnsvereniging Dodoens en vzw UnitedWe, vertegenwoordigd door S. Nobels. Volgens artikel 3 betaalde de gebruiker maandelijks een voorschot van 2.500 euro voor nutsvoorzieningen, met een verrekening na afloop van de overeenkomst. Hendrickx vraagt hoeveel UnitedWe of Nobels uiteindelijk betaalde, of de stad nog geld gaat innen als er niets betaald is, en of een eventuele kwijtschelding officieel beslist is. Hij vraagt ook waarom schepen P. Indigne, schepen K. Calvo en algemeen directeur G. Eeraerts eerder schreven dat de 2.500 euro een gebruiksvergoeding was, terwijl de overeenkomst spreekt van een kosteloos precair gebruiksrecht met een forfaitaire vergoeding voor nutsvoorzieningen. Het college antwoordt dat in totaal 50.000 euro werd ontvangen, waarvan 7.500 euro voor januari tot maart 2024 en 42.500 euro aan voorschotten voor april 2024 tot augustus 2025. De eindafrekening toont een voordeel van 11.922 euro voor de stadskas, en Dodoens berust hierin op basis van artikel 3 van het addendum.",
+      "themes": [
+        "Welzijn",
+        "Financiën"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Oud Gasthuis",
+        "vzw UnitedWe",
+        "S. Nobels",
+        "welzijnsvereniging Dodoens",
+        "bezetting ter bede",
+        "addendum dd. 30 maart 2024"
+      ]
+    },
     {
       "id": "sv-2026-08-2026-079",
       "type": "schriftelijke_vraag",
@@ -106225,6 +106276,7 @@
     "Burgemeester|2026-08-11|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_11-08-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-08-20|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_20-08-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-08-25|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_25-08-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-08-28|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_28-08-2026_Beslissingenlijst.pdf",
     "College|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_10-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_17-12-2024_Beslissingenlijst.pdf",
