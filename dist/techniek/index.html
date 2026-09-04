@@ -2043,12 +2043,13 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border-left:1px solid var(--line-strong);
   pointer-events:none;
 }
-/* De te-laat-zone: alles boven de 0-lijn. */
-/* Lichter dan vroeger (.08): nu de as het woord 'te laat' draagt, hoeft dit vlak het niet
-   meer alleen te zeggen. Bij een orgaan met één late zitting op twintig was dat lege roze
+/* De te-laat-zone: alles ONDER de 0-lijn, sinds de grafiek de gewone leesrichting volgt
+   (boven nul = goed, onder nul = te laat; gevraagd 04/09/2026). */
+/* Licht gehouden (.035): nu de as het woord 'te laat' draagt, hoeft dit vlak het niet
+   meer alleen te zeggen. Bij een orgaan met één late zitting op twintig was een vol
    vlak anders het grootste element in beeld, en dat leest als veel mis. */
 .dvb-zone{
-  position:absolute; left:56px; right:0; top:0; height:var(--deadline-top, 50%);
+  position:absolute; left:56px; right:0; top:var(--deadline-top, 50%); bottom:0;
   background:rgba(0,121,107,.035);
   pointer-events:none;
 }
@@ -2071,7 +2072,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    telefoon vrijwel leeg terwijl de betekenis van de as ver eronder in een tekstblok zat.
    Nu staat ze wáár ze hoort: bij de as zelf, en dat kost geen enkele pixel balkbreedte. */
 /* Deze as draagt twee dingen tegelijk, en ze stond op 9,9 en 9 pixels. Ze zegt hoe je de
-   grafiek leest (boven nul te laat, eronder op tijd), en ze is het ENIGE teken dat de schaal
+   grafiek leest (boven nul op tijd, eronder te laat), en ze is het ENIGE teken dat de schaal
    per orgaan verschilt: bij de burgemeester loopt ze tot 10 dagen, bij de raden tot 6. Wie
    twee organen na elkaar bekijkt en dat cijfer niet leest, vergelijkt twee beelden die niet
    dezelfde maat hebben. Daarom groter, en het getal zwaarder dan het woord eronder. */
@@ -2097,8 +2098,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   cursor:pointer;
   z-index:1;
 }
-/* Balken hangen aan de 0-lijn: te laat groeit omhoog de zone in, binnen de termijn
-   groeit omlaag. De positionering (top/bottom + hoogte) komt inline uit de renderer. */
+/* Balken hangen aan de 0-lijn: binnen de termijn groeit omhoog (positief = goed), te
+   laat groeit omlaag. De positionering (top/bottom + hoogte) komt inline uit de renderer. */
 .dvb-bar-inner{
   position:absolute; left:0; right:0;
   transition:filter .15s;
@@ -2110,7 +2111,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Dekking van .35 naar .65: op papier haalde de tijdige balk 1,77:1 en was hij bij kleine
    afwijkingen nauwelijks van het vel te onderscheiden. Op .65 is dat 3,28:1. De hiërarchie
    blijft: het roze van de late balken springt er nog altijd uit. */
-.dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.65); border-radius:0 0 2px 2px; }
+.dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.65); border-radius:2px 2px 0 0; }
 /* PRECIES OP DE DEADLINE. Een afwijking van nul dagen tekende als een streepje van 2px en
    las daardoor als 'geen data', terwijl het op de startpagina de meest voorkomende uitkomst
    is: de stad publiceert stelselmatig op de laatste toegelaten dag. Die zittingen krijgen
@@ -2119,7 +2120,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-bar.opdelijn .dvb-bar-inner{
   background:rgba(82,74,63,.65); border-radius:1px;
 }
-.dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:2px 2px 0 0; }
+.dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:0 0 2px 2px; }
 .dvb-bar.active .dvb-bar-inner{ filter:brightness(1.2); box-shadow:0 0 0 1.5px var(--ink); }
 /* Geleidelijn over de volle hoogte bij de gekozen balk. De ring rond de balk alleen was
    onvindbaar bij een zitting die exact op de deadline valt: die balk is maar 2px hoog. */
@@ -2133,12 +2134,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    een uitschieter van 22 dagen even hoog te tekenen als een van 6. De exacte waarde staat
    in de readout en in de tabel. Horizontale banden, dus ook op 9px breed leesbaar. */
 .dvb-bar.geknipt.late .dvb-bar-inner{
-  background:linear-gradient(to top,
+  background:linear-gradient(to bottom,
     var(--pink) calc(100% - 8px), transparent calc(100% - 8px),
     transparent calc(100% - 5px), var(--pink) calc(100% - 5px));
 }
 .dvb-bar.geknipt.tijdig .dvb-bar-inner{
-  background:linear-gradient(to bottom,
+  background:linear-gradient(to top,
     rgba(82,74,63,.65) calc(100% - 8px), transparent calc(100% - 8px),
     transparent calc(100% - 5px), rgba(82,74,63,.65) calc(100% - 5px));
 }
@@ -3723,6 +3724,24 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .menu-search .ms-go:hover{ background:var(--pink-vlak-hover); }
 
+/* Installeer-als-app-knop in het menu: zelfde vormentaal als het profielblok en het
+   zoekveld erboven (scherpe hoeken, haarlijn), maar rustiger, want het is een aanbod
+   en geen kernfunctie. Alleen zichtbaar als installeren op dit toestel echt kan. */
+.menu-install{
+  display:flex; align-items:center; gap:.75rem; width:100%;
+  padding:.7rem .9rem; cursor:pointer; text-align:left;
+  border:1px solid var(--line-strong); background:var(--paper); color:var(--ink);
+  transition:border-color .15s;
+}
+.menu-install:hover{ border-color:var(--pink); }
+.menu-install .mi-ic{ display:flex; flex:none; color:var(--pink-text); }
+.menu-install .mi-ic svg{ width:20px; height:20px; }
+.menu-install .mi-title{ display:block; font-weight:600; font-size:.92rem; }
+.menu-install .mi-sub{
+  display:block; font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.68rem; color:var(--ink-dim); margin-top:.15rem;
+}
+
 /* =====================================================================
    NIEUW-SINDS-VORIG-BEZOEK TOAST + hamburger-signaal
    ===================================================================== */
@@ -3884,8 +3903,11 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
     padding:.6rem 0 .55rem;
     color:var(--ink-dim);
     text-decoration:none;
-    transition:color .15s;
+    /* Tik-feedback zoals in een echte app: de toets geeft heel even mee onder je vinger. */
+    transition:color .15s, transform .12s;
+    -webkit-user-select:none; user-select:none;
   }
+  .tabbar a:active{ transform:scale(.93); }
   .tabbar a svg{ width:22px; height:22px; display:block; flex:none; }
   .tabbar a .tab-mug{ width:22px; height:22px; display:block; flex:none; border-radius:50%; }
   .tabbar a span{
@@ -4289,11 +4311,18 @@ body{ background:var(--paper-3); }
             een besteknummer of adres, een eigennaam zoals een kerk, een buurt of een project, of een
             zeldzaam kernwoord uit de titel. Heeft een titel geen zeldzaam woord, dan kijken we naar
             een zeldzame <strong>combinatie</strong> van twee woorden: "jaarverslag" en "klachten" zijn elk gewoon,
-            maar samen wijzen ze precies één jaarlijkse zaak aan. Een breed thema bindt nooit op zichzelf. Het is een
-            <strong>vuistregel</strong>, geen absolute waarheid: soms koppelt ze twee losse zaken, soms knipt ze één
-            verhaal in twee. Waar dat scheef loopt, passen we de bundeling aan, op eigen nazicht en
-            op meldingen van lezers. Test dus gerust mee: de meldknop zit in elk dossier, en hoe die
-            werkt lees je verderop op deze pagina.
+            maar samen wijzen ze precies één jaarlijkse zaak aan. Een breed thema bindt nooit op zichzelf.
+          </p>
+          <p>
+            Een dossier ontstaat pas als minstens <strong>twee stukken</strong> elkaar zo vinden.
+            Een stuk zonder maatje blijft gewoon zichtbaar op de agenda en bij de recente
+            besluiten; het krijgt alleen geen dossiermap voor zich alleen.
+          </p>
+          <p>
+            Dit blijft een vuistregel, geen absolute waarheid: soms koppelt ze twee losse zaken,
+            soms knipt ze één verhaal in twee. Waar dat scheef loopt, passen we de bundeling aan,
+            op eigen nazicht en op meldingen van lezers. Test dus gerust mee: de meldknop zit in
+            elk dossier, en hoe die werkt lees je verderop op deze pagina.
           </p>
           <p>
             In zo'n dossier schuift ook een schriftelijke vraag van een raadslid mee, naast de
@@ -4467,19 +4496,15 @@ body{ background:var(--paper-3); }
     <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee met Mechelen, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
     <div class="co-body">
       <p class="co-zin"><strong class="co-naam">Denk mee <em>met Mechelen</em></strong>, een experiment van <strong>As Gau Paust</strong>. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
-      <!-- Geen "naar de hoofdpagina" meer: die weg terug staat al drie keer op deze pagina
-           (de knop "terug" in de nav, het merkteken hiernaast, en de tab Denk mee in de
-           onderbalk). Het colofon zegt nu enkel nog waar deze site bij hoort. -->
+      <!-- Geen "naar de hoofdpagina" meer: die weg terug staat al meermaals op deze pagina
+           (de knop "terug" in de nav, het merkteken hiernaast, en de vier onderdeel-toetsen
+           in de app-balk wijzen elk naar de hoofdpagina). Het colofon zegt nu enkel nog waar
+           deze site bij hoort. -->
       <p class="co-fam">Onderdeel van <a href="https://asgaupaust.be">asgaupaust.be</a> &middot; <a href="https://asgaupaust.be/privacy/">Privacy</a></p>
     </div>
   </div>
 </footer>
 
-<!-- Sitewissel-balk: exact dezelfde balk als op de hoofdpagina en op de andere sites van
-     As Gau Paust, zodat je ook vanaf deze pagina naar de rest van de familie kunt springen.
-     De opmaak komt uit de gedeelde <head>, dus hier staat enkel het merk zelf.
-     Denk mee draagt aria-current="true" en niet "page": je zit wél in Denk mee, maar deze
-     tab wijst naar de hoofdpagina en niet naar /techniek/. -->
 <!-- Mini-sprite voor de app-balk: dezelfde vier iconen als op de hoofdpagina (dit is een eigen document, dus de sprite van daar bestaat hier niet). -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="ic-dossiers" viewBox="0 0 24 24"><path d="M8 4h12v12" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="8" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 12h6M7 16h6" stroke="currentColor" stroke-width="2"/></symbol><symbol id="ic-agenda" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 2v5M16 2v5M3 10h18" stroke="currentColor" stroke-width="2"/><rect x="7" y="13" width="4" height="4" fill="currentColor"/></symbol><symbol id="ic-beslist" viewBox="0 0 24 24"><path d="M4 13l5 5L20 7" fill="none" stroke="currentColor" stroke-width="2.6"/></symbol><symbol id="ic-optijd" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v5l4 2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 2h6" stroke="currentColor" stroke-width="2"/></symbol></defs></svg>
 

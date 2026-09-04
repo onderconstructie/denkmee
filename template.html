@@ -2043,12 +2043,13 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border-left:1px solid var(--line-strong);
   pointer-events:none;
 }
-/* De te-laat-zone: alles boven de 0-lijn. */
-/* Lichter dan vroeger (.08): nu de as het woord 'te laat' draagt, hoeft dit vlak het niet
-   meer alleen te zeggen. Bij een orgaan met één late zitting op twintig was dat lege roze
+/* De te-laat-zone: alles ONDER de 0-lijn, sinds de grafiek de gewone leesrichting volgt
+   (boven nul = goed, onder nul = te laat; gevraagd 04/09/2026). */
+/* Licht gehouden (.035): nu de as het woord 'te laat' draagt, hoeft dit vlak het niet
+   meer alleen te zeggen. Bij een orgaan met één late zitting op twintig was een vol
    vlak anders het grootste element in beeld, en dat leest als veel mis. */
 .dvb-zone{
-  position:absolute; left:56px; right:0; top:0; height:var(--deadline-top, 50%);
+  position:absolute; left:56px; right:0; top:var(--deadline-top, 50%); bottom:0;
   background:rgba(0,121,107,.035);
   pointer-events:none;
 }
@@ -2071,7 +2072,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    telefoon vrijwel leeg terwijl de betekenis van de as ver eronder in een tekstblok zat.
    Nu staat ze wáár ze hoort: bij de as zelf, en dat kost geen enkele pixel balkbreedte. */
 /* Deze as draagt twee dingen tegelijk, en ze stond op 9,9 en 9 pixels. Ze zegt hoe je de
-   grafiek leest (boven nul te laat, eronder op tijd), en ze is het ENIGE teken dat de schaal
+   grafiek leest (boven nul op tijd, eronder te laat), en ze is het ENIGE teken dat de schaal
    per orgaan verschilt: bij de burgemeester loopt ze tot 10 dagen, bij de raden tot 6. Wie
    twee organen na elkaar bekijkt en dat cijfer niet leest, vergelijkt twee beelden die niet
    dezelfde maat hebben. Daarom groter, en het getal zwaarder dan het woord eronder. */
@@ -2097,8 +2098,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   cursor:pointer;
   z-index:1;
 }
-/* Balken hangen aan de 0-lijn: te laat groeit omhoog de zone in, binnen de termijn
-   groeit omlaag. De positionering (top/bottom + hoogte) komt inline uit de renderer. */
+/* Balken hangen aan de 0-lijn: binnen de termijn groeit omhoog (positief = goed), te
+   laat groeit omlaag. De positionering (top/bottom + hoogte) komt inline uit de renderer. */
 .dvb-bar-inner{
   position:absolute; left:0; right:0;
   transition:filter .15s;
@@ -2110,7 +2111,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Dekking van .35 naar .65: op papier haalde de tijdige balk 1,77:1 en was hij bij kleine
    afwijkingen nauwelijks van het vel te onderscheiden. Op .65 is dat 3,28:1. De hiërarchie
    blijft: het roze van de late balken springt er nog altijd uit. */
-.dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.65); border-radius:0 0 2px 2px; }
+.dvb-bar.tijdig .dvb-bar-inner{ background:rgba(82,74,63,.65); border-radius:2px 2px 0 0; }
 /* PRECIES OP DE DEADLINE. Een afwijking van nul dagen tekende als een streepje van 2px en
    las daardoor als 'geen data', terwijl het op de startpagina de meest voorkomende uitkomst
    is: de stad publiceert stelselmatig op de laatste toegelaten dag. Die zittingen krijgen
@@ -2119,7 +2120,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dvb-bar.opdelijn .dvb-bar-inner{
   background:rgba(82,74,63,.65); border-radius:1px;
 }
-.dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:2px 2px 0 0; }
+.dvb-bar.late .dvb-bar-inner{ background:var(--pink); border-radius:0 0 2px 2px; }
 .dvb-bar.active .dvb-bar-inner{ filter:brightness(1.2); box-shadow:0 0 0 1.5px var(--ink); }
 /* Geleidelijn over de volle hoogte bij de gekozen balk. De ring rond de balk alleen was
    onvindbaar bij een zitting die exact op de deadline valt: die balk is maar 2px hoog. */
@@ -2133,12 +2134,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    een uitschieter van 22 dagen even hoog te tekenen als een van 6. De exacte waarde staat
    in de readout en in de tabel. Horizontale banden, dus ook op 9px breed leesbaar. */
 .dvb-bar.geknipt.late .dvb-bar-inner{
-  background:linear-gradient(to top,
+  background:linear-gradient(to bottom,
     var(--pink) calc(100% - 8px), transparent calc(100% - 8px),
     transparent calc(100% - 5px), var(--pink) calc(100% - 5px));
 }
 .dvb-bar.geknipt.tijdig .dvb-bar-inner{
-  background:linear-gradient(to bottom,
+  background:linear-gradient(to top,
     rgba(82,74,63,.65) calc(100% - 8px), transparent calc(100% - 8px),
     transparent calc(100% - 5px), rgba(82,74,63,.65) calc(100% - 5px));
 }
@@ -3723,6 +3724,24 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .menu-search .ms-go:hover{ background:var(--pink-vlak-hover); }
 
+/* Installeer-als-app-knop in het menu: zelfde vormentaal als het profielblok en het
+   zoekveld erboven (scherpe hoeken, haarlijn), maar rustiger, want het is een aanbod
+   en geen kernfunctie. Alleen zichtbaar als installeren op dit toestel echt kan. */
+.menu-install{
+  display:flex; align-items:center; gap:.75rem; width:100%;
+  padding:.7rem .9rem; cursor:pointer; text-align:left;
+  border:1px solid var(--line-strong); background:var(--paper); color:var(--ink);
+  transition:border-color .15s;
+}
+.menu-install:hover{ border-color:var(--pink); }
+.menu-install .mi-ic{ display:flex; flex:none; color:var(--pink-text); }
+.menu-install .mi-ic svg{ width:20px; height:20px; }
+.menu-install .mi-title{ display:block; font-weight:600; font-size:.92rem; }
+.menu-install .mi-sub{
+  display:block; font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:.68rem; color:var(--ink-dim); margin-top:.15rem;
+}
+
 /* =====================================================================
    NIEUW-SINDS-VORIG-BEZOEK TOAST + hamburger-signaal
    ===================================================================== */
@@ -3884,8 +3903,11 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
     padding:.6rem 0 .55rem;
     color:var(--ink-dim);
     text-decoration:none;
-    transition:color .15s;
+    /* Tik-feedback zoals in een echte app: de toets geeft heel even mee onder je vinger. */
+    transition:color .15s, transform .12s;
+    -webkit-user-select:none; user-select:none;
   }
+  .tabbar a:active{ transform:scale(.93); }
   .tabbar a svg{ width:22px; height:22px; display:block; flex:none; }
   .tabbar a .tab-mug{ width:22px; height:22px; display:block; flex:none; border-radius:50%; }
   .tabbar a span{
@@ -4233,6 +4255,17 @@ a, button, summary, input, label{ touch-action:manipulation; }
       <input type="text" id="menuSearch" aria-label="Zoek in de dossiers op inhoud" placeholder="Zoek in de dossiers, bv. PFAS" autocomplete="off" enterkeyhint="search">
       <button type="submit" class="ms-go" aria-label="Zoeken">→</button>
     </form>
+    <!-- Installeer-als-app. De knop verschijnt alleen als installeren hier echt kan:
+         Chromium meldt dat via beforeinstallprompt, een iPhone of iPad krijgt de weg
+         uitgelegd (daar bestaat geen installatie-aanbod). Draait de app al op het
+         beginscherm (standalone), dan blijft de knop weg. -->
+    <button class="menu-install" id="menuInstall" hidden onclick="installeerApp()">
+      <span class="mi-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg></span>
+      <span class="mi-text">
+        <span class="mi-title">Installeer als app</span>
+        <span class="mi-sub" id="menuInstallSub">Op je beginscherm, zonder appwinkel</span>
+      </span>
+    </button>
     </div>
     <nav class="menu-list">
       <a href="#dossiers" onclick="toggleMenu()">
@@ -4334,11 +4367,11 @@ a, button, summary, input, label{ touch-action:manipulation; }
     <div class="sec-num met-ic"><svg class="sec-ic" aria-hidden="true"><use href="#ic-dossiers"/></svg>Dossiers</div>
     <div class="sec-titles">
       <h2>Eén onderwerp, <em>alle</em> beslissingen</h2>
+      <!-- Bewust kort (gevraagd 04/09/2026): een slanke intro houdt de zoekbalk in het
+           eerste scherm. De volledige uitleg over de bundeling staat op de techniekpagina. -->
       <p class="sec-lede">
-        Het kloppend hart van de site. We rijgen elk agendapunt, besluit, collegebeslissing
-        en schriftelijke vraag over <em>hetzelfde onderwerp</em> aaneen, over maanden heen.
-        Standaard zie je wat jouw profiel raakt; met de zoekbalk doorzoek je de volledige
-        catalogus op inhoud, tot in de samenvatting van elk besluit, ook buiten jouw thema's.
+        Alle beslissingen over hetzelfde onderwerp, gebundeld tot één dossier.
+        Zoek op inhoud, of bekijk wat jouw profiel raakt.
       </p>
     </div>
   </div>
@@ -5974,9 +6007,10 @@ function renderDashboard(){
 
   // Visualisatie: de 0-LIJN IS DE DEADLINE, voor beide regimes dezelfde leesrichting.
   // Per zitting tekenen we de AFWIJKING t.o.v. de wettelijke termijn:
-  //   · agenda (before):  afwijking = 8 − (dagen vooraf)  → positief = te laat
-  //   · besluiten (after): afwijking = (dagen nadien) − 10 → positief = te laat
-  // Boven nul = de roze te-laat-zone, onder nul = binnen de termijn.
+  //   · agenda (before):  afwijking = 8 − (dagen vooraf)  → positief getal = te laat
+  //   · besluiten (after): afwijking = (dagen nadien) − 10 → positief getal = te laat
+  // Tekenrichting zoals elke gewone grafiek (gevraagd 04/09/2026): boven de nullijn staat
+  // wat GOED is (binnen de termijn), onder de nullijn wat te laat kwam.
 
   // Enkel gepubliceerde stukken in de grafiek: een 'verwacht'-stipje zegt niets. Het
   // tegeltje 'nog niet gepubliceerd' bovenaan houdt die telling wél bij.
@@ -6138,8 +6172,8 @@ function dvbBouwBalken(zittingen, direction, deadlineDays, UP_MAX, DOWN_MAX, ZER
     const stijl = opDeLijn
       ? `top:calc(${ZERO_TOP.toFixed(1)}% - 4px); height:8px`
       : (afwijking > 0
-          ? `bottom:${(100 - ZERO_TOP).toFixed(1)}%; height:${h.toFixed(1)}%`   // te laat: omhoog de zone in
-          : `top:${ZERO_TOP.toFixed(1)}%; height:${h.toFixed(1)}%`);            // binnen termijn: omlaag
+          ? `top:${ZERO_TOP.toFixed(1)}%; height:${h.toFixed(1)}%`              // te laat: omlaag, onder de nullijn
+          : `bottom:${(100 - ZERO_TOP).toFixed(1)}%; height:${h.toFixed(1)}%`); // binnen termijn: omhoog, erboven
     // "0 dagen voor deadline" las als "de deadline is over nul dagen". Wat het betekent is:
     // precies op de laatste toegelaten dag. Dat zeggen we nu ook zo.
     if(direction === 'before'){
@@ -6167,9 +6201,9 @@ function dvbBouwBalken(zittingen, direction, deadlineDays, UP_MAX, DOWN_MAX, ZER
 // dashboard en de vergrote weergave.
 function dvbAsHTML(UP_MAX, DOWN_MAX, ZERO_TOP){
   return `
-    <span class="dvb-tick" style="top:2px" aria-hidden="true">+${UP_MAX}<i>te laat</i></span>
+    <span class="dvb-tick" style="top:2px" aria-hidden="true">+${DOWN_MAX}<i>op tijd</i></span>
     <span class="dvb-tick tick-nul" style="top:${ZERO_TOP}%" aria-hidden="true">0<i>deadline</i></span>
-    <span class="dvb-tick" style="bottom:6px" aria-hidden="true">−${DOWN_MAX}<i>op tijd</i></span>`;
+    <span class="dvb-tick" style="bottom:6px" aria-hidden="true">−${UP_MAX}<i>te laat</i></span>`;
 }
 // Zet de readout meteen op de jongste zitting (de laatste balk), zodat er een feit staat
 // waar anders een instructie of leegte stond.
@@ -8280,7 +8314,12 @@ function buildDossiers(){
     }
   });
 
-  DOSSIERS = Object.entries(map).map(([__root, g]) => {
+  // Een dossier is pas een dossier vanaf TWEE stukken (gevraagd 04/09/2026). Eén stuk
+  // aaneenrijgen met zichzelf zegt niets: zulke eenlingen (elk stuk zonder handtekening
+  // kreeg een eigen solo-sleutel) blijven gewoon zichtbaar in Agenda, Beslist en het
+  // archief, maar vullen de dossierlijst niet meer. Alle afnemers van ITEM2DOS zijn
+  // null-veilig, dus een stuk zonder dossier breekt nergens iets.
+  DOSSIERS = Object.entries(map).filter(([, g]) => g.length >= 2).map(([__root, g]) => {
     g.sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
     // Stabiele id: afgeleid van de clustersleutel (de kleinste _key van de groep, bevroren
     // vóór het losmaken), niet van een volgorde-index. Die index verschuift bij élke
@@ -9340,12 +9379,51 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============= APP-GEVOEL ============= */
-// De site als app in de hand: installeerbaar (service worker), het dossiervenster als
-// bottom-sheet die je op smartphone dichtveegt, en cockpit-cijfers die kort optellen.
+// De site als app in de hand: installeerbaar (service worker + echte installeerknop in
+// het menu), het dossiervenster als bottom-sheet die je op smartphone dichtveegt, en
+// cockpit-cijfers die kort optellen.
+// Naast de eenmalige uitnodigingsbanner (verderop) is dit de BLIJVENDE ingang: wie de
+// banner ooit wegklikte, kan alsnog installeren via het menu. Beide luisteren naar
+// hetzelfde beforeinstallprompt-aanbod; prompt() mag maar één keer per aanbod, vandaar
+// de try (verzilverde de banner het al, dan doet de knop gewoon niets meer).
+let uitgesteldeInstall = null;   // het bewaarde beforeinstallprompt-aanbod van Chromium
+function installeerApp(){
+  if(uitgesteldeInstall){
+    try{
+      uitgesteldeInstall.prompt();
+      uitgesteldeInstall.userChoice.finally(() => {
+        uitgesteldeInstall = null;
+        const b = $('menuInstall'); if(b) b.hidden = true;
+      });
+    }catch(e){ uitgesteldeInstall = null; }
+  }
+  // Zonder aanbod (iOS) is de knop zelf de uitleg: de sub-regel zegt de weg al.
+}
+window.addEventListener('appinstalled', () => {
+  uitgesteldeInstall = null;
+  const b = $('menuInstall'); if(b) b.hidden = true;
+});
 function setupAppGevoel(){
   // 1) Installeerbaar op het beginscherm + offline-terugval (zelfde patroon als asgaupaust.be).
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
+  }
+
+  // 1b) De installeerknop in het menu. Chromium zegt zelf wanneer installeren kan
+  // (beforeinstallprompt); dan tonen we de knop en geeft een tik het echte
+  // installatie-aanbod. Safari op iPhone/iPad kent dat aanbod niet: daar toont de knop
+  // de weg (Deel → Zet op beginscherm). Draait de app al standalone, dan geen knop.
+  const standalone = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    uitgesteldeInstall = e;
+    const b = $('menuInstall');
+    if(b && !standalone()) b.hidden = false;
+  });
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone()){
+    const b = $('menuInstall'), s = $('menuInstallSub');
+    if(b){ b.hidden = false; }
+    if(s){ s.textContent = 'Via Deel (het vierkant met de pijl) → Zet op beginscherm'; }
   }
 
   const rustig = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
