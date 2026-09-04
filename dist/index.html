@@ -8269,12 +8269,10 @@ function buildDossiers(){
     }
   });
 
-  // Een dossier is pas een dossier vanaf TWEE stukken (gevraagd 04/09/2026). Eén stuk
-  // aaneenrijgen met zichzelf zegt niets: zulke eenlingen (elk stuk zonder handtekening
-  // kreeg een eigen solo-sleutel) blijven gewoon zichtbaar in Agenda, Beslist en het
-  // archief, maar vullen de dossierlijst niet meer. Alle afnemers van ITEM2DOS zijn
-  // null-veilig, dus een stuk zonder dossier breekt nergens iets.
-  DOSSIERS = Object.entries(map).filter(([, g]) => g.length >= 2).map(([__root, g]) => {
+  // Eenlingen BLIJVEN een dossier (afgesproken 04/09/2026: "een eenling in uiterste nood
+  // behouden; koppel slimmer"). Een stuk zonder maatje is geen fout maar een stuk dat er
+  // nog geen vond; de winst moet uit slimmere koppeling komen, niet uit wegfilteren.
+  DOSSIERS = Object.entries(map).map(([__root, g]) => {
     g.sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
     // Stabiele id: afgeleid van de clustersleutel (de kleinste _key van de groep, bevroren
     // vóór het losmaken), niet van een volgorde-index. Die index verschuift bij élke
