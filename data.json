@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03",
+  "generated_at": "2026-09-04",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -28710,6 +28710,32 @@
     }
   ],
   "college_beslissingen": [
+    {
+      "id": "burgemeester-20260903-1",
+      "date": "2026-09-03",
+      "orgaan": "Burgemeester",
+      "categorie": "Milieu",
+      "titel": "Besluit burgemeester van 3 september 2026 betreffende hygiënisch woontoezicht.",
+      "decoded": "De burgemeester beslist op 3 september 2026 over hygiënisch woontoezicht.",
+      "themes": [
+        "Wonen"
+      ],
+      "kernbegrippen": [
+        "hygiënisch woontoezicht"
+      ]
+    },
+    {
+      "id": "burgemeester-20260903-2",
+      "date": "2026-09-03",
+      "orgaan": "Burgemeester",
+      "categorie": "Natuur en Groenontwikkeling",
+      "titel": "Besluit burgemeester van 3 september 2026 betreffende beslissing kappen van een boom omwille van acuut gevaar.",
+      "decoded": "De burgemeester beslist om een boom te kappen. De reden is acuut gevaar.",
+      "themes": [
+        "Veiligheid",
+        "Natuur"
+      ]
+    },
     {
       "id": "burgemeester-20260828-1",
       "date": "2026-08-28",
@@ -101367,6 +101393,12 @@
           "published": "2026-08-28",
           "status": "tijdig",
           "late_days": 0
+        },
+        {
+          "date": "2026-09-03",
+          "published": "2026-09-04",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 10,
@@ -106981,6 +107013,7 @@
     "Burgemeester|2026-08-20|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_20-08-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-08-25|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_25-08-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-08-28|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_28-08-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-09-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_03-09-2026_Beslissingenlijst.pdf",
     "College|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_10-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_17-12-2024_Beslissingenlijst.pdf",
