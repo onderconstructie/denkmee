@@ -7819,6 +7819,102 @@ let DOSSIERS = [];
 function dosTrack(org){
   return (org === 'RMW' || org === 'Vast bureau' || org === 'Vast Bureau') ? 'welzijn' : 'gemeente';
 }
+// De kant van een STUK: normaal die van zijn orgaan, maar "deel OCMW" op de gemeenteraad
+// gaat over het OCMW-budget dat de raad voor maatschappelijk welzijn vaststelt en de
+// gemeenteraad nadien goedkeurt: één zaak, twee organen. Zulke stukken horen bij de
+// OCMW-kant (en "deel Stad" bij een OCMW-orgaan omgekeerd), anders blijven ze eenling.
+function dosTrackVanStuk(it){
+  const t = (it.titel || '').toLowerCase(), kant = dosTrack(it.org);
+  if(kant === 'gemeente' && /\bdeel ocmw\b/.test(t)) return 'welzijn';
+  if(kant === 'welzijn' && /\bdeel stad\b/.test(t)) return 'gemeente';
+  return kant;
+}
+
+// ---------------------------------------------------------------------------
+// EIGENNAAM-FRASEN — de volledige naam als koppelsignaal (sinds 04/09/2026).
+// Losse hoofdletterwoorden koppelden fout: "Green" uit Green Impact Investments vond
+// European Green Capital, "Lieve" uit Onze Lieve Vrouw van Hanswijk vond de Lieve-
+// Vrouweparochie. De hele frase ("earth hour", "depot rato", "nv eigen woning") wijst
+// wél één zaak aan; gemeten precisie rond de 90% op een handmatige steekproef.
+// Werkwijze: aaneengesloten hoofdletterwoorden (met verbindwoorden als "van", "en"),
+// waarbij een zinsaanhef-woord alleen meetelt als het corpus het als naam kent (elders
+// vaker met hoofdletter midden in een zin dan klein). Uitgesloten: algemene plaats- en
+// bestuurswoorden, deelgemeenten en windstreken als losse naam, straatnamen (die hebben
+// hun eigen regel), losse woorden die elders ooit klein staan ("Zaken", "Bijzondere") en
+// rubriekkoppen waarvan élk woord elders klein voorkomt ("Sociale Zaken", "Mondiaal Beleid").
+const FR_ALG = new Set(('mechelen stad ocmw vlaanderen vlaamse vlaams belgie belgische gemeenteraad college raad '
+  + 'maatschappelijk welzijn politiezone stadsbestuur mechelse mechelaar mechelaars europa europese federale '
+  + 'federaal provincie antwerpen nekkerspoel willebroek muizen walem leest hombeek heffen battel noord zuid oost '
+  // Instrumenten en documentsoorten met een hoofdletter zijn geen zaak: een Mechelenbon
+  // schenken bij de Horeca Awards is niet hetzelfde als Mechelenbons voor een school, en
+  // twee project-MER's zijn twee projecten.
+  + 'west centrum mechelenbon mechelenbons project-mer plan-mer kiss ride').split(' '));
+const FR_VERBIND = new Set('van de der den het en op door aan voor in of & te ter tot met'.split(' '));
+const FR_MAAND = new Set('januari februari maart april mei juni juli augustus september oktober november december'.split(' '));
+const FR_STRAAT = /(straat|lei|laan|weg|plein|vest|dreef|steenweg|hof|kaai|dijk|markt|baan|pad|wal|dok|berg)$/;
+const frNorm = w => w.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const frKaal = w => frNorm(w.replace(/[^A-Za-zÀ-ÿ\-&]/g, ''));
+const frCap = w => { const c = w.replace(/^["'“‘(]+/, ''); return !!c && /[A-ZÀ-Ÿ]/.test(c[0]) && !/\d/.test(c); };
+// Woorden van een titel met de vlag "staat dit aan een zinsaanhef?" (na een punt, dubbele
+// punt, haakje, aanhalingsteken of nummering).
+function frWoorden(titel){
+  const out = []; let aanhef = true;
+  (titel || '').split(/\s+/).filter(Boolean).forEach(w => {
+    out.push([w, aanhef]);
+    aanhef = /[.:;("'“‘]$/.test(w) || /^\d+[).]$/.test(w) || w === '-' || w === '–' || w === '/';
+    if(/[.:;]\W*$/.test(w)) aanhef = true;
+  });
+  return out;
+}
+// Corpus-telling: per woord hoe vaak het klein staat en hoe vaak met hoofdletter MIDDEN in
+// een zin. Daarop steunt de vraag "is dit een naam of een gewoon woord met zinshoofdletter".
+function frTelling(items){
+  const klein = {}, midzin = {};
+  items.forEach(it => frWoorden(it.titel).forEach(([w, aanhef]) => {
+    const n = frKaal(w); if(n.length < 3) return;
+    if(frCap(w)){ if(!aanhef) midzin[n] = (midzin[n] || 0) + 1; }
+    else klein[n] = (klein[n] || 0) + 1;
+  }));
+  return { klein, midzin };
+}
+function dosFrasen(titel, tel){
+  const ws = frWoorden(titel), out = new Set(); let i = 0;
+  while(i < ws.length){
+    if(!frCap(ws[i][0])){ i++; continue; }
+    let run = [], j = i;
+    while(j < ws.length){
+      const wj = ws[j][0], nj = frKaal(wj);
+      if(frCap(wj) && nj && !FR_MAAND.has(nj)){
+        run.push([nj, ws[j][1]]); j++;
+        if(/[.:;,]$/.test(wj)) break;
+      } else if(FR_VERBIND.has(nj) && j + 1 < ws.length && frCap(ws[j + 1][0]) && run.length){
+        run.push([nj, false]); j++;
+      } else break;
+    }
+    i = Math.max(j, i + 1);
+    while(run.length && run[0][1] && ((tel.klein[run[0][0]] || 0) > (tel.midzin[run[0][0]] || 0) || DOS_STOP.has(run[0][0]))) run.shift();
+    while(run.length && FR_VERBIND.has(run[0][0])) run.shift();
+    while(run.length && FR_VERBIND.has(run[run.length - 1][0])) run.pop();
+    const kern = run.map(r => r[0]).filter(n => !FR_ALG.has(n) && !FR_VERBIND.has(n));
+    if(!kern.length) continue;
+    if(kern.length === 1 && (kern[0].length < 4 || FR_STRAAT.test(kern[0]) || DOS_STOP.has(kern[0]))) continue;
+    if(kern.every(k => FR_STRAAT.test(k))) continue;
+    if(kern.length === 1 && (tel.klein[kern[0]] || 0) > 0) continue;
+    if(kern.every(k => (tel.klein[k] || 0) > 0)) continue;
+    out.add(run.map(r => r[0]).join(' '));
+  }
+  return out;
+}
+// De KALE titel: zonder cijfers, datums, maandnamen, het routeringsstaartje en de
+// stopwoorden. Twee stukken met dezelfde kale titel van minstens drie woorden zijn
+// hetzelfde terugkerende punt ("Advisering jaarrekening 2024 van Audio" / "... 2025 ...",
+// "Big Half 31 mei 2026" twee keer). De reeksen-regel eist er drie; voor het adopteren
+// van een eenling in het dossier van zijn tweelingtitel volstaan er twee.
+function dosKaal(titel){
+  let t = frNorm(titel || '').replace(/\bverwijzing naar (?:de|het)\b[^.]*\.?/g, ' ').replace(/\d+([./-]\d+)*/g, ' ');
+  const ws = (t.match(/[a-z][a-z\-]+/g) || []).filter(w => w.length >= 3 && !FR_MAAND.has(w) && !DOS_STOP.has(w));
+  return ws.length >= 3 ? ws.join(' ') : '';
+}
 
 // ---------------------------------------------------------------------------
 // Heldere dossiertitel — KORT en LEESBAAR, zonder iets te verzinnen.
@@ -8001,10 +8097,19 @@ function buildDossiers(){
     it._tk = dosTokens(it.titel);
     // Harde titel-ankers (bestekcodes, adressen) PLUS de zeldzame AI-kernbegrippen uit de bron.
     it._anchors = dosAnchors(it.titel).concat(kbAnchors(it));
-    it._track = dosTrack(it.org);
+    it._track = dosTrackVanStuk(it);
     it._ent = dosEntities(it.titel);
     it._city = dosCityTheme(it);
     new Set(it._tk.map(dosStam)).forEach(t => df[t]=(df[t]||0)+1);
+  });
+  // Eigennaam-frasen en kale titels, voor de adoptie van eenlingen verderop (stap 6b/6c).
+  const frTel = frTelling(items);
+  const frDragers = {}, kaalGroep = {};
+  items.forEach(it => {
+    it._fr = dosFrasen(it.titel, frTel);
+    it._fr.forEach(f => { const k = it._track + '::' + f; (frDragers[k] = frDragers[k] || []).push(it); });
+    it._kaal = dosKaal(it.titel);
+    if(it._kaal){ const k = it._track + '::' + it._kaal; (kaalGroep[k] = kaalGroep[k] || []).push(it); }
   });
   // Signatuur per document = het meest ONDERSCHEIDENDE woord uit de titel. Gewogen:
   //  · een EIGENNAAM (hoofdletterwoord, bv. "Catharina", "Indigo", "Ragheno") telt als dubbel
@@ -8192,6 +8297,58 @@ function buildDossiers(){
       const goed = beste[1] >= 2 && deeltThema && deeltIdentiteit;
       const enig = doelen.length === 1 && deeltThema;
       if(sterk || goed || enig) uni(eigen, beste[0]);
+    });
+
+    // 6b) ADOPTIE OP EIGENNAAM-FRASE (sinds 04/09/2026, "koppel slimmer"). Draagt een
+    //     eenling een volledige eigennaam ("Earth Hour", "Depot Rato", "Nv Eigen Woning")
+    //     en zitten álle andere dragers van precies die frase aan dezelfde kant in één
+    //     groep, dan sluit de eenling daarbij aan. Twee eenlingen die enkel elkaar hebben
+    //     (Earth Hour 2025 en 2026) vormen zo samen een dossier. Poorten: de frase mag
+    //     niet vaker dan CAP voorkomen; wijzen twee frasen naar verschillende groepen, dan
+    //     twijfel en dus niet koppelen; en een gewoon stuk gaat nooit een groep van louter
+    //     tijdelijke verkeersbesluiten in (de straat of het plein in zo'n besluit is de
+    //     plek van een evenement, niet de zaak). Omgekeerd mag wel: het verkeersbesluit
+    //     voor Mechelen Beach hoort bij het dossier Mechelen Beach.
+    const isVerkeer = x => /tijdelijke politieverordening/i.test(x.titel || '');
+    const voorlopig2 = {};
+    items.forEach(it => { const r = find(it._key); (voorlopig2[r] = voorlopig2[r] || []).push(it); });
+    Object.values(voorlopig2).forEach(g => {
+      if(g.length !== 1) return;
+      const d = g[0], eigen = find(d._key);
+      const kand = [];
+      d._fr.forEach(f => {
+        // Een stuk dat zelf vier of meer namen opsomt ("aanduiden vertegenwoordigers in
+        // diverse organisaties") is een lijst, geen zaak: het mag geen drager zijn, anders
+        // trekt het eenlingen over elke genoemde organisatie naar zich toe.
+        const dragers = (frDragers[d._track + '::' + f] || []).filter(x => x.id !== d.id && x._fr.size <= 3);
+        if(!dragers.length || dragers.length + 1 > CAP) return;
+        const roots = new Set(dragers.map(x => find(x._key)));
+        roots.delete(eigen);
+        if(roots.size !== 1) return;
+        if(dragers.every(isVerkeer) && !isVerkeer(d)) return;
+        kand.push({ n: dragers.length, f, root: [...roots][0] });
+      });
+      if(!kand.length) return;
+      if(new Set(kand.map(k => k.root)).size > 1) return;          // twijfel = apart laten
+      kand.sort((a, b) => a.n - b.n || (a.f < b.f ? -1 : 1));
+      uni(eigen, kand[0].root);
+    });
+
+    // 6c) ADOPTIE OP KALE TITEL. Dezelfde titel zonder cijfers, datums en stopwoorden
+    //     (minstens drie woorden) is hetzelfde terugkerende punt: "Advisering jaarrekening
+    //     2024 van Audio" en "... 2025 ...", "Goedkeuring verwerkersovereenkomst Cevi" twee
+    //     keer. Gelijkheid is exact en binnen één kant, dus geen kettingen; wijst de
+    //     tweelingtitel naar meer dan één groep, dan koppelen we niet.
+    const voorlopig3 = {};
+    items.forEach(it => { const r = find(it._key); (voorlopig3[r] = voorlopig3[r] || []).push(it); });
+    Object.values(voorlopig3).forEach(g => {
+      if(g.length !== 1 || !g[0]._kaal) return;
+      const d = g[0], eigen = find(d._key);
+      const tweeling = (kaalGroep[d._track + '::' + d._kaal] || []).filter(x => x.id !== d.id);
+      if(!tweeling.length) return;
+      const roots = new Set(tweeling.map(x => find(x._key)));
+      roots.delete(eigen);
+      if(roots.size === 1) uni(eigen, [...roots][0]);
     });
   }
 
