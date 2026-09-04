@@ -3724,24 +3724,6 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .menu-search .ms-go:hover{ background:var(--pink-vlak-hover); }
 
-/* Installeer-als-app-knop in het menu: zelfde vormentaal als het profielblok en het
-   zoekveld erboven (scherpe hoeken, haarlijn), maar rustiger, want het is een aanbod
-   en geen kernfunctie. Alleen zichtbaar als installeren op dit toestel echt kan. */
-.menu-install{
-  display:flex; align-items:center; gap:.75rem; width:100%;
-  padding:.7rem .9rem; cursor:pointer; text-align:left;
-  border:1px solid var(--line-strong); background:var(--paper); color:var(--ink);
-  transition:border-color .15s;
-}
-.menu-install:hover{ border-color:var(--pink); }
-.menu-install .mi-ic{ display:flex; flex:none; color:var(--pink-text); }
-.menu-install .mi-ic svg{ width:20px; height:20px; }
-.menu-install .mi-title{ display:block; font-weight:600; font-size:.92rem; }
-.menu-install .mi-sub{
-  display:block; font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.68rem; color:var(--ink-dim); margin-top:.15rem;
-}
-
 /* =====================================================================
    NIEUW-SINDS-VORIG-BEZOEK TOAST + hamburger-signaal
    ===================================================================== */
@@ -4132,21 +4114,6 @@ a, button, summary, input, label{ touch-action:manipulation; }
 @media (prefers-reduced-motion:reduce){
   .dosm-panel{ animation:fadeIn .2s ease-out; }
 }
-/* Installatie-uitnodiging: verschijnt één keer, alleen op mobiel, ná de privacymelding
-   (zelfde patroon en toon als op asgaupaust.be, met de toren als app-gezicht). */
-.install-note{
-  position:fixed; left:1rem; right:1rem; bottom:calc(74px + env(safe-area-inset-bottom)); z-index:160;
-  max-width:520px; margin:0 auto; display:flex; align-items:center; gap:.75rem;
-  padding:.7rem .85rem; background:var(--paper-2); border:1px solid var(--line-kaart); border-radius:var(--r-chip);
-  box-shadow:0 12px 36px rgba(72,56,38,.2); font-size:.86rem; line-height:1.4;
-}
-.install-note .in-toren{ width:36px; height:36px; flex:none; border-radius:50%; }
-.install-note .in-txt{ flex:1; min-width:0; margin:0; color:var(--ink-2); }
-.install-note .in-txt strong{ color:var(--ink); }
-.install-note .in-ok{ flex:none; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; background:var(--pink); color:#fff; border:1px solid var(--pink); border-radius:999px; padding:.5rem .85rem; cursor:pointer; }
-.install-note .in-ok:hover{ background:var(--pink-deep); border-color:var(--pink-deep); }
-.install-note .in-close{ flex:none; background:none; border:0; color:var(--ink-faint); font-size:1.3rem; line-height:1; cursor:pointer; padding:.1rem .35rem; }
-@media (min-width:701px){ .install-note{ bottom:1.5rem; } }
 </style>
 </head>
 
@@ -4255,17 +4222,6 @@ a, button, summary, input, label{ touch-action:manipulation; }
       <input type="text" id="menuSearch" aria-label="Zoek in de dossiers op inhoud" placeholder="Zoek in de dossiers, bv. PFAS" autocomplete="off" enterkeyhint="search">
       <button type="submit" class="ms-go" aria-label="Zoeken">→</button>
     </form>
-    <!-- Installeer-als-app. De knop verschijnt alleen als installeren hier echt kan:
-         Chromium meldt dat via beforeinstallprompt, een iPhone of iPad krijgt de weg
-         uitgelegd (daar bestaat geen installatie-aanbod). Draait de app al op het
-         beginscherm (standalone), dan blijft de knop weg. -->
-    <button class="menu-install" id="menuInstall" hidden onclick="installeerApp()">
-      <span class="mi-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg></span>
-      <span class="mi-text">
-        <span class="mi-title">Installeer als app</span>
-        <span class="mi-sub" id="menuInstallSub">Op je beginscherm, zonder appwinkel</span>
-      </span>
-    </button>
     </div>
     <nav class="menu-list">
       <a href="#dossiers" onclick="toggleMenu()">
@@ -7170,7 +7126,6 @@ function dismissCookieNote(){
   /* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
   try{ localStorage.setItem('denkmee.privacyok','1'); }catch(e){}
   try{ sessionStorage.setItem('denkmee.privacyok','1'); }catch(e){}
-  if(window.__toonInstall) setTimeout(window.__toonInstall, 500);   // dan pas de installeer-uitnodiging
   const el = $('cookieNote'); if(el) el.hidden = true;
 }
 function setupCookieNote(){
@@ -9379,51 +9334,15 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============= APP-GEVOEL ============= */
-// De site als app in de hand: installeerbaar (service worker + echte installeerknop in
-// het menu), het dossiervenster als bottom-sheet die je op smartphone dichtveegt, en
-// cockpit-cijfers die kort optellen.
-// Naast de eenmalige uitnodigingsbanner (verderop) is dit de BLIJVENDE ingang: wie de
-// banner ooit wegklikte, kan alsnog installeren via het menu. Beide luisteren naar
-// hetzelfde beforeinstallprompt-aanbod; prompt() mag maar één keer per aanbod, vandaar
-// de try (verzilverde de banner het al, dan doet de knop gewoon niets meer).
-let uitgesteldeInstall = null;   // het bewaarde beforeinstallprompt-aanbod van Chromium
-function installeerApp(){
-  if(uitgesteldeInstall){
-    try{
-      uitgesteldeInstall.prompt();
-      uitgesteldeInstall.userChoice.finally(() => {
-        uitgesteldeInstall = null;
-        const b = $('menuInstall'); if(b) b.hidden = true;
-      });
-    }catch(e){ uitgesteldeInstall = null; }
-  }
-  // Zonder aanbod (iOS) is de knop zelf de uitleg: de sub-regel zegt de weg al.
-}
-window.addEventListener('appinstalled', () => {
-  uitgesteldeInstall = null;
-  const b = $('menuInstall'); if(b) b.hidden = true;
-});
+// De site als app in de hand: de webapp zelf, zonder installatie-aanbiedingen (bewuste
+// keuze 04/09/2026: "het is het gevoel van een web app, niks installeren"). Wel: het
+// dossiervenster als bottom-sheet die je op smartphone dichtveegt, tik-feedback op de
+// app-balk, en cockpit-cijfers die kort optellen. De service worker blijft (offline-
+// terugval, geen trackers); wie wil, installeert via het browsermenu, wij dringen niet.
 function setupAppGevoel(){
   // 1) Installeerbaar op het beginscherm + offline-terugval (zelfde patroon als asgaupaust.be).
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
-  }
-
-  // 1b) De installeerknop in het menu. Chromium zegt zelf wanneer installeren kan
-  // (beforeinstallprompt); dan tonen we de knop en geeft een tik het echte
-  // installatie-aanbod. Safari op iPhone/iPad kent dat aanbod niet: daar toont de knop
-  // de weg (Deel → Zet op beginscherm). Draait de app al standalone, dan geen knop.
-  const standalone = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    uitgesteldeInstall = e;
-    const b = $('menuInstall');
-    if(b && !standalone()) b.hidden = false;
-  });
-  if(/iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone()){
-    const b = $('menuInstall'), s = $('menuInstallSub');
-    if(b){ b.hidden = false; }
-    if(s){ s.textContent = 'Via Deel (het vierkant met de pijl) → Zet op beginscherm'; }
   }
 
   const rustig = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -9474,48 +9393,9 @@ function setupAppGevoel(){
   }
 }
 
-// Installatie-uitnodiging bij het eerste bezoek: zet Denk mee als app op je beginscherm.
-// Verschijnt NA de privacymelding (geen twee tegelijk) en maar één keer; alleen op mobiel.
-(function(){
-  var KEY = 'denkmee.installgezien';
-  function seen(){ try{ return localStorage.getItem(KEY) === '1'; }catch(e){ return true; } }
-  function remember(){ try{ localStorage.setItem(KEY,'1'); }catch(e){} }
-  function standalone(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
-  function privacyWeg(){ try{ return localStorage.getItem('denkmee.privacyok')==='1' || sessionStorage.getItem('denkmee.privacyok')==='1'; }catch(e){ return false; } }
-  // iOS/iPadOS: alle Apple-aanraaktoestellen (iPadOS 13+ meldt zich als Mac, vandaar de touch-test).
-  // Safari kent geen beforeinstallprompt, dus daar tonen we de handmatige uitleg.
-  var iOS = /iphone|ipad|ipod/i.test(navigator.userAgent)
-            || (navigator.platform === 'MacIntel' && (navigator.maxTouchPoints||0) > 1);
-  function mobiel(){
-    var coarse = window.matchMedia ? window.matchMedia('(pointer:coarse)').matches : false;
-    return coarse || iOS;
-  }
-  var deferred = null, shown = false;
-  function toon(){
-    if(shown || seen() || standalone()) return;
-    if(!mobiel()) return;                         // alleen telefoon/tablet, niet op desktop
-    if(!deferred && !iOS) return;                 // geen installpad op dit toestel
-    shown = true;
-    var b = document.createElement('div'); b.className = 'install-note'; b.setAttribute('role','note');
-    b.innerHTML = '<img class="in-toren" src="/beelden/toren-192.png" alt="" aria-hidden="true">'
-      + '<p class="in-txt">' + (iOS
-          ? 'Zet <strong>Denk mee</strong> op je beginscherm: tik op het deel-icoon en kies “Zet op beginscherm”.'
-          : 'Zet <strong>Denk mee</strong> als app op je beginscherm.') + '</p>'
-      + (iOS ? '' : '<button type="button" class="in-ok">Installeren</button>')
-      + '<button type="button" class="in-close" aria-label="Sluiten">×</button>';
-    document.body.appendChild(b);
-    b.querySelector('.in-close').addEventListener('click', function(){ b.remove(); remember(); });
-    var ok = b.querySelector('.in-ok');
-    if(ok) ok.addEventListener('click', function(){
-      remember();
-      if(deferred){ deferred.prompt(); if(deferred.userChoice){ deferred.userChoice.then(function(){}).catch(function(){}); } deferred = null; }
-      b.remove();
-    });
-  }
-  window.__toonInstall = toon;                     // de Begrepen-knop van de privacymelding roept dit aan
-  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; if(privacyWeg()) toon(); });
-  if(privacyWeg()) setTimeout(toon, 900);          // privacy al weg (terugkerend bezoek): toon meteen
-})();
+// De installatie-uitnodiging (banner na de privacymelding) is op 04/09/2026 bewust
+// verwijderd, net als de installeerknop in het menu: "het is het gevoel van een web
+// app, niks installeren." Niet terugbrengen. Wie wil, installeert via het browsermenu.
 
 // failsafe: zet de terug-naar-boven knop ook los van de init-keten hierboven aan,
 // zodat hij verschijnt zelfs als een andere init-functie een fout zou geven
