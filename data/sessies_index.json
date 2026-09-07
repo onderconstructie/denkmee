@@ -1378,6 +1378,17 @@
     "uittreksels": []
   },
   {
+    "organ": "Burgemeester",
+    "date": "2026-09-04",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-09-07",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_04-09-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "College van burgemeester en schepenen",
     "date": "2024-12-03",
     "documenten": {
@@ -6090,6 +6101,17 @@
     ]
   },
   {
+    "organ": "Gemeenteraad",
+    "date": "2026-09-15",
+    "documenten": {
+      "agenda": {
+        "published": "2026-09-07",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_15-09-2026_Agenda.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "Raad voor maatschappelijk welzijn",
     "date": "2024-12-02",
     "documenten": {
@@ -6470,6 +6492,17 @@
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=20262027_Reglement_soep_op_school_23-06-2026_115096.pdf"
       }
     ]
+  },
+  {
+    "organ": "Raad voor maatschappelijk welzijn",
+    "date": "2026-09-15",
+    "documenten": {
+      "agenda": {
+        "published": "2026-09-07",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Agenda.pdf"
+      }
+    },
+    "uittreksels": []
   },
   {
     "organ": "Vast bureau",
