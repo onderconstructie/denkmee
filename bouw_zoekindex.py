@@ -89,7 +89,7 @@ AANSPREEK_RX = re.compile(
 # Twee rolaanduidingen die in deze stukken vrijwel altijd een PARTICULIER aanwijzen en die de
 # aanspreekvorm hierboven niet vangt, omdat er geen 'de heer' of 'mevrouw' bij staat:
 #   'OGV Voorbeeld'    de aanvrager van een omgevingsvergunning, in de vergunningentabel
-#   'Meester Proefsma'   de advocaat van een burger in een bezwaardossier
+#   'Meester Proefsma' de advocaat van een burger in een bezwaardossier
 # Gemeten aanleiding: beide vormen leverden werkende zoektermen op die naar precies één stuk
 # leidden. Zelfde aanpak en zelfde beperking als hierboven: we knippen de CONTEXT weg, niet de
 # persoon. Draagt een naam elders betekenis, dan blijft ze vindbaar. Bewust géén regel voor de

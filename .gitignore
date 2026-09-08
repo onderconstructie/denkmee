@@ -33,8 +33,7 @@ notulen.notulen.json
 # Lokale tooling / scratch (niet voor de repo)
 .claude/
 CLAUDE.local.md
-_*.py
-_*.png
+_*
 
 # Uitgelezen begrotingstabellen (parse_mjp_acties.py): de VOLLEDIGE tabel van elk
 # budgetstuk, ruim twaalfduizend lijnen. Documentkopie, dus niet in git. Enkel de lijnen
@@ -53,4 +52,13 @@ data/uittreksel_cache/
 data/uittreksels_tekst.json
 data/uittreksels_index.json
 data/uittreksel_koppeling.json
-privacy_namen.json
+privacy_namen*
+
+# Losse werkbestanden en controle-uitvoer. Aanleiding: op 07/09/2026 belandde een met curl
+# opgehaalde kopie van de LIVE pagina (p.tmp) in een commit, en die live pagina draagt wel de
+# naam die nergens in git mag staan. Alles wat van de live site komt of een meting wegschrijft,
+# hoort in de kladmap buiten de repo; deze regels zijn het vangnet als dat toch misloopt.
+# Let op: GEEN *.txt hier. De OFL-licenties van de lettertypes zijn .txt en moeten in git.
+*.tmp
+*.log
+*.out
