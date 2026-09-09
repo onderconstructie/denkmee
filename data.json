@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-07",
+  "generated_at": "2026-09-09",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -103221,6 +103221,56 @@
   ],
   "is_demo": false,
   "schriftelijke_vragen": [
+    {
+      "id": "sv-2026-09-2026-065-588f80",
+      "type": "schriftelijke_vraag",
+      "date": "2026-08-19",
+      "nummer": "2026/065",
+      "indiener": "Marc HENDRICKX (N-VA)",
+      "onderwerp": "Tegenstrijdigheden in opeenvolgende antwoorden over dossier",
+      "titel": "Tegenstrijdigheden in opeenvolgende antwoorden over dossier",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-09/083. M. Hendrickx - Tegenstrijdige antwoorden site Oud Gasthuis.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-09/083.%20M.%20Hendrickx%20-%20Tegenstrijdige%20antwoorden%20site%20Oud%20Gasthuis.pdf",
+      "decoded": "Raadslid Marc Hendrickx (N-VA) vraagt de stad uitleg over tegenstrijdige antwoorden in het dossier van het Oud Stadhuis en de vzw United We. Hij wijst erop dat eerdere antwoorden spraken van 2.500 euro per maand als opbrengst voor de stad, terwijl de overeenkomst dit omschrijft als een forfaitaire vergoeding voor nutsvoorzieningen en het gebruik als een gunst wordt toegekend. Hij vraagt ook waarom het aantal maanden en de bedragen verschillen tussen antwoord 2026/077, dat sprak van 14 maanden en 35.000 euro, en antwoord 2026/080, dat spreekt van 17 maanden en 42.500 euro. Verder vraagt hij waarom het saldo van 11.922 euro in het voordeel van de gebruiker niet werd terugbetaald. Het college antwoordt dat het om een gebruikerskost gaat, dat het addendum geen terugbetaling verplicht in het voordeel van vzw Dodoens, en dat het cijfer van 14 maanden verouderd was en gecorrigeerd werd naar 17 maanden plus 3 maanden uit de oorspronkelijke overeenkomst, goed voor in totaal 50.000 euro en een voordeel van 11.922 euro, naast 11.307 euro aan ticketinkomsten.",
+      "themes": [
+        "Financiën",
+        "Erfgoed"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Oud Stadhuis",
+        "vzw United We",
+        "Welzijnsvereniging Dodoens",
+        "2026/065",
+        "2026/077",
+        "2026/080"
+      ]
+    },
+    {
+      "id": "sv-2026-09-2026-082",
+      "type": "schriftelijke_vraag",
+      "date": "2026-08-18",
+      "nummer": "2026/082",
+      "indiener": "Marc HENDRICKX (N-VA)",
+      "onderwerp": "wat met site “Oud Gasthuis” nu leegstand aanhoudt?",
+      "titel": "wat met site “Oud Gasthuis” nu leegstand aanhoudt?",
+      "heeft_antwoord": true,
+      "pdf": "data/raw/schriftelijke_vragen/2026-09/082. M. Hendrickx - Toekomstplannen Oud Gasthuis.pdf",
+      "bron_url": "https://www.mechelen.be/sites/default/files/schriftelijke-vragen-buiten-de-gemeenteraad/files/2026-09/082.%20M.%20Hendrickx%20-%20Toekomstplannen%20Oud%20Gasthuis.pdf",
+      "decoded": "Raadslid Marc Hendrickx (N-VA) vraagt de stad wat ze van plan is met de gebouwen van het Oud Gasthuis, dat al langere tijd leegstaat. Hij verwijst naar schattingen van het gebouw: 1,68 miljoen euro in 2018 door de Regie der Gebouwen, en 1,65 miljoen euro in oktober 2022 na renovatie en instandhoudingswerken van meer dan 600.000 euro. Hij wijst erop dat de stedenbouwkundige bestemming wijzigde, van enkel kantoren in 2018 naar een combinatie van woongelegenheid en kankercentrum nadien. Hij vraagt ook of de stad blijft vasthouden aan de voorwaarde dat een koper een kankercentrum moet vestigen. Het college antwoordt dat het nog steeds de ambitie heeft om samen met een private partner een kankercentrum te realiseren op het gelijkvloers van het Oud Gasthuis. Het gebouw werd in 2023 te koop gezet voor minimaal 1.650.000 euro, een kandidaat werd geselecteerd, maar het project liep vertraging op door procedures bij een gekoppeld woonzorgcentrum-project.",
+      "themes": [
+        "Stedenbouw",
+        "Wonen"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Oud Gasthuis",
+        "kankercentrum",
+        "Regie der Gebouwen",
+        "ABEX-index"
+      ]
+    },
     {
       "id": "sv-2026-09-2026-065",
       "type": "schriftelijke_vraag",
