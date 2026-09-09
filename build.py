@@ -1,4 +1,21 @@
 from pathlib import Path
+
+# --- De poort scherp zetten. Hooks reizen niet mee met een kloon en git config is per kloon,
+#     dus zonder deze regels staat de bescherming na een verse kloon uit zonder dat iets het
+#     meldt. Elke build zet ze opnieuw goed. Zie .githooks/poort.py voor wat ze weigert. ---
+def _poort_scherpzetten():
+    import subprocess
+    hier = Path(__file__).resolve().parent
+    if not (hier / ".githooks" / "poort.py").exists():
+        return
+    huidig = subprocess.run(["git", "config", "core.hooksPath"], capture_output=True,
+                            cwd=str(hier)).stdout.decode("utf-8", "replace").strip()
+    if huidig != ".githooks":
+        subprocess.run(["git", "config", "core.hooksPath", ".githooks"], cwd=str(hier))
+        print("       poort scherpgezet: core.hooksPath -> .githooks")
+
+_poort_scherpzetten()
+
 import sys
 import json
 import re

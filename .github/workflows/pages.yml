@@ -32,6 +32,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: "Poort (derde laag) - geen prive-waarde in de repo"
+        run: python3 .github/poort_ci.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -4116,6 +4116,43 @@ a, button, summary, input, label{ touch-action:manipulation; }
 }
 
 /* =====================================================================
+   STATUSSTROOK  (over te nemen van het portaal, 09/09/2026)
+   =====================================================================
+   De zwarte balk onder de nav met 'Nog niet gelanceerd'. Zelfde vorm en
+   tekst als op asgaupaust.be, maar het badge-woord staat hier in de
+   app-kleur: het portaalroze blijft in een app voorbehouden aan het
+   merkwoord in de nav en de portaaltoets in de app-balk. Weg te halen
+   na de lancering (markup én dit blok). */
+.status-strook{
+  background:var(--ink); color:var(--paper);
+  border-bottom:1px solid rgba(245,241,232,.14);
+}
+.status-strook .shell{
+  display:flex; align-items:baseline; gap:.75rem; flex-wrap:wrap;
+  padding-top:.55rem; padding-bottom:.55rem;
+}
+.status-strook b{
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.68rem;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--eiland-app); flex:none;
+}
+.status-strook span{ font-size:.85rem; line-height:1.45; color:rgba(245,241,232,.82); }
+.status-strook .ss-cta{
+  font:inherit; color:#fff; background:none; border:0; padding:0; cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.6);
+}
+.status-strook .ss-cta:hover{ border-bottom-color:#fff; }
+/* De korte variant bestaat alleen op gsm; daarboven staat de volle zin er. */
+.status-strook .ss-kort{ display:none; }
+/* Op een telefoon zou de zin over drie regels lopen en zo een derde van het eerste
+   scherm opeten. Daar houden we hem kort: het badge-woord, de kernzin en de knop. */
+@media (max-width:700px){
+  .status-strook .shell{ padding-top:.5rem; padding-bottom:.5rem; gap:.35rem; }
+  .status-strook span{ font-size:.78rem; line-height:1.4; }
+  .status-strook .ss-lang{ display:none; }
+  .status-strook .ss-kort{ display:inline; }
+}
+
+/* =====================================================================
    HET HERO-PANEEL PAST OP HET SCHERM  (gevraagd 09/09/2026)
    =====================================================================
    De zittingskaart en de cockpit eronder vormen samen de clou van de
@@ -4181,8 +4218,12 @@ a, button, summary, input, label{ touch-action:manipulation; }
 
 /* LAPTOP. Boven de 820px vensterhoogte verandert er niets: daar paste alles al.
    Daaronder in twee trappen krimpen, zodat een MacBook (790px) nauwelijks iets
-   inlevert en een 1366x768-scherm met werkbalken toch nog past. */
-@media (min-width:901px) and (max-height:820px){
+   inlevert en een 1366x768-scherm met werkbalken toch nog past.
+   LET OP: de drempels (880 en 780) liggen ~60px hoger dan de kale berekening, want de
+   statusstrook 'Nog niet gelanceerd' kost dat van het eerste scherm. Verdwijnt die
+   strook na de lancering, dan mogen ze terug naar 820 en 720 (en de twee drempels
+   hieronder naar 830 en 790), zodat er weer wat meer lucht komt. */
+@media (min-width:901px) and (max-height:880px){
   .meeting-card{ padding:1.25rem 1.75rem; }
   .mc-tag{ margin-bottom:.65rem; }
   .mc-date{ font-size:clamp(1.85rem, 2.7vw, 2.4rem); }
@@ -4193,7 +4234,7 @@ a, button, summary, input, label{ touch-action:manipulation; }
   .hero-cockpit{ padding:.88rem 1.2rem .88rem; }
   .hc-stats{ margin-top:.68rem; padding-top:.68rem; }
 }
-@media (min-width:901px) and (max-height:720px){
+@media (min-width:901px) and (max-height:800px){
   .meeting-card{ padding:1.05rem 1.75rem; }
   .mc-tag{ margin-bottom:.55rem; }
   .mc-date{ font-size:clamp(1.7rem, 2.45vw, 2.05rem); }
@@ -4216,9 +4257,9 @@ a, button, summary, input, label{ touch-action:manipulation; }
 /* De balk 'nieuw sinds mijn vorige bezoek' verschijnt alleen als er nieuws is, en kost
    dan 46px. Op een laag venster is dat net het verschil tussen passen en niet passen,
    dus daar staat hij strakker (hij blijft één regel, dus dat leest even goed). */
-@media (max-height:830px){ .hc-nieuw{ margin-top:.5rem; padding:.38rem .65rem; } }
+@media (max-height:890px){ .hc-nieuw{ margin-top:.5rem; padding:.38rem .65rem; } }
 @media (max-height:700px){ .mc-stats{ display:none !important; } }
-@media (max-width:700px) and (max-height:790px){ .mc-stats{ display:none !important; } }
+@media (max-width:700px) and (max-height:850px){ .mc-stats{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -4323,6 +4364,17 @@ body{ background:var(--paper-3); }
     <a class="nav-cta" href="https://denkmee.asgaupaust.be/" style="margin-left:auto">← terug</a>
   </div>
 </nav>
+
+<!-- Zelfde statusstrook als op de startpagina en op het portaal: wie hier rechtstreeks
+     binnenkomt, krijgt hetzelfde signaal. De opmaak komt uit de gedeelde head; de knop is
+     hier een link naar het contactformulier van het portaal, want het contactvenster van
+     de hoofdpagina bestaat op deze pagina niet. -->
+<div class="status-strook"><div class="shell">
+  <b>Nog niet gelanceerd</b>
+  <span><span class="ss-lang">Deze site is nog in volle voorbereiding: we testen nog of alle data kloppen.
+    Kom je hier toevallig terecht, dan is je feedback nu al welkom.</span><span class="ss-kort">We testen nog of alle data kloppen.</span>
+    <a class="ss-cta" href="https://asgaupaust.be/#contact">Laat het ons weten</a></span>
+</div></div>
 
 <main class="shell">
 

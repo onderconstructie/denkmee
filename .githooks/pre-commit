@@ -1,0 +1,3 @@
+#!/bin/sh
+# Roept de poort ernaast aan. Zie .githooks/poort.py voor wat ze weigert en waarom.
+exec python "$(dirname "$0")/poort.py"
