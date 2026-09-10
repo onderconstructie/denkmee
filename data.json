@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09",
+  "generated_at": "2026-09-10",
   "next_meeting": {
     "id": "gemeenteraad-20260915",
     "type": "Gemeenteraad",
@@ -30170,6 +30170,934 @@
       "themes": [
         "Veiligheid",
         "Natuur"
+      ]
+    },
+    {
+      "id": "college-20260901-1",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Aktename ontslag gemeenteraadslid en procedure aanstelling opvolger. Verwijzing naar de gemeenteraad. (1)",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van het ontslag van een gemeenteraadslid. Het college verwijst de procedure voor het aanstellen van een opvolger door naar de gemeenteraad.",
+      "themes": [
+        "Burgerzaken"
+      ]
+    },
+    {
+      "id": "college-20260901-2",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Raadscommissies. Goedkeuring agenda commissie schepen Calvo van 8 september 2026.",
+      "decoded": "Het college van burgemeester en schepenen keurt de agenda goed van de raadscommissie van schepen Calvo van 8 september 2026.",
+      "themes": [
+        "Participatie"
+      ],
+      "schepen": "Calvo",
+      "kernbegrippen": [
+        "Calvo",
+        "raadscommissie 8 september 2026"
+      ]
+    },
+    {
+      "id": "college-20260901-3",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Raadscommissies. Goedkeuring agenda commissie schepen Geypen van 9 september 2026.",
+      "decoded": "Het college van burgemeester en schepenen keurt de agenda goed van de raadscommissie van schepen Geypen van 9 september 2026.",
+      "schepen": "Geypen",
+      "kernbegrippen": [
+        "commissie schepen Geypen"
+      ]
+    },
+    {
+      "id": "college-20260901-4",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Lijst plechtigheden. Vergaderingen - manifestaties van 01/09/2026 - 20/09/2026.",
+      "decoded": "Het college van burgemeester en schepenen keurt de lijst goed van plechtigheden, vergaderingen en manifestaties tussen 1 september 2026 en 20 september 2026.",
+      "themes": [
+        "Cultuur"
+      ]
+    },
+    {
+      "id": "college-20260901-5",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Veiligheid",
+      "titel": "Bevestiging beslissing burgemeester van 25 augustus 2026 betreffende het opleggen van een tijdelijk plaatsverbod.",
+      "decoded": "Het college van burgemeester en schepenen bevestigt de beslissing die de burgemeester op 25 augustus 2026 nam. Die beslissing legde een tijdelijk plaatsverbod op.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "kernbegrippen": [
+        "tijdelijk plaatsverbod"
+      ]
+    },
+    {
+      "id": "college-20260901-6",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Aktename opvolgingsrapportering inzake de uitvoering van het meerjarenplan 2026-2031 van Stad Mechelen tijdens het eerste semester van 2026. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van het opvolgingsrapport over de uitvoering van het meerjarenplan 2026-2031 van Stad Mechelen tijdens het eerste semester van 2026. Het college verwijst dit rapport door naar de gemeenteraad.",
+      "themes": [
+        "Financiën"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "meerjarenplan 2026-2031"
+      ]
+    },
+    {
+      "id": "college-20260901-7",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Aktename opvolgingsrapportering inzake uitvoering van meerjarenplan 2026-2031 van Autonoom Gemeentebedrijf Mechelen Actief in Cultuur (AGB MAC) tijdens het eerste semester van 2026. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van het opvolgingsrapport over de uitvoering van het meerjarenplan 2026-2031 van Autonoom Gemeentebedrijf Mechelen Actief in Cultuur (AGB MAC) tijdens het eerste semester van 2026. Het college verwijst dit rapport door naar de gemeenteraad.",
+      "themes": [
+        "Cultuur",
+        "Financiën"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Autonoom Gemeentebedrijf Mechelen Actief in Cultuur",
+        "AGB MAC",
+        "meerjarenplan 2026-2031"
+      ]
+    },
+    {
+      "id": "college-20260901-8",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Aktename opvolgingsrapportering inzake uitvoering van meerjarenplan 2026-2031 van Autonoom Gemeentebedrijf Sport Actief Mechelen (AGB SAM) tijdens het eerste semester van 2026. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de opvolgingsrapportering over de uitvoering van het meerjarenplan 2026-2031 van het Autonoom Gemeentebedrijf Sport Actief Mechelen (AGB SAM) tijdens het eerste semester van 2026. Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Sport",
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Autonoom Gemeentebedrijf Sport Actief Mechelen",
+        "AGB SAM",
+        "meerjarenplan 2026-2031"
+      ]
+    },
+    {
+      "id": "college-20260901-9",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Aktename opvolgingsrapportering inzake uitvoering van meerjarenplan 2026-2031 van Autonoom Gemeentebedrijf Energiepunt Mechelen tijdens het eerste semester van 2026. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van het opvolgingsrapport over de uitvoering van het meerjarenplan 2026-2031 van het Autonoom Gemeentebedrijf Energiepunt Mechelen tijdens het eerste semester van 2026. Het college verwijst dit rapport naar de gemeenteraad.",
+      "themes": [
+        "Klimaat & energie"
+      ],
+      "kernbegrippen": [
+        "Autonoom Gemeentebedrijf Energiepunt Mechelen",
+        "meerjarenplan 2026-2031"
+      ]
+    },
+    {
+      "id": "college-20260901-10",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op gebouwen en/of woningen die beschouwd worden als onbewoonbaar, ongeschikt, verwaarloosd, bouwvallig of leegstaand. Beslissing tot aanstelling advocaat.",
+      "decoded": "Het college van burgemeester en schepenen stelt een advocaat aan. Dit gaat over de belasting op gebouwen en woningen die als onbewoonbaar, ongeschikt, verwaarloosd, bouwvallig of leegstaand beschouwd worden.",
+      "themes": [
+        "Wonen",
+        "Financiën"
+      ]
+    },
+    {
+      "id": "college-20260901-11",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op bedrijfsgebouwen op bedrijfsruimten die beschouwd worden als onafgewerkt, leegstaand of verwaarloosd. Beslissing tot aanstelling advocaat.",
+      "decoded": "Het college van burgemeester en schepenen stelt een advocaat aan. Dit gebeurt voor een dossier over de belasting op bedrijfsgebouwen en bedrijfsruimten die onafgewerkt, leegstaand of verwaarloosd zijn.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "belasting op bedrijfsgebouwen",
+        "bedrijfsruimten"
+      ]
+    },
+    {
+      "id": "college-20260901-12",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Uitvoerbaarverklaring kohier administratieve toeslag (contantbelasting). Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier voor de administratieve toeslag, een contantbelasting, vast en verklaart het uitvoerbaar.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "kohier administratieve toeslag",
+        "contantbelasting"
+      ]
+    },
+    {
+      "id": "college-20260901-13",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op verspreiden reclamedrukwerk 2026 - 2. Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier voor de belasting op het verspreiden van reclamedrukwerk voor 2026 vast en verklaart het uitvoerbaar.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Belasting op verspreiden reclamedrukwerk 2026"
+      ]
+    },
+    {
+      "id": "college-20260901-14",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op filmvoorstellingen 2026 - 2. Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier voor de belasting op filmvoorstellingen 2026 vast. Het college verklaart dit kohier uitvoerbaar.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Belasting op filmvoorstellingen 2026"
+      ]
+    },
+    {
+      "id": "college-20260901-15",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Belasting op sportwedstrijden 2026 - 2. Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier voor de belasting op sportwedstrijden 2026 vast en verklaart het uitvoerbaar.",
+      "themes": [
+        "Sport",
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Belasting op sportwedstrijden 2026"
+      ]
+    },
+    {
+      "id": "college-20260901-16",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Vaststelling aangepast retributiereglement 'Parkeren'. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen stelt het aangepaste retributiereglement 'Parkeren' vast. Het college verwijst dit reglement door naar de gemeenteraad.",
+      "themes": [
+        "Mobiliteit",
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "retributiereglement 'Parkeren'"
+      ]
+    },
+    {
+      "id": "college-20260901-17",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Vaststelling aangepast retributiereglement 'Evenementenloket'. Verwijzing naar de gemeenteraad. Vaststelling van de tarieven van het retributiereglement, onder voorbehoud van de goedkeuring van het retributiereglement door de gemeenteraad van 15 september 2026.",
+      "decoded": "Het college van burgemeester en schepenen stelt de tarieven van het retributiereglement 'Evenementenloket' vast. Het college verwijst dit naar de gemeenteraad. De tarieven gelden onder voorbehoud van goedkeuring van het retributiereglement door de gemeenteraad van 15 september 2026.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Evenementenloket",
+        "retributiereglement"
+      ]
+    },
+    {
+      "id": "college-20260901-18",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "AGB Mechelen Actief in Cultuur. Prijssubsidies 2026. Verwijzing gewijzigde tariefstructuren en prijssubsidies voor goedkeuring naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen stuurt de gewijzigde tariefstructuren en prijssubsidies 2026 van AGB Mechelen Actief in Cultuur door naar de gemeenteraad voor goedkeuring.",
+      "themes": [
+        "Cultuur",
+        "Financiën"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "AGB Mechelen Actief in Cultuur",
+        "Prijssubsidies 2026"
+      ]
+    },
+    {
+      "id": "college-20260901-19",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Jaarrekeningen 2025. Controle aanwending van de stadstoelage. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen controleert hoe stadstoelagen besteed zijn via de jaarrekeningen 2025. Het college stuurt dit dossier daarna door naar de gemeenteraad.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Jaarrekeningen 2025",
+        "stadstoelage"
+      ]
+    },
+    {
+      "id": "college-20260901-20",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Vzw Mechelen Feest. Verwijzen jaarrekening 2025 voor aktename en begroting 2026 voor gunstig advies naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen stuurt twee documenten van vzw Mechelen Feest door naar de gemeenteraad. De jaarrekening 2025 gaat naar de gemeenteraad om er akte van te nemen. De begroting 2026 gaat naar de gemeenteraad voor een gunstig advies.",
+      "themes": [
+        "Cultuur",
+        "Financiën"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Vzw Mechelen Feest",
+        "jaarrekening 2025",
+        "begroting 2026"
+      ]
+    },
+    {
+      "id": "college-20260901-21",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Financiën",
+      "titel": "Beslissing betreffende aanvraag tot uitstel indienen verantwoording toelage 2025.",
+      "decoded": "Het college van burgemeester en schepenen beslist over een aanvraag tot uitstel voor het indienen van de verantwoording van een toelage voor 2025.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "toelage 2025"
+      ]
+    },
+    {
+      "id": "college-20260901-22",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Schildering elektriciteitskast Winketkaai. Goedkeuring ontwerp.",
+      "decoded": "Het college van burgemeester en schepenen keurt het ontwerp goed voor een schildering op de elektriciteitskast aan de Winketkaai.",
+      "themes": [
+        "Cultuur"
+      ],
+      "streets": [
+        "Winketkaai"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Winketkaai",
+        "elektriciteitskast"
+      ]
+    },
+    {
+      "id": "college-20260901-23",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Goedkeuring toekenning thesaurievoorschot aan Theater Arsenaal.",
+      "decoded": "Het college van burgemeester en schepenen keurt de toekenning van een thesaurievoorschot aan Theater Arsenaal goed.",
+      "themes": [
+        "Cultuur",
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Theater Arsenaal",
+        "thesaurievoorschot"
+      ]
+    },
+    {
+      "id": "college-20260901-24",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "River Clean Up - Binnendijle 20 september 2026. Goedkeuring campagne. Afvaardiging college.",
+      "decoded": "Het college van burgemeester en schepenen keurt de campagne River Clean Up Binnendijle van 20 september 2026 goed. Het college beslist ook wie van het college aanwezig is bij dit evenement.",
+      "themes": [
+        "Leefmilieu",
+        "Natuur"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "River Clean Up",
+        "Binnendijle"
+      ]
+    },
+    {
+      "id": "college-20260901-25",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "FO - Projecten en Monumenten",
+      "titel": "CUHA 2 Minderbroederskerk. Goedkeuring offertes onderaannemers en extra studie.",
+      "decoded": "Het college van burgemeester en schepenen keurt offertes van onderaannemers goed voor de Minderbroederskerk. Het college keurt ook een extra studie goed.",
+      "themes": [
+        "Erfgoed"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Minderbroederskerk"
+      ]
+    },
+    {
+      "id": "college-20260901-26",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Evenementen 2026. Beslissingslijst nr. 27.",
+      "decoded": "Het college van burgemeester en schepenen beslist over evenementen 2026, vermeld in beslissingslijst nr. 27. De bron geeft geen verdere concrete details over welke evenementen of aanvragen het precies gaat.",
+      "themes": [
+        "Cultuur"
+      ],
+      "kernbegrippen": [
+        "Evenementen 2026",
+        "Beslissingslijst nr. 27"
+      ]
+    },
+    {
+      "id": "college-20260901-26A",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van Spot op mARTa op 10 september 2026.",
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_01-09-2026_116088.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor Spot op mARTa en MontmARTa op 10 en 13 september 2026 in Mechelen. De regels gelden van 10 tot en met 14 september 2026.\n• In de Adegemstraat tussen de Kraanstraat en de Keerbergstraat geldt een parkeerverbod aan beide zijden van de rijbaan van 10 september 2026 om 6u00 tot 14 september 2026 om 18u00.\n• In datzelfde stuk van de Adegemstraat geldt een verbod voor alle bestuurders in beide richtingen van 10 september 2026 om 17u00 tot 11 september 2026 om 3u00.\n• In de volledige Adegemstraat geldt op 13 september 2026 van 6u00 tot 21u00 een parkeerverbod aan beide zijden van de rijbaan.\n• In de volledige Adegemstraat geldt op 13 september 2026 van 6u00 tot 21u00 ook een verbod voor alle bestuurders in beide richtingen.\nDe stad maakt de verordening bekend volgens artikel 286 van het Decreet Lokaal Bestuur en bezorgt een afschrift aan de Bestendige Deputatie van de Provincieraad van Antwerpen en aan de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Adegemstraat",
+        "Kraanstraat",
+        "Keerbergstraat"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Spot op mARTa",
+        "MontmARTa",
+        "Adegemstraat",
+        "Kraanstraat",
+        "Keerbergstraat"
+      ]
+    },
+    {
+      "id": "college-20260901-28",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Cultuur",
+      "titel": "Evenementenloket. Goedkeuring gebruiksreglement mARTa. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt het gebruiksreglement van mARTa goed. Het college stuurt dit reglement door naar de gemeenteraad.",
+      "themes": [
+        "Cultuur"
+      ],
+      "kernbegrippen": [
+        "mARTa",
+        "Evenementenloket"
+      ]
+    },
+    {
+      "id": "college-20260901-29",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vastleggingen week 34. Aktename vastleggingen op wekelijkse basis.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de vastleggingen van week 34. Dit gebeurt op wekelijkse basis.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Vastleggingen week 34"
+      ]
+    },
+    {
+      "id": "college-20260901-30",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Interne Dienst voor Preventie en Bescherming op het Werk. Aktename maandverslag juni en juli 2026.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van het maandverslag van juni en juli 2026 van de Interne Dienst voor Preventie en Bescherming op het Werk.",
+      "themes": [
+        "Welzijn"
+      ],
+      "kernbegrippen": [
+        "Interne Dienst voor Preventie en Bescherming op het Werk"
+      ]
+    },
+    {
+      "id": "college-20260901-31",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Gezonde voeding op school. Goedkeuring samenwerkingsovereenkomst met Ecoso betreffende ontbijtkar. Goedkeuring samenwerkingsovereenkomst met Zorgbedrijf Rivierenland betreffende soep op school. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt twee samenwerkingsovereenkomsten goed over gezonde voeding op school.\n• Het college keurt de samenwerkingsovereenkomst met Ecoso goed over een ontbijtkar.\n• Het college keurt de samenwerkingsovereenkomst met Zorgbedrijf Rivierenland goed over soep op school.\nHet college verwijst dit door naar de gemeenteraad.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "kernbegrippen": [
+        "Ecoso",
+        "Zorgbedrijf Rivierenland",
+        "ontbijtkar",
+        "soep op school"
+      ]
+    },
+    {
+      "id": "college-20260901-32",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Buitenschoolse Opvang en Activiteiten (BO&A). Goedkeuring subsidiereglement inclusie in de naschoolse opvang. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt een subsidiereglement goed over inclusie in de naschoolse opvang, binnen Buitenschoolse Opvang en Activiteiten (BO&A). Het college verwijst dit reglement door naar de gemeenteraad.",
+      "themes": [
+        "Kinderopvang"
+      ],
+      "kernbegrippen": [
+        "Buitenschoolse Opvang en Activiteiten (BO&A)",
+        "subsidiereglement inclusie in de naschoolse opvang"
+      ]
+    },
+    {
+      "id": "college-20260901-33",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Buitenschoolse Opvang en Activiteiten (BO&A) - sociaal tarief. Goedkeuring samenwerkings- en protocolovereenkomst met Vlaams Agentschap voor de Uitbetaling van de Toelagen in het kader van het Gezinsbeleid (VUTG). Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt een samenwerkings- en protocolovereenkomst goed over het sociaal tarief voor Buitenschoolse Opvang en Activiteiten (BO&A). De overeenkomst loopt met het Vlaams Agentschap voor de Uitbetaling van de Toelagen in het kader van het Gezinsbeleid (VUTG). Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Kinderopvang"
+      ],
+      "kernbegrippen": [
+        "Buitenschoolse Opvang en Activiteiten",
+        "BO&A",
+        "VUTG"
+      ]
+    },
+    {
+      "id": "college-20260901-34",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Goedkeuring verhoging toelage aan Merci Voor De Klas vzw in het kader van waarderingsinitiatieven voor Mechels onderwijspersoneel voor de periode 2026-2028. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt een verhoging goed van de toelage aan Merci Voor De Klas vzw. Die toelage kadert in waarderingsinitiatieven voor Mechels onderwijspersoneel voor de periode 2026-2028. Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Merci Voor De Klas vzw"
+      ]
+    },
+    {
+      "id": "college-20260901-35",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "Omgevingsvergunningen. Besluiten en meldingen lijst 36.",
+      "decoded": "Het college van burgemeester en schepenen behandelt een lijst met besluiten en meldingen over omgevingsvergunningen, lijst 36. De bron geeft geen concrete details over individuele dossiers.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "kernbegrippen": [
+        "Besluiten en meldingen lijst 36"
+      ]
+    },
+    {
+      "id": "college-20260901-36",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "20260494_OGV. Woonland Mezenstraat. Wijzigen bestaande rooilijn in het kader van een aanvraag voor een omgevingsvergunning voor het bouwen van 9 sociale appartementen. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen behandelt een aanvraag voor een omgevingsvergunning voor het bouwen van 9 sociale appartementen in de Mezenstraat, project Woonland. Daarvoor moet de bestaande rooilijn wijzigen. Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Wonen",
+        "Stedenbouw"
+      ],
+      "streets": [
+        "Mezenstraat"
+      ],
+      "kernbegrippen": [
+        "Woonland",
+        "Mezenstraat",
+        "9 sociale appartementen"
+      ]
+    },
+    {
+      "id": "college-20260901-37",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Openbare werken",
+      "titel": "Keerdok. Goedkeuring verslag inspraakperiode brownfieldconvenant met betrekking tot het Brownfieldproject '252. Mechelen – Keerdokkaai'. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt het verslag van de inspraakperiode over het brownfieldconvenant voor het Brownfieldproject '252. Mechelen Keerdokkaai' goed. Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Keerdok",
+        "Keerdokkaai",
+        "Brownfieldproject '252. Mechelen – Keerdokkaai'",
+        "brownfieldconvenant"
+      ]
+    },
+    {
+      "id": "college-20260901-38",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "FO - Projecten en Monumenten",
+      "titel": "Aktename melding werkzaamheden binnen beschermde stads- en dorpsgezichten.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van een melding van werkzaamheden binnen beschermde stads- en dorpsgezichten.",
+      "themes": [
+        "Erfgoed"
+      ],
+      "kernbegrippen": [
+        "beschermde stads- en dorpsgezichten"
+      ]
+    },
+    {
+      "id": "college-20260901-39",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "FO - Projecten en Monumenten",
+      "titel": "Glas-in-loodraam Bieren Jacobs. Goedkeuring intentie-overeenkomst en wijze van aanbesteding. Geven van opdrachten.",
+      "decoded": "Het college van burgemeester en schepenen keurt de intentieovereenkomst en de wijze van aanbesteding voor het glas-in-loodraam Bieren Jacobs goed. Het college geeft ook de nodige opdrachten.",
+      "themes": [
+        "Erfgoed"
+      ],
+      "kernbegrippen": [
+        "Glas-in-loodraam Bieren Jacobs"
+      ]
+    },
+    {
+      "id": "college-20260901-40",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Aktename goedgekeurde aanvragen ontmoetingsinitiatieven juli - augustus 2026.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de goedgekeurde aanvragen voor ontmoetingsinitiatieven voor juli en augustus 2026.",
+      "themes": [
+        "Participatie"
+      ],
+      "kernbegrippen": [
+        "ontmoetingsinitiatieven"
+      ]
+    },
+    {
+      "id": "college-20260901-41",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Erkenning Mechelse verenigingen.",
+      "decoded": "Het college van burgemeester en schepenen erkent Mechelse verenigingen.",
+      "themes": [
+        "Participatie"
+      ]
+    },
+    {
+      "id": "college-20260901-42",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Economie",
+      "titel": "Bloemenmarkt 2026. Goedkeuring bloemenverkoop stedelijke begraafplaatsen 25 oktober tot en met 2 november 2026.",
+      "decoded": "Het college van burgemeester en schepenen keurt de bloemenverkoop op de stedelijke begraafplaatsen goed voor de Bloemenmarkt 2026. De verkoop loopt van 25 oktober tot en met 2 november 2026.",
+      "themes": [
+        "Burgerzaken"
+      ],
+      "kernbegrippen": [
+        "Bloemenmarkt 2026",
+        "stedelijke begraafplaatsen"
+      ]
+    },
+    {
+      "id": "college-20260901-43",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Mobiliteit",
+      "titel": "STRAPdag 18 september 2026. Aktename deelnemende scholen.",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van de scholen die deelnemen aan de STRAPdag op 18 september 2026.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "kernbegrippen": [
+        "STRAPdag"
+      ]
+    },
+    {
+      "id": "college-20260901-44",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Bevolkings- en vreemdelingenregister. Ambtshalve inschrijvingen.",
+      "decoded": "Het college van burgemeester en schepenen schrijft mensen ambtshalve in het bevolkings- en vreemdelingenregister in.",
+      "themes": [
+        "Burgerzaken"
+      ]
+    },
+    {
+      "id": "college-20260901-45",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Milieu",
+      "titel": "Omgevingsvergunningen. Besluiten en meldingen lijst 36.",
+      "decoded": "Het college van burgemeester en schepenen behandelt een lijst met besluiten en meldingen over omgevingsvergunningen, lijst 36. De bron geeft geen concrete details over individuele dossiers.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "kernbegrippen": [
+        "Besluiten en meldingen lijst 36"
+      ]
+    },
+    {
+      "id": "college-20260901-46",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Openbare werken",
+      "titel": "Heraanleg Liersesteenweg. Goedkeuring voorontwerp en aktename infomoment.",
+      "decoded": "Het college van burgemeester en schepenen keurt het voorontwerp voor de heraanleg van de Liersesteenweg goed. Het college neemt ook akte van het infomoment daarover.",
+      "themes": [
+        "Openbare werken",
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Liersesteenweg"
+      ],
+      "kernbegrippen": [
+        "Liersesteenweg"
+      ]
+    },
+    {
+      "id": "college-20260901-47",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Mondiaal Beleid. Internationale Dag voor de Vrede. Vredesweek van 21 tot en met 28 september 2026. Goedkeuring deelname campagne en geven van opdrachten.",
+      "decoded": "Het college van burgemeester en schepenen keurt de deelname aan de Vredesweek goed. Deze loopt van 21 tot en met 28 september 2026 rond de Internationale Dag voor de Vrede. Het college geeft ook opdrachten voor de campagne.",
+      "themes": [
+        "Participatie"
+      ],
+      "kernbegrippen": [
+        "Vredesweek",
+        "Internationale Dag voor de Vrede"
+      ]
+    },
+    {
+      "id": "college-20260901-48",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling wijze van gunnen voor opmaak van herinrichtingsdossier van Vliet, buurtpark, parking op de voormalige Ovam site en K. Dedecker. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen beslist hoe het de opmaak van het herinrichtingsdossier van Vliet, buurtpark, de parking op de voormalige Ovam site en K. Dedecker gunt. Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Openbare werken",
+        "Stedenbouw"
+      ],
+      "kernbegrippen": [
+        "Vliet",
+        "buurtpark",
+        "voormalige Ovam site",
+        "K. Dedecker"
+      ]
+    },
+    {
+      "id": "college-20260901-50",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sport",
+      "titel": "Sportgala 9 oktober 2026. Goedkeuring organisatie. Afvaardiging college.",
+      "decoded": "Het college van burgemeester en schepenen keurt de organisatie van het Sportgala op 9 oktober 2026 goed. Het college beslist ook wie van het college daarbij aanwezig zal zijn.",
+      "themes": [
+        "Sport"
+      ],
+      "kernbegrippen": [
+        "Sportgala"
+      ]
+    },
+    {
+      "id": "college-20260901-51",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Goedkeuring heropstart buddywerking Samen Inburgeren vanaf 1 januari 2027.",
+      "decoded": "Het college van burgemeester en schepenen keurt de heropstart van de buddywerking Samen Inburgeren goed. Deze werking start opnieuw vanaf 1 januari 2027.",
+      "themes": [
+        "Sociale zaken"
+      ],
+      "kernbegrippen": [
+        "Samen Inburgeren"
+      ]
+    },
+    {
+      "id": "college-20260901-52",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sociale zaken",
+      "titel": "Goedkeuring aanvragen Mechelse Taaloefenkansen Nederlands. Goedkeuring opstart doe-tafels.",
+      "decoded": "Het college van burgemeester en schepenen keurt twee zaken goed.\n• De aanvragen voor Mechelse Taaloefenkansen Nederlands.\n• De opstart van doe-tafels.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "kernbegrippen": [
+        "Mechelse Taaloefenkansen Nederlands",
+        "doe-tafels"
+      ]
+    },
+    {
+      "id": "college-20260901-53",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Helios Foundation OSCAR. Goedkeuring opstart project.",
+      "decoded": "Het college van burgemeester en schepenen keurt de opstart goed van het project OSCAR bij Helios Foundation.",
+      "kernbegrippen": [
+        "Helios Foundation",
+        "OSCAR"
+      ]
+    },
+    {
+      "id": "college-20260901-54",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "Fietsenstalling Varkensstraat. Goedkeuring overeenkomst. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt de overeenkomst voor de fietsenstalling in de Varkensstraat goed. Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Varkensstraat"
+      ],
+      "kernbegrippen": [
+        "Fietsenstalling Varkensstraat"
+      ]
+    },
+    {
+      "id": "college-20260901-55",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Juridische Zaken",
+      "titel": "Goedkeuring aangepast pachtkohier. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt het aangepaste pachtkohier goed. Het college verwijst dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "pachtkohier"
+      ]
+    },
+    {
+      "id": "college-20260901-56",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Stedenbouw",
+      "titel": "Ten Moortele 1, Leest. Goedkeuring overeenkomst met basisschool De Spiegel voor gebruik gelijkvloers Dorpshuis.",
+      "decoded": "Het college van burgemeester en schepenen keurt een overeenkomst goed met basisschool De Spiegel. De overeenkomst gaat over het gebruik van het gelijkvloers van het Dorpshuis in Ten Moortele 1 in Leest.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "streets": [
+        "Ten Moortele"
+      ],
+      "neighborhood": "Leest",
+      "kernbegrippen": [
+        "De Spiegel",
+        "Dorpshuis",
+        "Ten Moortele 1"
+      ]
+    },
+    {
+      "id": "college-20260901-57",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Aktename ontslag gemeenteraadslid en procedure aanstelling opvolger. Verwijzing naar de gemeenteraad. (2)",
+      "decoded": "Het college van burgemeester en schepenen neemt akte van het ontslag van een gemeenteraadslid. Het college verwijst de procedure voor het aanstellen van een opvolger door naar de gemeenteraad.",
+      "themes": [
+        "Burgerzaken"
+      ]
+    },
+    {
+      "id": "college-20260901-58",
+      "date": "2026-09-01",
+      "orgaan": "College",
+      "categorie": "Sport",
+      "titel": "Zwemwater. Goedkeuring samenwerkingsovereenkomst Stad Mechelen - Sint-Romboutscollege. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen keurt de samenwerkingsovereenkomst tussen Stad Mechelen en het Sint-Romboutscollege over zwemwater goed. Het college stuurt dit dossier door naar de gemeenteraad.",
+      "themes": [
+        "Onderwijs",
+        "Sport"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Sint-Romboutscollege",
+        "zwemwater"
+      ]
+    },
+    {
+      "id": "vastbureau-20260901-1",
+      "date": "2026-09-01",
+      "orgaan": "Vast bureau",
+      "categorie": "Financiën",
+      "titel": "Aktename opvolgingsrapportering inzake de uitvoering van het meerjarenplan 2026-2031 van OCMW Mechelen tijdens het eerste semester van 2026. Verwijzing naar de raad voor maatschappelijk welzijn.",
+      "decoded": "Het vast bureau neemt akte van de opvolgingsrapportering over de uitvoering van het meerjarenplan 2026-2031 van OCMW Mechelen tijdens het eerste semester van 2026. Het vast bureau verwijst dit dossier door naar de raad voor maatschappelijk welzijn.",
+      "themes": [
+        "Financiën",
+        "Sociale zaken"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "meerjarenplan 2026-2031",
+        "OCMW Mechelen",
+        "opvolgingsrapportering"
+      ]
+    },
+    {
+      "id": "vastbureau-20260901-2",
+      "date": "2026-09-01",
+      "orgaan": "Vast bureau",
+      "categorie": "Financiën",
+      "titel": "Welzijnsvereniging Zorgbedrijf Rivierenland. Verwijzing jaarrekening 2025 voor aktename naar de raad voor maatschappelijk welzijn.",
+      "decoded": "Het vast bureau stuurt de jaarrekening 2025 van Welzijnsvereniging Zorgbedrijf Rivierenland door naar de raad voor maatschappelijk welzijn. De raad moet deze jaarrekening ter kennis nemen.",
+      "themes": [
+        "Welzijn",
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "Zorgbedrijf Rivierenland",
+        "jaarrekening 2025"
+      ]
+    },
+    {
+      "id": "vastbureau-20260901-3",
+      "date": "2026-09-01",
+      "orgaan": "Vast bureau",
+      "categorie": "Sociale zaken",
+      "titel": "Goedkeuring in house opdracht in kader van het subsidiereglement ‘Soep op school’. Verwijzing naar de raad voor maatschappelijk welzijn.",
+      "decoded": "Het vast bureau keurt een in house opdracht goed binnen het subsidiereglement 'Soep op school'. Het vast bureau verwijst dit dossier door naar de raad voor maatschappelijk welzijn.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "kernbegrippen": [
+        "Soep op school"
+      ]
+    },
+    {
+      "id": "vastbureau-20260901-4",
+      "date": "2026-09-01",
+      "orgaan": "Vast bureau",
+      "categorie": "Juridische Zaken",
+      "titel": "Beslissing tot stopzetting openbare verpachting. Goedkeuring aangepast pachtkohier. Verwijzing naar de raad voor maatschappelijk welzijn.",
+      "decoded": "Het vast bureau beslist over de openbare verpachting.\n• Het vast bureau zet de openbare verpachting stop.\n• Het vast bureau keurt het aangepaste pachtkohier goed.\n• Het vast bureau verwijst het dossier door naar de raad voor maatschappelijk welzijn.",
+      "themes": [
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "pachtkohier",
+        "openbare verpachting"
       ]
     },
     {
@@ -101622,8 +102550,8 @@
         },
         {
           "date": "2026-09-01",
-          "published": null,
-          "status": "geen",
+          "published": "2026-09-10",
+          "status": "tijdig",
           "late_days": 0
         }
       ],
@@ -102105,6 +103033,12 @@
         {
           "date": "2026-08-25",
           "published": "2026-09-03",
+          "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-09-01",
+          "published": "2026-09-10",
           "status": "tijdig",
           "late_days": 0
         }
@@ -108616,6 +109550,7 @@
     "College|2026-08-11|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_11-08-2026_Beslissingenlijst.pdf",
     "College|2026-08-18|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_18-08-2026_Beslissingenlijst.pdf",
     "College|2026-08-25|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_25-08-2026_Beslissingenlijst.pdf",
+    "College|2026-09-01|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_01-09-2026_Beslissingenlijst.pdf",
     "Gemeenteraad|2024-12-02|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_02-12-2024_Beslissingslijst%20toezicht.pdf",
     "Gemeenteraad|2024-12-02|notulen": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Notulen_Gemeenteraad_02-12-2024_Notulen%20-%20openbare%20zitting.pdf",
     "Gemeenteraad|2024-12-02|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_02-12-2024_Agenda.pdf",
@@ -108796,6 +109731,7 @@
     "Vast bureau|2026-07-28|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_28-07-2026_Beslissingenlijst.pdf",
     "Vast bureau|2026-08-04|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_04-08-2026_Beslissingenlijst.pdf",
     "Vast bureau|2026-08-18|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_18-08-2026_Beslissingenlijst.pdf",
-    "Vast bureau|2026-08-25|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_25-08-2026_Beslissingenlijst.pdf"
+    "Vast bureau|2026-08-25|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_25-08-2026_Beslissingenlijst.pdf",
+    "Vast bureau|2026-09-01|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_01-09-2026_Beslissingenlijst.pdf"
   }
 }
