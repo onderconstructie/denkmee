@@ -4141,15 +4141,13 @@ a, button, summary, input, label{ touch-action:manipulation; }
   border-bottom:1px solid rgba(255,255,255,.6);
 }
 .status-strook .ss-cta:hover{ border-bottom-color:#fff; }
-/* De korte variant bestaat alleen op gsm; daarboven staat de volle zin er. */
-.status-strook .ss-kort{ display:none; }
-/* Op een telefoon zou de zin over drie regels lopen en zo een derde van het eerste
-   scherm opeten. Daar houden we hem kort: het badge-woord, de kernzin en de knop. */
+/* Overal dezelfde zin, ook op een telefoon (gevraagd 10/09/2026: "de grote zwarte banner
+   ipv die ingekorte"). Hier stond een korte variant die op gsm de volle zin verving; het
+   portaal, de persmap en GAS mee tonen de volle tekst wel, en dat liep dus uiteen.
+   Op een klein scherm blijft de strook wel iets compacter gezet. */
 @media (max-width:700px){
   .status-strook .shell{ padding-top:.5rem; padding-bottom:.5rem; gap:.35rem; }
   .status-strook span{ font-size:.78rem; line-height:1.4; }
-  .status-strook .ss-lang{ display:none; }
-  .status-strook .ss-kort{ display:inline; }
 }
 
 /* =====================================================================
@@ -4351,8 +4349,8 @@ a, button, summary, input, label{ touch-action:manipulation; }
      app-kleur (eiland-petrol op inkt, 6,9:1) in plaats van het portaalroze. -->
 <div class="status-strook"><div class="shell">
   <b>Nog niet gelanceerd</b>
-  <span><span class="ss-lang">Deze site is nog in volle voorbereiding: we testen nog of alle data kloppen.
-    Kom je hier toevallig terecht, dan is je feedback nu al welkom.</span><span class="ss-kort">We testen nog of alle data kloppen.</span>
+  <span>Deze site is nog in volle voorbereiding: we testen nog of alle data kloppen.
+    Kom je hier toevallig terecht, dan is je feedback nu al welkom.
     <button type="button" class="ss-cta" onclick="openContactModal()">Laat het ons weten</button></span>
 </div></div>
 
