@@ -2,6 +2,8 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
+<!-- Geen viewport-fit=cover: op iOS blijft elke env(safe-area-inset-*) 0, dus de app-balk houdt
+     zijn hoogte en het hero-paneel past op het scherm. -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Technische pagina, Denk mee met Mechelen</title>
 <meta name="description" content="De technische pagina van Denk mee met Mechelen: de architectuur, waarom het lokaal draait, en wat we mogelijk over het hoofd zien.">
@@ -33,6 +35,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Denk mee">
+
+<!-- De twee lettertypes van het eerste scherm vooraf ophalen. De href is exact de url uit
+     @font-face, anders laadt de browser ze twee keer. -->
+<link rel="preload" href="/fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jbmono-var.woff2" as="font" type="font/woff2" crossorigin>
 
 <!-- Zelf-gehoste lettertypes: geen Google Fonts, dus geen bezoekers-IP naar derden. -->
 <style>
@@ -640,7 +647,8 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 /* Alleen het pijltje als link naar de wizard (zelfde pijl als in de wizard zelf). */
 .hc-edit{ cursor:pointer; color:#fff; background:none; border:none; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; line-height:1; padding:.2rem .1rem; display:inline-flex; align-items:center; gap:.35rem; transition:transform .15s, opacity .15s; }
 .hc-edit .hce-arr{ font-size:1.05rem; }
-.hc-edit:hover{ transform:translateX(2px); opacity:.85; }
+.hc-edit:hover{ opacity:.85; }
+@media (hover:hover){ .hc-edit:hover{ transform:translateX(2px); } }
 /* Monochrome kaart-pin voor locatie, schaalt mee met de tekst. */
 .loc-pin{ width:.85em; height:.85em; vertical-align:-.14em; margin-right:.16rem; flex-shrink:0; }
 .hc-chips{ display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.65rem; }
@@ -724,9 +732,12 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   width:260px; max-width:100%;
   justify-content:center;
 }
-.hero-actions .btn:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 24px -12px rgba(72,56,38,.45);
+/* Liften en schaduwen bij hover enkel met een muis: op touch blijft een hover na een tik hangen. */
+@media (hover:hover){
+  .hero-actions .btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 24px -12px rgba(72,56,38,.45);
+  }
 }
 .btn{
   display:inline-flex; align-items:center; gap:.6rem;
@@ -737,11 +748,12 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .btn-pink{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); box-shadow:0 6px 18px -9px rgba(0,121,107,.5); }
-.btn-pink:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); transform:translate(0,-2px); box-shadow:var(--shadow-pink); }
+.btn-pink:hover{ background:var(--pink-vlak-hover); border-color:var(--pink-vlak-hover); }
+@media (hover:hover){ .btn-pink:hover{ transform:translate(0,-2px); box-shadow:var(--shadow-pink); } }
 .btn-ghost{ color:var(--ink); border-color:var(--ink); }
 .btn-ghost:hover{ background:var(--ink); color:var(--paper); }
 .btn .arrow{ transition:transform .2s; display:inline-block; }
-.btn:hover .arrow{ transform:translateX(4px); }
+@media (hover:hover){ .btn:hover .arrow{ transform:translateX(4px); } }
 
 .hero-credit{
   margin-top:3rem;
@@ -791,7 +803,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   border-right:2px solid var(--pink);
 }
 .meeting-card.is-clickable{ cursor:pointer; transition:transform .2s, box-shadow .2s; }
-.meeting-card.is-clickable:hover{ transform:translateY(-3px); box-shadow:0 1px 0 rgba(72,56,38,.05), 0 34px 74px -26px rgba(72,56,38,.55); }
+@media (hover:hover){ .meeting-card.is-clickable:hover{ transform:translateY(-3px); box-shadow:0 1px 0 rgba(72,56,38,.05), 0 34px 74px -26px rgba(72,56,38,.55); } }
 .meeting-card.is-clickable:focus-visible{ outline:2px solid var(--pink); outline-offset:3px; }
 .mc-tag{
   font-family:'JetBrains Mono', ui-monospace, monospace;
@@ -826,6 +838,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   display:flex; align-items:baseline; gap:.75rem;
   padding-top:.9rem;
 }
+.cd-grid[hidden]{ display:none; }
 /* De scheidingslijntjes in de zittingskaart stoppen vóór het toren-watermerk rechts
    (altijd ±148px zichtbaar): ze lopen er niet doorheen. Bewust ingekorte lijnen, Bauhaus. */
 .cd-grid, .pub-status, .mc-stats{ position:relative; }
@@ -1225,10 +1238,12 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   transition:border-color .2s, transform .2s, box-shadow .2s;
   position:relative;
 }
-.item-card:hover{
-  border-color:var(--pink);
-  transform:translateY(-1px);
-  box-shadow:0 8px 24px -16px rgba(72,56,38,.15);
+.item-card:hover{ border-color:var(--pink); }
+@media (hover:hover){
+  .item-card:hover{
+    transform:translateY(-1px);
+    box-shadow:0 8px 24px -16px rgba(72,56,38,.15);
+  }
 }
 .item-card .topline{
   display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;
@@ -2538,7 +2553,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   box-shadow:var(--shadow-soft);
   transition:border-color .2s, box-shadow .2s;
 }
-.sch-card:hover{ border-color:var(--pink); box-shadow:var(--shadow-lift); }
+.sch-card:hover{ border-color:var(--pink); }
+@media (hover:hover){ .sch-card:hover{ box-shadow:var(--shadow-lift); } }
 .sch-init{
   font-family:'JetBrains Mono', ui-monospace, monospace;
   font-size:2rem; line-height:1;
@@ -3175,7 +3191,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* De mug-png op het portaal is een VOLLE schijf; de toren tekent r=212 in een
    viewBox van 480, dus 88,33%. Daar zet een inzet op de img dat gelijk. */
 .co-mark img{ width:88.33%; height:88.33%; margin:5.833%; }
-.co-mark:hover{ box-shadow:0 0 0 4px var(--c-pink-zacht); }
+@media (hover:hover){ .co-mark:hover{ box-shadow:0 0 0 4px var(--c-pink-zacht); } }
 .co-mark:focus-visible{ outline:2px solid var(--c-pink); outline-offset:3px; }
 .co-body{ max-width:33rem; }     /* rem, niet ch: 'ch' meet de brede nul van Geist */
 .co-zin{
@@ -3316,7 +3332,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   border:1px solid var(--line-kaart); box-shadow:var(--shadow-soft);
   display:flex; flex-direction:column; min-height:248px; transition:border-color .2s, transform .2s, box-shadow .2s;
 }
-.dos-card:hover{ border-color:var(--pink); box-shadow:var(--shadow-lift); z-index:2; }
+.dos-card:hover{ border-color:var(--pink); }
+@media (hover:hover){ .dos-card:hover{ box-shadow:var(--shadow-lift); z-index:2; } }
 /* Visuele taal: gevolgd = favoriet (ster + licht-roze), raakt jouw profiel = bol,
    en met een profiel ingesteld grijzen de niet-passende dossiers iets uit zodat de
    relevante opvallen. */
@@ -3531,7 +3548,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   background:var(--paper); border:1px solid var(--line-kaart); border-radius:var(--r-kaart);
   padding:.75rem .9rem; cursor:pointer; transition:border-color .15s, box-shadow .15s;
 }
-.dosm-verwant-kaart:hover{ border-color:var(--pink); box-shadow:var(--shadow-soft); }
+.dosm-verwant-kaart:hover{ border-color:var(--pink); }
+@media (hover:hover){ .dosm-verwant-kaart:hover{ box-shadow:var(--shadow-soft); } }
 .dv-naam{ font-size:.88rem; font-weight:600; line-height:1.35; color:var(--ink); }
 .dv-waarom{
   font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.56rem;
@@ -3657,7 +3675,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Geen 'aanpassen'-tekst meer: de hele rij is klikbaar. Een subtiele chevron toont
    dat je erop kunt klikken om die stap te bewerken; hij kleurt roze bij hover. */
 .wiz-sum-row::after{ content:'\203A'; margin-left:auto; align-self:center; color:var(--ink-faint); font-size:1.3rem; line-height:1; transition:color .15s, transform .15s; }
-.wiz-sum-row:hover::after, .wiz-sum-row:focus-visible::after{ color:var(--pink); transform:translateX(3px); }
+.wiz-sum-row:hover::after, .wiz-sum-row:focus-visible::after{ color:var(--pink); }
+.wiz-sum-row:focus-visible::after{ transform:translateX(3px); }
+@media (hover:hover){ .wiz-sum-row:hover::after{ transform:translateX(3px); } }
 .wiz-sum-k{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); min-width:108px; flex-shrink:0; }
 .wiz-sum-v{ font-size:.95rem; color:var(--ink); line-height:1.4; }
 .wiz-sum-v.is-empty{ color:var(--ink-faint); font-style:italic; }
@@ -3714,7 +3734,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .menu-search .ms-ic{ display:flex; align-items:center; color:var(--ink-faint); font-size:1.15rem; flex:none; }
 .menu-search input{
   flex:1; min-width:0; border:none; background:none; outline:none;
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.9rem; color:var(--ink);
+  /* 1rem (16px): kleiner en iOS zoomt bij het aantikken in op het veld. */
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:1rem; color:var(--ink);
   padding:.75rem 0;
 }
 .menu-search input::placeholder{ color:var(--ink-faint); }
@@ -3861,7 +3882,7 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
 .to-top.show{ opacity:.72; transform:none; pointer-events:auto; }
 .to-top.show:hover,.to-top.show:focus-visible{ opacity:1; border-color:var(--pink); color:var(--pink); }
 .to-top .tt-arrow{ display:block; transition:transform .2s; }
-.to-top.show:hover .tt-arrow{ transform:translateY(-2px); }
+@media (hover:hover){ .to-top.show:hover .tt-arrow{ transform:translateY(-2px); } }
 @media (max-width:560px){ .to-top{ width:38px; height:38px; } }
 
 /* =====================================================================
@@ -3913,16 +3934,19 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
   /* Ruimte onder de pagina + zwevende elementen boven de balk uit. */
   body{ padding-bottom:calc(58px + env(safe-area-inset-bottom)); }
   .to-top{ bottom:calc(70px + env(safe-area-inset-bottom)); }
-  .cookie-note{ bottom:calc(70px + env(safe-area-inset-bottom)); }
   .redactie-melding{ bottom:calc(70px + env(safe-area-inset-bottom)); }
   .nieuw-banner{ top:auto; bottom:calc(70px + env(safe-area-inset-bottom)) !important; }
   /* Het curatorpaneel stond als enige zwevende element nog op 1rem en verdween dus achter de
      tabbalk, net het gereedschap dat je op je telefoon zou willen gebruiken. */
   .curator-paneel{ bottom:calc(70px + env(safe-area-inset-bottom)); }
-  /* De terug-naar-boven-knop stond op exact dezelfde hoogte als de privacymelding, die er met
-     een hogere z-index overheen schilderde. Bij een eerste bezoek was de knop dus onzichtbaar.
-     Zolang de melding er staat, tillen we de knop erboven. */
-  body:has(.cookie-note:not([hidden])) .to-top{ bottom:calc(148px + env(safe-area-inset-bottom)); }
+  /* Zolang de privacymelding open staat, tilt de terug-naar-boven-knop zich erboven: de melding
+     staat op 70px, --cookie-h is haar echte hoogte (gezet door setupCookieNote), plus 10px lucht.
+     Zonder die variabele geldt de hoogte bij standaard tekstgrootte. */
+  body:has(.cookie-note:not([hidden])) .to-top{ bottom:calc(80px + var(--cookie-h, 143px) + env(safe-area-inset-bottom)); }
+}
+/* Smaller dan 360px loopt de melding een regel langer, dus ook de terugval. */
+@media (max-width:359px){
+  body:has(.cookie-note:not([hidden])) .to-top{ bottom:calc(80px + var(--cookie-h, 181px) + env(safe-area-inset-bottom)); }
 }
 
 /* Eerlijke privacymelding bij het eerste bezoek (geen consent-banner: niets om toe te staan). */
@@ -4258,6 +4282,31 @@ a, button, summary, input, label{ touch-action:manipulation; }
 @media (max-height:890px){ .hc-nieuw{ margin-top:.5rem; padding:.38rem .65rem; } }
 @media (max-height:700px){ .mc-stats{ display:none !important; } }
 @media (max-width:700px) and (max-height:850px){ .mc-stats{ display:none !important; } }
+
+/* =====================================================================
+   VEILIGE ZONES  (14/09/2026)
+   =====================================================================
+   De site staat zonder viewport-fit=cover (zie de viewport-meta): op iOS
+   is elke env(safe-area-inset-*) 0, dus de env()-delen hieronder en in het
+   mobiele blok tellen daar niet mee. */
+/* Liggend houdt de zijmarge minstens de veilige zone vrij. Enkel op een laag liggend venster breder dan 430px
+   (een telefoon): tablet, desktop en de smalle hamburgermarge blijven zoals ze zijn. */
+@media (orientation:landscape) and (max-height:500px) and (min-width:431px){
+  .shell, .nav-inner, .menu-head, .demo-banner-inner, .co-shell{
+    padding-left:max(var(--pad-x), env(safe-area-inset-left));
+    padding-right:max(var(--pad-x), env(safe-area-inset-right));
+  }
+  .to-top{ right:max(clamp(1rem,3vw,2rem), env(safe-area-inset-right)); }
+}
+/* Het dossiervenster als bottom-sheet: de knoppen onderaan blijven boven de thuisbalk. */
+@media (max-width:700px){
+  .dosm-foot{ padding-bottom:calc(1rem + env(safe-area-inset-bottom)); }
+}
+/* De privacymelding boven de app-balk, op dezelfde 70px als de andere zwevende elementen. Deze
+   regel moet ná de basisregel .cookie-note staan. */
+@media (max-width:700px){
+  .cookie-note{ bottom:calc(70px + env(safe-area-inset-bottom)); }
+}
 </style>
 </head>
 <body>

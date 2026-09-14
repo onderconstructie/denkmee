@@ -20,6 +20,8 @@ import sys
 import json
 import re
 import shutil
+from datetime import date, datetime
+from html import escape as html_escape
 
 # print() met → … × werkt zo ook op een Windows-console die standaard cp1252 gebruikt
 # (anders crasht een niet-ASCII-teken met een UnicodeEncodeError).
@@ -99,8 +101,45 @@ for _v in data.get("schriftelijke_vragen", []):
     for _veld in ("vraag", "antwoord", "brontekst"):
         _v.pop(_veld, None)
 
+# 2d) De zittingskaart vanaf de eerste verf. Type, datum en tijd staan al in de HTML, in het
+#     formaat van hydrateHero(), dagen en label in dat van tick(); corrigeerVolgendeZitting() blijft in de browser het
+#     vangnet voor een zitting die sinds de build voorbij is. Aantal dagen en label houden enkel de
+#     breedte vast: ze blijven onzichtbaar tot tick() ze met de datum van de lezer invult. Zonder
+#     zitting blijven datum en label leeg, zoals hydrateHero() ze dan laat.
+MAANDEN = ("januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus",
+           "september", "oktober", "november", "december")
+WEEKDAGEN = ("maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag")
+_zit = data.get("next_meeting") or {}
+_kaart_tag = "Geen geplande zitting"
+if _zit:
+    _zit_type = "Raad voor maatschappelijk welzijn" if _zit.get("type") == "RMW" else (_zit.get("type") or "Gemeenteraad")
+    _kaart_tag = "Volgende " + _zit_type.lower()
+_kaart_datum, _kaart_tijd, _kaart_dagen, _kaart_label = "", "", 0, ""
+if _zit.get("date"):
+    _zd = date.fromisoformat(str(_zit["date"])[:10])
+    _kaart_datum = f"{_zd.day} {MAANDEN[_zd.month - 1]} {_zd.year}"
+    _kaart_dagen = max(0, (_zd - date.today()).days)
+    _kaart_label = "dag te gaan" if _kaart_dagen == 1 else "dagen te gaan"
+if _zit.get("datetime"):
+    _zdt = datetime.fromisoformat(str(_zit["datetime"]))
+    if _zdt.tzinfo:
+        _zdt = _zdt.astimezone()
+    _kaart_tijd = f"{WEEKDAGEN[_zdt.weekday()]} · {_zdt:%H:%M}"
+_kaart = {
+    "__MC_TAG__": _kaart_tag,
+    "__MC_DATUM__": _kaart_datum,
+    "__MC_TIJD__": _kaart_tijd,
+    "__CD_DAGEN__": str(_kaart_dagen),
+    "__CD_LABEL__": _kaart_label,
+}
+html = template
+for _token, _waarde in _kaart.items():
+    if html.count(_token) != 1:
+        sys.exit(f"[STOP] Plaatshouder {_token} staat {html.count(_token)}x in template.html, verwacht 1x.")
+    html = html.replace(_token, html_escape(_waarde))
+
 data_json = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
-html = template.replace("__DENKMEE_DATA__", data_json)
+html = html.replace("__DENKMEE_DATA__", data_json)
 
 # 2b) Veiligheidsklep: de samenvattingen ("in mensentaal") zijn de kern van de site.
 #     Wordt de AI-tagging overgeslagen (geen ANTHROPIC_API_KEY) of faalt ze halverwege,
@@ -290,6 +329,8 @@ PAGINA_404 = """<!doctype html>
 <title>Pagina niet gevonden, Denk mee met Mechelen</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="/beelden/mug.png">
+<link rel="preload" href="/fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jbmono-var.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:'Geist';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/geist-var.woff2') format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jbmono-var.woff2') format('woff2')}
