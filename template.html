@@ -8146,6 +8146,13 @@ function dosPhraseTrunc(s, max){
   return dosTrimFill(c);
 }
 function dosTitle(d){
+  // Een tijdelijke politieverordening gaat over het evenement dat erin genoemd wordt, niet over
+  // de verordening zelf. Zonder deze regel droegen 177 dossiers dezelfde kop "Tijdelijke
+  // politieverordening op het wegverkeer", vaak onderscheiden door niets meer dan een datum.
+  const naav = /politieverordening/i.test(d.name) && d.name.match(/naar aanleiding van\s+(?:de\s+|het\s+)?(?:organisatie\s+van\s+(?:de\s+|het\s+)?)?(.+?)(?:\s+(?:op|van|vanaf|tot|tussen|in de periode)\s+\d|\s+\d{1,2}\s+[a-z]+\s+\d{4}|\.|$)/i);
+  if(naav && naav[1].replace(/[^A-Za-zÀ-ÿ]/g, '').length >= 4){
+    return 'Verkeer bij ' + dosPhraseTrunc(naav[1].trim(), 48);
+  }
   const segs = d.name.split(/[.:;]\s/);
   let topic = dosCleanSeg(segs[0]);
   if(DOS_CAT.test(topic) && segs[1]) topic = dosCleanSeg(segs[1]) || topic;
@@ -8584,6 +8591,18 @@ function buildDossiers(){
   // Eenlingen BLIJVEN een dossier (afgesproken 04/09/2026: "een eenling in uiterste nood
   // behouden; koppel slimmer"). Een stuk zonder maatje is geen fout maar een stuk dat er
   // nog geen vond; de winst moet uit slimmere koppeling komen, niet uit wegfilteren.
+  // DOSSIERKOPPEN (herzien 14/09/2026). De kop kwam van de LANGSTE titel van de groep: in 96%
+  // van de meerstukkendossiers besliste alleen de lengte, en lange titels zijn net de meest
+  // ambtelijke ("Vaststelling wijze van gunnen volgens de openbare procedure aan de
+  // voorwaarden..."). DOS_SLECHTE_KOP noemt de boilerplatezinnen die geen zaak benoemen. Losse
+  // werkwoorden als "Vaststelling" of "Goedkeuring" staan er bewust NIET in: gemeten gaven die
+  // zijwaartse of slechtere wissels ("Vaststelling rooilijnplan Stuivenbergbaan" is een goede kop).
+  // kopRubriek telt in hoeveel dossiers een eerste titelsegment voorkomt: hoe vaker, hoe meer het
+  // een rubriek is ("Mondiaal Beleid") en hoe minder het een zaak benoemt.
+  const DOS_SLECHTE_KOP = /^(?:wijze van gunnen|gunningswijze|besluit(?:en)? (?:van )?(?:de )?burge?r?meester|bevestiging (?:van (?:de )?)?beslissing|tijdelijke politieverordening|politieverordening van de burgemeester|stand van zaken|machtiging aan het college)\b/i;
+  const dosKopSeg = t => (t || '').split(/[.:;]\s/)[0].trim();
+  const kopRubriek = {};
+  Object.values(map).forEach(g => new Set(g.map(i => dosKopSeg(i.titel).toLowerCase())).forEach(k => { kopRubriek[k] = (kopRubriek[k] || 0) + 1; }));
   DOSSIERS = Object.entries(map).map(([__root, g]) => {
     g.sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
     // Stabiele id: afgeleid van de clustersleutel (de kleinste _key van de groep, bevroren
@@ -8593,7 +8612,33 @@ function buildDossiers(){
     // dossier gevolgd blijft, ook nadat er een stuk is losgemaakt.
     const canon = canonVan[__root];
     const freq = {}; g.forEach(i => freq[i.titel]=(freq[i.titel]||0)+1);
-    const name = Object.entries(freq).sort((a,b)=> b[1]-a[1] || b[0].length-a[0].length)[0][0];
+    // Standaard blijft de meest voorkomende titel, bij gelijkstand de langste: zijwaarts wisselen
+    // van kop kost wie een dossier volgt zijn houvast. We oordelen over de kop die de LEZER ziet
+    // (de uitkomst van dosTitle, die 'Goedkeuring' en soortgenoten al wegknipt). Is die kop een
+    // boilerplatezin, dan kiezen we een ander stuk uit de groep: eerst de kop die de meeste stukken
+    // delen (het patroon, bv. "Raadscommissies · schepen Geypen"), dan de meest specifieke, nooit
+    // een los rubriekwoord. Gemeten: indeling en dossier-ID's identiek, boilerplatekoppen 215 -> 26.
+    const nameOud = Object.entries(freq).sort((a,b)=> b[1]-a[1] || b[0].length-a[0].length)[0][0];
+    let name = nameOud;
+    const toon = t => dosTitle({ name: t, items: g });
+    if(freq[nameOud] === 1 && DOS_SLECHTE_KOP.test(toon(nameOud))){
+      const woorden = t => toon(t).split(' ').filter(Boolean).length;
+      const rub = t => kopRubriek[dosKopSeg(t).toLowerCase()] || 1;
+      const alt = Object.keys(freq).filter(t => {
+        const k = toon(t);
+        if(k.length < 4 || DOS_SLECHTE_KOP.test(k)) return false;
+        if(woorden(t) === 1 && rub(t) >= 3) return false;
+        return true;
+      });
+      const deelt = {};
+      Object.keys(freq).forEach(t => { const k = toon(t); deelt[k] = (deelt[k] || 0) + freq[t]; });
+      alt.sort((a, b) => deelt[toon(b)] - deelt[toon(a)]
+                        || rub(a) - rub(b)
+                        || Math.min(woorden(b), 6) - Math.min(woorden(a), 6)
+                        || toon(a).length - toon(b).length
+                        || (a < b ? -1 : a > b ? 1 : 0));
+      if(alt.length && toon(alt[0]) !== toon(nameOud)) name = alt[0];
+    }
     const themes = [...new Set(g.flatMap(i=>i.themes))];
     const places = [...new Set(g.flatMap(i => {
       const base = [...(i.streets||[]), i.hood];
@@ -8756,7 +8801,14 @@ function buildDossiers(){
     const r2 = {}; g.forEach(d => { (r2[d.title] = r2[d.title] || []).push(d); });
     Object.values(r2).forEach(g2 => {
       if(g2.length < 2) return;
-      g2.forEach(d => { d.title += ' · ' + new Date(d.firstDate).toLocaleDateString('nl-BE', { month:'short', year:'numeric' }); });
+      // Loopt het dossier over meer dan een maand, dan is de eerste maand een begin en geen
+      // onderwerp: "Beslissingslijst · dec 2024" las als een lijst van december, terwijl ze tot
+      // september 2026 liep. Dan staat er "sinds dec 2024".
+      g2.forEach(d => {
+        const mj = x => new Date(x).toLocaleDateString('nl-BE', { month:'short', year:'numeric' });
+        const loopt = String(d.firstDate).slice(0, 7) !== String(d.lastDate).slice(0, 7);
+        d.title += ' · ' + (loopt ? 'sinds ' : '') + mj(d.firstDate);
+      });
       const r3 = {}; g2.forEach(d => { (r3[d.title] = r3[d.title] || []).push(d); });
       Object.values(r3).forEach(g3 => {
         if(g3.length < 2) return;
