@@ -321,10 +321,19 @@ def main():
     # is, gewoon een werkende zoekterm: nagemeten stond een achternaam nog in de index terwijl hij
     # nergens meer op de pagina te zien was.
     gemaskeerd = 0
+    context_adres = context_geb = 0
     for item_id, tekst in list(extra.items()):
         extra[item_id], n = schoon_brontekst.maskeer_namen(tekst)
         gemaskeerd += n
+        # Ook de context die een persoon herleidbaar maakt, om dezelfde reden als hierboven: een
+        # woonadres of geboortedatum uit de pdf-tekst werd anders een zoekterm, naast een naam die
+        # zelf al gemaskeerd was. Nagemeten op 14/09/2026 zat zo een kind met naam, geboortedatum
+        # en woonadres in de zoekcache.
+        extra[item_id], a, g = schoon_brontekst.maskeer_context(extra[item_id])
+        context_adres += a
+        context_geb += g
     print("       namen gemaskeerd in de volledige tekst: %d vermelding(en)" % gemaskeerd)
+    print("       woonadressen en geboortedatums gemaskeerd: %d en %d" % (context_adres, context_geb))
 
     per_item = {}
     for item_id, tekst in extra.items():

@@ -58,12 +58,111 @@ GEB_KOP = re.compile(r"geboortedatum\s+beroep", re.I)
 GEB_DATUM = re.compile(r"(?<![\d/])(\d{2})/(\d{2})/(\d{2})(?![\d/])")
 GEB_MASKER = r"··/··/\3"
 
+# --- Context die een persoon herleidbaar maakt -----------------------------------------------
+# Een gemaskeerde naam beschermt niemand als de zin ernaast zegt waar die persoon woont of
+# wanneer hij geboren is. Nagemeten op 14/09/2026 stonden er twee zulke zinnen live
+# ("Contactpersoon is [naam], wonend op ... 23, 3140 ...") en zat in de zoekcache een kind
+# met naam, "°dd-mm-jjjj" en woonadres. De geboortedatumklep hierboven zag dat niet: die kijkt
+# alleen naar dd/mm/jj ná de tabelkop "Geboortedatum Beroep".
+#
+# 1. Een geboortedatum met het graadteken ("°22-03-2021") of na "geboren (op)". Dat teken staat in
+#    deze stukken enkel voor een geboortedatum, dus een tabelkop als anker is hier niet nodig.
+#    Dag en maand weg, het jaar blijft, net als bij de kandidatentabellen.
+GEB_TEKEN = re.compile(
+    r"(°\s?|\bgeboren\s+(?:op\s+)?)(\d{1,2})[-/.](\d{1,2})[-/.](\d{4}|\d{2})(?!\d)", re.I)
+GEB_TEKEN_MASKER = r"\1··-··-\4"
+
+# 2. Een WOONadres. Het werkwoord is het anker: wonend, wonende, woonachtig, gedomicilieerd.
+#    Zonder dat woord blijft een adres gewoon staan, want dan gaat het over de plek zelf (een
+#    perceel, een vergunning, een bedrijf op zijn zetel), en dat is precies wat het dossier moet
+#    tonen. Het werkwoord blijft staan zodat de zin leesbaar blijft. Let op: GEEN re.IGNORECASE op
+#    het geheel, want dan wordt [A-Z] gelijk aan [a-z] en eet de regel lopende tekst op; alleen
+#    het werkwoord zelf is hoofdletterongevoelig. De gemeente achteraan gaat enkel mee na een
+#    komma, "te", "in" of een postcode, anders slokt de regel het volgende zinsbegin op.
+_ADRES_WOORD = r"[\w'’À-ÿ-]"
+ADRES_NA_WOON = re.compile(
+    r"(\b(?i:wonend(?:e)?|woonachtig|gedomicilieerd)\s+(?:(?i:op|te|in|aan)\s+)?)"
+    r"(?:[A-Z]" + _ADRES_WOORD + r"*\.?\s+){0,3}?" + _ADRES_WOORD + r"*?"
+    r"(?:straat|laan|weg|dreef|steenweg|vest|plein|kaai|lei|baan|markt|hof|pad|singel|dijk|berg|veld)"
+    # Het huisnummer mag één hoofdletter dragen (23A), maar alleen als die letter NIET aan een
+    # woord vastzit. Eerst stond hier \s?[A-Za-z]?, en de zelftest toonde wat dat doet: de regel
+    # greep de eerste letter van het volgende woord mee, zodat "54 in Proefdorp" eindigde als
+    # "[adres]n Proefdorp" en "5 De aanvraag" als "[adres]e aanvraag".
+    r"\s+\d+(?:\s?[A-Z](?![A-Za-zÀ-ÿ]))?(?:\s*(?:bus|b\.?)\s*\d+)?"
+    r"(?:(?:\s*,\s*|\s+(?:te|in)\s+|\s+)\d{4}\s+[A-Z]" + _ADRES_WOORD + r"+"
+    r"|(?:\s*,\s*|\s+(?:te|in)\s+)[A-Z]" + _ADRES_WOORD + r"+)?")
+ADRES_MASKER = r"\1[adres]"
+
+# 3. Een adres DIRECT na een gemaskeerde naam: "De heer [naam], Proefstraat 54 in 2800 Mechelen".
+#    Geen werkwoord, gewoon een komma of een spatie. Het anker is het masker zelf: maskeer_namen
+#    heeft er al "[naam]" van gemaakt, dus wat erachter staat is per definitie het adres van die
+#    persoon. Nagemeten op 14/09/2026: 1 keer in data.json en 13 keer in de tekst die de zoekindex
+#    voedt ("[naam] Voorbeeldstraat 46 2800 Mechelen"). Draai maskeer_namen dus EERST.
+_STRAAT_NR = (r"(?:[A-Z]" + _ADRES_WOORD + r"*\.?\s+){0,3}?" + _ADRES_WOORD + r"*?"
+              r"(?:straat|laan|weg|dreef|steenweg|vest|plein|kaai|lei|baan|markt|hof|pad|singel|dijk|berg|veld)"
+              r"\s+\d+(?:\s?[A-Z](?![A-Za-zÀ-ÿ]))?(?:\s*(?:bus|b\.?)\s*\d+)?")
+_GEMEENTE = (r"(?:(?:\s*,\s*|\s+(?:te|in)\s+|\s+)\d{4}\s+[A-Z]" + _ADRES_WOORD + r"+"
+             r"|(?:\s*,\s*|\s+(?:te|in)\s+)[A-Z]" + _ADRES_WOORD + r"+)?")
+ADRES_NA_NAAM = re.compile(r"(\[naam\],?\s+)" + _STRAAT_NR + _GEMEENTE)
+
+# 4. Een contactformulier met veldlabels in plaats van een zin, zoals in de budgetten van de
+#    kerkfabrieken: "Contactpersoon <naam>", dan "Straat en nummer", "Postcode en gemeente",
+#    "Telefoon" en "Email". Alleen BINNEN zo'n blok, dus in de regels vlak na een regel die met
+#    "Contactpersoon" begint: elders zijn dezelfde labels het adres van een organisatie, en dat
+#    mag blijven.
+FORM_BLOK = re.compile(r"(?im)^(?:naam\s+)?contactpersoon\b[^\n]*(?:\n[^\n]*){0,8}")
+FORM_VELD = re.compile(
+    r"(?im)^((?:straat en nummer|postcode en gemeente|telefoon|tel\.?|gsm|e-?mail)\s*:?\s+)\S[^\n]*")
+
+# 5. Een verhuld e-mailadres. De gewone regel eist een punt voor het domein, en in de stukken
+#    staat soms een komma ("...@voorbeeld,be") of "[at]". Nagemeten op 14/09/2026 werd zo de voor- en
+#    achternaam in het lokale deel van het adres een ZOEKTERM, terwijl diezelfde naam overal
+#    elders gemaskeerd was. De naammaskering werd dus volledig omzeild.
+#    Geen spatie na de punt of komma voor het domeinachtervoegsel, en dat achtervoegsel is kort.
+#    Een eerste versie liet die spatie toe, en de droogtest toonde meteen wat dat kost: de
+#    organisatie "vzw J@M." gevolgd door "Aktename" las als een e-mailadres, in 19 titels van
+#    collegebesluiten. Een echt verhuld adres ("...@voorbeeld,be") heeft die spatie niet.
+EMAIL_VERHULD = re.compile(
+    r"[A-Za-z0-9._%+-]+(?:@|\s?\[at\]\s?|\s?\(at\)\s?)[A-Za-z0-9-]+(?:[.,][A-Za-z0-9-]+)*"
+    r"[.,][A-Za-z]{2,4}(?![A-Za-z])")
+
+
+def maskeer_context(tekst):
+    """Haalt weg wat een persoon herleidbaar maakt, ook als de naam al gemaskeerd is. Geeft
+    (nieuwe tekst, aantal adres- en contactgegevens, aantal geboortedatums) terug:
+
+      - een woonadres na 'wonend/woonachtig/gedomicilieerd'
+      - een adres direct na '[naam]'
+      - de adres-, telefoon- en mailvelden in een contactformulier
+      - een verhuld e-mailadres (komma of [at] in plaats van punt of @)
+      - een geboortedatum na '°' of 'geboren'
+
+    Gedeeld met bouw_zoekindex.py, om dezelfde reden als maskeer_namen: de volledige tekst uit de
+    pdf's loopt daar niet langs data.json, dus zonder deze gedeelde functie bleef het een zoekterm.
+    Draai maskeer_namen EERST, want de tweede regel steunt op het masker '[naam]'."""
+    if not tekst:
+        return tekst, 0, 0
+    tekst, a1 = ADRES_NA_WOON.subn(ADRES_MASKER, tekst)
+    tekst, a2 = ADRES_NA_NAAM.subn(r"\1[adres]", tekst)
+    velden = [0]
+
+    def _in_blok(m):
+        nieuw, n = FORM_VELD.subn(r"\1[verwijderd]", m.group(0))
+        velden[0] += n
+        return nieuw
+
+    tekst = FORM_BLOK.sub(_in_blok, tekst)
+    tekst, a4 = EMAIL_VERHULD.subn("[e-mailadres]", tekst)
+    tekst, g = GEB_TEKEN.subn(GEB_TEKEN_MASKER, tekst)
+    return tekst, a1 + a2 + velden[0] + a4, g
+
 # --- Namen van gewone burgers ---------------------------------------------------------------
 # Besluiten noemen soms een natuurlijke persoon bij naam: de eigenaars van een woning, wie een
 # perceel koopt, wie bezwaar aantekent, wie een vergunning aanvraagt. Die stukken zijn openbaar,
 # maar hier worden ze doorzoekbaar naast 5.000 andere, en dat is een ander soort openbaarheid
 # dan één pdf op het stadsportaal. De naam voegt journalistiek ook niets toe: het dossier gaat
-# over de plek, niet over de persoon. Het ADRES blijft dus staan (dat ís de zaak), de naam niet.
+# over de plek, niet over de persoon. Het ADRES van de plek blijft dus staan (dat ís de zaak), de
+# naam niet. Een WOONadres dat de persoon zelf aanwijst gaat wél weg: zie ADRES_NA_WOON hierboven.
 # Idem voor de landmeter-experts die een schattingsverslag tekenen: hun kantoor blijft staan,
 # hun naam hoeft er niet bij.
 #
@@ -396,6 +495,31 @@ def main():
                             schoon.append(nieuw)
                     item[veld] = schoon
 
+    # 1e) Context die een persoon herleidbaar maakt: een woonadres na "wonend/woonachtig/
+    #     gedomicilieerd" en een geboortedatum na "°" of "geboren". Over ALLE stukken, niet enkel
+    #     die met een naam van de lijst: nagemeten stond het adres naast een naam die al "[naam]"
+    #     was, en droeg een naam die op geen enkele lijst staat (een kind) er een geboortedatum bij.
+    adressen = 0
+    geb_teken = 0
+    for lijst in LIJSTEN:
+        for item in data.get(lijst, []):
+            for veld in VELDEN + ("kernbegrippen",):
+                waarde = item.get(veld)
+                if isinstance(waarde, str):
+                    nieuw, a, g = maskeer_context(waarde)
+                    if a or g:
+                        item[veld] = nieuw
+                        adressen += a
+                        geb_teken += g
+                elif isinstance(waarde, list):
+                    for i, deel in enumerate(waarde):
+                        if isinstance(deel, str):
+                            nieuw, a, g = maskeer_context(deel)
+                            if a or g:
+                                waarde[i] = nieuw
+                                adressen += a
+                                geb_teken += g
+
     # 2) Gestructureerde 'email'-velden van de college- en fractieroster. Die roster wordt
     #    niet meer getoond op de site, dus de contactadressen van schepenen/fracties horen
     #    niet in de publieke data. Leegmaken (apart veld, geen lopende tekst om te redacteren).
@@ -407,6 +531,7 @@ def main():
                 leeggemaakt += 1
 
     DATA.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"Woonadressen gemaskeerd: {adressen}; geboortedatums met ° of 'geboren': {geb_teken}.")
     print(f"E-mailadressen geredacteerd in {geredacteerd} tekstveld(en); "
           f"{leeggemaakt} contactveld(en) van de roster leeggemaakt.")
     print(f"Geboortedatums gemaskeerd: {datums} in {stukken} stuk(ken) met een kandidatentabel.")

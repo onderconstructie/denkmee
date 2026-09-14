@@ -210,6 +210,34 @@ if _geb_kandidaten:
     else:
         print("       geboortedatums: kandidatentabel(len) gemaskeerd ✓")
 
+# 3d) Woonadressen en geboortedatums in lopende tekst. schoon_brontekst.py maskeert een adres na
+#     "wonend/woonachtig/gedomicilieerd" en een datum na "°" of "geboren". Deze klep controleert of
+#     dat ook echt gebeurd is, met exact dezelfde patronen, zodat een losse stap die de opkuis
+#     overslaat de site niet live kan zetten. Aanleiding: op 14/09/2026 stonden er twee woonadressen
+#     van burgers live, telkens naast een naam die zelf netjes "[naam]" was. De naam maskeren
+#     beschermt niemand als de zin ernaast zegt waar die persoon woont.
+import schoon_brontekst as _sb
+_ctx_lek = []
+for i in _items:
+    for v in GEB_VELDEN:
+        _t = str(i.get(v) or "")
+        # Dezelfde regels als maskeer_context, behalve het contactformulier: dat staat enkel in de
+        # tekst die de zoekindex voedt, niet in deze velden.
+        if (_sb.ADRES_NA_WOON.search(_t) or _sb.ADRES_NA_NAAM.search(_t)
+                or _sb.EMAIL_VERHULD.search(_t) or _sb.GEB_TEKEN.search(_t)):
+            _ctx_lek.append(str(i.get("id")))
+            break
+if _ctx_lek:
+    print(f"[context-lek] woonadres of geboortedatum in {len(_ctx_lek)} stuk(ken): "
+          f"{', '.join(_ctx_lek[:5])}")
+    if not is_demo:
+        sys.exit("[STOP] Live build geweigerd: er staat een woonadres of geboortedatum van een persoon "
+                 "in de build. Draai schoon_brontekst.py opnieuw, dan bouw_zoekindex.py, en bouw "
+                 "daarna de site opnieuw (zie de volgorde in run_all.py).")
+    print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
+else:
+    print("       woonadressen en geboortedatums: niets in de build ✓")
+
 # 4) Schrijf het eindproduct.
 out_dir = BASE / "dist"
 out_dir.mkdir(exist_ok=True)
