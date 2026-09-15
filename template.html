@@ -8276,13 +8276,29 @@ function dosTitle(d){
 // week 24", "8ste kohier 2026", "Weekoverzicht uitnodigingen 12 mei") zijn instanties van
 // HETZELFDE terugkerende agendapunt. De kale sleutel (zonder cijfers en maandnamen) is dan
 // identiek; daarop bundelen we ze tot één reeks-dossier met een volgbare tijdlijn.
-function dosSerieKey(titel){
+function dosSerieKeyOud(titel){
   const kaal = (titel||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
     .replace(/\b(januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\b/g,' ')
     .replace(/\d+(ste|de|e)?\b/g,' ')
     .replace(/[^a-z]+/g,' ')
     .replace(/\s+/g,' ').trim();
   return kaal.length >= 15 ? kaal : null;
+}
+// REEKSEN V2 (getoetst 15/09/2026). De reekssleutel zag drie varianten van hetzelfde terugkerende
+// punt als verschillend: een nummerBEREIK ("Vastleggingen week 51 en 52"), "(deel 2)" en een kaal
+// routeringsstaartje ("Verwijzing naar de gemeenteraad."). Poort 1: enkel een KALE doorverwijzing die
+// zelf een zin is wordt geknipt; een staart met inhoud blijft in de sleutel. Gemeten: 681 kale
+// staarten geknipt, geen enkele met inhoud.
+const SER_TEL = 'week|lijst|nr\\.?|kohier|deel|periode|reeks';
+const SER_REEKS = new RegExp('\\b(' + SER_TEL + ')\\s*\\d+(?:\\s*(?:en|tot|t\\/m|&|[-\\u2013\\u2014])\\s*(?:(?:' + SER_TEL + ')\\s*)?\\d+)+', 'gi');
+const DOS_KALE_VERWIJZING = /(^|[.;:]\s*)verwijzing naar (?:de )?(?:gemeenteraad|raad voor maatschappelijk welzijn)(?: voor goedkeuring| ter bekrachtiging)?\s*(?:\.|$)/gi;
+function dosSerieKey(titel){
+  const t = (titel || '')
+    .replace(DOS_KALE_VERWIJZING, (m, voor) => voor + ' ')
+    .replace(/\(\s*deel\s*\d+\s*\)/gi, ' ')
+    .replace(/\bdeel\s*\d+\b/gi, ' ')
+    .replace(SER_REEKS, '$1 0');
+  return dosSerieKeyOud(t);
 }
 // Korte, stabiele hash (cyrb53, 53-bit) voor een dossier-id dat aan de INHOUD hangt in
 // plaats van aan de volgorde. Botsingsvrij voor de enkele duizenden dossiers die we bouwen.
@@ -8378,6 +8394,46 @@ function buildDossiers(){
                : ('tok:'+stam+'@'+it._city);
     it._key = it._track + '::' + subj;
   });
+  // RAADSKETEN, voorbereiding voor stap 6d. Een college- of vast-bureaustuk dat 'verwijzing naar de
+  // gemeenteraad / raad voor maatschappelijk welzijn' draagt, belooft dat dezelfde zaak later op de
+  // raad komt. _kbt: zeldzame kernbegrippen die ook letterlijk in de titel staan; _ketQ: zeldzame
+  // titelstammen.
+  const KET_ROUTE = /(?:door)?verwijzing[^.]{0,70}?naar (?:de )?(?:gemeenteraad|raad voor maatschappelijk welzijn)/i;
+  const ketRaad = x => x.org === 'Gemeenteraad' || x.org === 'RMW';
+  const ketDag = t => Math.round(Date.parse(t) / 86400000);
+  const ketRaadVan = {}, ketRouteVan = {};
+  items.forEach(it => {
+    const tn = frNorm(it.titel || '');
+    it._kbt = [...new Set((it.kernbegrippen || []).map(kbNorm))]
+      .filter(k => k.length >= 5 && kbDf[k] >= 2 && kbDf[k] <= CAP && tn.indexOf(k) >= 0);
+    it._ketQ = [...new Set(it._tk.filter(w => w.length >= 6 && df[dosStam(w)] >= 2 && df[dosStam(w)] <= 9).map(dosStam))];
+    it._ketStam = new Set(it._tk.map(dosStam));
+    it._ketRoute = KET_ROUTE.test(it.titel || '');
+    if(ketRaad(it)) (ketRaadVan[it._track] = ketRaadVan[it._track] || []).push(it);
+    else if(it._ketRoute) (ketRouteVan[it._track] = ketRouteVan[it._track] || []).push(it);
+  });
+  const ketPool = y => ketRaad(y) ? (ketRouteVan[y._track] || []) : (y._ketRoute ? (ketRaadVan[y._track] || []) : []);
+  const ketBewijs = (y, z) => {
+    const raad = ketRaad(y) ? y : z, route = ketRaad(y) ? z : y;
+    if(!ketRaad(raad) || ketRaad(route) || !route._ketRoute || y._track !== z._track) return null;
+    const dagen = ketDag(raad.date) - ketDag(route.date);
+    if(!(dagen >= 0 && dagen <= 90)) return null;
+    const kbt = y._kbt.filter(k => z._kbt.indexOf(k) >= 0);
+    const st = y._ketQ.filter(q => z._ketStam.has(q));
+    const bew = [...new Set(kbt.concat(st.filter(q => !kbt.some(k => k.indexOf(q) >= 0))))];
+    if(bew.length < 2) return null;
+    return { dagen, n: bew.length };
+  };
+  const ketBeste = y => {
+    let b = null, ids = [];
+    ketPool(y).forEach(z => {
+      if(z.id === y.id) return;
+      const e = ketBewijs(y, z); if(!e) return;
+      if(!b || e.dagen < b.dagen || (e.dagen === b.dagen && e.n > b.n)){ b = e; ids = [z.id]; }
+      else if(e.dagen === b.dagen && e.n === b.n) ids.push(z.id);
+    });
+    return ids;
+  };
   // VANGNET voor eenlingen: het zeldzame WOORDPAAR. "Aktename jaarverslag klachten 2024"
   // heeft geen geldig handtekeningwoord ("jaarverslag" staat in 20 stukken, "klachten" in
   // 27, allebei boven de CAP), maar de combinatie komt maar in 8 stukken voor en wijst dus
@@ -8461,9 +8517,24 @@ function buildDossiers(){
     const k = dosSerieKey(it.titel);
     if(k) (serie[it._track + '::' + k] = serie[it._track + '::' + k] || []).push(it);
   });
+  // Poort 2 (reeksen v2): een reeks is pas een reeks als EEN orgaan er op minstens drie
+  // verschillende zittingsdata in staat; de echo college -> raad telt niet als editie. Anders valt de
+  // groep terug op exact de oude regel (deelklassen op de oude sleutel van minstens drie stukken),
+  // zodat een afgewezen stuk nooit doorvalt naar een ander doel.
   Object.values(serie).forEach(g => {
     if(g.length < 3) return;
-    for(let i = 1; i < g.length; i++) uni(g[0]._key, g[i]._key);
+    const zit = {};
+    g.forEach(it => { (zit[it.org] = zit[it.org] || new Set()).add(it.date); });
+    if(Object.values(zit).some(z => z.size >= 3)){
+      for(let i = 1; i < g.length; i++) uni(g[0]._key, g[i]._key);
+      return;
+    }
+    const oud = {};
+    g.forEach(it => { const k = dosSerieKeyOud(it.titel); if(k) (oud[k] = oud[k] || []).push(it); });
+    Object.values(oud).forEach(z => {
+      if(z.length < 3) return;
+      for(let i = 1; i < z.length; i++) uni(z[0]._key, z[i]._key);
+    });
   });
 
   // 5) Stad ↔ OCMW koppelen we BEWUST alleen via de harde ankers hierboven, niet via
@@ -8589,6 +8660,89 @@ function buildDossiers(){
       const roots = new Set(tweeling.map(x => find(x._key)));
       roots.delete(eigen);
       if(roots.size === 1) uni(eigen, [...roots][0]);
+    });
+
+    // 6d) DE RAADSKETEN (getoetst 15/09/2026: 25 koppelingen, alle 25 juist). Een eenling sluit aan
+    //     bij zijn raads- of routeringstweeling, met zes poorten die elk nodig bleken: P1 het raadsstuk
+    //     komt 0 tot 90 dagen NA het routeringsstuk; P2 twee ONAFHANKELIJKE zeldzame signalen (nooit een
+    //     organisatie- of straatnaam alleen); P3 dichtst, dan sterkst, en wijzen de besten naar twee
+    //     groepen dan niet; P4 wederzijds de beste partner; P5 alle besluiten op een bevroren stand;
+    //     P6 nooit een keten eenling -> eenling -> groep.
+    const voorlopig4 = {};
+    items.forEach(it => { const r = find(it._key); (voorlopig4[r] = voorlopig4[r] || []).push(it); });
+    const ketRoot = new Map(items.map(it => [it.id, find(it._key)]));
+    const ketBesluit = [];
+    Object.values(voorlopig4).forEach(g => {
+      if(g.length !== 1) return;
+      const d = g[0], eigen = ketRoot.get(d.id);
+      let kand = ketPool(d).filter(x => x.id !== d.id && ketRoot.get(x.id) !== eigen)
+        .map(x => ({ x, e: ketBewijs(d, x) })).filter(k => k.e);
+      if(!kand.length) return;
+      const minD = Math.min(...kand.map(k => k.e.dagen)); kand = kand.filter(k => k.e.dagen === minD);
+      const maxN = Math.max(...kand.map(k => k.e.n)); kand = kand.filter(k => k.e.n === maxN);
+      if(new Set(kand.map(k => ketRoot.get(k.x.id))).size !== 1) return;
+      kand.sort((a, b) => (a.x.id < b.x.id ? -1 : 1));
+      const x = kand[0].x;
+      if(ketBeste(x).indexOf(d.id) < 0) return;
+      ketBesluit.push({ d, dRoot: eigen, doel: ketRoot.get(x.id) });
+    });
+    const ketDoelVan = new Map(ketBesluit.map(b => [b.d.id, b.doel]));
+    ketBesluit.forEach(b => {
+      const doelGroep = voorlopig4[b.doel];
+      if(doelGroep.length === 1 && ketDoelVan.has(doelGroep[0].id) && ketDoelVan.get(doelGroep[0].id) !== b.dRoot) return;
+      if(ketBesluit.some(o => o.doel === b.dRoot && o.dRoot !== b.doel)) return;
+      uni(b.dRoot, b.doel);
+    });
+  }
+
+  // 6f) CODE-ADOPTIE (getoetst 15/09/2026: 4 nieuwe paren, alle juist). Een bestekcode, een volledig
+  //     OMV-nummer, een stadsnummer 20yymmnn_OGV/ONV/OMV of een project-MER-nummer wijst naar precies
+  //     een aanbesteding of vergunning. Enkel EENLINGEN schuiven aan (nooit een groep meegesleept, dus
+  //     geen ketting), op een bevroren stand, met een draaggrens, zonder grote doelgroep, en nooit in
+  //     een groep die al een ander nummer van dezelfde soort draagt.
+  {
+    const DOS_CODE = [
+      ['bestek', /\b20\d{2}-(?:[a-z]{2,}-)+\d{3,}\b/g],
+      ['omv',    /\bomv[_ ]?\d{10}\b/g],
+      ['stad8',  /\b20\d{6}_(?:ogv|onv|omv)\b/g],
+      ['mer',    /\bp[rl]\d{4}\b/g]
+    ];
+    const dosCodes = it => {
+      const bron = frNorm(it.titel || '') + ' ; ' + (it.kernbegrippen || []).map(kbNorm).join(' ; ');
+      const out = new Map();
+      DOS_CODE.forEach(([fam, re]) => (bron.match(re) || []).forEach(c => out.set(c.replace(/\s/g, '_'), fam)));
+      return out;
+    };
+    const groep = {}, root = new Map();
+    items.forEach(it => { const r = find(it._key); root.set(it.id, r); (groep[r] = groep[r] || []).push(it); it._codes = dosCodes(it); });
+    const dragers = {};
+    items.forEach(it => it._codes.forEach((fam, c) => (dragers[c] = dragers[c] || []).push(it)));
+    const besluit = new Map();
+    Object.keys(dragers).sort().forEach(c => {
+      const ds = dragers[c];
+      if(ds.length < 2 || ds.length > 8) return;
+      const roots = [...new Set(ds.map(x => root.get(x.id)))].sort();
+      if(roots.length < 2) return;
+      const groot = roots.filter(r => groep[r].length >= 2);
+      const een = roots.filter(r => groep[r].length === 1);
+      if(groot.length >= 2) return;
+      let doel;
+      if(groot.length === 1){
+        const g = groep[groot[0]], fam = ds[0]._codes.get(c);
+        if(g.length > CAP) return;
+        if(g.some(x => !x._codes.has(c) && [...x._codes].some(([c2, f2]) => f2 === fam && c2 !== c))) return;
+        doel = 'root:' + groot[0];
+      } else doel = 'paar:' + c;
+      een.forEach(r => { const id = groep[r][0].id; if(!besluit.has(id)) besluit.set(id, new Set()); besluit.get(id).add(doel); });
+    });
+    const paarAnker = {};
+    [...besluit.keys()].sort().forEach(id => {
+      const doelen = besluit.get(id);
+      if(doelen.size !== 1) return;
+      const d = [...doelen][0], eigen = root.get(id);
+      if(d.startsWith('root:')) uni(eigen, d.slice(5));
+      else if(paarAnker[d] === undefined) paarAnker[d] = eigen;
+      else uni(eigen, paarAnker[d]);
     });
   }
 
