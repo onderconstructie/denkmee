@@ -7197,7 +7197,11 @@ function curatorVoegSamen(){
   const data = curatorData();
   data.samenvoegen.push(dossiers.map(d => d.items[0].id));
   let canon = null;
-  dossiers.forEach(d => d.items.forEach(it => { if(canon === null || it._key < canon) canon = it._key; }));
+  // Canonbescherming zoals in de build: een geadopteerd stuk levert de canon enkel als er niets anders
+  // is. (Losgemaakte of verplaatste stukken rekent de build anders, vóór het losmaken; dat verschil
+  // bestond al.)
+  const alleStukken = dossiers.flatMap(d => d.items), eigen = alleStukken.filter(it => !it._adoptie);
+  (eigen.length ? eigen : alleStukken).forEach(it => { if(canon === null || it._key < canon) canon = it._key; });
   if(canon !== null){
     const nieuwId = 'dossier-' + dosHash(canon);
     dossiers.forEach(d => { if(d.id !== nieuwId) data.alias[d.id] = nieuwId; });
@@ -8223,7 +8227,91 @@ function dosPhraseTrunc(s, max){
   let c = s.slice(0, max); const sp = c.lastIndexOf(' '); if(sp > max*0.45) c = c.slice(0, sp);
   return dosTrimFill(c);
 }
+// NUMMERKOPPEN (15/09/2026, "leesbaar maken"). Een vergunningsnummer vooraan ("20241071_OGV. Woonproject
+// Ragheno Dellingstraat. Doorverwijzing ...") zegt de lezer niets. Is het EERSTE titelsegment volledig
+// zo'n nummer, dan slaan we het over, samen met de zuiver procedurele segmenten erna, en nemen we het
+// eerste inhoudelijke segment. Daarin knippen we de procedurestaart weg ("geïntegreerd binnen de
+// procedure voor ..."). Is wat overblijft enkel een plek ("Oude Baan 2"), dan zegt de kop nog niet wat
+// er gebeurt: dan volgt de eerste handeling uit dezelfde titel ("Oude Baan 2 · Opheffing gemeenteweg"),
+// of anders uit een stuk van hetzelfde dossier met hetzelfde nummer en dezelfde plek, het vroegste eerst.
+// De handeling moet heel passen; anders blijft de plek alleen. Niets verzonnen: elk deel is een
+// letterlijke uitsnede van een echte titel met dat nummer. Gekozen uit drie ontwerpen door drie
+// onafhankelijke rechters; bestekcodes tellen bewust niet mee (ze staan nooit vooraan en gaven
+// rubriekkoppen).
+const DOS_KOPCODE = /^(?:20\d{6}_O[GNM]V|OMV_\d{10})$/;
+const DOS_PROC_F = '(?:(?:aktename|kennisname) (?:van (?:de )?)?)?sluiting (?:van (?:het )?)?openbaar onderzoek'
+  + '|kennisname (?:van (?:het )?)?verslag (?:van (?:de )?)?gemeentelijke? omgevingsambtenaar(?: \\(goa\\))?'
+  + '|(?:door)?verwijzing naar (?:de )?(?:gemeenteraad|raad voor maatschappelijk welzijn)(?: voor goedkeuring| ter bekrachtiging)?'
+  + '|(?:goedkeuring )?behandeling (?:van (?:de )?)?bezwaren'
+  + '|besluit tot kennisname, behandeling en ter beschikking stellen (?:van (?:de )?)?bezwaarschriften binnen (?:de )?procedure omgevingsvergunning'
+  + '|(?:beoordeling van (?:de )?|kennisname en behandel(?:en|ing) (?:van (?:de )?)?)bezwaarschriften(?: in het kader van het openbaar onderzoek(?: in de beroepsprocedure)?)?';
+const DOS_PROCEDUREEL = new RegExp('^(?:' + DOS_PROC_F + ')(?:,? en (?:' + DOS_PROC_F + '))*$', 'i');
+const DOS_KOP_STAART = /\s+(?:ge[iï]ntegreerd binnen|in het kader van)\s/i;
+const DOS_KOP_LEEG = /^(?:goedkeuring|goedkeuren|aktename|kennisname|beslissing|besluit|bekrachtiging|(?:door)?verwijzing)(?:\s+(?:van|tot|over|inzake)(?:\s+(?:de|het|een))?)?\s+/i;
+const DOS_PLEK_WOORD = /(?:straat|straatje|laan|baan|weg|plein|pad|dreef|lei|vest|kaai|kade|markt|dijk|singel|hof|werf)$/i;
+const DOS_PLEK_TUSSEN = /^(?:op|van|de|der|den|het|ter|te|aan|in|bij|onder)$/i;
+// Index van het segment waaruit de kop komt: 0, tenzij segment 0 volledig een vergunningsnummer is en er
+// verderop een inhoudelijk segment (minstens 5 tekens, niet procedureel) staat.
+function dosKopSegIndex(segs){
+  if(segs.length < 2 || !DOS_KOPCODE.test(dosCleanSeg(segs[0]))) return 0;
+  for(let i = 1; i < segs.length; i++){
+    const k = dosCleanSeg(segs[i]);
+    if(k.length >= 5 && !DOS_PROCEDUREEL.test(k)) return i;
+  }
+  return 0;
+}
+function dosKopStaart(k){
+  const m = k.match(DOS_KOP_STAART);
+  if(!m) return k;
+  const kort = dosCleanSeg(k.slice(0, m.index));
+  return kort.split(' ').filter(Boolean).length >= 2 ? kort : k;
+}
+// Een plek en niets anders: elk woord draagt een hoofdletter of is een huisnummer, op de tussenwoordjes
+// van straatnamen na, met een straatwoord dat hooguit een naamwoord voor zich heeft ("Postzegellaan",
+// "Oude Baan 2", "Steenweg op Blaasveld 131"). "Woonproject Ragheno Dellingstraat" benoemt al een zaak.
+function dosIsPlek(k){
+  const w = (k || '').split(' ').filter(Boolean);
+  if(!w.length || w.length > 6) return false;
+  if(!w.every(x => /^[A-ZÀ-Þ0-9]/.test(x) || DOS_PLEK_TUSSEN.test(x))) return false;
+  const i = w.findIndex(x => DOS_PLEK_WOORD.test(x.replace(/[.,]+$/, '')));
+  if(i < 0 || i > 1) return false;
+  return w.slice(i + 1).every(x => DOS_PLEK_TUSSEN.test(x) || /^[A-ZÀ-Þ]/.test(x) || /^\d+[A-Za-z]?(?:[\/-]\d+[A-Za-z]?)?$/.test(x));
+}
+// De eerste handeling na de plek in DEZELFDE titel: geen procedure, geen tweede plek, zonder lege
+// beslissingsterm vooraan, minstens twee woorden en niet beginnend met een voegwoord.
+function dosKopHandelingUit(segs, s0){
+  for(let i = s0 + 1; i < segs.length; i++){
+    let k = dosCleanSeg(segs[i]);
+    if(k.length < 5 || DOS_PROCEDUREEL.test(k) || dosIsPlek(k)) continue;
+    k = dosKopStaart(k).replace(DOS_KOP_LEEG, '');
+    const w = k.split(' ').filter(Boolean);
+    if(w.length < 2 || DOS_EDGE.test(w[0])) return '';
+    return dosCap(dosTrimFill(k));
+  }
+  return '';
+}
+// Staat er in de eigen titel enkel procedure, dan de handeling uit een stuk van hetzelfde dossier met
+// hetzelfde nummer en dezelfde plek, het vroegste eerst (dat blijft stabiel als er stukken bijkomen).
+function dosKopBroer(d, segs, s0){
+  const code = dosCleanSeg(segs[0]), plek = dosCleanSeg(segs[s0]);
+  const broers = (d.items || []).filter(it => {
+    const bs = (it.titel || '').split(/[.:;]\s/), b0 = dosKopSegIndex(bs);
+    return b0 > 0 && dosCleanSeg(bs[0]) === code && dosCleanSeg(bs[b0]) === plek;
+  }).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : ((a.titel || '') < (b.titel || '') ? -1 : 1)));
+  for(const it of broers){
+    const bs = it.titel.split(/[.:;]\s/), h = dosKopHandelingUit(bs, dosKopSegIndex(bs));
+    if(h) return h;
+  }
+  return '';
+}
 function dosTitle(d){
+  // Budgetcyclus: de titel zelf is de kop ("Aanpassing meerjarenplan 2026-2031 nr. 1, deel Stad"). De
+  // gewone knip op zinseinden zou 'nr. 1 - deel Stad' wegknippen, en dan botsen Stad en OCMW op een kop.
+  // Het streepje voor 'deel' wordt een komma: in een kop leest het anders als een gedachtestreepje.
+  if(dosBudgetCyclus(d.name)){
+    const m = d.name.match(/^(?:(?:vaststelling|goedkeuring)\s+)?(.*?\bdeel\s+(?:stad|ocmw))\b/i);
+    if(m) return dosCap(m[1].trim().replace(/\s*[-–]\s*(deel\s)/i, ', $1'));
+  }
   // Een tijdelijke politieverordening gaat over het evenement dat erin genoemd wordt, niet over
   // de verordening zelf. Zonder deze regel droegen 177 dossiers dezelfde kop "Tijdelijke
   // politieverordening op het wegverkeer", vaak onderscheiden door niets meer dan een datum.
@@ -8232,8 +8320,15 @@ function dosTitle(d){
     return 'Verkeer bij ' + dosPhraseTrunc(naav[1].trim(), 48);
   }
   const segs = d.name.split(/[.:;]\s/);
-  let topic = dosCleanSeg(segs[0]);
-  if(DOS_CAT.test(topic) && segs[1]) topic = dosCleanSeg(segs[1]) || topic;
+  const s0 = dosKopSegIndex(segs);   // 0 voor elke titel zonder volledig vergunningsnummer vooraan
+  let topic = dosCleanSeg(segs[s0]);
+  if(s0 > 0){
+    topic = dosKopStaart(topic).replace(/^besluit tot (?:het )?[a-zà-ÿ]+ van (?:een |de |het )?/i, '');
+    if(dosIsPlek(topic)){
+      const h = dosKopHandelingUit(segs, s0) || dosKopBroer(d, segs, s0);
+      if(h && (topic + ' · ' + h).length <= 56) topic = topic + ' · ' + h;
+    }
+  } else if(DOS_CAT.test(topic) && segs[1]) topic = dosCleanSeg(segs[1]) || topic;
   topic = dosStripLead(topic);
   topic = dosTrimFill(topic);
   const tl = topic.toLowerCase();
@@ -8243,7 +8338,7 @@ function dosTitle(d){
   // staart. Enkel als de zinsnede onbruikbaar is (te kort, of louter een orgaannaam) vallen
   // we terug op het bundel-trefwoord.
   if(topic.length>=5 && !DOS_GEN.has(tl)){
-    base = dosCap(dosPhraseTrunc(topic, 56));
+    base = dosCap(dosPhraseTrunc(topic, s0 > 0 ? 60 : 56));
     // een los eigennaam-woord verrijken tot zijn volledige naam ("Emmaüs" -> "Kerkfabriek Emmaüs")
     if(!/\s/.test(base)){ const ph = dosTokenPhrase(d.name, tl); if(ph && ph.length > base.length) base = dosCap(ph); }
   } else {
@@ -8300,6 +8395,142 @@ function dosSerieKey(titel){
     .replace(SER_REEKS, '$1 0');
   return dosSerieKeyOud(t);
 }
+// BUDGETCYCLUS (sinds 15/09/2026). De twee delen van dezelfde jaarrekening of hetzelfde
+// meerjarenplan ("Jaarrekening 2025 - deel Stad" en "... - deel OCMW") horen per kant bij een
+// cyclus. Strikt: enkel een kale staart (hooguit een verwijzingszin), een aanpassing enkel met
+// volgnummer, en een jaarrekening nooit met een looptijd. Anders null, dan telt het stuk gewoon mee.
+const BBC_RE = /^(?:(?:vaststelling|goedkeuring)\s+)?(aanpassing\s+)?(jaarrekening|meerjarenplan)\s+(\d{4})(?:\s*[-–]\s*(\d{4}))?(?:\s+nr\.?\s*(\d+))?\s*[-–]\s*deel\s+(stad|ocmw)\b/;
+const BBC_STAART = /^\s*\.?\s*(?:verwijzing naar (?:de|het) [^.]*\.?\s*)?$/;
+function dosBudgetCyclus(titel){
+  const t = frNorm(titel || '').trim();
+  const m = t.match(BBC_RE);
+  if(!m) return null;
+  if(!BBC_STAART.test(t.slice(m[0].length))) return null;
+  if(m[1] && !m[5]) return null;
+  if(m[2] === 'jaarrekening' && m[4]) return null;
+  const soort = m[1] ? 'amjp' : (m[2] === 'meerjarenplan' ? 'mjp' : 'jr');
+  const jaar = m[2] === 'jaarrekening' ? m[3] : (m[4] || m[3]);
+  return soort + ':' + jaar + ':' + (m[5] || '');
+}
+// TWEELINGVERWIJZING (sinds 15/09/2026). Stad en OCMW behandelen soms op dezelfde dag hetzelfde
+// agendapunt, elk in hun eigen orgaan. Die stukken blijven in hun eigen dossier (de kant zit in de
+// sleutel); ze krijgen enkel een verwijzing naar elkaar. Poorten: geen budgetstuk, twijfel over
+// alle kandidaten vooraf, routine op tempo (zes zittingsdagen binnen 365 dagen aan beide kanten),
+// geen parallel stuk van de eigen instelling, een vaste knopkeuze, en een dossierkaart enkel bij
+// meer dan de helft dekking aan beide kanten.
+const TW_CAP = 18, TW_ROUTINE_MIN = 6, TW_INSTEL = new Set(['stad', 'stads', 'ocmw']);
+const TW_RANG = { 'College':'v', 'Vast bureau':'v', 'Vast Bureau':'v', 'Gemeenteraad':'b', 'RMW':'b' };
+const TW_WEG = new Set(('goedkeuring goedkeuren aktename kennisname kennisneming kennisgeving vaststelling bekrachtiging '
+  + 'beslissing besluit advisering principiele verwijzing doorverwijzing '
+  + 'stad stads mechelen ocmw gemeenteraad raad maatschappelijk welzijn college burgemeester schepenen vast bureau deel '
+  + 'dv cv cvba nv vzw bv ov '
+  + 'de het een van voor met aan bij tot naar over en of in op te ter der den is die dat deze dit als '
+  + 'nr inzake betreffende kader via door zijn werd wordt worden').split(/\s+/));
+const TW_BUDTERM = /^(?:jaarrekening(?:en)?|meerjarenplan|budget|begroting)(?: \d{4}(?:-\d{4})?)?$/;
+function dosTweelingKern(titel){
+  const t = frNorm(titel || '')
+    .replace(/naar (?:de |het )?(?:raad voor maatschappelijk welzijn|gemeenteraad|syndicaal overleg)/g, ' ')
+    .replace(/voor (?:gunstig advies|aktename)/g, ' ')
+    .replace(/\d+(?:[./-]\d+)*/g, ' ');
+  return (t.match(/[a-z][a-z\-]+/g) || []).map(w => w.replace(/^-+|-+$/g, ''))
+    .filter(w => w.length >= 3 && !FR_MAAND.has(w) && !TW_WEG.has(w));
+}
+function twTitelWoorden(t){
+  const s = frNorm(t || '').replace(/(?:doorverwijzing|verwijzing) naar (?:de |het )?(?:raad voor maatschappelijk welzijn|gemeenteraad|syndicaal overleg)\.?/g, ' ');
+  const m = new Map(); (s.match(/[a-z0-9]+/g) || []).forEach(w => m.set(w, (m.get(w) || 0) + 1)); return m;
+}
+function twEigenInstelling(a, b){
+  const wa = twTitelWoorden(a.titel), wb = twTitelWoorden(b.titel), versch = [];
+  new Set([...wa.keys(), ...wb.keys()]).forEach(w => { if((wa.get(w) || 0) !== (wb.get(w) || 0)) versch.push(w); });
+  // Noemt de ene titel enkel de stad en de andere enkel het OCMW ("nominatieve subsidies van Stad
+  // Mechelen" tegenover "... van OCMW Mechelen"), dan beslist elk bestuur over zijn eigen zaak.
+  const stadA = wa.has('stad') || wa.has('stads'), stadB = wb.has('stad') || wb.has('stads');
+  const ocA = wa.has('ocmw'), ocB = wb.has('ocmw');
+  if((stadA && !ocA && ocB && !stadB) || (stadB && !ocB && ocA && !stadA)) return true;
+  return versch.length > 0 && versch.some(w => TW_INSTEL.has(w))
+      && versch.every(w => TW_INSTEL.has(w) || w === 'de' || w === 'het' || w === 'van' || w === 'mechelen');
+}
+function dosTweelingen(items, item2dos){
+  const kbN = k => frNorm(k || '').replace(/\s+/g, ' ').trim();
+  const frDf = {}, kbDf = {}, perDag = {}, twDagen = {};
+  items.forEach(it => {
+    it._twk = dosTweelingKern(it.titel);
+    it._twkb = new Set((it.kernbegrippen || []).map(kbN).filter(k => k.length >= 4));
+    it._twt = frNorm(it.titel || '');
+    (it._fr || new Set()).forEach(f => frDf[f] = (frDf[f] || 0) + 1);
+    it._twkb.forEach(k => kbDf[k] = (kbDf[k] || 0) + 1);
+    if(new Set(it._twk).size >= 2 && it.date){
+      const k = it._track + '|' + it._twk.join(' '); (twDagen[k] = twDagen[k] || new Set()).add(it.date);
+    }
+    if(TW_RANG[it.org] && it.date && !dosBudgetCyclus(it.titel))
+      (perDag[it.date] = perDag[it.date] || []).push(it);
+  });
+  const twTempo = {};
+  Object.entries(twDagen).forEach(([k, set]) => {
+    const ds = [...set].sort().map(x => Date.parse(x + 'T00:00:00Z') / 864e5);
+    let best = 0, j = 0;
+    for(let i = 0; i < ds.length; i++){ while(ds[i] - ds[j] > 364) j++; best = Math.max(best, i - j + 1); }
+    twTempo[k] = best;
+  });
+  const twRoutine = a => { const kk = a._twk.join(' ');
+    return (twTempo['gemeente|' + kk] || 0) >= TW_ROUTINE_MIN && (twTempo['welzijn|' + kk] || 0) >= TW_ROUTINE_MIN; };
+  const kand = [];
+  Object.keys(perDag).sort().forEach(dag => {
+    const g = perDag[dag], A = g.filter(x => x._track === 'gemeente'), B = g.filter(x => x._track === 'welzijn');
+    A.forEach(a => B.forEach(b => {
+      if(TW_RANG[a.org] !== TW_RANG[b.org]) return;
+      if(new Set(a._twk).size >= 2 && a._twk.join(' ') === b._twk.join(' ')){
+        kand.push([a, b, 1, twRoutine(a)]); return;
+      }
+      const sa = new Set(a._twk.map(dosStam)), sb = new Set(b._twk.map(dosStam));
+      const ged = [...sa].filter(x => sb.has(x)).length, un = new Set([...sa, ...sb]).size;
+      if(ged < 2 || ged / un < 0.5) return;
+      const frase = [...(a._fr || [])].some(f => b._fr && b._fr.has(f) && frDf[f] <= TW_CAP);
+      const kern = [...a._twkb].some(k => b._twkb.has(k) && kbDf[k] >= 2 && kbDf[k] <= TW_CAP
+        && a._twt.includes(k) && b._twt.includes(k) && !TW_BUDTERM.test(k));
+      if(frase || kern) kand.push([a, b, 2, false]);
+    }));
+  });
+  const naar = new Map();
+  const noteer = (x, y) => { const d = item2dos.get(y.id); if(!d) return; if(!naar.has(x.id)) naar.set(x.id, new Set()); naar.get(x.id).add(d.id); };
+  kand.forEach(([a, b]) => { noteer(a, b); noteer(b, a); });
+  const twijfel = new Set([...naar].filter(([, st]) => st.size > 1).map(([id]) => id));
+  const per = new Map(), links = new Map();
+  kand.forEach(([a, b, laag, routine]) => {
+    if(twijfel.has(a.id) || twijfel.has(b.id)) return;
+    const da = item2dos.get(a.id), db = item2dos.get(b.id);
+    if(!da || !db || da === db) return;
+    if(laag === 1 && routine) return;
+    if(twEigenInstelling(a, b)) return;
+    [[a, b, db], [b, a, da]].forEach(([x, y, dy]) => {
+      if(!per.has(x.id)) per.set(x.id, []);
+      per.get(x.id).push({ id: y.id, org: y.org, date: y.date, dos: dy.id });
+    });
+    const k = da.id + '|' + db.id; if(!links.has(k)) links.set(k, [da, db]);
+  });
+  per.forEach(v => v.sort((x, y) => (x.date < y.date ? -1 : x.date > y.date ? 1 : x.org < y.org ? -1 : x.org > y.org ? 1 : x.id < y.id ? -1 : x.id > y.id ? 1 : 0)));
+  const dek = (d, ander) => d.items.filter(it => (per.get(it.id) || []).some(t => t.dos === ander.id)).length / d.items.length;
+  const dosParen = [];
+  [...links.keys()].sort().forEach(k => { const [da, db] = links.get(k); if(dek(da, db) > 0.5 && dek(db, da) > 0.5) dosParen.push([da.id, db.id]); });
+  return { perStuk: per, dosParen };
+}
+// VRAAG VERVOLGT VRAAG (sinds 15/09/2026, stap 6e). Een raadslid herhaalt een schriftelijke vraag
+// ("Nekkerhal" en later "Nekkerhal-vervolgvraag"). De kale vraagtitel strijkt die etiketten weg.
+const DOS_VSTOP = new Set('vervolg vervolgvraag vraag versie finaal bijkomende opvolging update'.split(' '));
+function dosVraagKaal(titel){
+  const t = frNorm(titel || '').replace(/\d+/g, ' ');
+  const ws = (t.match(/[a-z][a-z\-]*/g) || []).map(w => w.replace(/-?vervolg(vraag)?$/, ''))
+    .filter(w => w.length >= 3 && !FR_MAAND.has(w) && !DOS_VSTOP.has(w));
+  return [...new Set(ws)].sort().join(' ');
+}
+const VR_LABEL = /vervolg|opvolg|bijkomend/i;
+const vrIndiener = it => { const n = String(it.indiener || '').trim().split(/\s+/).pop(); return n ? frNorm(n) : ''; };
+const VR_ROUTINE = /(tijdelijke politieverordening|raadscommissies|delegatie tot ondertekening|bestuurlijk plaatsverbod|agenda commissie)/i;
+const vrRoutine = x => VR_ROUTINE.test(x.titel || '');
+const VR_STRAATSUF = /(straat|laan|steenweg|weg|plein|kaai|baan|dreef|markt|vest|lei|wal|dok|pad|hof|dijk|berg)$/;
+const VR_ORGAAN = /^(team|dienst|departement|agentschap|afdeling|cel|directie|sector|werkgroep|commissie|raadscommissie|bijzonder comite|college|gemeenteraad|kabinet|schepen|burgemeester|raadslid|voorzitter|fractie|kerkfabriek)\b|(dienst|loket|secretariaat)$/;
+const VR_KADER  = /(decreet|wetboek|\bwet\b|vlarema|vlarem|codex|omzendbrief|koninklijk besluit|richtlijn|verordening|\bavg\b|\bkb\b)/;
+const VR_STEDEN = new Set('kortrijk gent leuven hasselt brugge lier willebroek bonheiden sint-katelijne-waver duffel putte kapelle-op-den-bos vilvoorde brussel aalst turnhout genk roeselare oostende dendermonde bornem heist-op-den-berg puurs-sint-amands zemst boom rumst'.split(' '));
 // Korte, stabiele hash (cyrb53, 53-bit) voor een dossier-id dat aan de INHOUD hangt in
 // plaats van aan de volgorde. Botsingsvrij voor de enkele duizenden dossiers die we bouwen.
 function dosHash(str){
@@ -8329,6 +8560,22 @@ function buildDossiers(){
   const kbNorm = k => (k||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
   const kbDf = {};
   items.forEach(it => new Set((it.kernbegrippen||[]).map(kbNorm).filter(k => k.length >= 4)).forEach(k => kbDf[k] = (kbDf[k]||0)+1));
+  // Voor stap 6e (vraag vervolgt vraag): de kernbegrippen per stuk, hun dragers en alle straatnamen.
+  const kbDragers = {}, alleStraten = new Set();
+  items.forEach(it => {
+    it._kbOrig = {};
+    (it.kernbegrippen || []).forEach(k => { const n = kbNorm(k); if(n.length >= 4 && !it._kbOrig[n]) it._kbOrig[n] = k; });
+    Object.keys(it._kbOrig).forEach(n => (kbDragers[n] = kbDragers[n] || []).push(it));
+    (it.streets || []).forEach(x => alleStraten.add(kbNorm(x)));
+  });
+  const vrGroep = {};
+  items.forEach(it => { if(it.src === 'vraag'){ it._vk = dosVraagKaal(it.titel); if(it._vk) (vrGroep[it._vk] = vrGroep[it._vk] || []).push(it); } });
+  // true = dit kernbegrip mag NOOIT als getuige tellen (algemene naam, stad, straat, orgaan, juridisch kader, afkorting)
+  const vrPoort = n =>
+       FR_ALG.has(n) || VR_STEDEN.has(n) || alleStraten.has(n)
+    || VR_STRAATSUF.test(n.split(' ').pop()) || VR_ORGAAN.test(n) || VR_KADER.test(n)
+    || /^[a-z]{1,3}( \d+)?$/.test(n);
+  const door6e = new Set();
   // Enkel ONDUBBELZINNIGE referenties mogen bruggen: een harde code (omgevingsvergunning OMV...,
   // bestek 20XX-XX-...-NNN) of een adres (straatnaam + huisnummer). Die wijzen naar precies één
   // aanbesteding of locatie en ketenen niet. Organisatienamen (vzw/bv) bewust NIET: de
@@ -8354,6 +8601,9 @@ function buildDossiers(){
     // Harde titel-ankers (bestekcodes, adressen) PLUS de zeldzame AI-kernbegrippen uit de bron.
     it._anchors = dosAnchors(it.titel).concat(kbAnchors(it));
     it._track = dosTrackVanStuk(it);
+    it._adoptie = false;   // canonbescherming: 6d, 6e en 6f zetten dit bij een adoptie
+    it._bbc = dosBudgetCyclus(it.titel);
+    if(it._bbc) it._anchors = [];   // een budgetstuk brugt nooit via een anker
     it._ent = dosEntities(it.titel);
     it._city = dosCityTheme(it);
     new Set(it._tk.map(dosStam)).forEach(t => df[t]=(df[t]||0)+1);
@@ -8363,9 +8613,9 @@ function buildDossiers(){
   const frDragers = {}, kaalGroep = {};
   items.forEach(it => {
     it._fr = dosFrasen(it.titel, frTel);
-    it._fr.forEach(f => { const k = it._track + '::' + f; (frDragers[k] = frDragers[k] || []).push(it); });
+    if(!it._bbc) it._fr.forEach(f => { const k = it._track + '::' + f; (frDragers[k] = frDragers[k] || []).push(it); });
     it._kaal = dosKaal(it.titel);
-    if(it._kaal){ const k = it._track + '::' + it._kaal; (kaalGroep[k] = kaalGroep[k] || []).push(it); }
+    if(it._kaal && !it._bbc){ const k = it._track + '::' + it._kaal; (kaalGroep[k] = kaalGroep[k] || []).push(it); }
   });
   // Signatuur per document = het meest ONDERSCHEIDENDE woord uit de titel. Gewogen:
   //  · een EIGENNAAM (hoofdletterwoord, bv. "Catharina", "Indigo", "Ragheno") telt als dubbel
@@ -8409,6 +8659,7 @@ function buildDossiers(){
     it._ketQ = [...new Set(it._tk.filter(w => w.length >= 6 && df[dosStam(w)] >= 2 && df[dosStam(w)] <= 9).map(dosStam))];
     it._ketStam = new Set(it._tk.map(dosStam));
     it._ketRoute = KET_ROUTE.test(it.titel || '');
+    if(it._bbc) return;
     if(ketRaad(it)) (ketRaadVan[it._track] = ketRaadVan[it._track] || []).push(it);
     else if(it._ketRoute) (ketRouteVan[it._track] = ketRouteVan[it._track] || []).push(it);
   });
@@ -8461,6 +8712,9 @@ function buildDossiers(){
     }
     if(beste) it._key = it._track + '::paar:' + beste.k;
   });
+  // T0 BUDGETCYCLUS: de cyclus IS de sleutel (de kant zit erin, dus nooit Stad met OCMW). Geen anker,
+  // geen reeks, geen adoptie: zo valt een budgetstuk nooit door naar een andere cyclus.
+  items.forEach(it => { if(it._bbc) it._key = it._track + '::bbc:' + it._bbc; });
   const keys = [...new Set(items.map(it=>it._key))];
   const par = {}; keys.forEach(k=>par[k]=k);
   const find = x => par[x]===x ? x : (par[x]=find(par[x]));
@@ -8480,7 +8734,7 @@ function buildDossiers(){
   //    orgaan-onafhankelijk), dan lijmen we hun groepen. De brug bestaat alleen tussen
   //    groepen met hetzelfde signaalwoord: geen kettingen, dus geen vergaarbak.
   const perStam = {};
-  items.forEach(it => { if(it._token) { const s = dosStam(it._token); (perStam[it._track + '::' + s] = perStam[it._track + '::' + s] || []).push(it); } });
+  items.forEach(it => { if(it._token && !it._bbc) { const s = dosStam(it._token); (perStam[it._track + '::' + s] = perStam[it._track + '::' + s] || []).push(it); } });
   Object.values(perStam).forEach(g => {
     if(g.length < 2 || g.length > 20) return;
     for(let i = 0; i < g.length; i++) for(let j = i+1; j < g.length; j++){
@@ -8498,7 +8752,7 @@ function buildDossiers(){
   const sgroep = {};
   items.forEach(it => {
     const strs = [...new Set((it.streets||[]).map(x => x.toLowerCase()))];
-    if(strs.length === 1) (sgroep[it._track + '::' + strs[0]] = sgroep[it._track + '::' + strs[0]] || []).push(it);
+    if(strs.length === 1 && !it._bbc) (sgroep[it._track + '::' + strs[0]] = sgroep[it._track + '::' + strs[0]] || []).push(it);
   });
   Object.values(sgroep).forEach(g => {
     if(g.length < 2 || g.length > 6) return;
@@ -8514,7 +8768,7 @@ function buildDossiers(){
   //    losse kaartjes. Exacte kale-titel-gelijkheid, dus geen kettingen.
   const serie = {};
   items.forEach(it => {
-    const k = dosSerieKey(it.titel);
+    const k = it._bbc ? null : dosSerieKey(it.titel);
     if(k) (serie[it._track + '::' + k] = serie[it._track + '::' + k] || []).push(it);
   });
   // Poort 2 (reeksen v2): een reeks is pas een reeks als EEN orgaan er op minstens drie
@@ -8561,6 +8815,7 @@ function buildDossiers(){
     items.forEach(it => { const r = find(it._key); (voorlopig[r] = voorlopig[r] || []).push(it); });
     const stamRoots = {};
     items.forEach(it => {
+      if(it._bbc) return;
       const r = find(it._key);
       it._tk.forEach(w => {
         if(w.length < 6) return;
@@ -8572,6 +8827,7 @@ function buildDossiers(){
     Object.values(voorlopig).forEach(g => {
       if(g.length !== 1) return;
       const d = g[0], eigen = find(d._key);
+      if(d._bbc) return;
       const score = {};
       d._tk.forEach(w => {
         if(w.length < 6) return;
@@ -8624,7 +8880,7 @@ function buildDossiers(){
     const voorlopig2 = {};
     items.forEach(it => { const r = find(it._key); (voorlopig2[r] = voorlopig2[r] || []).push(it); });
     Object.values(voorlopig2).forEach(g => {
-      if(g.length !== 1) return;
+      if(g.length !== 1 || g[0]._bbc) return;
       const d = g[0], eigen = find(d._key);
       const kand = [];
       d._fr.forEach(f => {
@@ -8653,7 +8909,7 @@ function buildDossiers(){
     const voorlopig3 = {};
     items.forEach(it => { const r = find(it._key); (voorlopig3[r] = voorlopig3[r] || []).push(it); });
     Object.values(voorlopig3).forEach(g => {
-      if(g.length !== 1 || !g[0]._kaal) return;
+      if(g.length !== 1 || !g[0]._kaal || g[0]._bbc) return;
       const d = g[0], eigen = find(d._key);
       const tweeling = (kaalGroep[d._track + '::' + d._kaal] || []).filter(x => x.id !== d.id);
       if(!tweeling.length) return;
@@ -8675,6 +8931,7 @@ function buildDossiers(){
     Object.values(voorlopig4).forEach(g => {
       if(g.length !== 1) return;
       const d = g[0], eigen = ketRoot.get(d.id);
+      if(d._bbc) return;
       let kand = ketPool(d).filter(x => x.id !== d.id && ketRoot.get(x.id) !== eigen)
         .map(x => ({ x, e: ketBewijs(d, x) })).filter(k => k.e);
       if(!kand.length) return;
@@ -8691,58 +8948,120 @@ function buildDossiers(){
       const doelGroep = voorlopig4[b.doel];
       if(doelGroep.length === 1 && ketDoelVan.has(doelGroep[0].id) && ketDoelVan.get(doelGroep[0].id) !== b.dRoot) return;
       if(ketBesluit.some(o => o.doel === b.dRoot && o.dRoot !== b.doel)) return;
+      b.d._adoptie = true;
       uni(b.dRoot, b.doel);
     });
   }
 
-  // 6f) CODE-ADOPTIE (getoetst 15/09/2026: 4 nieuwe paren, alle juist). Een bestekcode, een volledig
-  //     OMV-nummer, een stadsnummer 20yymmnn_OGV/ONV/OMV of een project-MER-nummer wijst naar precies
-  //     een aanbesteding of vergunning. Enkel EENLINGEN schuiven aan (nooit een groep meegesleept, dus
-  //     geen ketting), op een bevroren stand, met een draaggrens, zonder grote doelgroep, en nooit in
-  //     een groep die al een ander nummer van dezelfde soort draagt.
+  // 6e) VRAAG VERVOLGT VRAAG (sinds 15/09/2026, enkel pad C). Een schriftelijke vraag die nog eenling is,
+  //     sluit aan bij de groep van haar eerdere versie. Poorten: bevroren stand, zelfde kant, precies
+  //     een doelgroep, geen groep groter dan 20 of louter routine, hetzelfde raadslid, een vervolglabel
+  //     of een gedeeld gepoort kernbegrip, een zuivere doelgroep en een ketenwacht. Nooit groep aan groep.
+  {
+    const voorlopig6e = {}, start = new Map();
+    items.forEach(it => { const r = find(it._key); (voorlopig6e[r] = voorlopig6e[r] || []).push(it); start.set(it.id, r); });
+    const kdVan = d => new Set(Object.keys(d._kbOrig).filter(k => !vrPoort(k) && (kbDragers[k] || []).length <= CAP));
+    const besluiten = [];
+    Object.keys(voorlopig6e).sort().forEach(eigen => {
+      const g = voorlopig6e[eigen];
+      if(g.length !== 1 || g[0].src !== 'vraag' || !g[0]._vk) return;
+      const d = g[0];
+      const tw = (vrGroep[d._vk] || []).filter(x => x.id !== d.id && x._track === d._track);
+      const roots = new Set(tw.map(x => start.get(x.id))); roots.delete(eigen);
+      if(roots.size !== 1) return;
+      const doel = [...roots][0], doelgrp = voorlopig6e[doel];
+      if(doelgrp.length > 20 || doelgrp.every(vrRoutine)) return;
+      const kd = kdVan(d);
+      const getuigen = tw.filter(x => start.get(x.id) === doel
+        && vrIndiener(x) && vrIndiener(x) === vrIndiener(d)
+        && (VR_LABEL.test(d.titel) || VR_LABEL.test(x.titel)
+            || Object.keys(x._kbOrig).some(k => kd.has(k))));
+      if(!getuigen.length) return;
+      const vkW = d._vk.split(' ');
+      const zuiver = doelgrp.every(x => Object.keys(x._kbOrig).some(k => kd.has(k))
+        || vkW.every(w => dosVraagKaal(x.titel).split(' ').includes(w)));
+      if(!zuiver) return;
+      besluiten.push({ d, eigen, doel });
+    });
+    const verhuist = new Map(besluiten.map(b => [b.eigen, b.doel]));
+    besluiten.sort((a, b) => (a.d.date < b.d.date ? 1 : a.d.date > b.d.date ? -1 : (a.d.id < b.d.id ? 1 : -1)));
+    besluiten.forEach(({ d, eigen, doel }) => {
+      if(voorlopig6e[doel].length === 1 && verhuist.has(doel) && verhuist.get(doel) !== eigen) return;
+      const a = find(d._key), b = find(voorlopig6e[doel][0]._key);
+      if(a === b) return;
+      if(items.filter(i => find(i._key) === a).length > 1 && items.filter(i => find(i._key) === b).length > 1) return;
+      door6e.add(d.id);
+      d._adoptie = true;
+      uni(d._key, voorlopig6e[doel][0]._key);
+    });
+  }
+
+  // 6f) CODE-ADOPTIE, streng (herzien 15/09/2026, P1 tot P9). Een bestekcode, een volledig OMV-nummer,
+  //     een stadsnummer 20yymmnn_OGV/ONV of een project-MER-nummer wijst naar precies een aanbesteding of
+  //     vergunning. Enkel EENLINGEN schuiven aan, op een bevroren stand. P1 twee tot acht dragers; P2 nooit
+  //     twee groepen; P3 doelgroep hooguit acht; P4 geen ander nummer van dezelfde soort in de doelgroep;
+  //     P5 een eenling met twee nummers van dezelfde soort doet niet mee; P6 gelijkspel is niet koppelen;
+  //     P7 een nieuw paar enkel met minstens twee eenlingen; P8 canonbescherming; P9 de doelgroep is
+  //     code-gesloten (elk lid is via nummers met de drager verbonden). Zonder P9 legde de regel in de
+  //     tijdreis foute paren.
   {
     const DOS_CODE = [
       ['bestek', /\b20\d{2}-(?:[a-z]{2,}-)+\d{3,}\b/g],
       ['omv',    /\bomv[_ ]?\d{10}\b/g],
-      ['stad8',  /\b20\d{6}_(?:ogv|onv|omv)\b/g],
+      ['stad8',  /\b20\d{6}_(?:ogv|onv)\b/g],
       ['mer',    /\bp[rl]\d{4}\b/g]
     ];
     const dosCodes = it => {
       const bron = frNorm(it.titel || '') + ' ; ' + (it.kernbegrippen || []).map(kbNorm).join(' ; ');
-      const out = new Map();
-      DOS_CODE.forEach(([fam, re]) => (bron.match(re) || []).forEach(c => out.set(c.replace(/\s/g, '_'), fam)));
+      const out = {};
+      DOS_CODE.forEach(([fam, re]) => (bron.match(re) || []).forEach(c => { out['code:' + c.replace(/\s/g, '_')] = fam; }));
       return out;
     };
-    const groep = {}, root = new Map();
-    items.forEach(it => { const r = find(it._key); root.set(it.id, r); (groep[r] = groep[r] || []).push(it); it._codes = dosCodes(it); });
-    const dragers = {};
-    items.forEach(it => it._codes.forEach((fam, c) => (dragers[c] = dragers[c] || []).push(it)));
-    const besluit = new Map();
+    const byId = new Map(items.map(it => [it.id, it]));
+    const groep = {}, root = {};
+    items.forEach(it => { const r = find(it._key); root[it.id] = r; (groep[r] = groep[r] || []).push(it); });
+    const codes = {}, dragers = {};
+    items.forEach(it => { codes[it.id] = it._bbc ? {} : dosCodes(it); Object.keys(codes[it.id]).forEach(c => (dragers[c] = dragers[c] || []).push(it)); });   // een budgetstuk brugt nooit
+    const zelfdeSoortAnders = (id, fam, c) => Object.entries(codes[id]).some(([c2, f2]) => f2 === fam && c2 !== c);
+    const besluit = {};
     Object.keys(dragers).sort().forEach(c => {
       const ds = dragers[c];
       if(ds.length < 2 || ds.length > 8) return;
-      const roots = [...new Set(ds.map(x => root.get(x.id)))].sort();
+      const roots = [...new Set(ds.map(x => root[x.id]))].sort();
       if(roots.length < 2) return;
-      const groot = roots.filter(r => groep[r].length >= 2);
-      const een = roots.filter(r => groep[r].length === 1);
+      const groot = roots.filter(r => groep[r].length >= 2), een = roots.filter(r => groep[r].length === 1);
       if(groot.length >= 2) return;
+      const fam = codes[ds[0].id][c];
       let doel;
       if(groot.length === 1){
-        const g = groep[groot[0]], fam = ds[0]._codes.get(c);
-        if(g.length > CAP) return;
-        if(g.some(x => !x._codes.has(c) && [...x._codes].some(([c2, f2]) => f2 === fam && c2 !== c))) return;
-        doel = 'root:' + groot[0];
-      } else doel = 'paar:' + c;
-      een.forEach(r => { const id = groep[r][0].id; if(!besluit.has(id)) besluit.set(id, new Set()); besluit.get(id).add(doel); });
+        const g = groep[groot[0]];
+        if(g.length > 8) return;
+        if(g.some(x => zelfdeSoortAnders(x.id, fam, c))) return;
+        const bereikt = new Set(g.filter(x => codes[x.id][c]).map(x => x.id)), rand = [...bereikt];
+        while(rand.length){ const y = rand.pop();
+          g.forEach(x => { if(!bereikt.has(x.id) && Object.keys(codes[x.id]).some(k => codes[y][k])){ bereikt.add(x.id); rand.push(x.id); } }); }
+        if(bereikt.size !== g.length) return;
+        doel = 'groep:' + groot[0];
+      } else {
+        doel = 'nieuw:' + c;
+      }
+      een.forEach(r => {
+        const e = groep[r][0];
+        if(zelfdeSoortAnders(e.id, fam, c)) return;
+        (besluit[e.id] = besluit[e.id] || new Set()).add(doel);
+      });
     });
-    const paarAnker = {};
-    [...besluit.keys()].sort().forEach(id => {
-      const doelen = besluit.get(id);
-      if(doelen.size !== 1) return;
-      const d = [...doelen][0], eigen = root.get(id);
-      if(d.startsWith('root:')) uni(eigen, d.slice(5));
-      else if(paarAnker[d] === undefined) paarAnker[d] = eigen;
-      else uni(eigen, paarAnker[d]);
+    const toepassen = Object.keys(besluit).sort()
+      .filter(i => besluit[i].size === 1)
+      .map(i => [i, [...besluit[i]][0]]);
+    const tel = {};
+    toepassen.forEach(([i, d]) => { if(d.startsWith('nieuw:')) tel[d] = (tel[d] || 0) + 1; });
+    const anker = {};
+    toepassen.forEach(([i, d]) => {
+      if(d.startsWith('nieuw:') && tel[d] < 2) return;
+      if(d.startsWith('groep:')){ byId.get(i)._adoptie = true; uni(root[i], d.slice(6)); }
+      else if(!anker[d]) anker[d] = root[i];
+      else uni(root[i], anker[d]);
     });
   }
 
@@ -8763,9 +9082,15 @@ function buildDossiers(){
   // van net het stuk mét de kleinste _key het id van de rest doen verspringen, en zou een
   // volger of een gedeelde link stil breken: precies de instabiliteit die stabiele id's moeten
   // voorkomen. De losgemaakte stukken krijgen straks hun eigen, vaste solo-canon.
+  // Canonbescherming (15/09/2026): een GEADOPTEERD stuk levert nooit de canon zolang zijn groep
+  // andere leden heeft. Anders erft een bestaand dossier het id van een eenling die er net bij kwam
+  // ('solo:' sorteert voor 'tok:') en breekt elke volger. Bestaat de groep enkel uit adopties, dan
+  // telt iedereen mee, zodat de canon volgorde-onafhankelijk blijft.
+  const canonBron = g => { const b = g.filter(i => !i._adoptie); return b.length ? b : g; };
   const canonVan = {};
   Object.keys(map).forEach(r => {
-    canonVan[r] = map[r].reduce((m, i) => (i._key < m ? i._key : m), map[r][0]._key);
+    const bron = canonBron(map[r]);
+    canonVan[r] = bron.reduce((m, i) => (i._key < m ? i._key : m), bron[0]._key);
   });
 
   // ── Handmatig losgemaakte stukken (correcties.json): een lezer of de redactie oordeelde dat
@@ -8816,7 +9141,8 @@ function buildDossiers(){
   Object.keys(map).forEach(r => {
     if(r.slice(0,4) === 'los:') return;
     if(!map[r].some(it => origLeden[r] && origLeden[r].has(it.id))){
-      canonVan[r] = map[r].reduce((m, i) => (i._key < m ? i._key : m), map[r][0]._key);
+      const bron = canonBron(map[r]);
+      canonVan[r] = bron.reduce((m, i) => (i._key < m ? i._key : m), bron[0]._key);
     }
   });
 
@@ -8835,6 +9161,8 @@ function buildDossiers(){
   const dosKopSeg = t => (t || '').split(/[.:;]\s/)[0].trim();
   const kopRubriek = {};
   Object.values(map).forEach(g => new Set(g.map(i => dosKopSeg(i.titel).toLowerCase())).forEach(k => { kopRubriek[k] = (kopRubriek[k] || 0) + 1; }));
+  // Een vervolgetiket ("Nekkerhal-vervolgvraag") benoemt de herhaling, niet de zaak.
+  const VR_ETIKET = /-?\s?vervolg(?:\s?vraag)?\b/i;
   DOSSIERS = Object.entries(map).map(([__root, g]) => {
     g.sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
     // Stabiele id: afgeleid van de clustersleutel (de kleinste _key van de groep, bevroren
@@ -8850,7 +9178,7 @@ function buildDossiers(){
     // boilerplatezin, dan kiezen we een ander stuk uit de groep: eerst de kop die de meeste stukken
     // delen (het patroon, bv. "Raadscommissies · schepen Geypen"), dan de meest specifieke, nooit
     // een los rubriekwoord. Gemeten: indeling en dossier-ID's identiek, boilerplatekoppen 215 -> 26.
-    const nameOud = Object.entries(freq).sort((a,b)=> b[1]-a[1] || b[0].length-a[0].length)[0][0];
+    const nameOud = Object.entries(freq).sort((a,b)=> (VR_ETIKET.test(a[0]) - VR_ETIKET.test(b[0])) || b[1]-a[1] || b[0].length-a[0].length)[0][0];
     let name = nameOud;
     const toon = t => dosTitle({ name: t, items: g });
     if(freq[nameOud] === 1 && DOS_SLECHTE_KOP.test(toon(nameOud))){
@@ -8870,6 +9198,14 @@ function buildDossiers(){
                         || toon(a).length - toon(b).length
                         || (a < b ? -1 : a > b ? 1 : 0));
       if(alt.length && toon(alt[0]) !== toon(nameOud)) name = alt[0];
+    }
+    // Budgetcyclus: de raad beslist, dus zijn titel geeft de kop. Het collegestuk draagt soms een ander
+    // jaartal ("meerjarenplan 2025-2031" tegenover "2026-2031" bij de raad) en is door de verwijzingszin
+    // altijd de langste titel.
+    if(g.every(i => i._bbc)){
+      const raad = g.filter(i => i.org === 'Gemeenteraad' || i.org === 'RMW')
+        .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : (a.id < b.id ? -1 : 1)));
+      if(raad.length) name = raad[0].titel;
     }
     const themes = [...new Set(g.flatMap(i=>i.themes))];
     const places = [...new Set(g.flatMap(i => {
@@ -8916,16 +9252,24 @@ function buildDossiers(){
   // punt-id, en via deze map weten we meteen in welk dossier dat punt zit.
   ITEM2DOS = new Map();
   DOSSIERS.forEach(d => d.items.forEach(it => ITEM2DOS.set(it.id, d)));
+  { const tw = dosTweelingen(items, ITEM2DOS); TWEELING = tw.perStuk; TWEELING_DOS = tw.dosParen; DOS_VERWANT = null; }
   DOSSIERS.sort((a,b)=> b.items.length - a.items.length);
+
+  // Runtime-alias voor een door 6e geadopteerde vraag: haar vroegere eigen id volgt mee.
+  door6e.forEach(id => { const it = idMap.get(id), oud = 'dossier-' + dosHash(it._key), nu = ITEM2DOS.get(id).id;
+    if(oud !== nu && !DOS_ALIAS[oud] && !DOSSIERS.some(x => x.id === oud)) DOS_ALIAS[oud] = nu; });
 
   // Snoei dode aliassen: een alias die (na resolutie) niet op een bestaand dossier uitkomt,
   // zou een wél-bestaand dossier-id kunnen kapen en dat dossier onbereikbaar maken. Zulke
   // aliassen (bv. een verouderde samenvoeg-voorspelling) negeren we, zodat het echte dossier
   // gewoon opent.
   const geldigeIds = new Set(DOSSIERS.map(d => d.id));
-  Object.keys(DOS_ALIAS).forEach(oud => {
-    if(!geldigeIds.has(dosResolveId(oud))) delete DOS_ALIAS[oud];
-  });
+  // Aliaswacht (15/09/2026): een bron-id dat zelf weer een geldig dossier is, wint van zijn alias.
+  // Anders kaapt een oude alias een dossier dat na een latere indeling opnieuw bestaat. In twee
+  // stappen, zodat de uitkomst niet afhangt van de volgorde van de sleutels: eerst de wacht, dan pas
+  // de aliassen die nergens meer uitkomen.
+  Object.keys(DOS_ALIAS).forEach(oud => { if(geldigeIds.has(oud)) delete DOS_ALIAS[oud]; });
+  Object.keys(DOS_ALIAS).forEach(oud => { if(!geldigeIds.has(dosResolveId(oud))) delete DOS_ALIAS[oud]; });
 
   // Reeks-dossiers: haal het instantienummer uit de kop ("Vastleggingen week 47" →
   // "Vastleggingen"): de reeks omvat álle weken, dus het nummer van één week hoort
@@ -9272,7 +9616,12 @@ function synExtra(term){
 // omgevingsvergunning), gedolven door delf_verwijzingen.py. Bewust suggesties en geen
 // samenvoeging: een gedeelde budgetlijn is soms één project en soms een generieke pot,
 // dus we benoemen de relatie eerlijk en laten de lezer oordelen.
-const VERWANT_LBL = { mjp: 'zelfde lijn in het meerjarenplan', zaak: 'zelfde besluit aangehaald', omv: 'zelfde omgevingsvergunning' };
+const VERWANT_LBL = { mjp: 'zelfde lijn in het meerjarenplan', zaak: 'zelfde besluit aangehaald', omv: 'zelfde omgevingsvergunning',
+  'tw-ocmw': 'zelfde dag, gelijkaardige titel', 'tw-stad': 'zelfde dag, gelijkaardige titel' };
+// Het orgaan in lopende tekst, voor de knop "Gelijkaardig punt bij het vast bureau".
+const TW_ORGAAN = { 'College':'het college', 'Vast bureau':'het vast bureau', 'Vast Bureau':'het vast bureau', 'Gemeenteraad':'de gemeenteraad', 'RMW':'de raad voor maatschappelijk welzijn' };
+let TWEELING = new Map();   // stuk-id -> [{id, org, date, dos}] van zijn tweeling aan de andere kant
+let TWEELING_DOS = [];      // [stadsdossier-id, OCMW-dossier-id] met meer dan de helft dekking
 let DOS_VERWANT = null;   // dossier-id → Map(ander dossier-id → Set(soorten))
 function bouwVerwant(){
   DOS_VERWANT = new Map();
@@ -9287,6 +9636,11 @@ function bouwVerwant(){
       s.add(soort);
     }
   });
+  TWEELING_DOS.forEach(([st, oc]) => [[st, oc, 'tw-ocmw'], [oc, st, 'tw-stad']].forEach(([x, y, soort]) => {
+    let m = DOS_VERWANT.get(x); if(!m){ m = new Map(); DOS_VERWANT.set(x, m); }
+    let z = m.get(y); if(!z){ z = new Set(); m.set(y, z); }
+    z.add(soort);
+  }));
 }
 // Aliassen: als dossiers ooit samensmelten (via het correctiebestand van de redactie),
 // blijven oude id's geldig: gevolgde dossiers en gedeelde links komen dan in het
@@ -9601,6 +9955,11 @@ function openDossier(id){
       const teVerplaatsen = curatorVerplaatsStuk === it.id;
       actions.push(`<button type="button" class="dosm-ev-link dosm-ev-cur${teVerplaatsen?' aan':''}" onclick="curatorStartVerplaats('${it.id}', this)">${teVerplaatsen?'✓ te verplaatsen (klik om te annuleren)':'→ Verplaats naar ander dossier'}</button>`);
     }
+    // Tweeling aan de andere kant: dezelfde dag stond bij het orgaan aan de andere kant een punt met een
+    // gelijkaardige titel. Meer claimen we niet, want soms beslist elk bestuur onder dezelfde titel over
+    // iets van zichzelf. De datum staat al bovenaan dit tijdlijnpunt, dus niet nog eens in de knop.
+    const tw = (TWEELING.get(it.id) || [])[0];
+    if(tw && TW_ORGAAN[tw.org]) actions.push(`<button type="button" class="dosm-ev-link" onclick="openDossier('${tw.dos}')" title="Op dezelfde dag stond een punt met een gelijkaardige titel op de agenda van ${TW_ORGAAN[tw.org]}. Open dat dossier."><span>Gelijkaardig punt bij ${TW_ORGAAN[tw.org]}</span></button>`);
     actions.push(`<button type="button" class="dosm-ev-link dosm-ev-meld" onclick="meldFout('${d.id}','${it.id}')" title="Dit stuk hoort niet in dit dossier? Laat het ons weten"><svg class="dosm-ev-ic" aria-hidden="true"><use href="#ic-fout"/></svg><span>Fout melden</span></button>`);
     const indiener = (it.src==='vraag' && it.indiener)
       ? `<div class="dosm-ev-indiener">Schriftelijke vraag van ${escape(it.indiener)}</div>` : '';
@@ -9633,7 +9992,7 @@ function openDossier(id){
   const vwBlok = $('dosmVerwant'), vwLijst = $('dosmVerwantLijst');
   if(vwBlok && vwLijst){
     if(verw && verw.size){
-      vwLijst.innerHTML = [...verw.entries()].slice(0, 6).map(([vid, soorten]) => {
+      vwLijst.innerHTML = [...verw.entries()].sort((x, y) => (y[1].has('tw-ocmw') || y[1].has('tw-stad')) - (x[1].has('tw-ocmw') || x[1].has('tw-stad'))).slice(0, 6).map(([vid, soorten]) => {
         const vd = DOSSIERS.find(x => x.id === vid);
         if(!vd) return '';
         const waarom = [...soorten].map(s => VERWANT_LBL[s] || s).join(' · ');
