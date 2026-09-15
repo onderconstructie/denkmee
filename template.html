@@ -4140,13 +4140,15 @@ a, button, summary, input, label{ touch-action:manipulation; }
 }
 
 /* =====================================================================
-   STATUSSTROOK  (over te nemen van het portaal, 09/09/2026)
+   STATUSSTROOK  (BETA)
    =====================================================================
-   De zwarte balk onder de nav met 'Nog niet gelanceerd'. Zelfde vorm en
-   tekst als op asgaupaust.be, maar het badge-woord staat hier in de
-   app-kleur: het portaalroze blijft in een app voorbehouden aan het
-   merkwoord in de nav en de portaaltoets in de app-balk. Weg te halen
-   na de lancering (markup én dit blok). */
+   De zwarte balk onder de nav: het badge-woord BETA, een regel die om
+   reacties vraagt en een knop die meteen het mailprogramma opent. Zelfde
+   vorm en tekst als op asgaupaust.be, de persmap en GAS mee, maar het
+   badge-woord staat hier in de app-kleur: het portaalroze blijft in een
+   app voorbehouden aan het merkwoord in de nav en de portaaltoets in de
+   app-balk. De strook blijft staan. De techniek-pagina erft dit blok via
+   de gedeelde head. */
 .status-strook{
   background:var(--ink); color:var(--paper);
   border-bottom:1px solid rgba(245,241,232,.14);
@@ -4161,14 +4163,12 @@ a, button, summary, input, label{ touch-action:manipulation; }
 }
 .status-strook span{ font-size:.85rem; line-height:1.45; color:rgba(245,241,232,.82); }
 .status-strook .ss-cta{
-  font:inherit; color:#fff; background:none; border:0; padding:0; cursor:pointer;
+  font:inherit; color:#fff; text-decoration:none; cursor:pointer;
   border-bottom:1px solid rgba(255,255,255,.6);
 }
 .status-strook .ss-cta:hover{ border-bottom-color:#fff; }
-/* Overal dezelfde zin, ook op een telefoon (gevraagd 10/09/2026: "de grote zwarte banner
-   ipv die ingekorte"). Hier stond een korte variant die op gsm de volle zin verving; het
-   portaal, de persmap en GAS mee tonen de volle tekst wel, en dat liep dus uiteen.
-   Op een klein scherm blijft de strook wel iets compacter gezet. */
+/* Overal dezelfde zin, ook op een telefoon, net als op het portaal, de persmap en GAS mee.
+   Op een klein scherm staat de strook iets compacter gezet. */
 @media (max-width:700px){
   .status-strook .shell{ padding-top:.5rem; padding-bottom:.5rem; gap:.35rem; }
   .status-strook span{ font-size:.78rem; line-height:1.4; }
@@ -4241,10 +4241,9 @@ a, button, summary, input, label{ touch-action:manipulation; }
 /* LAPTOP. Boven de 820px vensterhoogte verandert er niets: daar paste alles al.
    Daaronder in twee trappen krimpen, zodat een MacBook (790px) nauwelijks iets
    inlevert en een 1366x768-scherm met werkbalken toch nog past.
-   LET OP: de drempels (880 en 780) liggen ~60px hoger dan de kale berekening, want de
-   statusstrook 'Nog niet gelanceerd' kost dat van het eerste scherm. Verdwijnt die
-   strook na de lancering, dan mogen ze terug naar 820 en 720 (en de twee drempels
-   hieronder naar 830 en 790), zodat er weer wat meer lucht komt. */
+   LET OP: de drempels (880 en 800) liggen hoger dan de kale berekening, want de
+   statusstrook (BETA) kost ruimte van het eerste scherm. Die strook blijft staan, dus
+   deze drempels en de twee hieronder houden er rekening mee. */
 @media (min-width:901px) and (max-height:880px){
   .meeting-card{ padding:1.25rem 1.75rem; }
   .mc-tag{ margin-bottom:.65rem; }
@@ -4392,16 +4391,35 @@ a, button, summary, input, label{ touch-action:manipulation; }
   </div>
 </nav>
 
-<!-- Statusstrook, weg te halen na de lancering. Exact hetzelfde signaal en hetzelfde
-     badge-woord als op het portaal, zodat een bezoeker die van asgaupaust.be doorklikt
-     niet plots iets anders leest. Enige verschil: het badge-woord draagt hier de
-     app-kleur (eiland-petrol op inkt, 6,9:1) in plaats van het portaalroze. -->
+<!-- Statusstrook BETA. Exact hetzelfde signaal, badge-woord en knop als op het portaal,
+     de persmap en GAS mee, zodat een bezoeker die van asgaupaust.be doorklikt niet plots
+     iets anders leest. Enige verschil: het badge-woord draagt hier de app-kleur
+     (eiland-petrol op inkt) in plaats van het portaalroze. De knop opent meteen het
+     mailprogramma: het script eronder zet de mailto op het adres uit CONTACT_TO (base64,
+     in het hoofdscript), nooit als platte tekst in de bron. Zonder JavaScript wijst de
+     knop naar het contactformulier van het portaal. -->
 <div class="status-strook"><div class="shell">
-  <b>Nog niet gelanceerd</b>
-  <span>Deze site is nog in volle voorbereiding: we testen nog of alle data kloppen.
-    Kom je hier toevallig terecht, dan is je feedback nu al welkom.
-    <button type="button" class="ss-cta" onclick="openContactModal()">Laat het ons weten</button></span>
+  <b>BETA</b>
+  <span>Deze site is nog in opbouw. Zie je een fout of iets dat beter kan?
+    <a class="ss-cta" href="https://asgaupaust.be/#contact">Mail het ons</a></span>
 </div></div>
+<script>
+// CONTACT_TO en mailtoUrl() staan in het hoofdscript onderaan de pagina, dat bij
+// DOMContentLoaded al gedraaid heeft. Ontbreekt het adres, dan blijft de link naar het portaal.
+// Bij de klik zet het de link opnieuw, want de hash volgt het gekozen onderdeel.
+document.addEventListener('DOMContentLoaded', function(){
+  var knop = document.querySelector('.status-strook .ss-cta');
+  if(!knop) return;
+  var zet = function(){
+    try {
+      knop.href = mailtoUrl(atob(CONTACT_TO), 'Reactie op Denk mee met Mechelen (BETA)',
+                            'Pagina: ' + location.href + '\n\n');
+    } catch(e) {}
+  };
+  zet();
+  knop.addEventListener('click', zet);
+});
+</script>
 
 <!-- Fullscreen menu overlay -->
 <div class="menu-overlay" id="menuOverlay" hidden>
