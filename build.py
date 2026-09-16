@@ -249,6 +249,33 @@ if _geb_kandidaten:
     else:
         print("       geboortedatums: kandidatentabel(len) gemaskeerd ✓")
 
+# 3c2) Veiligheidsklep: de ledentabel van een adviesraad met burgers (de GECORO benoemt
+#      deskundigen en vertegenwoordigers van verenigingen) mag geen persoonsnamen dragen, en een
+#      ondersteunende personeelsrol evenmin. schoon_brontekst.py maskeert die via
+#      maskeer_ledenlijst(); deze klep controleert het resultaat, zodat een volgende benoemingsronde
+#      niet stil opnieuw namen publiceert. Aanleiding: op 16/09/2026 stond de volledige GECORO-tabel
+#      in de build, tot in de samenvatting.
+import schoon_brontekst as _sb_leden
+_leden_lek = []
+for _it in _items:
+    for _v in GEB_VELDEN:
+        _t = str(_it.get(_v) or "")
+        if not _t:
+            continue
+        _schoon, _n = _sb_leden.maskeer_ledenlijst(_t)
+        if _n:
+            _leden_lek.append(str(_it.get("id")))
+            break
+if _leden_lek:
+    print(f"[ledenlijst] persoonsnamen in een ledentabel of naast een personeelsrol in "
+          f"{len(_leden_lek)} stuk(ken): " + ", ".join(_leden_lek[:5]))
+    if not is_demo:
+        sys.exit("[STOP] Live build geweigerd: er staan namen van burgers in een ledentabel. Draai "
+                 "schoon_brontekst.py opnieuw, dan bouw_zoekindex.py, en bouw daarna de site opnieuw.")
+    print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
+else:
+    print("       ledentabellen: geen persoonsnamen in de build ✓")
+
 # 3d) Woonadressen en geboortedatums in lopende tekst. schoon_brontekst.py maskeert een adres na
 #     "wonend/woonachtig/gedomicilieerd" en een datum na "°" of "geboren". Deze klep controleert of
 #     dat ook echt gebeurd is, met exact dezelfde patronen, zodat een losse stap die de opkuis

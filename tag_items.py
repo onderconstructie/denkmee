@@ -133,17 +133,36 @@ def uittreksel_tekst(item_id: str, klassen=None) -> str:
 # Tagging leest niet meer dan dit aantal tekens brontekst: één besluit past ruim, maar een
 # verzamelpunt met tientallen bijlagen zou anders de input (en de kost) laten exploderen.
 MAX_BRON = 24000
+_BRON_CACHE = {}          # per stuk-id: de gemaskeerde brontekst, want content_key vraagt ze vaak op
 
 def brontekst_voor_tagging(item: dict) -> str:
     """De brontekst die de tagging ziet: primair de officiële BESLUIT-tekst (klasse 'uittreksel',
     rijker dan de besluitenlijst); de bijlage-reglementen laten we hier weg (die voeden de zoek,
-    niet de samenvatting). Wordt NIET naar data.json teruggeschreven."""
+    niet de samenvatting). Wordt NIET naar data.json teruggeschreven.
+
+    De tekst gaat eerst door de maskering van schoon_brontekst (16/09/2026). Die leest de PDF-tekst
+    uit de uittrekselcache, niet het geschoonde data.json, dus zonder deze stap zag het model nog
+    altijd de namen uit een ledenlijst en zette het ze terug in de samenvatting. Gemeten: na het
+    maskeren van data.json kwamen de namen van de GECORO-leden via de nieuwe samenvatting gewoon
+    terug, en weigerde de klep in build.py de build. Maskeren vóór de prompt lost dat bij de bron op."""
     bt = (item.get("brontekst") or "").strip()
     ut = uittreksel_tekst(item.get("id", ""), klassen={"uittreksel"})
     if not ut:                                   # geen eigen uittreksel: val terug op bijlagen
         ut = uittreksel_tekst(item.get("id", ""), klassen={"bijlage"})
     bron = (ut + ("\n\n" + bt if bt else "")).strip() if ut else bt
-    return bron[:MAX_BRON]
+    sleutel = item.get("id") or bron[:60]
+    if sleutel in _BRON_CACHE:
+        return _BRON_CACHE[sleutel]
+    try:
+        import schoon_brontekst as _sb
+        bron, _ = _sb.maskeer_namen(bron)
+        ctx = _sb.maskeer_context(bron)
+        bron = ctx[0] if isinstance(ctx, tuple) else ctx
+    except Exception:
+        pass                                     # maskering nooit fataal voor de tagging
+    bron = bron[:MAX_BRON]
+    _BRON_CACHE[sleutel] = bron                  # content_key() vraagt dit per item meermaals op
+    return bron
 
 
 def content_key(item: dict) -> str:

@@ -251,6 +251,128 @@ PERSONEELSGIDS_TEKST = (
     "en de bedrijfshulpverleners: weggelaten.] ")
 
 
+# --- Ledentabel van een adviesraad met burgers, en ondersteunende personeelsrollen -----------
+# Een raadsbesluit dat de GECORO benoemt, zet elf deskundigen en zeven vertegenwoordigers van
+# verenigingen bij naam in de tekst, elk met een plaatsvervanger. Dat zijn burgers: hun naam hoorde
+# nooit op de site, en stond er op 16/09/2026 wel, tot in de samenvatting. De organisaties zelf
+# (Natuurpunt, VOKA, UNIZO, Fietsersbond) blijven staan; die horen bij het besluit.
+#
+# Twee smalle regels, in de vorm van de personeelsgids-knip hierboven:
+#  1. LEDENBLOK: binnen een ledenopsomming van zo'n commissie maskeren we de persoonsnamen. Het
+#     blok is afgebakend met eigen ankers, zodat de rest van het besluit (stemmingen met
+#     raadsleden, juridische grond) ongemoeid blijft.
+#  2. ONDERSTEUNENDE ROL: de naam naast preventieadviseur, arbeidsarts, vertrouwenspersoon of
+#     HR-manager. Dat is personeel in een ondersteunende functie, dezelfde categorie die de
+#     personeelsgids-regel elders al wegknipt.
+# Mandatarissen blijven staan: raadsleden, het college en de bevoegde schepenen staan in de witte
+# lijst, en organen waar zij zetelen (bijzonder comité, raad van bestuur, algemene vergadering)
+# vallen buiten deze regels.
+ROL_WOORD = re.compile(
+    r"(?i)\b(?:effectief lid|plaatsvervangend lid|plaatsvervanger|deskundige|vertegenwoordiger|"
+    r"afgevaardigde|ondervoorzitter|voorzitter|secretaris|waarnemer|vervanger|lid namens)\b")
+PRIVAAT_CONTEXT = re.compile(
+    r"(?i)(gecoro|commissie voor ruimtelijke ordening|syndicaal overleg|syndicale afvaardiging|"
+    r"overheidsdelegatie|onderhandelingscomite|onderhandelingscomité|basisoverlegcomite|basisoverlegcomité)")
+LEDENBLOK = re.compile(
+    r"(?is)(?:deskundigen\s*\(\d+\)\s*:|maatschappelijke geledingen\s+effectief lid\s+plaatsvervanger|"
+    r"effectief lid\s+plaatsvervanger).{0,4000}?(?=\n\s*besluit\b|\n\s*artikel\s+1\b|\n\s*financi|\n\s*•|$)")
+PERSOON_PAAR = re.compile(
+    r"\b[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der|Vande|Vanden))?"
+    r"\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,}\b")
+# Woorden die verraden dat het om een orgaan, vakgebied, plaats of datum gaat, niet om een persoon.
+GEEN_PERSOON = re.compile(
+    r"(?i)\b(?:stad|gemeente|provincie|vlaams|vlaamse|agentschap|departement|dienst|vzw|bv|nv|cvba|"
+    r"ocmw|politie|zone|school|hogeschool|academie|universiteit|kabinet|college|raad|bureau|comite|"
+    r"comité|commissie|gecoro|fractie|maatschappij|groep|bedrijf|centrum|vereniging|verenigingen|"
+    r"bond|punt|straat|laan|plein|weg|kaai|baan|park|huis|mechelen|brussel|antwerpen|leuven|"
+    r"ruimtelijke|ordening|codex|decreet|beleid|reglement|overleg|kunstonderwijs|deeltijds|"
+    r"januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\b")
+ONDERSTEUNENDE_ROL = re.compile(
+    r"(?i)(\b(?:interne preventieadviseur|preventieadviseur|arbeidsarts|vertrouwensperso[a-z]*|"
+    r"hr-manager)\b[^\w\n]{0,4})("
+    r"[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der))?\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,})")
+# De politieke waarnemers in zo'n commissie staan als "partij: naam" buiten de ledentabel. Ook zij
+# zijn geen mandataris in dit besluit; enkel wie in de witte lijst staat, blijft staan.
+PARTIJ_NAAM = re.compile(
+    r"(?i)(\b(?:n-va|vooruit|cd&v|pvda|groen|open vld|vlaams belang|vld|sp\.a)\b[^\w\n]{0,14})("
+    r"[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der|Vande|Vanden))?\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,})")
+
+
+def _publieke_namen():
+    """Mandatarissen en al beoordeelde publieke namen: die blijven staan."""
+    namen = set()
+    try:
+        ruw = json.loads((BASE / "data" / "raadsleden.json").read_text(encoding="utf-8"))
+        if isinstance(ruw, dict):
+            namen |= {k.strip() for k in ruw}
+    except Exception:
+        pass
+    namen |= {n.strip() for n in _PRIVACY_RUW.get("beoordeeld_publiek", []) if isinstance(n, str)}
+    try:
+        d = json.loads(DATA.read_text(encoding="utf-8"))
+        for lid in d.get("college", []):
+            if isinstance(lid, dict) and lid.get("name"):
+                namen.add(lid["name"].strip())
+        for x in d.get("college_beslissingen", []) + d.get("agendapunten", []):
+            s = x.get("schepen")
+            if isinstance(s, str) and s.strip():
+                namen.add(re.sub(r"(?i)^(?:schepen|burgemeester|voorzitter)\s+", "", s).strip())
+    except Exception:
+        pass
+    namen |= {" ".join(reversed(n.split())) for n in list(namen) if len(n.split()) == 2}
+    return {n for n in namen if len(n.split()) >= 2}
+
+
+_PUBLIEK = None
+
+
+def _maskeer_paren(blok):
+    """Vervangt de persoonsnamen in één ledenblok. Geeft (blok, aantal)."""
+    global _PUBLIEK
+    if _PUBLIEK is None:
+        _PUBLIEK = _publieke_namen()
+    uit, laatst, aantal = [], 0, 0
+    for m in PERSOON_PAAR.finditer(blok):
+        naam = m.group(0)
+        if naam in _PUBLIEK or GEEN_PERSOON.search(naam):
+            continue
+        uit.append(blok[laatst:m.start()]); uit.append(NAAM_MASKER); laatst = m.end(); aantal += 1
+    uit.append(blok[laatst:])
+    return "".join(uit), aantal
+
+
+def maskeer_ledenlijst(tekst):
+    """Maskeert namen in de ledenlijst van een adviesraad en naast een ondersteunende rol.
+
+    Een benoemingsbesluit van zo'n raad IS een personenlijst: de namen staan in de tabel, maar ook
+    bij de kandidaten, de voorgedragen voorzitter en de politieke waarnemers. Daarom maskeren we in
+    zo'n stuk ELK persoonsnaampaar, behalve de mandatarissen uit de witte lijst en de woordparen die
+    een orgaan, vakgebied of plaats benoemen. Buiten zo'n stuk raakt de regel niets aan."""
+    if not tekst:
+        return tekst, 0
+    aantal = 0
+    # Drie ingangen, want zo'n lijst heeft niet altijd tabelvorm: het besluit zelf (LEDENBLOK), een
+    # opsomming met rolwoorden, en de samenvatting in lopende tekst (een rol plus meerdere namen).
+    _rollen = len(ROL_WOORD.findall(tekst))
+    if PRIVAAT_CONTEXT.search(tekst) and (LEDENBLOK.search(tekst) or _rollen >= 3
+                                          or (_rollen >= 1 and len(PERSOON_PAAR.findall(tekst)) >= 3)):
+        tekst, aantal = _maskeer_paren(tekst)
+    # subn() telt élke treffer, ook wanneer we de tekst bewust ongemoeid laten (een organisatienaam
+    # naast een rol). Zelf tellen dus, anders meldt de klep in build.py een lek dat er niet is.
+    geteld = [0]
+
+    def _rol(m):
+        naam = m.group(2)
+        if naam in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
+            return m.group(0)
+        geteld[0] += 1
+        return m.group(1) + NAAM_MASKER
+    tekst = ONDERSTEUNENDE_ROL.sub(_rol, tekst)
+    if PRIVAAT_CONTEXT.search(tekst):
+        tekst = PARTIJ_NAAM.sub(_rol, tekst)
+    return tekst, aantal + geteld[0]
+
+
 def maskeer_namen(tekst, met_achternamen=None):
     """Maskeert de gecureerde namen in één tekst. Geeft (nieuwe tekst, aantal) terug.
 
@@ -271,6 +393,7 @@ def maskeer_namen(tekst, met_achternamen=None):
     if not tekst:
         return tekst, 0
     tekst, gids = PERSONEELSGIDS.subn(PERSONEELSGIDS_TEKST, tekst)
+    tekst, leden = maskeer_ledenlijst(tekst)
     if met_achternamen is None:
         met_achternamen = any(v in tekst for v in PRIVE_VORMEN)
     vormen = sorted(PRIVE_VORMEN, key=len, reverse=True)
@@ -281,7 +404,7 @@ def maskeer_namen(tekst, met_achternamen=None):
         tekst, n = re.subn(r"\b%s\b" % re.escape(vorm), NAAM_MASKER, tekst)
         aantal += n
     tekst, n = BEROEP_NAAM.subn(r"\1 " + NAAM_MASKER, tekst)
-    return tekst, aantal + n + gids
+    return tekst, aantal + n + gids + leden
 
 
 def tekst_van(item):
