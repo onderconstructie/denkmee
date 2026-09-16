@@ -147,10 +147,19 @@ def brontekst_voor_tagging(item: dict) -> str:
 
 
 def content_key(item: dict) -> str:
-    """Hash over de bron-inhoud én de promptversie. Wijzigt de titel/brontekst (incl. een nieuw
-    gekoppeld uittreksel) of de prompt, dan vervalt de cache vanzelf en wordt het item opnieuw
-    getagd; anders hergebruiken we het resultaat (zo is een her-tag hervatbaar)."""
-    bron = PROMPT_VERSION + "\n" + (item.get("titel") or "") + "\n" + brontekst_voor_tagging(item)
+    """Hash over de bron-inhoud, het ORGAAN én de promptversie. Wijzigt de titel/brontekst (incl.
+    een nieuw gekoppeld uittreksel) of de prompt, dan vervalt de cache vanzelf en wordt het item
+    opnieuw getagd; anders hergebruiken we het resultaat (zo is een her-tag hervatbaar).
+
+    Het orgaan hoort erbij (16/09/2026). Stad en OCMW behandelen dezelfde dag punten met exact
+    dezelfde titel, en bij een besluitenlijst zonder eigen brontekst was de sleutel dan identiek:
+    het eerst getagde stuk (het college) leverde de samenvatting voor beide. Gemeten stonden zo 39
+    stukken met het verkeerde orgaan op de site ("Het college van burgemeester en schepenen neemt
+    akte ..." bij een stuk van het vast bureau). De prompt kende het orgaan wel, de sleutel niet.
+    Collegestukken houden hun oude sleutel, zodat enkel de andere organen opnieuw getagd worden."""
+    org = orgaan_van(item)
+    staart = "" if org in (None, "College") else "\n" + org
+    bron = PROMPT_VERSION + "\n" + (item.get("titel") or "") + "\n" + brontekst_voor_tagging(item) + staart
     return hashlib.sha1(bron.encode("utf-8")).hexdigest()
 
 

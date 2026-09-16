@@ -1389,6 +1389,17 @@
     "uittreksels": []
   },
   {
+    "organ": "Burgemeester",
+    "date": "2026-09-11",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-09-14",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_11-09-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "College van burgemeester en schepenen",
     "date": "2024-12-03",
     "documenten": {
@@ -5955,6 +5966,10 @@
       "besluiten": {
         "published": "2026-06-24",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_23-06-2026_Beslissingslijst_toezicht.pdf"
+      },
+      "notulen": {
+        "published": "2026-09-16",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Notulen_Gemeenteraad_23-06-2026_Notulen_-_openbare_zitting.pdf"
       }
     },
     "uittreksels": [
@@ -6112,9 +6127,84 @@
       "agenda": {
         "published": "2026-09-07",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_15-09-2026_Agenda.pdf"
+      },
+      "besluiten": {
+        "published": "2026-09-16",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_15-09-2026_Beslissingslijst_toezicht.pdf"
       }
     },
-    "uittreksels": []
+    "uittreksels": [
+      {
+        "titel": "Uittreksels",
+        "id": "116107",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_116107.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116223",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_116223.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "115281",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_115281.pdf"
+      },
+      {
+        "titel": "Politieverordening Amant V'Air - onttrekking openbaar domein",
+        "id": "115281",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Politieverordening_Amant_V%27Air_-_onttrekking_openbaar_domein_15-09-2026_115281.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116103",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_116103.pdf"
+      },
+      {
+        "titel": "Gebruiksreglement mARTa",
+        "id": "116103",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Gebruiksreglement_mARTa_15-09-2026_116103.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116119",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_116119.pdf"
+      },
+      {
+        "titel": "16A EVENEMENTENLOKET",
+        "id": "116119",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=16A_EVENEMENTENLOKET_15-09-2026_116119.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116113",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_116113.pdf"
+      },
+      {
+        "titel": "Subsidiereglement inclusie naschoolse opvang",
+        "id": "116113",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Subsidiereglement_inclusie_naschoolse_opvang_15-09-2026_116113.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "115739",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_115739.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116112",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_15-09-2026_116112.pdf"
+      },
+      {
+        "titel": "03A Retributiereglement parkeren",
+        "id": "116112",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=03A_Retributiereglement_parkeren_15-09-2026_116112.pdf"
+      },
+      {
+        "titel": "bewonerszones-centrum 1",
+        "id": "116112",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=bewonerszones-centrum_1_15-09-2026_116112.pdf"
+      }
+    ]
   },
   {
     "organ": "Raad voor maatschappelijk welzijn",
@@ -6468,6 +6558,10 @@
       "besluiten": {
         "published": "2026-06-24",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=BesluitenLijstUitspraak_Raad%20voor%20maatschappelijk%20welzijn_23-06-2026_Beslissingslijst_toezicht.pdf"
+      },
+      "notulen": {
+        "published": "2026-09-16",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Notulen_Raad%20voor%20maatschappelijk%20welzijn_23-06-2026_Notulen__-_openbare_zitting.pdf"
       }
     },
     "uittreksels": [
@@ -6505,6 +6599,10 @@
       "agenda": {
         "published": "2026-09-07",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Agenda.pdf"
+      },
+      "besluiten": {
+        "published": "2026-09-16",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=BesluitenLijstUitspraak_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Beslissingslijst_toezicht.pdf"
       }
     },
     "uittreksels": []
