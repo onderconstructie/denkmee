@@ -27,7 +27,7 @@
 
 <!-- Favicon = hetzelfde toren-in-cirkel-logo (SVG data-URI; maak_toren.py houdt dit mee in sync). -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlNpbnQtUm9tYm91dHN0b3JlbiI+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMjQwIiByPSIyMTIiIGZpbGw9IiMwMDc5NkIiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzYsLTM2KSBzY2FsZSgxLjE1KSI+PGcgZmlsbD0iI0Y1RjFFOCI+PHJlY3QgeD0iMTg4IiB5PSIxNTAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIyIi8+PHJlY3QgeD0iMTk0IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjxyZWN0IHg9IjIxOCIgeT0iMTMwIiB3aWR0aD0iMTYiIGhlaWdodD0iMjAiLz48cmVjdCB4PSIyNDIiIHk9IjEzMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIwIi8+PHJlY3QgeD0iMjY2IiB5PSIxMzAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyMCIvPjwvZz48ZyBmaWxsPSIjMDA3OTZCIj48cmVjdCB4PSIyMTgiIHk9IjE5NSIgd2lkdGg9IjgiIGhlaWdodD0iODUiLz48cmVjdCB4PSIyMzYiIHk9IjE4MiIgd2lkdGg9IjgiIGhlaWdodD0iMTEwIi8+PHJlY3QgeD0iMjU0IiB5PSIxOTUiIHdpZHRoPSI4IiBoZWlnaHQ9Ijg1Ii8+PHBvbHlnb24gcG9pbnRzPSIyMjQsMzcyIDIyNCwzMzggMjQwLDMxOCAyNTYsMzM4IDI1NiwzNzIiLz48L2c+PC9nPjwvc3ZnPg==">
-<meta name="theme-color" content="#00796b">
+<meta name="theme-color" content="#f5f1e8">
 
 <!-- Installeerbaar als app op het beginscherm (zelfde patroon als asgaupaust.be). -->
 <link rel="manifest" href="/manifest.json">
@@ -151,13 +151,35 @@
   /* Het vel en de insprong zijn FAMILIEWAARDEN, identiek aan het portaal en Lees mee
      (--max 1180px, --pad-x tot 3rem). Denk mee stond op 1440px met een insprong tot 4rem,
      en daardoor begon het logo en de titel op een breed scherm 40px linkser dan op de
-     zustersites; dat zag je verspringen bij het wisselen (gemeld 24/08/2026). De ondergrens
-     1,1rem en niet 1rem: op een telefoon valt 4vw onder het minimum, en op 1rem begon de
-     mug hier 1,6px linkser dan op het portaal. */
+     zustersites; dat zag je verspringen bij het wisselen (gemeld 24/08/2026).
+     Zijmarge: ondergrens 1rem, gelijk op de vier sites, zodat het merkwoord met de mug op een
+     telefoon overal op dezelfde plek staat. Vanaf ongeveer 440px wint de 4vw en komt de marge
+     weer op de bestaande waarde uit, dus het brede beeld blijft ongewijzigd. */
   --max:       1180px;
-  --pad-x:     clamp(1.1rem, 4vw, 3rem);
+  --pad-x:     clamp(1rem,4vw,3rem);
   --pad-y:     clamp(3rem, 8vw, 7rem);
 }
+
+/* =====================================================================
+   SCHIL-TOKENS (fase 2). Woordelijk hetzelfde in de vier sites.
+   Nu gebruikt alleen de schil ze. Microlabels volgen bij hun volgende aanraking.
+   De --t-maten zijn telefoonmaten: een desktopregel schrijft haar waarde uit.
+   ===================================================================== */
+:root{
+  --s-1:.25rem; --s-2:.5rem; --s-3:.75rem; --s-4:1rem; --s-5:1.25rem; --s-6:1.5rem; --s-8:2rem; --s-12:3rem;
+  --t-label:.625rem; --t-meta:.72rem; --t-knop:.8125rem; --t-tekst:1rem; --t-lees:1.0625rem;
+  --t-h3:1.125rem; --t-h2:1.5rem; --t-h1:1.75rem; --t-kop-lh:1.15;
+  --r-kaart:18px; --r-klein:14px; --r-mini:10px; --r-pil:999px;
+  --schaduw:0 1px 2px rgba(72,56,38,.05), 0 10px 30px -12px rgba(72,56,38,.16);
+  --haarlijn:rgba(26,23,18,.10);
+  --dur-druk:80ms; --dur-kort:160ms; --dur-blad:220ms; --dur-blad-uit:180ms;
+  --ease-blad:cubic-bezier(.16,1,.3,1);
+  --z-nav:100; --z-terug:140; --z-balk:150; --z-privacy:155; --z-menu:200; --z-blad:300; --z-venster:400;
+  --nav-h:68px; --balk-h:58px;
+}
+@media (max-width:700px){ :root{ --nav-h:64px; } }
+/* De actieve toets in de app-balk: label in de leestint van de app, streep in de app-kleur. */
+:root{ --tab-actief-tekst:var(--app-text); --tab-actief-streep:var(--app); }
 
 *{box-sizing:border-box;margin:0;padding:0}
 *::selection{background:var(--pink-vlak);color:#fff}
@@ -457,12 +479,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 }
 
 @media (max-width:430px){
-  .nav-inner{ padding-right:.65rem; }            /* hamburger dichter bij de rechterrand */
-  .nav-burger{ width:34px; height:34px; padding:6px; margin-left:auto; }
   .menu-list a{ grid-template-columns:48px 1fr; padding:.95rem 1.2rem; }
-  /* menukop spiegelt de balk, ook hier */
-  .menu-head{ padding-right:.65rem; }
-  .menu-close{ width:34px; height:34px; }
 }
 
 /* ============================================================
@@ -559,7 +576,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   width:7px; height:7px; border-radius:50%;
   background:var(--pink);
   box-shadow:0 0 0 0 var(--pink);
-  animation:pulse 2s 4;   /* eindige hartslag: vier tellen, dan ligt hij; levend, niet zeurend */
+  animation:pulse 2s 3;   /* eindige hartslag: drie tellen, dan ligt hij; levend, niet zeurend */
 }
 @keyframes pulse{
   0%   { box-shadow:0 0 0 0 rgba(0,121,107,.5); }
@@ -658,7 +675,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 /* 'Nieuw sinds vorig bezoek': volle ink-balk binnen het roze, de blikvanger. */
 .hc-nieuw{ display:flex; align-items:center; gap:.6rem; margin-top:.7rem; padding:.5rem .75rem; background:var(--ink); color:var(--paper); text-decoration:none; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.74rem; letter-spacing:.02em; transition:background .15s; }
 .hc-nieuw:hover{ background:var(--ink-2); }
-.hc-nieuw .hcn-dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); flex-shrink:0; box-shadow:0 0 0 0 var(--pink); animation:pulse 2s 4; }
+.hc-nieuw .hcn-dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); flex-shrink:0; box-shadow:0 0 0 0 var(--pink); animation:pulse 2s 3; }
 .hc-nieuw .hcn-txt{ flex:1; }
 .hc-nieuw .hcn-txt strong{ font-weight:600; }
 .hc-nieuw .hcn-arr{ flex-shrink:0; }
@@ -1353,7 +1370,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 }
 .lc-stage.now .lc-dot{
   border-color:var(--pink);
-  animation:pulse-dot 2s infinite;
+  animation:pulse-dot 2s 3;
 }
 @keyframes pulse-dot{
   0%,100% { box-shadow:0 0 0 0 var(--pink-soft); }
@@ -3012,7 +3029,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .ov-step-desc a{ color:var(--pink-text); border-bottom:1px solid var(--pink-text); }
 
 /* Modal */
-.ov-modal{ position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:1rem; }
+.ov-modal{ position:fixed; inset:0; z-index:var(--z-venster); display:flex; align-items:center; justify-content:center; padding:1rem; }
 .ov-modal[hidden]{ display:none; }
 .ov-modal-overlay{ position:absolute; inset:0; background:rgba(26,23,18,.55); backdrop-filter:blur(4px); }
 .ov-modal-card{
@@ -3216,9 +3233,16 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .co-fam a{ color:var(--c-pink-tekst); border-bottom:1px solid var(--c-pink); }
 .co-fam a:hover{ color:var(--c-pink-deep); border-bottom-color:var(--c-pink-deep); }
 
-/* Reduced motion */
+/* Minder beweging: animaties en overgangen duren een fractie van een milliseconde in plaats van niets,
+   zodat animationend en transitionend blijven vuren, en scrollen springt. */
 @media (prefers-reduced-motion:reduce){
   *, *::before, *::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  html{ scroll-behavior:auto; }
+}
+/* Minder beweging op een telefoon: animaties en overgangen beginnen ook zonder vertraging. Op een
+   groot scherm blijven de vertragingen staan, zodat het brede beeld ongewijzigd blijft. */
+@media (prefers-reduced-motion:reduce) and (max-width:700px){
+  *, *::before, *::after{ animation-delay:0s !important; transition-delay:0s !important; }
 }
 </style>
 
@@ -3261,9 +3285,8 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
    pagina. Ze draagt haar korrel nu zelf: het stippenraster als achtergrond, de ruis als
    ::after. Het z-indexen naar onder is geen optie, want dan schuiven de kaarten eroverheen. */
 .dos-toolbar{
-  /* 68px, niet 60: de nav is .9rem padding boven en onder plus een 38px hoge hamburger plus
-     1px rand. Op 60px verdween de bovenste ~8px van deze balk eronder. */
-  position:sticky; top:68px; z-index:20;
+  /* top volgt --nav-h: de nav is 68 op desktop en 64 op gsm, gelijk op de vier sites. */
+  position:sticky; top:var(--nav-h); z-index:20;
   display:flex; flex-wrap:wrap; gap:.7rem 1rem; align-items:center;
   margin:0 0 1.75rem; padding:1.05rem 0 1.1rem; border-bottom:1px solid var(--line);
   background-color:var(--paper);
@@ -3833,7 +3856,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Bol op de hamburger als blijvend signaal dat er nieuw nieuws is. */
 .burger-dot{
   position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%;
-  background:var(--pink); box-shadow:0 0 0 0 var(--pink); animation:pulse 2s 4;
+  background:var(--pink); box-shadow:0 0 0 0 var(--pink); animation:pulse 2s 3;
 }
 .burger-dot[hidden]{ display:none; }
 
@@ -3871,7 +3894,7 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
 
 /* terug-naar-boven knop: rond en glazig/licht transparant, net als op het portaal */
 .to-top{
-  position:fixed; right:clamp(1rem,3vw,2rem); bottom:clamp(1rem,3vw,2rem); z-index:140;
+  position:fixed; right:clamp(1rem,3vw,2rem); bottom:clamp(1rem,3vw,2rem); z-index:var(--z-terug);
   width:42px; height:42px; display:flex; align-items:center; justify-content:center;
   background:rgba(245,241,232,.5); backdrop-filter:blur(9px) saturate(140%); -webkit-backdrop-filter:blur(9px) saturate(140%);
   color:var(--ink); border:1px solid var(--line-strong); border-radius:50%;
@@ -3883,7 +3906,6 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
 .to-top.show:hover,.to-top.show:focus-visible{ opacity:1; border-color:var(--pink); color:var(--pink); }
 .to-top .tt-arrow{ display:block; transition:transform .2s; }
 @media (hover:hover){ .to-top.show:hover .tt-arrow{ transform:translateY(-2px); } }
-@media (max-width:560px){ .to-top{ width:38px; height:38px; } }
 
 /* =====================================================================
    MOBIELE TABBALK: de app-navigatie op smartphone. Vijf secties, elk met
@@ -3892,66 +3914,44 @@ section[id], #dossiers, #agenda, #archief, #schepenen, #vergaderingen, #verantwo
    ===================================================================== */
 .tabbar{ display:none; }
 @media (max-width:700px){
-  .tabbar{
-    display:grid; grid-template-columns:repeat(5, 1fr);
-    position:fixed; left:0; right:0; bottom:0; z-index:150;
-    background:rgba(245,241,232,.92);
-    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  .tabbar{ display:grid; grid-template-columns:repeat(5,1fr); position:fixed; left:0; right:0; bottom:0;
+    z-index:var(--z-balk); background:rgba(245,241,232,.93);
+    -webkit-backdrop-filter:blur(14px) saturate(1.4); backdrop-filter:blur(14px) saturate(1.4);
     border-top:1px solid var(--line);
-    padding-bottom:env(safe-area-inset-bottom);
-  }
-  .tabbar a{
-    position:relative;
-    display:flex; flex-direction:column; align-items:center; gap:.28rem;
-    padding:.6rem 0 .55rem;
-    color:var(--ink-dim);
-    text-decoration:none;
-    /* Tik-feedback zoals in een echte app: de toets geeft heel even mee onder je vinger. */
-    transition:color .15s, transform .12s;
-    -webkit-user-select:none; user-select:none;
-  }
-  .tabbar a:active{ transform:scale(.93); }
-  .tabbar a svg{ width:22px; height:22px; display:block; flex:none; }
-  .tabbar a .tab-mug{ width:22px; height:22px; display:block; flex:none; border-radius:50%; }
-  .tabbar a span{
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-    /* Kleine mono-caps. Sinds de verzelfstandiging is dit weer een APP-balk: de vier
-       onderdelen van deze app plus de portaaltoets als weg terug. De labels blijven
-       kort (Dossiers, Agenda, Beslist, Op tijd?, Portaal) zodat elk vak past. */
-    font-size:.55rem; letter-spacing:.03em; text-transform:uppercase; white-space:nowrap;
-  }
-  .tabbar a:hover{ color:var(--pink-text); }
+    padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  /* Elke toets heeft een vaste hoogte: de balk is altijd --balk-h plus de haarlijn, en de body-padding,
+     de privacystrook en de terugknop rekenen daarop. */
+  .tabbar a, .tabbar button{ position:relative; box-sizing:border-box; height:var(--balk-h); margin:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:0 2px;
+    background:none; border:0; border-radius:0; font:inherit; color:var(--ink-2); text-decoration:none;
+    cursor:pointer; -webkit-user-select:none; user-select:none; transition:color var(--dur-kort); }
+  .tabbar svg, .tabbar .tab-mug{ width:22px; height:22px; display:block; flex:none; }
+  .tabbar .tab-mug{ border-radius:50%; }
+  /* Kleine mono-caps. Sinds de verzelfstandiging is dit weer een APP-balk: de vier onderdelen
+     van deze app plus de portaaltoets als weg terug. De labels blijven kort (Dossiers, Agenda,
+     Beslist, Op tijd?, Portaal) zodat elk vak past. */
+  .tabbar span{ font-family:'JetBrains Mono',ui-monospace,monospace; font-size:var(--t-label); font-weight:500;
+    line-height:12px; letter-spacing:.03em; text-transform:uppercase; white-space:nowrap; }
   /* De portaaltoets is de enige plek in de app met het portaalroze: de kleur zelf zegt
      al "hier verlaat je de app". De mug is al roze; het label kleurt mee. */
   .tabbar .tab-portaal span{ color:var(--portaal-roze-tekst); }
-  /* [aria-current] zonder waarde-check: de hoofdpagina zet "page" (dit IS die pagina),
-     de techniek-pagina zet "true" (je zit wél in Denk mee, maar niet op die pagina). */
-  .tabbar a[aria-current]{ color:var(--pink-text); }
-  .tabbar a[aria-current]::before{
-    content:''; position:absolute; top:0; left:24%; right:24%; height:2px;
-    background:var(--pink);
-  }
+  .tabbar [aria-current], .tabbar [aria-selected="true"]{ color:var(--tab-actief-tekst); }
+  .tabbar [aria-current]::before, .tabbar [aria-selected="true"]::before{ content:''; position:absolute;
+    top:0; left:24%; right:24%; height:2px; background:var(--tab-actief-streep); }
   /* Ruimte onder de pagina + zwevende elementen boven de balk uit. */
-  body{ padding-bottom:calc(58px + env(safe-area-inset-bottom)); }
-  .to-top{ bottom:calc(70px + env(safe-area-inset-bottom)); }
-  .redactie-melding{ bottom:calc(70px + env(safe-area-inset-bottom)); }
-  .nieuw-banner{ top:auto; bottom:calc(70px + env(safe-area-inset-bottom)) !important; }
+  body{ padding-bottom:calc(var(--balk-h) + 1px + env(safe-area-inset-bottom)); }
+  .redactie-melding{ bottom:calc(var(--balk-h) + 12px + env(safe-area-inset-bottom)); }
+  .nieuw-banner{ top:auto; bottom:calc(var(--balk-h) + 12px + env(safe-area-inset-bottom)) !important; }
   /* Het curatorpaneel stond als enige zwevende element nog op 1rem en verdween dus achter de
      tabbalk, net het gereedschap dat je op je telefoon zou willen gebruiken. */
-  .curator-paneel{ bottom:calc(70px + env(safe-area-inset-bottom)); }
-  /* Zolang de privacymelding open staat, tilt de terug-naar-boven-knop zich erboven: de melding
-     staat op 70px, --cookie-h is haar echte hoogte (gezet door setupCookieNote), plus 10px lucht.
-     Zonder die variabele geldt de hoogte bij standaard tekstgrootte. */
-  body:has(.cookie-note:not([hidden])) .to-top{ bottom:calc(80px + var(--cookie-h, 143px) + env(safe-area-inset-bottom)); }
+  .curator-paneel{ bottom:calc(var(--balk-h) + 12px + env(safe-area-inset-bottom)); }
 }
-/* Smaller dan 360px loopt de melding een regel langer, dus ook de terugval. */
-@media (max-width:359px){
-  body:has(.cookie-note:not([hidden])) .to-top{ bottom:calc(80px + var(--cookie-h, 181px) + env(safe-area-inset-bottom)); }
-}
+/* Hover op de balk enkel met een echte cursor, zodat de kleur op een aanraakscherm na een tik niet blijft hangen. */
+@media (hover:hover) and (max-width:700px){ .tabbar a:hover, .tabbar button:hover{ color:var(--tab-actief-tekst); } }
 
 /* Eerlijke privacymelding bij het eerste bezoek (geen consent-banner: niets om toe te staan). */
 .cookie-note{
-  position:fixed; left:1rem; right:1rem; bottom:1rem; z-index:150;
+  position:fixed; left:1rem; right:1rem; bottom:1rem; z-index:var(--z-privacy);
   max-width:540px; margin:0 auto;
   display:flex; align-items:center; gap:1rem;
   padding:.9rem 1.1rem;
@@ -4105,17 +4105,19 @@ body{
    bij aanraken, het dossiervenster als bottom-sheet, geen tik-flits.
    ===================================================================== */
 html{ -webkit-tap-highlight-color:transparent; }
-a, button, summary, input, label{ touch-action:manipulation; }
+a, button, summary, input, select, label{ touch-action:manipulation; }
 @media (hover:none){
   .btn:active, .hc-chip:active, .hc-stat:active, .hc-edit:active, .tij-tab:active,
   .dvb-knip:active, .dvb-recent-link:active,
   .seg-opt:active, .tch:active, .dos-card:active, .dc-card:active, .item-card:active,
-  .prc-card:active, .sch-card:active, .menu-list a:active, .tabbar a:active,
+  .prc-card:active, .sch-card:active, .menu-list a:active,
   .cml-action:active, .dos-volg-chip:active, .fc:active, .menu-profile:active,
   .dc-cta:active, .sess-link:active, .wb-click:active{
     transform:scale(.97);
-    transition:transform .08s ease-out;
+    transition:transform var(--dur-druk) ease-out;
   }
+  /* De toetsen van de app-balk drukken dieper in. Deze regel staat na de lijst hierboven. */
+  .tabbar a:active, .tabbar button:active{ transform:scale(.93); transition:transform var(--dur-druk) ease-out; }
 }
 /* Dossiervenster als bottom-sheet op smartphone: veert van onder omhoog, met een
    greep-streepje in de kop; omlaag vegen sluit (zie setupAppGevoel). */
@@ -4137,6 +4139,101 @@ a, button, summary, input, label{ touch-action:manipulation; }
 @keyframes dosmUp{ from{ transform:translateY(56px); opacity:.4 } to{ transform:none; opacity:1 } }
 @media (prefers-reduced-motion:reduce){
   .dosm-panel{ animation:fadeIn .2s ease-out; }
+}
+
+/* =====================================================================
+   SCHIL (fase 2). De gedeelde schil van de vier apps. Telefoonregels staan in
+   een max-width:700px-blok, zodat het desktopbeeld ongewijzigd blijft. Het blok
+   staat vlak voor de drie blokken die bewust achteraan horen (statusstrook,
+   hero-paneel, veilige zones), zodat die het laatste woord houden.
+   ===================================================================== */
+/* Nav en menukop: --nav-h is de totale hoogte met haarlijn, 68 boven 700px en 64 eronder,
+   gelijk op de vier sites. De menukop is even hoog als de nav, zodat het merkwoord bij het
+   openen op zijn plek blijft. */
+@media (max-width:700px){
+  .nav-inner{ height:calc(var(--nav-h) - 1px); padding-block:0; }
+  .menu-head{ height:var(--nav-h); padding-block:0; }
+}
+/* Burger op een telefoon: dezelfde maat en lijndikte als bij de zusters, het tikvlak ligt in ::after. */
+@media (max-width:700px){
+  .nav-burger{ position:relative; width:38px; height:38px; padding:7px; gap:5px; display:flex; flex-direction:column;
+    justify-content:center; align-items:stretch; }
+  .nav-burger::after{ content:''; position:absolute; inset:-4px; }
+  .nav-burger span{ width:auto; height:1.5px; }
+  .nav-burger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+  .nav-burger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+}
+/* Terug naar boven: op een telefoon een groter tikvlak met een getekende pijl, net boven de balk,
+   en boven de privacystrook zolang die in beeld is. De hoogte van die strook komt uit --cookie-h,
+   dat het script meet; de terugval van 60px is de hoogte die de strook hier haalt, voor het geval
+   het script nog niet gemeten heeft. Op desktop blijft het teken. */
+.to-top{ z-index:var(--z-terug); }
+.to-top .tt-svg{ display:none; }
+@media (max-width:700px){
+  .to-top{ width:44px; height:44px; right:max(1rem, env(safe-area-inset-right));
+    bottom:calc(var(--balk-h) + 12px + env(safe-area-inset-bottom)); border:1px solid var(--line-strong);
+    transform:translateY(8px); transition:opacity .25s ease, transform .25s ease, border-color .18s, color .18s; }
+  .to-top.show{ transform:none; }
+  .to-top .tt-svg{ display:block; width:20px; height:20px; }
+  .to-top .tt-teken{ display:none; }
+  body:has(.cookie-note:not([hidden])) .to-top{
+    bottom:calc(var(--balk-h) + 1px + var(--cookie-h, 60px) + 12px + env(safe-area-inset-bottom)); }
+}
+/* Privacymelding: op een telefoon een strook van rand tot rand die op de app-balk rust. De tweede
+   en derde zin vallen er weg; een link naar de privacyverklaring neemt hun plaats in. De tekst staat
+   een paar pixels boven het midden, zodat het tikvlak van die link binnen de strook blijft en niet
+   over de toetsen van de app-balk valt. */
+.cookie-note{ z-index:var(--z-privacy); }
+.cookie-note .cn-privacy{ display:none; }
+@media (max-width:700px){
+  .cookie-note{ left:0; right:0; bottom:calc(var(--balk-h) + 1px + env(safe-area-inset-bottom));
+    max-width:none; margin:0; border:0; border-radius:0; min-height:60px; gap:.75rem;
+    padding:.5rem var(--pad-x); box-shadow:0 -8px 24px -16px rgba(72,56,38,.45); }
+  .cookie-note .cn-text{ margin-bottom:5px; }
+  .cookie-note .cn-meer{ display:none; }
+  .cookie-note .cn-privacy{ display:inline; position:relative; white-space:nowrap; color:#fff;
+    border-bottom:1px solid rgba(255,255,255,.6); }
+  /* Een absoluut ::after rekent vanaf de binnenkant van de rand, en de onderlijn van de link is zo'n
+     rand: onderaan moet het vlak dus verder reiken dan bovenaan om het midden van de link in een vak
+     van 44px te leggen. Het blijft binnen de strook, net boven de toetsen van de app-balk. */
+  .cookie-note .cn-privacy::after{ content:''; position:absolute; inset:-13px -6px -14px; }
+  .cn-ok{ position:relative; min-height:44px; }
+}
+/* Menu: op een telefoon een rond sluitkruis in de huisletter, zoals bij de zusters. */
+@media (max-width:700px){
+  .menu-close{ position:relative; width:38px; height:38px; border-radius:50%; border:1px solid var(--line-strong);
+    background:transparent; display:inline-flex; align-items:center; justify-content:center; padding:0;
+    font:inherit; font-size:1.5rem; line-height:1; }
+  .menu-close::after{ content:''; position:absolute; inset:-4px; }
+}
+/* Tikvlakken: kleine doelen krijgen een onzichtbaar vlak via ::after, zonder dat hun vorm verandert.
+   Ze gelden enkel op een telefoon: met een muis rekt zo'n vlak de zweefzone op, en dan kleurt een
+   chip of een link al voor de cursor erop staat.
+   Het merkwoord krijgt zijn vlak met padding en een negatieve marge, zonder positionering onder de korrel.
+   Doelen die over meer rijen lopen (de cockpitchips, de knoppen onder een stuk in het dossierblad en
+   de bronlinks onder een besluit) reiken boven en onder net tot het midden van de ruimte tussen twee
+   rijen: de helft van die ruimte, plus de onderrand, want het vlak rekent vanaf de binnenkant van de
+   rand. Zo landt een tik op de onderkant van een doel nooit op het doel in de rij eronder. */
+@media (max-width:700px){
+  .dosm-close::after{ content:''; position:absolute; inset:-4px; }
+  .ov-modal-close::after{ content:''; position:absolute; inset:-5px; }
+  .hc-edit{ position:relative; } .hc-edit::after{ content:''; position:absolute; inset:-8px -4px; }
+  .hc-chip{ position:relative; } .hc-chip::after{ content:''; position:absolute; inset:-3.8px -2px; }
+  .tch{ position:relative; } .tch::after{ content:''; position:absolute; inset:-5px 0; }
+  .cml-action{ position:relative; } .cml-action::after{ content:''; position:absolute; inset:-6px 0; }
+  .dos-search-clear{ position:relative; } .dos-search-clear::after{ content:''; position:absolute; inset:-12px -8px; }
+  .bron-link{ position:relative; } .bron-link::after{ content:''; position:absolute; inset:-6px -4px -7px; }
+  .dosm-ev-link{ position:relative; } .dosm-ev-link::after{ content:''; position:absolute; inset:-5px 0; }
+  .co-fam a{position:relative} .co-fam a::after{content:'';position:absolute;inset:-15px -4px}
+}
+/* De schakelaar 'Voor mij / Alle dossiers' knipt met overflow:hidden af wat uitsteekt; op een telefoon dragen de
+   twee helften de ronding zelf, zodat de vorm gelijk blijft en het vlak eruit mag steken. */
+@media (max-width:700px){
+  .seg-toggle{ overflow:visible; }
+  .seg-opt{ position:relative; } .seg-opt:first-child{ border-radius:999px 0 0 999px; } .seg-opt:last-child{ border-radius:0 999px 999px 0; }
+  .seg-opt::after{ content:''; position:absolute; inset:-9px 0; }
+  .dosm-ev-actions{ gap:.5rem; } .theme-chips{ gap:.5rem; }
+  .brand{ padding-block:5px; margin-block:-5px; }
 }
 
 /* =====================================================================
@@ -4172,6 +4269,12 @@ a, button, summary, input, label{ touch-action:manipulation; }
 @media (max-width:700px){
   .status-strook .shell{ padding-top:.5rem; padding-bottom:.5rem; gap:.35rem; }
   .status-strook span{ font-size:.78rem; line-height:1.4; }
+  /* De knop blijft op één regel en krijgt een tikvlak zonder dat de strook hoger wordt. Het vlak
+     zelf tekent niets, dus de korrel blijft erover. De zin breekt hier over twee regels, dus de
+     knop staat onderaan: het stukje vlak dat onder de strook uitsteekt valt weg achter de eerste
+     sectie, die op een eigen laag staat. Wat overblijft is het vlak binnen de strook. */
+  .status-strook .ss-cta{ position:relative; white-space:nowrap; }
+  .status-strook .ss-cta::after{ content:''; position:absolute; inset:-14px -6px; }
 }
 
 /* =====================================================================
@@ -4297,14 +4400,13 @@ a, button, summary, input, label{ touch-action:manipulation; }
   }
   .to-top{ right:max(clamp(1rem,3vw,2rem), env(safe-area-inset-right)); }
 }
+/* Liggend op een telefoon houdt de knop dezelfde marge als staand: 16px, of de veilige zone. */
+@media (orientation:landscape) and (max-height:500px) and (min-width:431px) and (max-width:700px){
+  .to-top{ right:max(1rem, env(safe-area-inset-right)); }
+}
 /* Het dossiervenster als bottom-sheet: de knoppen onderaan blijven boven de thuisbalk. */
 @media (max-width:700px){
   .dosm-foot{ padding-bottom:calc(1rem + env(safe-area-inset-bottom)); }
-}
-/* De privacymelding boven de app-balk, op dezelfde 70px als de andere zwevende elementen. Deze
-   regel moet ná de basisregel .cookie-note staan. */
-@media (max-width:700px){
-  .cookie-note{ bottom:calc(70px + env(safe-area-inset-bottom)); }
 }
 </style>
 </head>
@@ -4399,6 +4501,11 @@ body{ background:var(--paper-3); }
      staat een hamburgermenu; hier is '← terug' de enige navigatie, en de sitewissel-balk
      verschijnt pas onder 700px. Tussen 701 en 780px zat je dus zonder terugweg. */
   .tech-nav .nav-cta{ display:inline-flex; }
+}
+/* Onder 700px staat onderaan de app-balk, met vier toetsen naar de hoofdpagina. De knop
+   "terug" in de nav is daar dubbelop en zou de nav hoger maken dan bij de zusters. */
+@media (max-width:700px){
+  .tech-nav .nav-cta{ display:none; }
 }
 </style>
 
@@ -4731,13 +4838,14 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
 <!-- Zelfde terug-naar-boven-knop als op de hoofdpagina; de .to-top-stijl erft deze
      pagina al via de gedeelde head. Eigen klein script, want initScrollChrome van de
      hoofdpagina draait hier niet. -->
-<button class="to-top" id="toTop" aria-label="Terug naar boven" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <span class="tt-arrow" aria-hidden="true">&#8593;</span>
-</button>
+<button class="to-top" id="toTop" type="button" aria-label="Terug naar boven"><svg class="tt-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M6 11l6-6 6 6"/></svg><span class="tt-arrow tt-teken" aria-hidden="true">&#8593;</span></button>
 <script>
 (function(){
   var top = document.getElementById('toTop');
   var bezig = false;
+  // Wie minder beweging vraagt, springt naar boven; de rest glijdt.
+  var zacht = function(){ return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'; };
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior: zacht()}); });
   function update(){
     bezig = false;
     top.classList.toggle('show', (window.scrollY || document.documentElement.scrollTop) > 600);

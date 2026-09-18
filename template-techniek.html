@@ -93,6 +93,11 @@ body{ background:var(--paper-3); }
      verschijnt pas onder 700px. Tussen 701 en 780px zat je dus zonder terugweg. */
   .tech-nav .nav-cta{ display:inline-flex; }
 }
+/* Onder 700px staat onderaan de app-balk, met vier toetsen naar de hoofdpagina. De knop
+   "terug" in de nav is daar dubbelop en zou de nav hoger maken dan bij de zusters. */
+@media (max-width:700px){
+  .tech-nav .nav-cta{ display:none; }
+}
 </style>
 
 <nav class="nav tech-nav">
@@ -424,13 +429,14 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
 <!-- Zelfde terug-naar-boven-knop als op de hoofdpagina; de .to-top-stijl erft deze
      pagina al via de gedeelde head. Eigen klein script, want initScrollChrome van de
      hoofdpagina draait hier niet. -->
-<button class="to-top" id="toTop" aria-label="Terug naar boven" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <span class="tt-arrow" aria-hidden="true">&#8593;</span>
-</button>
+<button class="to-top" id="toTop" type="button" aria-label="Terug naar boven"><svg class="tt-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M6 11l6-6 6 6"/></svg><span class="tt-arrow tt-teken" aria-hidden="true">&#8593;</span></button>
 <script>
 (function(){
   var top = document.getElementById('toTop');
   var bezig = false;
+  // Wie minder beweging vraagt, springt naar boven; de rest glijdt.
+  var zacht = function(){ return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'; };
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior: zacht()}); });
   function update(){
     bezig = false;
     top.classList.toggle('show', (window.scrollY || document.documentElement.scrollTop) > 600);
