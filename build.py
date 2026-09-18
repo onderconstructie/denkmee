@@ -304,6 +304,63 @@ if _ctx_lek:
 else:
     print("       woonadressen en geboortedatums: niets in de build ✓")
 
+# 3e) Uittreksel-koppeling. De tekst die de samenvatting van een stuk voedt, moet van het eigen
+#     besluit komen. koppel_uittreksels.py koppelt op het puntnummer dat de stad zelf in de kopregel
+#     zet; deze klep leest de koppeltabel na, zodat een latere wijziging aan de koppeling niet stil een
+#     verkeerde brontekst live zet. Aanleiding: op 18/09/2026 lazen 137 stukken een bijlage in plaats
+#     van hun besluit, en toonde een cultuurpunt een samenvatting over parkeertarieven. Vijf toetsen:
+#     de gecachete tekst hoort bij het document zelf; een bijlage hangt bij het punt van haar eigen
+#     uittreksel; een document hangt aan één punt; een punt heeft hooguit één uittreksel; het
+#     puntnummer in de kopregel is dat van het stuk.
+#     De koppeltabel en de tekstcache staan buiten git; ontbreken ze, dan valt er niets te toetsen.
+_koppel_pad = BASE / "data" / "uittreksel_koppeling.json"
+_index_pad = BASE / "data" / "uittreksels_index.json"
+if _koppel_pad.exists() and _index_pad.exists():
+    import hashlib as _hl
+    import koppel_uittreksels as _ku
+    _tabel = json.loads(_koppel_pad.read_text(encoding="utf-8"))
+    _per_url = {d["url"]: d for d in json.loads(_index_pad.read_text(encoding="utf-8"))}
+    _k_tekst, _k_wees, _k_nummer, _k_meer, _k_bij = [], [], [], [], {}
+    for _item, _refs in _tabel.items():
+        _eigen = {r["uittreksel_id"] for r in _refs if r["klasse"] == "uittreksel"}
+        if sum(1 for r in _refs if r["klasse"] == "uittreksel") > 1:
+            _k_meer.append(_item)
+        for _r in _refs:
+            _k_bij.setdefault(_r["url"], set()).add(_item)
+            if _r["klasse"] == "bijlage" and _r["uittreksel_id"] not in _eigen:
+                _k_wees.append(_item)
+            _doc, _sl = _per_url.get(_r["url"]), _r.get("cache_sleutel")
+            if not (_doc and _sl):
+                continue
+            _p = _ku.pdf_pad(_doc)
+            if _p.exists():
+                _st = _p.stat()
+                if _hl.sha1(f"{_p.as_posix()}|{_st.st_mtime_ns}|{_st.st_size}".encode()).hexdigest() != _sl:
+                    _k_tekst.append(_item)
+                    continue
+            _c = _ku.CACHE / (_sl + ".txt")
+            if _r["klasse"] == "uittreksel" and _c.exists():
+                _nr, _lt = _ku.kopregel_nummer(_c.read_text(encoding="utf-8"))
+                _inr, _ilt = _ku.puntnummer_uit_id(_item)
+                if _nr is not None and _inr is not None and (_nr != _inr or (_lt and _ilt and _lt != _ilt)):
+                    _k_nummer.append(_item)
+    _k_dubbel = [u for u, s in _k_bij.items() if len(s) > 1]
+    _k_fout = sorted(set(_k_tekst + _k_wees + _k_nummer + _k_meer))
+    if _k_fout or _k_dubbel:
+        print(f"[koppeling] tekst van een ander document {len(set(_k_tekst))} · bijlage los van haar "
+              f"uittreksel {len(set(_k_wees))} · puntnummer klopt niet {len(set(_k_nummer))} · punt met meer dan een "
+              f"uittreksel {len(_k_meer)} · document aan meer dan een stuk {len(_k_dubbel)}: " + ", ".join(_k_fout[:5]))
+        if not is_demo:
+            sys.exit("[STOP] Live build geweigerd: een stuk leest de tekst van een ander besluit. Draai "
+                     "koppel_uittreksels.py opnieuw, hertag de geraakte stukken, en bouw daarna de site "
+                     "opnieuw (zie de volgorde in run_all.py).")
+        print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
+    else:
+        print(f"       uittreksel-koppeling: {sum(len(v) for v in _tabel.values())} documenten, elk bij "
+              f"het eigen punt ✓")
+else:
+    print("       uittreksel-koppeling: geen koppeltabel, niets te toetsen")
+
 # 4) Schrijf het eindproduct.
 out_dir = BASE / "dist"
 out_dir.mkdir(exist_ok=True)

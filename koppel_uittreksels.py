@@ -2,11 +2,16 @@
 koppel_uittreksels.py — verwerkt de opgehaalde uittreksels/bijlagen (fetch_uittreksels.py):
   1) extraheert de VOLLEDIGE tekst per stuk (pdfplumber) → data/uittreksel_cache/ (git-genegeerd);
   2) koppelt elk stuk aan een agendapunt/collegebesluit, per zitting:
-       - UITTREKSEL (link 'Uittreksel - <titel>'): aan het besluit met die titel (exact of beste
-         stam-overlap). Verrijkt de brontekst van dat besluit.
-       - BIJLAGE (reglement, belasting, ...): sub-document; aan het besluit van dezelfde zitting
-         met de hoogste stam-overlap (bv. 'belasting op nachtwinkels' → 'Hernieuwing
-         belastingreglementen'). Zo wordt de bijlage-tekst doorzoekbaar via dat punt.
+       - UITTREKSEL: aan het punt met het nummer uit zijn eigen kopregel ("13. FINANCIËN-..."),
+         dat de stad er zelf in zet, met een titelcontrole erbovenop. Bestaat dat punt niet, dan
+         blijft het uittreksel los. Pas zonder nummer: aan het besluit met die titel (exact en
+         uniek, of minstens twee gedeelde woorden met een duidelijke winnaar). Verrijkt de
+         brontekst van dat besluit, dus een fout hier geeft een foute samenvatting.
+       - BIJLAGE (reglement, belasting, ...): volgt het uittreksel met hetzelfde publicatie-id in
+         dezelfde zitting. Geen woordoverlap: die gaf ooit een cultuurpunt het parkeerreglement
+         van een ander punt. Zo wordt de bijlage-tekst doorzoekbaar via het eigen punt.
+     De tekst zoekt het script op URL, niet op publicatie-id: dat id draagt het uittreksel en al
+     zijn bijlagen. build.py (klep 3e) leest de koppeltabel na vóór er iets live gaat.
   3) schrijft de koppeltabel data/uittreksel_koppeling.json (git-genegeerd) en voegt aan de
      rechtstreeks gekoppelde besluiten in data.json een 'uittreksel_url' toe (link, GEEN tekst).
 
@@ -14,14 +19,14 @@ De volledige tekst blijft in de lokale cache en voedt straks de tagging + zoekin
 afgeleide data (samenvatting, kernbegrippen, de url) komt in de gecommitte bestanden.
 
 Draai:  python koppel_uittreksels.py            (verwerkt alles + schrijft)
-        python koppel_uittreksels.py --meetlat   (enkel de koppel-cijfers, wijzigt niets)
+        python koppel_uittreksels.py --meetlat   (enkel de koppel-cijfers; vult hooguit de tekstcache aan)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
     try: _s.reconfigure(encoding="utf-8")
     except (AttributeError, ValueError): pass
 
-import re, json, hashlib, unicodedata
+import os, re, json, hashlib, unicodedata
 from pathlib import Path
 from collections import defaultdict
 
@@ -55,9 +60,57 @@ def woorden(n):
 
 def overlap(a, b):
     """Aantal betekenisvolle (niet-generieke) woorden dat A en B delen; prefix-match vangt
-    buiging op ('belasting' ~ 'belastingreglementen')."""
-    wa, wb = woorden(a), woorden(b)
+    buiging op ('belasting' ~ 'belastingreglementen'). Elk woord telt één keer: een titel die
+    hetzelfde woord twee keer herhaalt, kocht vroeger een tweede punt zonder meer onderwerp te delen."""
+    wa, wb = set(woorden(a)), set(woorden(b))
     return sum(1 for x in wa if any(x == y or y.startswith(x) or x.startswith(y) for y in wb))
+
+
+# De puntregel van een uittreksel staat na de aanwezigheidslijst, in de vorm "13. FINANCIËN-
+# BELASTINGEN. ...", "7 D. Bestuurlijk Beheer. ..." of "7E Bestuurlijk Beheer. ...". Dat nummer zet
+# de stad er zelf in: het is de betrouwbaarste sleutel naar het agendapunt. Een deelpunt ("1)
+# Goedkeuring ...") telt niet. Enkel de kop wordt gelezen: verderop genummerde artikels of
+# opsommingen zouden anders voor een puntnummer doorgaan.
+KOP_NR = re.compile(r"^\s*(\d{1,3})\s*(?:([A-Z])\s*\.?|\.)\s+[A-ZÀ-Þ][A-Za-zÀ-ÿ]{2,}")
+KOP_REGELS = 25
+
+
+def kopregel_nummer(tekst):
+    for regel in (tekst or "").splitlines()[:KOP_REGELS]:
+        m = KOP_NR.match(regel)
+        if m:
+            return int(m.group(1)), (m.group(2) or "")
+    return None, None
+
+
+def puntnummer_uit_id(item_id):
+    """(nummer, letter) uit een id als 'college-20260217-7D'. Een tweede punt met hetzelfde nummer
+    draagt een staart met een hash ('college-20260331-7-06de99') en telt als hetzelfde nummer."""
+    m = re.search(r"-(\d{8})-(\d+)([A-Z]*)(?:-[0-9a-f]{6})?$", item_id)
+    return (int(m.group(2)), m.group(3) or "") if m else (None, None)
+
+
+def beste_titel(kand, nt, minimum):
+    """Het punt uit kand [(genorm.titel, id)] waarvan de titel past: exact en uniek, anders
+    minstens `minimum` gedeelde woorden met een duidelijke winnaar. Twee punten met dezelfde
+    titel of een gelijkspel beslissen niets: dan (None, 'geen')."""
+    exact = [pid for cn, pid in kand if cn == nt]
+    if len(exact) == 1:
+        return exact[0], "exact"
+    if len(exact) > 1:
+        return None, "geen"
+    scored = sorted(((overlap(cn, nt), pid) for cn, pid in kand), reverse=True)
+    if scored and scored[0][0] >= minimum and (len(scored) == 1 or scored[0][0] > scored[1][0]):
+        return scored[0][1], "overlap"
+    return None, "geen"
+
+
+def schrijf_json(pad, obj):
+    """Eerst naar een tijdelijk bestand, dan in één beweging vervangen: een onderbroken run laat
+    nooit een half geschreven data.json achter."""
+    tmp = pad.with_name(pad.name + ".tmp")
+    tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+    os.replace(tmp, pad)
 
 def zitting_van_id(pid):
     m = re.match(r'[a-z]+[-_]?(\d{8})', pid)
@@ -100,42 +153,80 @@ def main():
     koppeling = defaultdict(list)   # item_id → [{uittreksel_id, url, klasse, cache_sleutel}]
     directe_url = {}                # item_id → url (enkel voor rechtstreekse uittreksel-match)
     stat = defaultdict(lambda: defaultdict(int))
+    per_url = {d["url"]: d for d in docs}
+    # Punten per (orgaan, zitting, puntnummer, letter). Een lijst, want een nummer kan twee keer
+    # voorkomen ('3' en '03', of een tweede punt 7 met een hash-staart): dan beslist de titel.
+    per_nummer = defaultdict(list)
+    for (slug, zit), lijst in idx.items():
+        for cn, pid in lijst:
+            nr, lt = puntnummer_uit_id(pid)
+            if nr is not None:
+                per_nummer[(slug, zit, nr, lt)].append((cn, pid))
+
+    # PAS 1: uittreksels. Het puntnummer uit de EIGEN kopregel beslist (de stad zet het er zelf in),
+    # met minstens één gedeeld woord of een exacte titel als controle. Staat er een nummer maar
+    # bestaat dat punt niet, dan geen gok op de titel: zo belandde het uittreksel van punt 7E ooit
+    # op punt 7D. Pas zonder nummer telt de titel: exact en uniek, of minstens twee gedeelde woorden
+    # met een duidelijke winnaar. Een fout hier geeft een foute samenvatting, dus streng.
+    uid_naar_punt = {}
+    los = []
     for d in docs:
-        kand = idx.get((SLUGO[d["orgaan"]], d["zitting"]), [])
+        if d["klasse"] != "uittreksel":
+            continue
+        slug = SLUGO[d["orgaan"]]
+        kand = idx.get((slug, d["zitting"]), [])
         nt = norm(d["titel"])
-        gekoppeld = None
-        if kand:
-            exact = [pid for cn, pid in kand if cn == nt]
-            if exact and d["klasse"] == "uittreksel":
-                gekoppeld = exact[0]
-            else:
-                # Uittreksel verrijkt de brontekst van één besluit → streng (fout = foute
-                # samenvatting): minstens 2 gedeelde woorden. Bijlage voedt enkel de zoek → los.
-                drempel = 2 if d["klasse"] == "uittreksel" else 1
-                scored = sorted(((overlap(cn, nt), pid) for cn, pid in kand), reverse=True)
-                if scored and scored[0][0] >= drempel and (len(scored) == 1 or scored[0][0] > scored[1][0]):
-                    gekoppeld = scored[0][1]     # duidelijke beste overlap
-        soort = "geen"
-        if gekoppeld:
-            soort = "exact" if (d["klasse"] == "uittreksel" and norm(next(cn for cn, pid in kand if pid == gekoppeld)) == nt) else "overlap"
-        stat[d["klasse"]][soort] += 1
+        gekoppeld, soort, nr, lt = None, "geen", None, None
+        pad = pdf_pad(d)
+        if pad.exists():
+            try:
+                _sl, tekst = pdf_tekst(pad)
+                nr, lt = kopregel_nummer(tekst)
+            except Exception as e:
+                print(f"  (tekst mislukt {d['id']}: {e})")
+        if nr is not None:
+            gekoppeld, _s = beste_titel(per_nummer.get((slug, d["zitting"], nr, lt), []), nt, 1)
+            soort = "puntnummer" if gekoppeld else "nummer zonder passend punt"
+        elif kand:
+            gekoppeld, soort = beste_titel(kand, nt, 2)
+            if gekoppeld:
+                soort = "titel " + soort
+        stat["uittreksel"][soort] += 1
+        if not gekoppeld:
+            los.append(f"{d['id']} ({d['zitting']}, kop {nr}{lt or ''})" if nr is not None else f"{d['id']} ({d['zitting']})")
+            continue
+        uid_naar_punt[(slug, d["zitting"], d["id"])] = gekoppeld
+        if not meetlat:
+            koppeling[gekoppeld].append({"uittreksel_id": d["id"], "url": d["url"], "klasse": "uittreksel"})
+            directe_url[gekoppeld] = d["url"]
+
+    # PAS 2: een bijlage hoort bij het punt van het uittreksel met hetzelfde publicatie-id, van
+    # hetzelfde orgaan en in dezelfde zitting (de stad hangt ze samen onder één id). Geen woordoverlap
+    # meer: die gaf het cultuurpunt 46 het parkeerreglement van punt 22, en zonder eigen uittreksel
+    # werd dat de bron van zijn samenvatting.
+    for d in docs:
+        if d["klasse"] != "bijlage":
+            continue
+        gekoppeld = uid_naar_punt.get((SLUGO[d["orgaan"]], d["zitting"], d["id"]))
+        stat["bijlage"]["via uittreksel" if gekoppeld else "geen"] += 1
         if gekoppeld and not meetlat:
-            koppeling[gekoppeld].append({"uittreksel_id": d["id"], "url": d["url"], "klasse": d["klasse"]})
-            if d["klasse"] == "uittreksel":
-                directe_url[gekoppeld] = d["url"]
+            koppeling[gekoppeld].append({"uittreksel_id": d["id"], "url": d["url"], "klasse": "bijlage"})
+    if los:
+        print(f"uittreksels zonder punt ({len(los)}): " + "; ".join(los[:10]))
 
     for kl in stat:
         r = stat[kl]; tot = sum(r.values())
-        print(f"{kl}: {tot} | exact {r['exact']} · overlap {r['overlap']} · geen {r['geen']}")
+        print(f"{kl}: {tot} | " + " · ".join(f"{k} {v}" for k, v in sorted(r.items())))
     if meetlat:
         print("(meetlat-modus: niets weggeschreven)"); return
 
     # tekst extraheren voor alle gekoppelde stukken (→ cache), cache-sleutel in de koppeltabel
-    per_id = {d["id"]: d for d in docs}
+    # Tekst opzoeken op URL, NIET op publicatie-id: dat id draagt het uittreksel en al zijn bijlagen,
+    # en een opzoeking op id gaf 137 stukken de tekst van een bijlage in plaats van hun besluit.
     n_tekst = 0
     for item_id, refs in koppeling.items():
         for ref in refs:
-            doc = per_id.get(ref["uittreksel_id"])
+            doc = per_url.get(ref["url"])
             pad = pdf_pad(doc) if doc else None
             if pad and pad.exists():
                 try:
@@ -150,8 +241,10 @@ def main():
         for p in data.get(coll, []):
             if p["id"] in directe_url:
                 p["uittreksel_url"] = directe_url[p["id"]]; aantal_url += 1
-    KOPPEL.write_text(json.dumps(koppeling, ensure_ascii=False, indent=2), encoding="utf-8")
-    DATA.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+            else:
+                p.pop("uittreksel_url", None)   # geen eigen uittreksel meer: geen link naar dat van een ander
+    schrijf_json(KOPPEL, koppeling)
+    schrijf_json(DATA, data)
     tot_refs = sum(len(v) for v in koppeling.values())
     print(f"\ngekoppelde besluiten: {len(koppeling)} | documenten gekoppeld: {tot_refs} | "
           f"tekst gecachet: {n_tekst} | uittreksel-url toegevoegd: {aantal_url}")
