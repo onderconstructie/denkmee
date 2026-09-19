@@ -8323,6 +8323,22 @@ const DOS_DATE = new RegExp('\\s+(\\d{1,2}(\\s+(en|tot|t\\/m|&|-|–|—)\\s+\\d
 // woordgrens liet "… nominatieve subsidies 2025 die" staan, en een kop die op "die",
 // "van" of "voor" eindigt leest als afgebroken. Alleen aan het einde, nooit middenin.
 const DOS_TAIL = /\s+(nr|nrs|art|op|tijdens|dd|d\.d|die|dat|van|voor|met|aan|tot|naar|inzake|betreffende)$/i;
+// De formule vooraan een burgemeestersbesluit benoemt geen zaak: "Besluit burgemeester van
+// 25 augustus 2026 betreffende X", "Bevestiging beslissing burgemeester van ... betreffende X",
+// "Besluit burgemeester tot het opleggen van X". dosKopZonderFormule geeft X terug (zonder de datum
+// of de duur van de maatregel), of null als de titel niet zo begint.
+const DOS_FORMULE = /^(?:bevestiging (?:van (?:de )?)?beslissing|besluit(?:en)?)\s+(?:van\s+)?(?:de\s+)?burge?r?meester\s+(?:bij\s+hoogdringe?n?dheid\s+)?(?:(?:van|d\.d\.)\s+\d{1,2}\s+\S+\s+\d{4}\s+)?(?:betreffende|betreft|houdende|inzake|over|tot)\s+(?:het\s+|de\s+)?/i;
+function dosKopZonderFormule(t){
+  const m = String(t || '').match(DOS_FORMULE);
+  if(!m) return null;
+  const r = String(t).slice(m[0].length)
+    .replace(/\s+(?:van|op|op datum van)\s+\d{1,2}\s+(?:januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\b.*$/i, '')
+    .replace(/\s+(?:van|met)\s+\d+\s+(?:maand|maanden|week|weken|dag|dagen)\b.*$/i, '')
+    .replace(/\s*\(\d+\)\s*$/, '')
+    .replace(/[.;:,]\s*$/, '')
+    .trim();
+  return r.length < 4 ? null : r.charAt(0).toUpperCase() + r.slice(1);
+}
 function dosTitleCase(w){ return String(w).split('-').map(p => p ? p.charAt(0).toUpperCase()+p.slice(1) : p).join('-'); }
 function dosCap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
 function dosCleanSeg(seg){
@@ -9349,6 +9365,15 @@ function buildDossiers(){
                         || toon(a).length - toon(b).length
                         || (a < b ? -1 : a > b ? 1 : 0));
       if(alt.length && toon(alt[0]) !== toon(nameOud)) name = alt[0];
+    }
+    // Blijft de kop een formule omdat elk stuk met dezelfde formule en een andere datum begint
+    // ("Besluit burgemeester van 25 augustus"), dan neemt het onderwerp na de formule de plaats in:
+    // het onderwerp dat in de groep het vaakst voorkomt, bij gelijkstand het kortste.
+    if(DOS_SLECHTE_KOP.test(toon(name))){
+      const onderwerp = {};
+      g.forEach(i => { const k = dosKopZonderFormule(i.titel); if(k) onderwerp[k] = (onderwerp[k] || 0) + 1; });
+      const best = Object.entries(onderwerp).sort((a, b) => b[1] - a[1] || a[0].length - b[0].length || (a[0] < b[0] ? -1 : 1))[0];
+      if(best) name = best[0];
     }
     // Budgetcyclus: de raad beslist, dus zijn titel geeft de kop. Het collegestuk draagt soms een ander
     // jaartal ("meerjarenplan 2025-2031" tegenover "2026-2031" bij de raad) en is door de verwijzingszin
