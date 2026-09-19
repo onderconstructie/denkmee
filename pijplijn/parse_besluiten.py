@@ -54,6 +54,12 @@ ITEM = re.compile(r'^(\d+[A-Za-z]?|\d+ [A-Z]|[A-Z]{2,4}\d{1,3})\.\s+(.*)$')
 # &, - en haakjes, haar punt, en daarna nog tekst. _volgt_op eist bovendien dat het nummer het
 # volgende in de reeks is.
 ITEM_ZONDER_PUNT = re.compile(r'^([1-9]\d{0,2}[A-Z]?) ([A-Z](?:[^\W\d_]|[ &()\-]){1,60}\.\s+\S.*)$')
+# Een raad-punttype staat niet altijd als "ACT01. ": ook "ACT1.ACTUALITEITSDEBAT. " (geen spatie na
+# de punt) en "ACT. ACTUALITEITSDEBAT. " (geen nummer) komen voor. ITEM zag die niet, en omdat ze
+# voor punt 1 staan, vielen ze stil weg (gemeenteraad 16/09/2025 en 26/01/2026). Deze vorm telt
+# enkel met een van de drie punttype-rubrieken erachter, zodat een titelfragment met een
+# lettercode nooit een punt opent.
+ITEM_PUNTTYPE = re.compile(r'^([A-Z]{2,4}\d{0,3})\.\s*((?:ACTUALITEITSDEBAT|TOEGEVOEGD PUNT|POLITIEVERORDENINGEN)\.\s+\S.*)$')
 KOP = re.compile(r'^([^.]+?)\.\s+(.*)$')                     # "Domein. titel..." (HOOFDLETTERS of Title Case)
 NOISE = re.compile(
     r'^(Beslissing(?:en|s)?lijst\s+\d+$'        # paginakop, bv. "Beslissingenlijst 2"
@@ -113,10 +119,28 @@ def _puntkop(regel: str, vorig):
     m = ITEM.match(regel)
     if m and _is_echt_punt(m.group(1), m.group(2)):        # geen jaartal/fragment
         return m.groups()
+    m = ITEM_PUNTTYPE.match(regel)
+    if m:
+        return m.groups()
     m = ITEM_ZONDER_PUNT.match(regel)
     if m and _is_echt_punt(m.group(1), m.group(2)) and _volgt_op(vorig, m.group(1)):
         return m.groups()
     return None
+
+
+# Een titel die over meer regels loopt, kan een regel laten beginnen met een getal en een punt:
+# "...openbaar domein van lot" + "7. Verwijzing naar de gemeenteraad.", of "...boomcompensatie
+# 2025 -" + "03. Vaststelling en uitvoerbaarverklaring kohier.". ITEM las dat als een nieuw punt:
+# dan stond er een spookpunt live met de staart van de titel, en bleef het echte punt afgeknot
+# (college 31/03/2026 en 12/05/2026, vast bureau 10/02/2026). Zo'n regel heeft geen rubriek en zijn
+# nummer volgt niet op het vorige punt, dus hoort hij bij de titel. Enkel binnen een gewone
+# nummerreeks, en een geschrapt punt ("GESCHRAPT.", ook zonder rubriek) blijft altijd een punt.
+def _is_titelvervolg(nummer: str, rest: str, vorig) -> bool:
+    if not re.fullmatch(r'\d+[A-Za-z]?', nummer) or not re.fullmatch(r'\d+[A-Za-z]?', vorig or ""):
+        return False
+    if KOP.match(rest) or rest.upper().startswith("GESCHRAPT"):
+        return False
+    return not _volgt_op(vorig, nummer)
 
 
 def extract_text(pdf_path):
@@ -160,6 +184,8 @@ def parse(pdf_path, text=None):
             sluit(); continue
 
         kop = _puntkop(l, vorig)
+        if kop and meta is not None and _is_titelvervolg(*kop, vorig):
+            kop = None                                      # vervolg van de titel, geen nieuw punt
         if kop:                                             # nieuw punt begint
             sluit()
             nummer, rest = kop
@@ -225,31 +251,6 @@ BEKENDE_AFWIJKINGEN = {
     # Het resultaat van punt 2 loopt in de bron over twee regels.
     "gemeenteraad/2025-10-21": {
         "2: resultaat 'Niet toekenning titel 1 ereraadslid.'",
-    },
-    # Tijdelijk, tot _is_titelvervolg in parse() staat: spookpunt uit een titelregel.
-    "college_van_burgemeester_en_schepenen/2026-03-31": {
-        "7 dubbel",
-        "7 na 50",
-        "50: resultaat 'loten 2, 3, 4 en 8. Goedkeuring tot overdracht naar openbaar domein van lot'",
-    },
-    # Tijdelijk, tot _is_titelvervolg in parse() staat: spookpunt uit een titelregel.
-    "college_van_burgemeester_en_schepenen/2026-05-12": {
-        "03 dubbel",
-        "03 na 11",
-        "11: resultaat ''",
-    },
-    # Tijdelijk, tot _is_titelvervolg in parse() staat: spookpunt uit een titelregel.
-    "vast_bureau/2026-02-10": {
-        "5 na 6",
-        "4: resultaat 'de niet-toegewezen loten van de openbare verkopen van gronden deel 1 t.e.m.'",
-    },
-    # Tijdelijk, tot ITEM_PUNTTYPE in _puntkop() staat: gemist actualiteitsdebat.
-    "gemeenteraad/2025-09-16": {
-        "ACTUALITEITSDEBAT: 1 koppen, 0 punten",
-    },
-    # Tijdelijk, tot ITEM_PUNTTYPE in _puntkop() staat: gemist actualiteitsdebat.
-    "gemeenteraad/2026-01-26": {
-        "ACTUALITEITSDEBAT: 2 koppen, 0 punten",
     },
 }
 

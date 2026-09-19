@@ -9775,6 +9775,37 @@
       ]
     },
     {
+      "id": "gemeenteraad-20250916-ACT",
+      "sessie_id": "gemeenteraad-20250916",
+      "sessie_date": "2025-09-16",
+      "nummer": "ACT",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "behandeld ter zitting",
+        "text": "Behandeld ter zitting",
+        "published": "2025-09-16"
+      },
+      "impact": 2,
+      "type": "actuadebat",
+      "aanvullend": false,
+      "titel": "Uitrol Diftar.",
+      "decoded": "De gemeenteraad beslist over de uitrol van Diftar.",
+      "themes": [
+        "Leefmilieu"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": null,
+      "kernbegrippen": [
+        "Diftar"
+      ]
+    },
+    {
       "id": "gemeenteraad-20250916-1",
       "sessie_id": "gemeenteraad-20250916",
       "sessie_date": "2025-09-16",
@@ -17481,6 +17512,76 @@
         "EQUATOR",
         "stadskantoor",
         "2025000946"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20260126-ACT1",
+      "sessie_id": "gemeenteraad-20260126",
+      "sessie_date": "2026-01-26",
+      "nummer": "ACT1",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "behandeld ter zitting",
+        "text": "Behandeld ter zitting",
+        "published": "2026-01-26"
+      },
+      "impact": 2,
+      "type": "actuadebat",
+      "aanvullend": false,
+      "titel": "Toekomst lokale dienstencentra. (aangevraagd door cd&v - N-VA - PVDA)",
+      "decoded": "De gemeenteraad houdt een actualiteitsdebat over de toekomst van de lokale dienstencentra. De cd&v-fractie, de N-VA-fractie en de PVDA-fractie vragen dit debat aan. Hun voorstel is bezorgd aan de raadsleden.",
+      "themes": [
+        "Senioren"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": {
+        "modus": "geen"
+      },
+      "brontekst": "ACT1. ACTUALITEITSDEBAT. Toekomst lokale dienstencentra. (aangevraagd door\ncd&v - N-VA - PVDA)\nHet voorstel van de cd&v-, de N-VA- en de PVDA-fractie werd aan de raadsleden bezorgd.",
+      "kernbegrippen": [
+        "lokale dienstencentra",
+        "cd&v",
+        "N-VA",
+        "PVDA"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20260126-ACT2",
+      "sessie_id": "gemeenteraad-20260126",
+      "sessie_date": "2026-01-26",
+      "nummer": "ACT2",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "behandeld ter zitting",
+        "text": "Behandeld ter zitting",
+        "published": "2026-01-26"
+      },
+      "impact": 2,
+      "type": "actuadebat",
+      "aanvullend": false,
+      "titel": "Escalatie geweldsdelicten in Mechelen. (aangevraagd door Vlaams Belang)",
+      "decoded": "De gemeenteraad houdt een actualiteitsdebat over de escalatie van geweldsdelicten in Mechelen. Vlaams Belang vraagt dit debat aan. De fractie bezorgt haar voorstel aan de raadsleden.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": {
+        "modus": "geen"
+      },
+      "brontekst": "ACT2. ACTUALITEITSDEBAT. Escalatie geweldsdelicten in Mechelen. (aangevraagd\ndoor Vlaams Belang)\nHet voorstel van de Vlaams Belang-fractie werd aan de raadsleden bezorgd.",
+      "kernbegrippen": [
+        "Vlaams Belang",
+        "Escalatie geweldsdelicten in Mechelen"
       ]
     },
     {
@@ -43471,25 +43572,14 @@
       "date": "2026-05-12",
       "orgaan": "College",
       "categorie": "Financiën",
-      "titel": "Belasting op ontbrekende boomcompensatie 2025 -",
-      "decoded": "Het college van burgemeester en schepenen beslist over de belasting op ontbrekende boomcompensatie voor 2025.",
+      "titel": "Belasting op ontbrekende boomcompensatie 2025 - 03. Vaststelling en uitvoerbaarverklaring kohier.",
+      "decoded": "Het college van burgemeester en schepenen stelt het kohier vast voor de belasting op ontbrekende boomcompensatie 2025. Het college verklaart dit kohier uitvoerbaar.",
       "themes": [
-        "Natuur",
-        "Financiën"
+        "Financiën",
+        "Leefmilieu"
       ],
       "kernbegrippen": [
         "Belasting op ontbrekende boomcompensatie 2025"
-      ]
-    },
-    {
-      "id": "college-20260512-03",
-      "date": "2026-05-12",
-      "orgaan": "College",
-      "categorie": "Overig",
-      "titel": "Vaststelling en uitvoerbaarverklaring kohier.",
-      "decoded": "Het college van burgemeester en schepenen stelt een kohier vast en verklaart het uitvoerbaar.",
-      "themes": [
-        "Financiën"
       ]
     },
     {
@@ -49652,23 +49742,20 @@
       "date": "2026-03-31",
       "orgaan": "College",
       "categorie": "Stedenbouw",
-      "titel": "Domein Muysenhuys te Muizen. Goedkeuring verkoop",
-      "decoded": "Het college van burgemeester en schepenen keurt de verkoop van Domein Muysenhuys in Muizen goed.",
+      "titel": "Domein Muysenhuys te Muizen. Goedkeuring verkoop loten 2, 3, 4 en 8. Goedkeuring tot overdracht naar openbaar domein van lot 7. Verwijzing naar de gemeenteraad.",
+      "decoded": "Het college van burgemeester en schepenen beslist over Domein Muysenhuys in Muizen.\n• Het college keurt de verkoop van loten 2, 3, 4 en 8 goed.\n• Het college keurt de overdracht van lot 7 naar het openbaar domein goed.\n• Het college verwijst het dossier door naar de gemeenteraad.",
       "themes": [
-        "Financiën"
+        "Stedenbouw"
       ],
       "neighborhood": "Muizen",
       "kernbegrippen": [
-        "Domein Muysenhuys"
+        "Domein Muysenhuys",
+        "lot 2",
+        "lot 3",
+        "lot 4",
+        "lot 7",
+        "lot 8"
       ]
-    },
-    {
-      "id": "college-20260331-7-06de99",
-      "date": "2026-03-31",
-      "orgaan": "College",
-      "categorie": "Overig",
-      "titel": "Verwijzing naar de gemeenteraad.",
-      "decoded": "Het college van burgemeester en schepenen verwijst dit dossier door naar de gemeenteraad."
     },
     {
       "id": "college-20260331-51",
@@ -55046,18 +55133,14 @@
       "date": "2026-02-10",
       "orgaan": "Vast bureau",
       "categorie": "Stedenbouw",
-      "titel": "Goedkeuring mandaat instrumenterende notaris voor",
-      "decoded": "Het vast bureau keurt een mandaat voor een instrumenterende notaris goed. De bron geeft geen verdere details over de concrete zaak, partijen of locatie."
-    },
-    {
-      "id": "vastbureau-20260210-6",
-      "date": "2026-02-10",
-      "orgaan": "Vast bureau",
-      "categorie": "Overig",
-      "titel": "Verwijzing naar de raad voor maatschappelijk welzijn.",
-      "decoded": "Het vast bureau verwijst dit dossier door naar de raad voor maatschappelijk welzijn.",
+      "titel": "Goedkeuring mandaat instrumenterende notaris voor de niet-toegewezen loten van de openbare verkopen van gronden deel 1 t.e.m. 6. Verwijzing naar de raad voor maatschappelijk welzijn.",
+      "decoded": "Het vast bureau keurt het mandaat goed voor de instrumenterende notaris voor de loten die niet toegewezen raakten bij de openbare verkopen van gronden, delen 1 tot en met 6. Het vast bureau verwijst dit dossier door naar de raad voor maatschappelijk welzijn.",
       "themes": [
-        "Sociale zaken"
+        "Financiën"
+      ],
+      "kernbegrippen": [
+        "openbare verkopen van gronden",
+        "instrumenterende notaris"
       ]
     },
     {
