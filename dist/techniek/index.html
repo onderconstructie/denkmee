@@ -3350,96 +3350,145 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dos-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(330px,1fr)); gap:.9rem; }
 .dos-more{ grid-column:1/-1; background:var(--kaart-b); border:1px solid var(--line-kaart); border-radius:var(--r-kaart); display:flex; flex-direction:column; align-items:center; gap:.7rem; padding:1.7rem 1rem; }
 .dos-more-note{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.02em; color:var(--ink-faint); text-align:center; }
+/* De dossierkaart, "status eerst". Van boven naar onder: de kop (met een ster als je het dossier
+   volgt), de kralenkoord met links de startdatum en rechts de stand van nu, de eerste zin van het
+   nieuwste stuk, en een metaregel met het aantal momenten, de organen (meteen de legende van de
+   koord) en, met een profiel, het thema waarlangs het dossier je raakt. Een gekleurd lijntje links
+   en een gedimde kaart zijn er niet meer: het lijntje zei niets zodra "Voor mij" aanstond (dan
+   raakt elke kaart), en de gedimde kaart haalde het leescontrast niet.
+   Op desktop een tegel in het rooster; tot 760 px een rij in één vel (blok onderaan).
+   --kk-bg is de grond onder de kralen: de ring rond elke kraal neemt zo de tint van de kaart aan,
+   ook als die bij een druk of een hover verandert. */
 .dos-card{
-  background:var(--paper); padding:1.5rem 1.5rem 1.35rem; cursor:pointer; position:relative;
-  border:1px solid var(--line-kaart); box-shadow:var(--shadow-soft);
-  display:flex; flex-direction:column; min-height:248px; transition:border-color .2s, transform .2s, box-shadow .2s;
+  --kk-bg:var(--kaart-b);
+  background:var(--paper); padding:var(--s-5) var(--s-5) var(--s-4); cursor:pointer; position:relative;
+  border:1px solid var(--line-kaart); box-shadow:var(--schaduw);
+  display:flex; flex-direction:column; min-width:0;
+  transition:border-color .2s, transform .2s, box-shadow .2s, background-color var(--dur-druk) ease-out;
 }
-.dos-card:hover{ border-color:var(--pink); }
-@media (hover:hover){ .dos-card:hover{ box-shadow:var(--shadow-lift); z-index:2; } }
-/* Visuele taal: gevolgd = favoriet (ster + licht-roze), raakt jouw profiel = bol,
-   en met een profiel ingesteld grijzen de niet-passende dossiers iets uit zodat de
-   relevante opvallen. */
-.dos-card.matched{ box-shadow:inset 3px 0 0 var(--pink); }
-.dos-card.followed{ box-shadow:inset 3px 0 0 var(--pink); background:var(--pink-soft); }
-.dos-card.followed:hover{ background:var(--pink-soft); }
-.dos-card.dim{ opacity:.55; }
-.dos-card.dim:hover{ opacity:1; }
-.dos-match{ color:var(--pink); font-size:.66rem; line-height:1; }
-.dos-card-top{ display:flex; align-items:center; gap:.5rem; margin-bottom:.85rem; }
-.dos-org{
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; font-weight:600;
-  letter-spacing:.1em; text-transform:uppercase; padding:.22rem .5rem; line-height:1;
-}
-.dos-org.gr{ background:var(--ink); color:var(--paper); }
-.dos-org.col{ background:var(--pink-vlak); color:#fff; }
-.dos-org.rmw{ background:var(--ink-dim); color:var(--paper); }
-.dos-org.vb{ background:transparent; color:var(--ink-dim); box-shadow:inset 0 0 0 1px var(--ink-dim); }
-.dos-org.bm{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
-.dos-org.sv{ background:transparent; color:var(--pink-text); box-shadow:inset 0 0 0 1px var(--pink); }
-.dos-count{ margin-left:auto; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.7rem; color:var(--ink-faint); letter-spacing:.02em; }
-.dos-star{ color:var(--pink); font-size:.8rem; }
+@media (hover:hover){ .dos-card:hover{ border-color:var(--app); box-shadow:var(--shadow-lift); z-index:2; } }
+.dos-kop{ display:flex; align-items:flex-start; gap:var(--s-2); }
 .dos-name{
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:500; font-size:1.12rem;
-  line-height:1.18; letter-spacing:-.02em; color:var(--ink); margin-bottom:.7rem;
+  flex:1; min-width:0;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:500; font-size:var(--t-lees);
+  line-height:1.25; letter-spacing:-.015em; color:var(--ink);
   text-wrap:balance;
-  /* lange, meerdelige titels mogen één kaart niet uitrekken */
+  /* Op desktop hoogstens vier regels: gemeten over alle dossiers van de standaardlijst op 1280 px
+     valt er zo geen kop af (zeven koppen nemen er vier). Op een telefoon drie, zie onderaan. */
   display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
 }
+/* In het rooster houdt elke kop twee regels plaats, zodat de koorden van een rij op één hoogte liggen. */
+@media (min-width:761px){ .dos-name{ min-height:2.5em; } }
+.dos-ster{ flex:none; width:17px; height:17px; margin-top:1px; color:var(--app); }
+
+/* De kralenkoord: één draad van het eerste tot het laatste moment, met de kralen op hun datum.
+   Wat dichter bij elkaar ligt dan één kraal, deelt een plek (24 plekken per draad), zodat een
+   wekelijkse reeks een rustig snoer wordt in plaats van een streep. Het bestuur (college, vast
+   bureau, burgemeester) is petrol, de raad inkt, een schriftelijke vraag een open ring. De laatste
+   kraal is groot en staat rechts; een jaarwissel krijgt een streepje met het jaartal erboven.
+   De baan laat links en rechts ruimte zodat de kralen aan de uiteinden niet tegen de rand komen. */
+.dos-koord{ position:relative; height:16px; margin-top:19px; }
+.dos-koord-baan{ position:absolute; left:4px; right:10px; top:0; bottom:0; }
+.dos-draad{ position:absolute; top:50%; left:0; right:0; height:1.5px; margin-top:-.75px; background:rgba(26,23,18,.26); border-radius:1px; }
+/* Eén moment of alles op één dag: geen verloop, dus een stippellijn naar de enige kraal. */
+.dos-draad.leeg{ height:0; background:none; border-top:1.5px dotted rgba(26,23,18,.26); }
+.dos-kraal{
+  position:absolute; top:50%; width:7px; height:7px; border-radius:50%; transform:translate(-50%,-50%);
+  box-shadow:0 0 0 1.5px var(--kk-bg);
+}
+.dos-kraal.bestuur{ background:var(--app); }
+.dos-kraal.raad{ background:var(--ink); }
+.dos-kraal.vraag{ background:var(--kk-bg); border:1.5px solid var(--ink-2); }
+/* De grote laatste kraal: wit teken (vinkje, kruis, streep) op de raadskraal, een vraagteken in de ring. */
+.dos-kraal.nu{ width:15px; height:15px; z-index:2; display:grid; place-items:center; color:#fff; }
+.dos-kraal.nu.bestuur{ box-shadow:0 0 0 2.5px var(--kk-bg), 0 0 0 3.75px rgba(0,121,107,.42); }
+.dos-kraal.nu.raad{ box-shadow:0 0 0 2.5px var(--kk-bg), 0 0 0 3.75px rgba(26,23,18,.36); }
+.dos-kraal.nu.vraag{ border-width:1.75px; color:var(--ink-2); box-shadow:0 0 0 2.5px var(--kk-bg); }
+.dos-kraal.nu svg{ width:9px; height:9px; display:block; }
+.dos-jaar{ position:absolute; top:-11px; height:19px; width:0; border-left:1px solid var(--line-strong); }
+.dos-jaar span{
+  position:absolute; left:4px; top:-3px;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:500; font-size:var(--t-label); line-height:1;
+  letter-spacing:.03em; color:var(--ink-dim);
+}
+.dos-jaar.links span{ left:auto; right:4px; }
+/* Onder de koord: links de startdatum, rechts de stand van nu in woorden met haar datum. */
+.dos-stand{
+  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:2px 12px; margin-top:6px;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6875rem; line-height:1.35; letter-spacing:.01em; color:var(--ink-dim);
+}
+.dos-tot{ margin-left:auto; text-align:right; }
+.dos-tot b{ font-weight:600; color:var(--ink); }
+.dos-tot span{ white-space:nowrap; }
+
+/* De eerste zin van het nieuwste stuk: wat er het laatst bewoog. */
 .dos-blurb{
-  font-family:'Geist', system-ui, -apple-system, sans-serif;
-  font-size:.82rem; line-height:1.45; color:var(--ink-dim); margin-bottom:.75rem;
+  margin-top:9px;
+  font-family:'Geist', system-ui, -apple-system, sans-serif; font-size:.875rem; line-height:1.45; color:var(--ink-2);
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
 }
 /* Zoektreffer die enkel in het VOLLEDIGE stuk zit (niet in titel of samenvatting): een
-   eerlijk, terughoudend label met het roze vierkantje als merkteken, zoals de eyebrows. */
+   eerlijk, terughoudend label met het petrol vierkantje als merkteken, zoals de eyebrows. */
 .dos-ft{
-  display:flex; align-items:center; gap:.45rem; margin:-.25rem 0 .7rem;
+  display:flex; align-items:center; gap:.45rem; margin-top:7px;
   font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text);
+  font-size:var(--t-label); line-height:1.4; letter-spacing:.06em; text-transform:uppercase; color:var(--app-text);
 }
-.dos-ft::before{ content:''; width:.45em; height:.45em; background:var(--pink); flex:none; }
+.dos-ft::before{ content:''; width:.45em; height:.45em; background:var(--app); flex:none; }
 /* De tekst zit in één span, anders maakt flex van elk stuk tekst en van elk vetgezet woord
    een eigen kind met de gap ertussen, en breekt de regel niet meer netjes af. Het woord
    waarlangs de treffer binnenkwam staat vet: dat is het antwoord op 'waarom staat dit hier?'. */
 .dos-ft > span, .dosm-ev-ft > span{ min-width:0; }
 .dos-ft b, .dosm-ev-ft b{ font-weight:600; color:var(--pink); }
-.dos-themes{ display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:auto; }
-.dos-theme{
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.02em;
-  color:var(--ink-dim); border:1px solid var(--line-strong); padding:.16rem .45rem; line-height:1.3;
+/* Metaregel: het aantal, de organen met hun kraal (de legende van de koord), besloten zitting en
+   waarom het dossier je raakt. Alles staat plat in één flexrij, zodat een lange regel netjes tussen
+   twee delen breekt; het scheidingspunt hangt achteraan een groep en belandt nooit vooraan een regel. */
+.dos-meta{
+  margin-top:auto; padding-top:9px;
+  display:flex; flex-wrap:wrap; align-items:center; gap:2px 10px;
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:var(--t-meta); line-height:1.45; letter-spacing:.01em; color:var(--ink-dim);
 }
-/* horizontal activity timeline strip */
-.dos-track{ position:relative; height:30px; margin:1.1rem 0 .85rem; }
-.dos-track-line{ position:absolute; left:0; right:0; top:50%; height:1px; background:var(--line-strong); }
-.dos-node{
-  position:absolute; top:50%; width:8px; height:8px; border-radius:50%; transform:translate(-50%,-50%);
-  background:var(--ink); border:1.5px solid var(--paper);
-}
-.dos-node.col{ background:var(--pink); }
-.dos-node.last{ width:13px; height:13px; box-shadow:0 0 0 3px var(--paper); z-index:2; }
-.dos-foot{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
-.dos-range{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.66rem; color:var(--ink-faint); letter-spacing:.02em; }
-.dos-status{
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; font-weight:600;
-  letter-spacing:.04em; text-transform:uppercase; padding:.2rem .5rem; line-height:1.2; white-space:nowrap;
-  /* Neutrale grondvorm voor de uitkomsten die we niet apart kleuren (vaststelling,
-     aktename, gunstig advies, en de samengestelde). Zie BESLUIT_LBL in het script. */
-  background:var(--paper-2); color:var(--ink-dim); border:1px solid var(--line);
-}
-.dos-status.goedgekeurd{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-.dos-status.verworpen{ background:var(--pink-vlak); color:#fff; border-color:var(--pink-vlak); }
-.dos-status.verdaagd,.dos-status.lopend{ background:var(--paper-3); color:var(--ink-2); border:1px solid var(--line-strong); }
-.dos-status.beslist{ background:var(--paper-2); color:var(--ink-dim); border:1px solid var(--line); }
-.dos-followed{
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.58rem; font-weight:600;
-  letter-spacing:.06em; text-transform:uppercase; color:var(--pink-text); padding:.16rem .42rem;
-  border:1px solid var(--line-pink); line-height:1;
-}
-/* inline dossier-grid in 'Mijn gemeenteraad' */
+.dos-meta > span{ white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
+.dos-meta > .sep::after{ content:'·'; margin-left:6px; }
+.dos-meta .dos-kraal{ position:static; transform:none; flex:none; box-shadow:none; }
+.dos-via{ color:var(--app-text); }
+.dos-besloten{ color:var(--ink-2); }
+.dos-meta > .dos-besloten{ gap:5px; }
+.dos-besloten svg{ width:11px; height:11px; flex:none; }
+/* Enkel voor schermlezers: "raakt je profiel" vóór "via Mobiliteit". */
+.dos-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 
+/* Tot 760 px: de lijst is één afgerond vel met rijen en een haarlijn ertussen, in plaats van losse
+   tegels onder elkaar. De rij verliest kader, schaduw en afronding; het vel draagt ze. Dit blok
+   staat na de basisregels van de kaart, en de selectors met .dos-grid ervoor winnen van de latere
+   algemene regels (familie-afronding, kaartvulling, focusrand en tik-indruk). */
 @media (max-width:760px){
-  .dos-grid{ grid-template-columns:1fr; }
+  .dos-grid{
+    grid-template-columns:1fr; gap:0;
+    background:linear-gradient(180deg, var(--kaart-a), var(--kaart-b));
+    border:1px solid var(--line-kaart); border-radius:var(--r-kaart); box-shadow:var(--schaduw); overflow:hidden;
+  }
+  /* Een lege toestand (niets gevonden, nog geen profiel) staat los, niet in een vel. */
+  .dos-grid:has(> .empty){ background:none; border:0; border-radius:0; box-shadow:none; overflow:visible; }
+  .dos-grid .dos-card{ background:none; border:0; border-radius:0; box-shadow:none; padding:var(--s-3) var(--s-4) 11px; }
+  .dos-grid .dos-card + .dos-card::before{ content:''; position:absolute; top:0; left:var(--s-4); right:0; height:1px; background:var(--haarlijn); }
+  .dos-grid .dos-card:focus-visible{ outline-offset:-3px; }
+  .dos-grid .dos-more{ background:none; border:0; border-top:1px solid var(--haarlijn); border-radius:0; }
+  /* Hoogstens drie regels. Op 15 px past elke kop van de standaardlijst daarin op 375 px breed;
+     op 16 px (--t-tekst) vielen er twee af, de langste met een lang samengesteld woord vooraan. */
+  .dos-name{ font-size:.9375rem; -webkit-line-clamp:3; }
+  .dos-koord{ margin-top:18px; }
+  .dos-blurb{ -webkit-line-clamp:2; margin-top:8px; }
+  .dos-meta{ padding-top:7px; }
 }
+@media (max-width:760px) and (hover:hover){
+  .dos-grid .dos-card:hover{ background-color:rgba(0,121,107,.04); box-shadow:none; --kk-bg:#f5f8f1; }
+}
+/* Tik op een rij: de rij kleurt even in plaats van te krimpen, want ze ligt in een vel. */
+@media (max-width:760px) and (hover:none){
+  .dos-grid .dos-card:active{ transform:none; background-color:rgba(26,23,18,.05); --kk-bg:#f4f2ec; }
+}
+@media (prefers-reduced-motion:reduce){ .dos-grid .dos-card:active{ transform:none; } }
 
 /* ===================================================================
    DOSSIER DETAIL OVERLAY
