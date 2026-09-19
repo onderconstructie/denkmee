@@ -308,10 +308,17 @@ else:
 #     besluit komen. koppel_uittreksels.py koppelt op het puntnummer dat de stad zelf in de kopregel
 #     zet; deze klep leest de koppeltabel na, zodat een latere wijziging aan de koppeling niet stil een
 #     verkeerde brontekst live zet. Aanleiding: op 18/09/2026 lazen 137 stukken een bijlage in plaats
-#     van hun besluit, en toonde een cultuurpunt een samenvatting over parkeertarieven. Vijf toetsen:
-#     de gecachete tekst hoort bij het document zelf; een bijlage hangt bij het punt van haar eigen
-#     uittreksel; een document hangt aan één punt; een punt heeft hooguit één uittreksel; het
-#     puntnummer in de kopregel is dat van het stuk.
+#     van hun besluit, en toonde een cultuurpunt een samenvatting over parkeertarieven. De toetsen:
+#     de gecachete tekst hoort bij het document zelf, en het bestand waaruit ze kwam bestaat; een
+#     bijlage hangt bij het punt van haar eigen uittreksel; een document hangt aan één punt; een
+#     punt heeft hooguit één uittreksel; het puntnummer in de kopregel is dat van het stuk; geen
+#     twee documenten delen een tekst in de koppeltabel, of een bestandsnaam in de catalogus.
+#     Die laatste twee bestaan omdat bijlagen het publicatie-id van hun uittreksel delen: gaf
+#     pdf_pad hun één bestandsnaam, dan haalde fetch_uittreksels.py er maar één op en las elke
+#     andere bijlage met dat id de tekst van dat ene bestand (aanleiding 19/09/2026). De zoekindex
+#     en de tagging lezen de tekst via de cache_sleutel in de koppeltabel, dus de klep toetst die
+#     sleutel zelf en niet enkel de naamgeving: een verouderde koppeltabel wijst anders nog naar het
+#     bestand van een ander document.
 #     De koppeltabel en de tekstcache staan buiten git; ontbreken ze, dan valt er niets te toetsen.
 _koppel_pad = BASE / "data" / "uittreksel_koppeling.json"
 _index_pad = BASE / "data" / "uittreksels_index.json"
@@ -321,6 +328,7 @@ if _koppel_pad.exists() and _index_pad.exists():
     _tabel = json.loads(_koppel_pad.read_text(encoding="utf-8"))
     _per_url = {d["url"]: d for d in json.loads(_index_pad.read_text(encoding="utf-8"))}
     _k_tekst, _k_wees, _k_nummer, _k_meer, _k_bij = [], [], [], [], {}
+    _k_zonder, _k_sleutel, _k_sleutel_bij = [], {}, {}
     for _item, _refs in _tabel.items():
         _eigen = {r["uittreksel_id"] for r in _refs if r["klasse"] == "uittreksel"}
         if sum(1 for r in _refs if r["klasse"] == "uittreksel") > 1:
@@ -330,14 +338,20 @@ if _koppel_pad.exists() and _index_pad.exists():
             if _r["klasse"] == "bijlage" and _r["uittreksel_id"] not in _eigen:
                 _k_wees.append(_item)
             _doc, _sl = _per_url.get(_r["url"]), _r.get("cache_sleutel")
+            if _sl:
+                _k_sleutel.setdefault(_sl, set()).add(_r["url"])
+                _k_sleutel_bij.setdefault(_sl, set()).add(_item)
             if not (_doc and _sl):
                 continue
             _p = _ku.pdf_pad(_doc)
-            if _p.exists():
-                _st = _p.stat()
-                if _hl.sha1(f"{_p.as_posix()}|{_st.st_mtime_ns}|{_st.st_size}".encode()).hexdigest() != _sl:
-                    _k_tekst.append(_item)
-                    continue
+            # Zonder bestand valt niet na te gaan van welk document de gecachete tekst komt.
+            if not _p.exists():
+                _k_zonder.append(_item)
+                continue
+            _st = _p.stat()
+            if _hl.sha1(f"{_p.as_posix()}|{_st.st_mtime_ns}|{_st.st_size}".encode()).hexdigest() != _sl:
+                _k_tekst.append(_item)
+                continue
             _c = _ku.CACHE / (_sl + ".txt")
             if _r["klasse"] == "uittreksel" and _c.exists():
                 _nr, _lt = _ku.kopregel_nummer(_c.read_text(encoding="utf-8"))
@@ -345,19 +359,41 @@ if _koppel_pad.exists() and _index_pad.exists():
                 if _nr is not None and _inr is not None and (_nr != _inr or (_lt and _ilt and _lt != _ilt)):
                     _k_nummer.append(_item)
     _k_dubbel = [u for u, s in _k_bij.items() if len(s) > 1]
-    _k_fout = sorted(set(_k_tekst + _k_wees + _k_nummer + _k_meer))
-    if _k_fout or _k_dubbel:
+    # Dezelfde sleutel onder twee url's: twee documenten lezen dezelfde tekst.
+    _k_gedeeld = [_sl for _sl, _u in _k_sleutel.items() if len(_u) > 1]
+    # Dezelfde bestandsnaam voor twee url's uit de catalogus: de download schrijft er maar een weg.
+    _k_pad = {}
+    for _u, _d in _per_url.items():
+        _k_pad.setdefault(_ku.pdf_pad(_d), set()).add(_u)
+    _k_botsing = {p: u for p, u in _k_pad.items() if len(u) > 1}
+    _k_fout = sorted(set(_k_tekst + _k_wees + _k_nummer + _k_meer + _k_zonder
+                         + [_i for _sl in _k_gedeeld for _i in _k_sleutel_bij[_sl]]))
+    if _k_fout or _k_dubbel or _k_botsing:
         print(f"[koppeling] tekst van een ander document {len(set(_k_tekst))} · bijlage los van haar "
               f"uittreksel {len(set(_k_wees))} · puntnummer klopt niet {len(set(_k_nummer))} · punt met meer dan een "
-              f"uittreksel {len(_k_meer)} · document aan meer dan een stuk {len(_k_dubbel)}: " + ", ".join(_k_fout[:5]))
+              f"uittreksel {len(_k_meer)} · document aan meer dan een stuk {len(_k_dubbel)} · tekst gedeeld door "
+              f"meer dan een document {len(_k_gedeeld)} · tekst zonder bestand {len(set(_k_zonder))} · "
+              f"bestandsnaam gedeeld in de catalogus {len(_k_botsing)}: " + (", ".join(_k_fout[:5]) or "-"))
+        if _k_botsing:
+            print("   gedeelde bestandsnaam: " + ", ".join(f"{p.parent.parent.parent.name}/{p.parent.parent.name}/"
+                                                         f"{p.name} ({len(u)} url's)"
+                                                         for p, u in sorted(_k_botsing.items())[:5]))
         if not is_demo:
-            sys.exit("[STOP] Live build geweigerd: een stuk leest de tekst van een ander besluit. Draai "
-                     "koppel_uittreksels.py opnieuw, hertag de geraakte stukken, en bouw daarna de site "
-                     "opnieuw (zie de volgorde in run_all.py).")
+            if _k_botsing:
+                sys.exit("[STOP] Live build geweigerd: meerdere documenten krijgen dezelfde bestandsnaam, "
+                         "dus een stuk leest de tekst van een ander document. Geef in fetch_uittreksels.py en "
+                         "koppel_uittreksels.pdf_pad elk document een eigen bestandsnaam, haal de ontbrekende "
+                         "documenten op, draai koppel_uittreksels.py opnieuw, hertag de geraakte stukken, en "
+                         "bouw daarna de site opnieuw (zie de volgorde in run_all.py).")
+            sys.exit("[STOP] Live build geweigerd: een stuk leest de tekst van een ander document, of een "
+                     "tekst waarvan het bestand ontbreekt. Haal de ontbrekende documenten op "
+                     "(fetch_uittreksels.py --download), draai koppel_uittreksels.py opnieuw, hertag de "
+                     "geraakte stukken, en bouw daarna de site opnieuw (zie de volgorde in run_all.py).")
         print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
     else:
         print(f"       uittreksel-koppeling: {sum(len(v) for v in _tabel.values())} documenten, elk bij "
-              f"het eigen punt ✓")
+              f"het eigen punt; {sum(len(u) for u in _k_sleutel.values())} met tekst, elk uit een eigen "
+              f"bestand; {len(_per_url)} in de catalogus, elk met een eigen bestandsnaam ✓")
 else:
     print("       uittreksel-koppeling: geen koppeltabel, niets te toetsen")
 

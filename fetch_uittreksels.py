@@ -25,6 +25,9 @@ from pathlib import Path
 from datetime import date
 from collections import defaultdict, Counter
 import requests
+# Pad en bestandsnaam van elk document komen uit de koppeling: zo leest die precies het bestand dat
+# hier geschreven wordt. koppel_uittreksels laadt pdfplumber pas bij het uitlezen, niet bij de import.
+from koppel_uittreksels import pdf_pad
 
 BASE_DIR = Path(__file__).parent
 ROOT = "https://lblod.mechelen.be"
@@ -129,19 +132,21 @@ def main():
     # url-uniekheid = 1 pdf per document? waarschuw bij botsingen
     bots = [u for u, n in Counter(urls).items() if n > 1]
     print(f"\ndubbele url's (zelfde pdf meerdere keren gelinkt): {len(bots)}")
+    # Elk document een eigen bestand: delen twee documenten een pad, dan schrijft de download er
+    # maar een weg en leest de koppeling voor het andere dezelfde tekst. build.py (klep 3e) weigert dat.
+    zelfde_pad = [p for p, n in Counter(pdf_pad(d) for d in docs).items() if n > 1]
+    if zelfde_pad:
+        print(f"! bestanden die door meer dan een document gedeeld worden: {len(zelfde_pad)}")
 
     if not download:
         print("\nDRY-RUN klaar. Niets gedownload. Draai met --download om echt op te halen.")
         return
 
-    import hashlib
-    raw = BASE_DIR / "data" / "raw"
     n = 0
     for d in docs:
-        # Veilige, unieke bestandsnaam: het publicatie-id (uniek per document), met een
-        # url-hash als terugval als er geen id in de bestandsnaam zat.
-        stam = d["id"] or hashlib.sha1(d["url"].encode()).hexdigest()[:10]
-        f = raw / d["slug"] / d["zitting"] / "uittreksels" / f"{d['klasse']}_{stam}.pdf"
+        # Een uniek pad per document (koppel_uittreksels.bestandsnaam). Het publicatie-id alleen is
+        # dat niet: een bijlage deelt het met haar uittreksel en soms met andere bijlagen.
+        f = pdf_pad(d)
         if f.exists(): continue
         f.parent.mkdir(parents=True, exist_ok=True)
         try:

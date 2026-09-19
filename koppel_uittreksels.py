@@ -117,10 +117,23 @@ def zitting_van_id(pid):
     if not m: return None
     d = m.group(1); return f"{d[0:4]}-{d[4:6]}-{d[6:8]}"
 
+def bestandsnaam(doc):
+    """Naam van het pdf-bestand van een document uit de uittreksel-index. Eén functie voor beide
+    kanten: fetch_uittreksels.py schrijft onder deze naam (via pdf_pad), de koppeling leest ze. Een
+    uittreksel heet naar zijn publicatie-id. Een bijlage deelt dat id met haar uittreksel en soms met
+    andere bijlagen, dus draagt ze er een stukje hash van haar url bij: met enkel het id schreef de
+    download per id maar één bijlage weg, en las elke andere bijlage met dat id de tekst van dat ene
+    bestand (aanleiding 19/09/2026). Zonder id: een hash van de url."""
+    url_hash = hashlib.sha1(doc["url"].encode()).hexdigest()
+    if not doc["id"]:
+        return f"{doc['klasse']}_{url_hash[:10]}.pdf"
+    if doc["klasse"] == "bijlage":
+        return f"bijlage_{doc['id']}_{url_hash[:8]}.pdf"
+    return f"{doc['klasse']}_{doc['id']}.pdf"
+
 def pdf_pad(doc):
     slug = SLUGMAP_RAW.get(doc["orgaan"], "")
-    stam = doc["id"] or hashlib.sha1(doc["url"].encode()).hexdigest()[:10]
-    return BASE / "data" / "raw" / slug / doc["zitting"] / "uittreksels" / f"{doc['klasse']}_{stam}.pdf"
+    return BASE / "data" / "raw" / slug / doc["zitting"] / "uittreksels" / bestandsnaam(doc)
 
 def pdf_tekst(pad):
     st = pad.stat()

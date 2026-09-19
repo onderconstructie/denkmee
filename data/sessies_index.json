@@ -1400,6 +1400,17 @@
     "uittreksels": []
   },
   {
+    "organ": "Burgemeester",
+    "date": "2026-09-17",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-09-18",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_17-09-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "College van burgemeester en schepenen",
     "date": "2024-12-03",
     "documenten": {
@@ -4216,6 +4227,64 @@
     ]
   },
   {
+    "organ": "College van burgemeester en schepenen",
+    "date": "2026-09-08",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-09-17",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_08-09-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "College van burgemeester en schepenen",
+    "date": "2026-09-15",
+    "documenten": {},
+    "uittreksels": [
+      {
+        "titel": "Uittreksels",
+        "id": "116337",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116337.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116338",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116338.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116339",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116339.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116340",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116340.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116341",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116341.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116342",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116342.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116343",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116343.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116344",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_15-09-2026_116344.pdf"
+      }
+    ]
+  },
+  {
     "organ": "Gemeenteraad",
     "date": "2024-12-02",
     "documenten": {
@@ -6128,6 +6197,10 @@
         "published": "2026-09-07",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_15-09-2026_Agenda.pdf"
       },
+      "aanvullend": {
+        "published": "2026-09-18",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=ToegevoegdeAgenda_Gemeenteraad_15-09-2026_Agenda_-_volledig.pdf"
+      },
       "besluiten": {
         "published": "2026-09-16",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_15-09-2026_Beslissingslijst_toezicht.pdf"
@@ -7499,6 +7572,17 @@
       "besluiten": {
         "published": "2026-09-10",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_01-09-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "Vast bureau",
+    "date": "2026-09-08",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-09-17",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_08-09-2026_Beslissingenlijst.pdf"
       }
     },
     "uittreksels": []
