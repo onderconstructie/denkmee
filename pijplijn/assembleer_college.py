@@ -15,7 +15,7 @@ demo-records (id begint met 'col-') volledig verwijderd, zodat demo en echte dat
 nooit vermengd raken. De is_demo-vlag in data.json laat je pas op False zetten als
 álle organen echt zijn.
 
-Gebruik:  python assembleer_college.py 2026-05-26 besluiten.agendapunten.json
+Gebruik:  python pijplijn/assembleer_college.py 2026-05-26 besluiten.agendapunten.json
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII

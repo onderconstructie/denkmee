@@ -15,10 +15,10 @@ Twee principes uit het project, hard ingebouwd:
     data/tags_cache.json — een tweede run kost niets voor wat niet veranderd is.
 
 Gebruik:
-  python tag_items.py --dry-run         # gratis: test de hele pijplijn zonder API
-  python tag_items.py --limit 5         # echt taggen, max 5 API-calls (kosten beperken)
-  python tag_items.py                   # alles taggen wat nog geen samenvatting heeft
-  python tag_items.py --overwrite       # ook al-getagde items opnieuw doen
+  python pijplijn/tag_items.py --dry-run         # gratis: test de hele pijplijn zonder API
+  python pijplijn/tag_items.py --limit 5         # echt taggen, max 5 API-calls (kosten beperken)
+  python pijplijn/tag_items.py                   # alles taggen wat nog geen samenvatting heeft
+  python pijplijn/tag_items.py --overwrite       # ook al-getagde items opnieuw doen
 Vereist voor echte runs:  pip install anthropic  +  omgevingsvariabele ANTHROPIC_API_KEY
 """
 from __future__ import annotations
@@ -38,7 +38,7 @@ for _stream in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 DATA = BASE / "data.json"
 CACHE = BASE / "data" / "tags_cache.json"
 STRATEN = BASE / "data" / "straten_mechelen.json"

@@ -12,8 +12,8 @@ De PDF's gaan naar data/raw/<orgaan>/<zitting>/uittreksels/ (git-genegeerd). De 
 VOLLEDIGE tekst hoort NOOIT in git: die komt in data/uittreksel_cache/ (git-genegeerd) en voedt
 enkel de tagging + zoekindex. Alleen afgeleide data (samenvatting, kernbegrippen) wordt gecommit.
 
-Draai:  python fetch_uittreksels.py            (DRY-RUN: enkel catalogiseren + tonen)
-        python fetch_uittreksels.py --download  (echt downloaden)
+Draai:  python pijplijn/fetch_uittreksels.py            (DRY-RUN: enkel catalogiseren + tonen)
+        python pijplijn/fetch_uittreksels.py --download  (echt downloaden)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
@@ -29,7 +29,7 @@ import requests
 # hier geschreven wordt. koppel_uittreksels laadt pdfplumber pas bij het uitlezen, niet bij de import.
 from koppel_uittreksels import pdf_pad
 
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 ROOT = "https://lblod.mechelen.be"
 BASE = f"{ROOT}/LBLODWeb/Home/Overzicht"
 UA = "DenkMeeMetMechelen/0.4 (burgerexperiment; contact via asgaupaust.be)"

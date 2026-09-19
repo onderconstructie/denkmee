@@ -10,7 +10,7 @@ terug op wat in de bestandsnaam staat (nummer, indiener, onderwerp).
 Bron-pdf's: data/raw/schriftelijke_vragen/<jaar-maand>/<bestand>.pdf
 Output:     data/schriftelijke_vragen.json  (lijst records, klaar voor de assemblage)
 
-Draai:  python parse_schriftelijke_vragen.py     (eenmalig: pip install pdfplumber)
+Draai:  python pijplijn/parse_schriftelijke_vragen.py     (eenmalig: pip install pdfplumber)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
@@ -23,7 +23,7 @@ import hashlib
 from pathlib import Path
 from datetime import date
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 RAW = BASE / "data" / "raw" / "schriftelijke_vragen"
 OUT = BASE / "data" / "schriftelijke_vragen.json"
 

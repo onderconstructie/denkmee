@@ -19,9 +19,9 @@ Belangrijk:
   bron-URL net als elders wordt gestript.
 
 Vereisten: requests en lxml (pip install requests lxml).
-Gebruik:    python zoek_dossier.py "fietspad N15"
-            python zoek_dossier.py "Prolocus" --vanaf 2024-12-01 --tot 2026-07-08
-            python zoek_dossier.py "mobiliteit" --debug
+Gebruik:    python pijplijn/zoek_dossier.py "fietspad N15"
+            python pijplijn/zoek_dossier.py "Prolocus" --vanaf 2024-12-01 --tot 2026-07-08
+            python pijplijn/zoek_dossier.py "mobiliteit" --debug
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII

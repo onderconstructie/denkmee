@@ -32,9 +32,9 @@ Uitvoer: data/raw/budgetten/<entiteit>/<set>/<bestand>.pdf
          data/raw/budgetten/_index.json        (wat er staat, met bron-URL en kop)
          data/raw/budgetten/_wijzigingen.json  (wat er sinds de vorige run veranderde)
 
-Draai:  python fetch_budgetten.py            (run_all.py doet dit automatisch, stap 1e)
-        python fetch_budgetten.py --enkel-kijken   (niets downloaden, enkel melden)
-        python fetch_budgetten.py --grondig        (altijd de volledige HEAD-ronde)
+Draai:  python pijplijn/fetch_budgetten.py            (run_all.py doet dit automatisch, stap 1e)
+        python pijplijn/fetch_budgetten.py --enkel-kijken   (niets downloaden, enkel melden)
+        python pijplijn/fetch_budgetten.py --grondig        (altijd de volledige HEAD-ronde)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
@@ -53,7 +53,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import unquote, urljoin, urlparse
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 ROOT = "https://www.mechelen.be"
 URL = (ROOT + "/stad-en-bestuur/stadsbestuur-en-organisatie/bekendmakingen-verslagen-en-documenten"
        "/budget-meerjarenplannen-en-jaarrekeningen")

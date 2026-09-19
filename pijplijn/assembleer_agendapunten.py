@@ -10,7 +10,7 @@ Wat nog NIET ingevuld wordt (komt in de AI-tagging, stap 11):
   - streets / neighborhood / schepen → leeg
 Thema's worden voorlopig afgeleid uit de categorie (deterministische map, geen AI).
 
-Gebruik:  python assembleer_agendapunten.py 2026-04-28 besluiten.agendapunten.json notulen.notulen.json
+Gebruik:  python pijplijn/assembleer_agendapunten.py 2026-04-28 besluiten.agendapunten.json notulen.notulen.json
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII

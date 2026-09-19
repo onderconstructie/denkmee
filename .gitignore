@@ -62,3 +62,11 @@ privacy_namen*
 *.tmp
 *.log
 *.out
+
+# Lokale knoppen (dubbelklik op dit toestel) en de eenmalige logo-hulpstukken: blijven lokaal,
+# niet nodig om te bouwen.
+*.bat
+/maak_toren.py
+/maak_app_icoon.py
+/sint-romboutstoren.svg
+/toren-datauri.txt

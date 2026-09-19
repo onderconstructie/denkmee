@@ -11,7 +11,7 @@ Toetst, onafhankelijk van hoe de index gebouwd is, twee dingen:
    elk bemonsterd woord (a) in de volledige tekst van dat punt staat en (b) niet in wat
    de huidige zoek al doorzoekt.
 
-Draai:  python meetlat_zoek.py     (na bouw_zoekindex.py; wijzigt niets, meet alleen)
+Draai:  python pijplijn/meetlat_zoek.py     (na bouw_zoekindex.py; wijzigt niets, meet alleen)
 """
 
 import sys
@@ -27,7 +27,7 @@ from pathlib import Path
 
 import bouw_zoekindex as bz
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 
 
 def main():

@@ -10,7 +10,7 @@ zitting binnenkomt, vervangt assembleer_agendapunten.py deze punten (zelfde sess
 Meerdere agenda-bestanden mogen meegegeven worden (bv. de gewone én de volledige
 agenda met vragen); ze worden samengevoegd op puntnummer, laatste wint.
 
-Gebruik:  python assembleer_agenda.py 2026-06-23 agenda.agenda.json aanvullend.agenda.json --orgaan "Gemeenteraad"
+Gebruik:  python pijplijn/assembleer_agenda.py 2026-06-23 agenda.agenda.json aanvullend.agenda.json --orgaan "Gemeenteraad"
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII
@@ -45,7 +45,7 @@ def main():
     if "--orgaan" in args:
         i = args.index("--orgaan"); orgaan = args[i + 1]; del args[i:i + 2]
     if len(args) < 2:
-        print("Gebruik: python assembleer_agenda.py JJJJ-MM-DD agenda.agenda.json [meer.json] --orgaan X")
+        print("Gebruik: python pijplijn/assembleer_agenda.py JJJJ-MM-DD agenda.agenda.json [meer.json] --orgaan X")
         return
     datum, agenda_paden = args[0], args[1:]
 

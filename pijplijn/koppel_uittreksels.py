@@ -18,8 +18,8 @@ koppel_uittreksels.py — verwerkt de opgehaalde uittreksels/bijlagen (fetch_uit
 De volledige tekst blijft in de lokale cache en voedt straks de tagging + zoekindex; enkel
 afgeleide data (samenvatting, kernbegrippen, de url) komt in de gecommitte bestanden.
 
-Draai:  python koppel_uittreksels.py            (verwerkt alles + schrijft)
-        python koppel_uittreksels.py --meetlat   (enkel de koppel-cijfers; vult hooguit de tekstcache aan)
+Draai:  python pijplijn/koppel_uittreksels.py            (verwerkt alles + schrijft)
+        python pijplijn/koppel_uittreksels.py --meetlat   (enkel de koppel-cijfers; vult hooguit de tekstcache aan)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
@@ -30,7 +30,7 @@ import os, re, json, hashlib, unicodedata
 from pathlib import Path
 from collections import defaultdict
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 INDEX = BASE / "data" / "uittreksels_index.json"
 CACHE = BASE / "data" / "uittreksel_cache"
 KOPPEL = BASE / "data" / "uittreksel_koppeling.json"

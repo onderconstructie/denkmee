@@ -11,7 +11,7 @@ De valkuil die dit script vermijdt: de context moet uit het EIGEN stuk van het w
 Een eerdere versie zocht de context in willekeurige bronbestanden en koppelde die aan de
 punten uit de index, en dat verwart een naam in stuk A met hetzelfde woord in stuk B.
 
-Draai:  python audit_namen.py            (leest zoekindex.json + dezelfde bronnen als de bouw)
+Draai:  python pijplijn/audit_namen.py            (leest zoekindex.json + dezelfde bronnen als de bouw)
 Uitvoer: een lijst kandidaten, zeldzaamste eerst. Beoordeel ze met de hand; wat een burger is
 gaat naar privacy_namen.json ("volledig"), wat een functie is naar "beoordeeld_publiek".
 """
@@ -27,8 +27,8 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-BASE = Path(__file__).parent
-sys.path.insert(0, str(BASE))
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
+sys.path.insert(0, str(Path(__file__).parent))
 import bouw_zoekindex as bz
 import schoon_brontekst
 

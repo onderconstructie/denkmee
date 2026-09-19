@@ -51,7 +51,10 @@ BASE = Path(__file__).parent
 def run(*args):
     print("›", " ".join(str(a) for a in args))
     env = {**os.environ, "PYTHONUTF8": "1"}   # elk pijplijn-script schrijft UTF-8, ook op cp1252
-    subprocess.run([sys.executable, *map(str, args)], cwd=BASE, check=True, env=env)
+    # De pijplijnscripts staan in pijplijn/; build.py staat bovenaan. Ze draaien allemaal vanuit de
+    # repomap, zodat relatieve paden als data.json blijven kloppen.
+    script = args[0] if args[0] == "build.py" else "pijplijn/" + args[0]
+    subprocess.run([sys.executable, script, *map(str, args[1:])], cwd=BASE, check=True, env=env)
 
 
 def ensure_straten():

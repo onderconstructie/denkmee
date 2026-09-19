@@ -11,7 +11,7 @@ Geldt voor de gemeenteraad én de raad voor maatschappelijk welzijn.
 Niet-destructief: maakt eerst data.json.bak en vervangt enkel de gegevens van de organen
 die in de index zitten. is_demo wordt door run_all.reset_voor_assemblage op False gezet.
 
-Draai:  python maak_data.py
+Draai:  python pijplijn/maak_data.py
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII
@@ -28,7 +28,7 @@ import shutil
 from pathlib import Path
 from datetime import date, timedelta
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 DATA = BASE / "data.json"
 INDEX = BASE / "data" / "sessies_index.json"
 

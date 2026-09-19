@@ -15,7 +15,7 @@ Output: data/geplande_zittingen.json
   [{"date": "2026-06-23", "type": "Gemeenteraad"},
    {"date": "2026-06-23", "type": "Raad voor maatschappelijk welzijn"}, ...]
 
-Draai:  python fetch_zittingen.py     (eenmalig: python -m pip install requests)
+Draai:  python pijplijn/fetch_zittingen.py     (eenmalig: python -m pip install requests)
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII

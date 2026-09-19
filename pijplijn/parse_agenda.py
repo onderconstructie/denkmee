@@ -16,7 +16,7 @@ Wat het per punt geeft:
   - indiener  (enkel bij vraag of toegevoegd punt, bv. 'K. Lauwers')
   - zitting   ('openbaar' of 'besloten')
 
-Draai:  python parse_agenda.py pad/naar/agenda.pdf
+Draai:  python pijplijn/parse_agenda.py pad/naar/agenda.pdf
 (eenmalig: python -m pip install pdfplumber)
 """
 
@@ -113,7 +113,7 @@ def parse(pdf_path):
 
 def main():
     if len(sys.argv) < 2:
-        print("Gebruik: python parse_agenda.py pad/naar/agenda.pdf"); return
+        print("Gebruik: python pijplijn/parse_agenda.py pad/naar/agenda.pdf"); return
     items = parse(sys.argv[1])
     out = Path.cwd() / (Path(sys.argv[1]).stem + ".agenda.json")
     out.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -35,8 +35,8 @@ Output  (data/straten_mechelen.json):
   "straten":  [{"naam": "...", "buurt": "", "deelgemeente": "..."}, ...]
 }
 
-Draai:  python straten_mechelen.py
-        python straten_mechelen.py --inspect      # toon eerste records en stop
+Draai:  python pijplijn/straten_mechelen.py
+        python pijplijn/straten_mechelen.py --inspect      # toon eerste records en stop
 """
 from __future__ import annotations
 import json
@@ -51,7 +51,7 @@ from collections import Counter
 from pathlib import Path
 
 NIS_MECHELEN = "12025"
-BASE = Path(__file__).resolve().parent
+BASE = Path(__file__).resolve().parent.parent   # de repomap; dit script staat in pijplijn/
 OUT_PATH = BASE / "data" / "straten_mechelen.json"
 GEOJSON_PATH = BASE / "data" / "deelgemeenten_mechelen.geojson"
 # Hervat-caches (gitignored): zo overleeft een lange API-run een onderbreking en

@@ -32,6 +32,7 @@ for _stream in (sys.stdout, sys.stderr):
         pass
 
 BASE = Path(__file__).parent
+sys.path.insert(0, str(BASE / "pijplijn"))   # schoon_brontekst en koppel_uittreksels staan daar
 
 # 1) Lees de UI-schil en de data (twee aparte bestanden).
 template = (BASE / "template.html").read_text(encoding="utf-8")

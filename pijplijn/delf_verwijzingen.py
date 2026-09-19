@@ -19,7 +19,7 @@ Uitvoer: verwijzingen.json met enkel de codes die 2+ punten delen (een code met 
 punt koppelt niets). build.py voegt dat als data.verwijzingen in de site, waar het
 dossierpaneel er een "Verwante dossiers"-blok mee vult.
 
-Draai:  python delf_verwijzingen.py     (run_all.py doet dit automatisch, stap 3f)
+Draai:  python pijplijn/delf_verwijzingen.py     (run_all.py doet dit automatisch, stap 3f)
 """
 
 import sys
@@ -35,7 +35,7 @@ from pathlib import Path
 
 import bouw_zoekindex as bz    # hergebruik: notulen-per-punt en pdf-tekst, mét cache
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 UIT = BASE / "verwijzingen.json"
 
 PATRONEN = {

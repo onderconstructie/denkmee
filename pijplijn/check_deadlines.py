@@ -14,11 +14,11 @@ De regels (Decreet Lokaal Bestuur):
                   dus een publicatie daarna is het normale verloop en geen tekortkoming
 
 Gebruik:
-  python check_deadlines.py                    alles, samengevat per orgaan
-  python check_deadlines.py --telaat           alleen wat te laat was (het interessantste)
-  python check_deadlines.py --orgaan raad      enkel organen waarvan de naam 'raad' bevat
-  python check_deadlines.py --steekproef 8     8 willekeurige zittingen, gespreid over de organen
-  python check_deadlines.py --urls             de bron-URL per regel, om zelf te gaan kijken
+  python pijplijn/check_deadlines.py                    alles, samengevat per orgaan
+  python pijplijn/check_deadlines.py --telaat           alleen wat te laat was (het interessantste)
+  python pijplijn/check_deadlines.py --orgaan raad      enkel organen waarvan de naam 'raad' bevat
+  python pijplijn/check_deadlines.py --steekproef 8     8 willekeurige zittingen, gespreid over de organen
+  python pijplijn/check_deadlines.py --urls             de bron-URL per regel, om zelf te gaan kijken
 
 Elke regel is met de hand te controleren: open de URL, zoek de publicatiedatum op de pagina van
 de stad, en vergelijk met de kolommen hieronder.
@@ -35,7 +35,7 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 INDEX = BASE / "data" / "sessies_index.json"
 DATA = BASE / "data.json"
 

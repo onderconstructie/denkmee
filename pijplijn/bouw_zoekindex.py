@@ -30,7 +30,7 @@ De pdf-extractie is traag en daarom gecachet in data/zoekcache/ (sleutel: pad + 
 grootte). Een ongewijzigde pdf wordt nooit opnieuw gelezen; de stap is idempotent en
 een gewone run kost seconden.
 
-Draai:  python bouw_zoekindex.py          (run_all.py doet dit automatisch, stap 3e)
+Draai:  python pijplijn/bouw_zoekindex.py          (run_all.py doet dit automatisch, stap 3e)
 """
 
 import sys
@@ -47,7 +47,7 @@ import unicodedata
 from pathlib import Path
 import schoon_brontekst
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 CACHE_DIR = BASE / "data" / "zoekcache"
 UIT = BASE / "zoekindex.json"
 

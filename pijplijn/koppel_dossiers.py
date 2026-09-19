@@ -17,8 +17,8 @@ zittingsdatum, en een voldoende gelijkende titel. De bron-links uit de treffers
 worden NIET overgenomen; die blijven interne pipeline-informatie.
 
 Gebruik:
-  python koppel_dossiers.py --data data.json dossier-fietspad-n15.json
-  python koppel_dossiers.py --data data.json dossier-*.json --debug
+  python pijplijn/koppel_dossiers.py --data data.json dossier-fietspad-n15.json
+  python pijplijn/koppel_dossiers.py --data data.json dossier-*.json --debug
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII

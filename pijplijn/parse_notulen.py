@@ -13,7 +13,7 @@ Belangrijk: gebruikt pdfplumber (pypdf geeft vervormde tekst op deze PDF's).
 Een echt genummerd agendapunt wordt herkend aan een categorie in HOOFDLETTERS;
 zo vallen opsommingen binnen de tekst ("1. Efficiënter gebruik…") er vanzelf buiten.
 
-Draai:  python parse_notulen.py pad/naar/notulen.pdf
+Draai:  python pijplijn/parse_notulen.py pad/naar/notulen.pdf
 """
 
 # Robuuste console-uitvoer: zet stdout/stderr op UTF-8, zodat print() met niet-ASCII
@@ -140,7 +140,7 @@ def parse(pdf_path):
 
 def main():
     if len(sys.argv) < 2:
-        print("Gebruik: python parse_notulen.py pad/naar/notulen.pdf"); return
+        print("Gebruik: python pijplijn/parse_notulen.py pad/naar/notulen.pdf"); return
     res = parse(sys.argv[1])
     out = Path.cwd() / (Path(sys.argv[1]).stem + ".notulen.json")
     out.write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")

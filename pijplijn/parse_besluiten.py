@@ -17,7 +17,7 @@ Wat het uit elke beslissing haalt:
 De rijkere velden (mensentaal-samenvatting, thema's, straten, bevoegde schepen)
 komen in de AI-tagging-stap erna; dit script levert het geraamte.
 
-Draai:  python parse_besluiten.py pad/naar/besluiten.pdf
+Draai:  python pijplijn/parse_besluiten.py pad/naar/besluiten.pdf
 (eenmalig: python -m pip install pdfplumber)
 """
 
@@ -318,7 +318,7 @@ def controleer(items, tekst):
 
 def main():
     if len(sys.argv) < 2:
-        print("Gebruik: python parse_besluiten.py pad/naar/besluiten.pdf"); return
+        print("Gebruik: python pijplijn/parse_besluiten.py pad/naar/besluiten.pdf"); return
     pdf_path = sys.argv[1]
     tekst = extract_text(pdf_path)
     items = parse(pdf_path, tekst)

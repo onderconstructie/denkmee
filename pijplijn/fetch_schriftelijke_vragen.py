@@ -9,7 +9,7 @@ er nog niet staat (idempotent). Beleefd: een korte pauze tussen de aanvragen.
 
 Output: data/raw/schriftelijke_vragen/<jaar-maand>/<bestandsnaam>.pdf
 
-Draai:  python fetch_schriftelijke_vragen.py     (eenmalig: python -m pip install requests)
+Draai:  python pijplijn/fetch_schriftelijke_vragen.py     (eenmalig: python -m pip install requests)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):

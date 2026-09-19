@@ -27,9 +27,9 @@ het bedrag uit een aanpassing van het vorige plan.
 Uitvoer: mjp_acties.json          (klein, wordt meegecommit)
          data/mjp_cache/*.json    (volledige tabel per document, git-genegeerd)
 
-Draai:  python parse_mjp_acties.py                (run_all.py doet dit automatisch, stap 3g)
-        python parse_mjp_acties.py --diep         (alle planversies, niet enkel de nieuwste)
-        python parse_mjp_acties.py --code MJP004937   (één lijn opzoeken in de cache)
+Draai:  python pijplijn/parse_mjp_acties.py                (run_all.py doet dit automatisch, stap 3g)
+        python pijplijn/parse_mjp_acties.py --diep         (alle planversies, niet enkel de nieuwste)
+        python pijplijn/parse_mjp_acties.py --code MJP004937   (één lijn opzoeken in de cache)
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
@@ -44,7 +44,7 @@ import json
 import re
 from pathlib import Path
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 BUDGET = BASE / "data" / "raw" / "budgetten"
 INDEX = BUDGET / "_index.json"
 CACHE = BASE / "data" / "mjp_cache"

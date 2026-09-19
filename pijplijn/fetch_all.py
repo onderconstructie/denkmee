@@ -11,7 +11,7 @@ fetch_all.py — ophaler voor de raden (gemeenteraad + raad voor maatschappelijk
 Tijdigheidsregels (artikel 22 en artikel 287 van het Decreet Lokaal Bestuur) worden
 in stap 9 (maak_data.py) toegepast; dit script verzamelt enkel de feiten.
 
-Draai:  python fetch_all.py     (eenmalig: python -m pip install requests)
+Draai:  python pijplijn/fetch_all.py     (eenmalig: python -m pip install requests)
 Alle vijf de organen staan in ORGANEN; een orgaan erbij = één regel daar.
 """
 
@@ -137,7 +137,7 @@ def parse_overview(html, organ):
 
 
 def main():
-    base_dir = Path(__file__).parent
+    base_dir = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
     data_dir = base_dir / "data"; data_dir.mkdir(exist_ok=True)
 
     hoofd_all, uittr_all = [], []

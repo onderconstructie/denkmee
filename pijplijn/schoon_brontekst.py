@@ -10,7 +10,7 @@ de RUWE brontekst (die elke run identiek uit de pdf's komt), terwijl enkel het g
 data.json geschoond wordt. De getoonde samenvatting (decoded) bevat normaal geen adressen,
 maar we schonen ze voor de zekerheid mee.
 
-Draai:  python schoon_brontekst.py
+Draai:  python pijplijn/schoon_brontekst.py
 """
 import sys
 for _s in (sys.stdout, sys.stderr):
@@ -21,7 +21,7 @@ import re
 import json
 from pathlib import Path
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent   # de repomap; dit script staat in pijplijn/
 DATA = BASE / "data.json"
 
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
