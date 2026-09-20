@@ -3467,7 +3467,9 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
   /* Hoogstens drie regels; de kop staat vet, dus hij leest van ver. */
   .dos-name{ font-size:1rem; -webkit-line-clamp:3; }
   .dos-koord{ margin-top:16px; }
-  .dos-blurb{ -webkit-line-clamp:2; margin-top:8px; }
+  /* Vier regels zin: gemeten over alle dossiers op 375 px staat negen op de tien zinnen dan
+     volledig (bij twee regels kapte bijna elke zin af). */
+  .dos-blurb{ -webkit-line-clamp:4; margin-top:8px; }
   .dos-meta{ padding-top:7px; }
 }
 
