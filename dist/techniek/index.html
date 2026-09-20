@@ -3370,7 +3370,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dos-kop{ display:flex; align-items:flex-start; gap:var(--s-2); }
 .dos-name{
   flex:1; min-width:0;
-  font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:500; font-size:var(--t-lees);
+  font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:700; font-size:var(--t-lees);
   line-height:1.25; letter-spacing:-.015em; color:var(--ink);
   text-wrap:balance;
   /* Op desktop hoogstens vier regels: gemeten over alle dossiers van de standaardlijst op 1280 px
@@ -3458,37 +3458,18 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 /* Enkel voor schermlezers: "raakt je profiel" vóór "via Mobiliteit". */
 .dos-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 
-/* Tot 760 px: de lijst is één afgerond vel met rijen en een haarlijn ertussen, in plaats van losse
-   tegels onder elkaar. De rij verliest kader, schaduw en afronding; het vel draagt ze. Dit blok
-   staat na de basisregels van de kaart, en de selectors met .dos-grid ervoor winnen van de latere
-   algemene regels (familie-afronding, kaartvulling, focusrand en tik-indruk). */
+/* Tot 760 px: één kolom met losse kaarten onder elkaar. Elke kaart houdt haar eigen kader,
+   afronding en schaduw, met lucht ertussen, zodat het ene dossier duidelijk van het volgende
+   gescheiden is. Dit blok staat na de basisregels van de kaart. */
 @media (max-width:760px){
-  .dos-grid{
-    grid-template-columns:1fr; gap:0;
-    background:linear-gradient(180deg, var(--kaart-a), var(--kaart-b));
-    border:1px solid var(--line-kaart); border-radius:var(--r-kaart); box-shadow:var(--schaduw); overflow:hidden;
-  }
-  /* Een lege toestand (niets gevonden, nog geen profiel) staat los, niet in een vel. */
-  .dos-grid:has(> .empty){ background:none; border:0; border-radius:0; box-shadow:none; overflow:visible; }
-  .dos-grid .dos-card{ background:none; border:0; border-radius:0; box-shadow:none; padding:var(--s-3) var(--s-4) 11px; }
-  .dos-grid .dos-card + .dos-card::before{ content:''; position:absolute; top:0; left:var(--s-4); right:0; height:1px; background:var(--haarlijn); }
-  .dos-grid .dos-card:focus-visible{ outline-offset:-3px; }
-  .dos-grid .dos-more{ background:none; border:0; border-top:1px solid var(--haarlijn); border-radius:0; }
-  /* Hoogstens drie regels. Op 15 px past elke kop van de standaardlijst daarin op 375 px breed;
-     op 16 px (--t-tekst) vielen er twee af, de langste met een lang samengesteld woord vooraan. */
-  .dos-name{ font-size:.9375rem; -webkit-line-clamp:3; }
-  .dos-koord{ margin-top:18px; }
+  .dos-grid{ grid-template-columns:1fr; gap:var(--s-3); }
+  .dos-card{ padding:var(--s-4); }
+  /* Hoogstens drie regels; de kop staat vet, dus hij leest van ver. */
+  .dos-name{ font-size:1rem; -webkit-line-clamp:3; }
+  .dos-koord{ margin-top:16px; }
   .dos-blurb{ -webkit-line-clamp:2; margin-top:8px; }
   .dos-meta{ padding-top:7px; }
 }
-@media (max-width:760px) and (hover:hover){
-  .dos-grid .dos-card:hover{ background-color:rgba(0,121,107,.04); box-shadow:none; --kk-bg:#f5f8f1; }
-}
-/* Tik op een rij: de rij kleurt even in plaats van te krimpen, want ze ligt in een vel. */
-@media (max-width:760px) and (hover:none){
-  .dos-grid .dos-card:active{ transform:none; background-color:rgba(26,23,18,.05); --kk-bg:#f4f2ec; }
-}
-@media (prefers-reduced-motion:reduce){ .dos-grid .dos-card:active{ transform:none; } }
 
 /* ===================================================================
    DOSSIER DETAIL OVERLAY
