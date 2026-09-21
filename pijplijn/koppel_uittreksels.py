@@ -26,7 +26,7 @@ for _s in (sys.stdout, sys.stderr):
     try: _s.reconfigure(encoding="utf-8")
     except (AttributeError, ValueError): pass
 
-import os, re, json, hashlib, unicodedata
+import os, re, json, time, hashlib, unicodedata
 from pathlib import Path
 from collections import defaultdict
 
@@ -107,10 +107,19 @@ def beste_titel(kand, nt, minimum):
 
 def schrijf_json(pad, obj):
     """Eerst naar een tijdelijk bestand, dan in één beweging vervangen: een onderbroken run laat
-    nooit een half geschreven data.json achter."""
+    nooit een half geschreven data.json achter. Houdt Windows het bestand even vast (een
+    virusscanner of de zoekindexering leest het mee), dan volgt een nieuwe poging, tot tien keer."""
     tmp = pad.with_name(pad.name + ".tmp")
-    tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
-    os.replace(tmp, pad)
+    tekst = json.dumps(obj, ensure_ascii=False, indent=2)
+    for poging in range(10):
+        try:
+            tmp.write_text(tekst, encoding="utf-8")
+            os.replace(tmp, pad)
+            return
+        except OSError:
+            if poging == 9:
+                raise
+            time.sleep(0.5 * (poging + 1))
 
 def zitting_van_id(pid):
     m = re.match(r'[a-z]+[-_]?(\d{8})', pid)

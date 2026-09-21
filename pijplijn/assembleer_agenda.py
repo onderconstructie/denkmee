@@ -91,7 +91,8 @@ def main():
 
     # vervang de punten van deze zitting, behoud de rest
     data["agendapunten"] = [a for a in data.get("agendapunten", []) if a.get("sessie_id") != sessie_id] + nieuwe
-    Path("data.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    from koppel_uittreksels import schrijf_json     # tijdelijk bestand + vervangen, met herhaling
+    schrijf_json(Path("data.json"), data)
 
     vr = sum(1 for a in nieuwe if a["type"] == "vraag")
     print(f"{len(nieuwe)} agendapunten voor {orgaan} {datum} op de agenda gezet ({vr} vragen)")

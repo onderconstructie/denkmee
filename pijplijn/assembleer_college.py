@@ -112,7 +112,8 @@ def main():
 
     data["college_beslissingen"] = sorted(bestaand + nieuwe,
                                            key=lambda b: b["date"], reverse=True)
-    Path("data.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    from koppel_uittreksels import schrijf_json     # tijdelijk bestand + vervangen, met herhaling
+    schrijf_json(Path("data.json"), data)
 
     print(f"{len(nieuwe)} besluiten ({orgaan}) toegevoegd voor {datum}; "
           f"{len(data['college_beslissingen'])} totaal in college_beslissingen")

@@ -94,7 +94,8 @@ def main():
 
     # verwijder eventuele eerdere punten van deze zitting, voeg de echte toe
     data["agendapunten"] = [a for a in data.get("agendapunten", []) if a.get("sessie_id") != sessie_id] + nieuwe
-    Path("data.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    from koppel_uittreksels import schrijf_json     # tijdelijk bestand + vervangen, met herhaling
+    schrijf_json(Path("data.json"), data)
 
     met_stem = sum(1 for a in nieuwe if a.get("stemming") and a["stemming"].get("per_fractie"))
     print(f"{len(nieuwe)} agendapunten toegevoegd voor {datum} ({met_stem} met stemming per fractie)")
