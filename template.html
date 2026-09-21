@@ -4044,6 +4044,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .stem-groep.g-onth .stem-groep-lbl{color:#756a00}
 .arch-org{display:inline-block;font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;padding:.08rem .4rem;border:1px solid var(--pink);color:var(--pink-text);border-radius:3px;margin-right:.35rem;vertical-align:middle}
 /* Actuadebat-badge: het punttype dat de raad zelf agendeert rond de actualiteit. */
+.badge-vraag{ display:inline-block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; padding:.1rem .45rem; border:1px solid var(--app); border-radius:999px; color:var(--app-text); background:var(--app-soft); margin-right:.4rem; vertical-align:.1em; white-space:nowrap; }
 .badge-actua{ display:inline-block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; padding:.1rem .45rem; border:1px solid var(--pink); border-radius:999px; color:var(--pink-text); background:var(--pink-soft); margin-right:.4rem; vertical-align:.1em; white-space:nowrap; }
 /* Besloten-zitting-badge: het punt is achter gesloten deuren behandeld; de stad publiceert
    enkel de titel (geen stukken, geen stemming). Inkt-stijl, geen roze: dit is een status. */
@@ -5307,12 +5308,15 @@ const BRON_ORGAAN_ID = { 'Gemeenteraad':'15', 'College':'254', 'RMW':'128', 'Vas
 // woord + icoon dienen de compacte chips in het dossierpaneel ("Besluitenlijst" met een
 // afvinklijst-icoon); label blijft de volzin, want bronLabelVoorItem en de item-kaarten
 // gebruiken die nog in lopende tekst.
-function bronDocs(org, decided, hasNotulen){
+function bronDocs(org, decided, hasNotulen, type){
   const LIJST   = { id:'2', label:'Bekijk de besluitenlijst', kort:'besluitenlijst', woord:'Besluitenlijst', icoon:'ic-doc-lijst' };
   const NOTULEN = { id:'1', label:'Lees het in de notulen',   kort:'notulen',        woord:'Notulen',        icoon:'ic-doc-notulen' };
   const AGENDA  = { id:'3', label:'Bekijk de agenda',         kort:'agenda',         woord:'Agenda',         icoon:'ic-agenda' };
   if(org === 'College' || org === 'Vast bureau' || org === 'Vast Bureau' || org === 'Burgemeester')
     return [LIJST];
+  // Een mondelinge vraag komt niet in de besluitenlijst: er wordt niet over gestemd. De vraag staat in
+  // de notulen, en zolang die er niet zijn op de agenda.
+  if(type === 'vraag') return hasNotulen ? [NOTULEN] : [AGENDA];
   if(decided){
     // De besluitenlijst komt kort na de zitting; de notulen pas weken later. Toon de
     // notulen-link dus enkel als ze er ook echt al zijn, niet zodra er een beslissing is.
@@ -5372,7 +5376,9 @@ function bronLinksHTML(item, cls, arrow, chip){
       ? '<a class="' + cls + '" href="' + u + '" target="_blank" rel="noopener" title="Open het volledige besluit (pdf)">' + ic('ic-doc-besluit') + '<span>Besluit</span></a>'
       : '<a class="' + cls + '" href="' + u + '" target="_blank" rel="noopener">Lees het volledige besluit ' + arrow + '</a>');
   }
-  bronDocs(c.org, c.decided, c.hasNotulen).forEach(d => {
+  // Bij een mondelinge vraag komt de brontekst uit de notulen: is ze er, dan zijn de notulen er ook.
+  const notulenEr = c.hasNotulen || (item.type === 'vraag' && !!item.brontekst);
+  bronDocs(c.org, c.decided, notulenEr, item.type).forEach(d => {
     const direct = bronDirectUrl(c.org, c.date, d.kort);   // rechtstreeks PDF, anders zoekpagina
     const href = direct ? escape(direct) : bronUrl(c.org, c.date, d.id);
     links.push(chip
@@ -5422,7 +5428,7 @@ function bronLabelVoorItem(item){
   let org = item.org;
   if(item.sessie_id) org = String(item.sessie_id).startsWith('rmw') ? 'RMW' : 'Gemeenteraad';
   else if(!org) org = 'College';
-  return bronDocs(org, !!(item.result && item.result.decision))[0].label;
+  return bronDocs(org, !!(item.result && item.result.decision), !!item.brontekst, item.type)[0].label;
 }
 function bronLinkHTML(item){ return bronLinksHTML(item, 'bron-link', '→'); }
 
@@ -5944,7 +5950,8 @@ function recentBeslistData(){
   const grens = Date.now() - 30*86400000;
   const ses = {}; (D.sessies||[]).forEach(s => ses[s.id] = s);
   const pub = a => (a.result && a.result.published) || (a.lifecycle && a.lifecycle.besluit && a.lifecycle.besluit.published) || a.sessie_date;
-  const decided = (D.agendapunten||[]).filter(a => (a.result || (a.lifecycle && a.lifecycle.besluit)) && new Date(pub(a)).getTime() >= grens);
+  // Een mondelinge vraag heeft een stand (beantwoord), maar is geen beslissing: ze hoort hier niet.
+  const decided = (D.agendapunten||[]).filter(a => a.type !== 'vraag' && (a.result || (a.lifecycle && a.lifecycle.besluit)) && new Date(pub(a)).getTime() >= grens);
   const typeOf = a => (ses[a.sessie_id] || {}).type || '';
   const newest = arr => arr.slice().sort((x,y) => new Date(pub(y)) - new Date(pub(x)));
   const gr  = newest(decided.filter(a => typeOf(a) === 'Gemeenteraad'));
@@ -6069,7 +6076,7 @@ function personalRecentCardHTML(p){
         <span class="prc-date">${formatShort(date)}</span>
         <span class="prc-status status-${besluitKlasse(decision)}">${escape(decisionLabel)}</span>
       </header>
-      <h5 class="prc-titel">${p.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${escape(p.titel)}</h5>
+      <h5 class="prc-titel">${p.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${p.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(p.titel)}</h5>
       ${decoded}
       <footer class="prc-foot">
         <div class="prc-themes">${themes}</div>
@@ -6948,7 +6955,7 @@ function renderArchief(){
             <summary>
               <span class="arch-date">${formatShort(date)}</span>
               <span class="arch-title">
-                ${p.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${escape(p.titel)}
+                ${p.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${p.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(p.titel)}
                 <div class="arch-themes">${orgaan?`<span class="arch-org">${escape(orgaan)}</span>`:''}${themes}</div>
               </span>
               <span class="arch-outcome ${besluitKlasse(decision)}">${escape(decisionLabel)}</span>
@@ -8082,6 +8089,7 @@ function dosAllItems(){
       src:'agenda', org, id:a.id, date:a.sessie_date, titel:a.titel||'', type:a.type||'gewoon', zitting:a.zitting||null,
       decoded:a.decoded||'', themes:a.themes||[], streets:a.streets||[],
       hood:a.neighborhood||null, schepen:a.schepen||null, url:a.url||null, uittreksel_url:a.uittreksel_url||null, kernbegrippen:a.kernbegrippen||[],
+      indiener:a.type==='vraag' ? (a.indiener||null) : null,
       result:a.result||null, status:a.status||null, stemming:a.stemming||null,
       notulenPublished: a.lifecycle?.notulen?.published || a.notulen?.published || null,
       brontekst:a.brontekst||'', categorie:null
@@ -10236,7 +10244,9 @@ function openDossier(id){
     if(tw && TW_ORGAAN[tw.org]) actions.push(`<button type="button" class="dosm-ev-link" onclick="openDossier('${tw.dos}')" title="Op dezelfde dag stond een punt met een gelijkaardige titel op de agenda van ${TW_ORGAAN[tw.org]}. Open dat dossier."><span>Gelijkaardig punt bij ${TW_ORGAAN[tw.org]}</span></button>`);
     actions.push(`<button type="button" class="dosm-ev-link dosm-ev-meld" onclick="meldFout('${d.id}','${it.id}')" title="Dit stuk hoort niet in dit dossier? Laat het ons weten"><svg class="dosm-ev-ic" aria-hidden="true"><use href="#ic-fout"/></svg><span>Fout melden</span></button>`);
     const indiener = (it.src==='vraag' && it.indiener)
-      ? `<div class="dosm-ev-indiener">Schriftelijke vraag van ${escape(it.indiener)}</div>` : '';
+      ? `<div class="dosm-ev-indiener">Schriftelijke vraag van ${escape(it.indiener)}</div>`
+      : (it.type==='vraag' && it.indiener)
+      ? `<div class="dosm-ev-indiener">Mondelinge vraag van ${escape(it.indiener)}</div>` : '';
     // Voor een schriftelijke vraag: de volledige vraag + het college-antwoord uitklapbaar,
     // zodat je het hele stuk in het dossier kunt lezen zonder de site te verlaten.
     // De letterlijke vraag- en antwoordtekst tonen we niet meer: de samenvatting
@@ -10248,7 +10258,7 @@ function openDossier(id){
           <span class="dosm-ev-org ${oc}">${escape(it.org)}</span>
           ${resultPill}
         </div>
-        <div class="dosm-ev-titel">${it.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${it.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${escape(it.titel)}</div>
+        <div class="dosm-ev-titel">${it.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${it.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${it.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(it.titel)}</div>
         ${ftSet && ftSet.has(it.id) ? `<div class="dosm-ev-ft"><span>zoekterm gevonden in het volledige stuk${(() => {
           const w = FT_WOORD && FT_WOORD.get(it.id);
           return w && w.size ? ', als <b>' + [...w].sort((a,b)=>a.length-b.length||a.localeCompare(b)).slice(0,2).map(escape).join('</b> en <b>') + '</b>' : '';

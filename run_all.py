@@ -275,13 +275,19 @@ def main():
             if besluiten.exists():
                 # Zitting is geweest → toon de beslissingen (vervangt een eventuele agenda).
                 run("parse_besluiten.py", besluiten)
+                # De agenda's dragen de mondelinge vragen zolang de notulen er niet zijn.
+                agenda_args = []
+                if agenda.exists():
+                    run("parse_agenda.py", agenda); agenda_args += ["--agenda", "agenda.agenda.json"]
+                if aanvullend.exists():
+                    run("parse_agenda.py", aanvullend); agenda_args += ["--agenda", "aanvullend.agenda.json"]
                 if notulen.exists():
                     run("parse_notulen.py", notulen)
                     run("assembleer_agendapunten.py", zitting.name,
-                        "besluiten.agendapunten.json", "notulen.notulen.json", "--orgaan", orgaan)
+                        "besluiten.agendapunten.json", "notulen.notulen.json", "--orgaan", orgaan, *agenda_args)
                 else:
                     run("assembleer_agendapunten.py", zitting.name,
-                        "besluiten.agendapunten.json", "--orgaan", orgaan)
+                        "besluiten.agendapunten.json", "--orgaan", orgaan, *agenda_args)
             elif agenda.exists() or aanvullend.exists():
                 # Zitting komt eraan → toon de agenda (sectie 02). Gewone + volledige agenda
                 # worden samengevoegd; de volledige bevat ook de mondelinge vragen.

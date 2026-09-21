@@ -100,8 +100,8 @@ def parse(pdf_path):
                 soort, categorie = "toegevoegd", ""
             else:
                 soort = "gewoon"
-            if soort in ("vraag", "toegevoegd") and " - " in titel_start:   # "Naam - onderwerp"
-                indiener, titel_start = [x.strip() for x in titel_start.split(" - ", 1)]
+            if soort in ("vraag", "toegevoegd") and re.search(r"\s[-\u2013]\s", titel_start):   # "Naam - onderwerp"
+                indiener, titel_start = [x.strip() for x in re.split(r"\s[-\u2013]\s", titel_start, maxsplit=1)]
             meta = {"nummer": nummer, "categorie": categorie, "zitting": zitting,
                     "type": soort, "indiener": indiener}
             blok = [titel_start]

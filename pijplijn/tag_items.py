@@ -270,6 +270,16 @@ def build_messages(item: dict, themes: list[str], buurten: list[str]) -> tuple[s
     # vraagt. Aparte framing (geen orgaan-attributie, wél 'Raadslid X vraagt ...').
     if item.get("type") == "schriftelijke_vraag":
         return _messages_vraag(bron, themes, buurt_hint)
+    # Mondelinge vraag in de gemeenteraad: meestal staat enkel "mondeling beantwoord ter zitting"
+    # in de notulen, dus het antwoord zelf staat niet in de bron en mag er niet in verschijnen.
+    if item.get("type") == "vraag":
+        s, u = _messages_vraag(bron, themes, buurt_hint)
+        s = s.replace("SCHRIFTELIJKE VRAAG van een raadslid aan de stad",
+                      "MONDELINGE VRAAG die een raadslid in de gemeenteraad stelt")
+        s += (chr(10) + "8. Staat er enkel dat de vraag mondeling beantwoord wordt ter zitting, dan staat "
+              "het antwoord NIET in de bron: schrijf niets over de inhoud van het antwoord.")
+        u = u.replace("Vat de volgende schriftelijke vraag", "Vat de volgende mondelinge vraag")
+        return s, u
 
     org = orgaan_van(item)
     org_naam = ORG_VOLUIT.get(org, org)

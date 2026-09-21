@@ -401,7 +401,10 @@ def maskeer_namen(tekst, met_achternamen=None):
         vormen = vormen + sorted(PRIVE_ACHTERNAAM, key=len, reverse=True)
     aantal = 0
     for vorm in vormen:
-        tekst, n = re.subn(r"\b%s\b" % re.escape(vorm), NAAM_MASKER, tekst)
+        # Tussen de delen van een naam mag elke witruimte staan: een pdf breekt een naam soms over
+        # twee regels ("Van" op de ene, de rest op de volgende), en dan glipte hij erdoor.
+        patroon = r"\s+".join(re.escape(deel) for deel in vorm.split())
+        tekst, n = re.subn(r"\b%s\b" % patroon, NAAM_MASKER, tekst)
         aantal += n
     tekst, n = BEROEP_NAAM.subn(r"\1 " + NAAM_MASKER, tekst)
     return tekst, aantal + n + gids + leden
