@@ -80,17 +80,7 @@ GEB_TEKEN_MASKER = r"\1··-··-\4"
 #    het werkwoord zelf is hoofdletterongevoelig. De gemeente achteraan gaat enkel mee na een
 #    komma, "te", "in" of een postcode, anders slokt de regel het volgende zinsbegin op.
 _ADRES_WOORD = r"[\w'’À-ÿ-]"
-ADRES_NA_WOON = re.compile(
-    r"(\b(?i:wonend(?:e)?|woonachtig|gedomicilieerd)\s+(?:(?i:op|te|in|aan)\s+)?)"
-    r"(?:[A-Z]" + _ADRES_WOORD + r"*\.?\s+){0,3}?" + _ADRES_WOORD + r"*?"
-    r"(?:straat|laan|weg|dreef|steenweg|vest|plein|kaai|lei|baan|markt|hof|pad|singel|dijk|berg|veld)"
-    # Het huisnummer mag één hoofdletter dragen (23A), maar alleen als die letter NIET aan een
-    # woord vastzit. Eerst stond hier \s?[A-Za-z]?, en de zelftest toonde wat dat doet: de regel
-    # greep de eerste letter van het volgende woord mee, zodat "54 in Proefdorp" eindigde als
-    # "[adres]n Proefdorp" en "5 De aanvraag" als "[adres]e aanvraag".
-    r"\s+\d+(?:\s?[A-Z](?![A-Za-zÀ-ÿ]))?(?:\s*(?:bus|b\.?)\s*\d+)?"
-    r"(?:(?:\s*,\s*|\s+(?:te|in)\s+|\s+)\d{4}\s+[A-Z]" + _ADRES_WOORD + r"+"
-    r"|(?:\s*,\s*|\s+(?:te|in)\s+)[A-Z]" + _ADRES_WOORD + r"+)?")
+# ADRES_NA_WOON staat verderop, na het gedeelde straatpatroon (_STRAAT_NR).
 ADRES_MASKER = r"\1[adres]"
 
 # 3. Een adres DIRECT na een gemaskeerde naam: "De heer [naam], Proefstraat 54 in 2800 Mechelen".
@@ -98,12 +88,47 @@ ADRES_MASKER = r"\1[adres]"
 #    heeft er al "[naam]" van gemaakt, dus wat erachter staat is per definitie het adres van die
 #    persoon. Nagemeten op 14/09/2026: 1 keer in data.json en 13 keer in de tekst die de zoekindex
 #    voedt ("[naam] Voorbeeldstraat 46 2800 Mechelen"). Draai maskeer_namen dus EERST.
-_STRAAT_NR = (r"(?:[A-Z]" + _ADRES_WOORD + r"*\.?\s+){0,3}?" + _ADRES_WOORD + r"*?"
-              r"(?:straat|laan|weg|dreef|steenweg|vest|plein|kaai|lei|baan|markt|hof|pad|singel|dijk|berg|veld)"
-              r"\s+\d+(?:\s?[A-Z](?![A-Za-zÀ-ÿ]))?(?:\s*(?:bus|b\.?)\s*\d+)?")
+# Een straatnaam kan een klein woordje dragen ("Goswin de Stassartstraat"), en sommige straten
+# dragen geen herkenbaar achtervoegsel (Zoutwerf, Grote Markt, IJzerenleen, Bruul). Die laatste
+# nemen we letterlijk uit het eigen stratenregister (data/straten_mechelen.json).
+_ACHTERVOEGSEL = r"(?:straat|laan|weg|dreef|steenweg|vest|plein|kaai|lei|baan|markt|hof|pad|singel|dijk|berg|veld)"
+
+
+def _register_zonder_achtervoegsel():
+    try:
+        ruw = json.loads((BASE / "data" / "straten_mechelen.json").read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    namen = [s.get("naam") for s in ruw.get("straten", []) if isinstance(s, dict)]
+    return sorted({n for n in namen if n and not re.search(_ACHTERVOEGSEL + "$", n, re.I)},
+                  key=len, reverse=True)
+
+
+_REGISTER = "|".join(re.escape(n) for n in _register_zonder_achtervoegsel()) or r"(?!x)x"
+_HUISNR = r"\s+\d+(?:\s?[A-Z](?![A-Za-zÀ-ÿ]))?(?:\s*(?:bus|b\.?)\s*\d+)?"
+_STRAAT_NR = (r"(?:(?:(?:[A-Z]" + _ADRES_WOORD + r"*\.?|de|van|der|den|ter|ten|het|la|le|du)\s+){0,3}?"
+              + _ADRES_WOORD + r"*?" + _ACHTERVOEGSEL + r"|(?:" + _REGISTER + r"))" + _HUISNR)
 _GEMEENTE = (r"(?:(?:\s*,\s*|\s+(?:te|in)\s+|\s+)\d{4}\s+[A-Z]" + _ADRES_WOORD + r"+"
              r"|(?:\s*,\s*|\s+(?:te|in)\s+)[A-Z]" + _ADRES_WOORD + r"+)?")
-ADRES_NA_NAAM = re.compile(r"(\[naam\],?\s+)" + _STRAAT_NR + _GEMEENTE)
+# Ook met iets ertussen: een veldlabel zoals in de vergunningen ("Aanvrager 2 [naam] Adres aanvrager:
+# Voorbeeldstraat 1, 2800 Mechelen"), een voorzetsel ("[naam], op de Voorbeeldstraat 1") of een
+# streepje. Wat ertussen staat blijft staan, enkel het adres gaat weg.
+_TUSSEN_NAAM_ADRES = (r"(?:(?i:adres(?:gegevens)?|woonplaats|domicilie)(?:\s+(?i:van\s+de\s+)?"
+                      r"(?i:aanvrager|exploitant|eigenaar|bouwheer))?\s*:?\s+"
+                      r"|(?i:op|aan|in|uit|te)\s+(?:(?i:de|het)\s+)?"
+                      r"|[-\u2013]\s+)?")
+ADRES_NA_NAAM = re.compile(r"(\[naam\],?\s+" + _TUSSEN_NAAM_ADRES + r")" + _STRAAT_NR + _GEMEENTE)
+
+# Het woonadres na 'wonend/woonachtig/gedomicilieerd' volgt hetzelfde straatpatroon.
+ADRES_NA_WOON = re.compile(r"(\b(?i:wonend(?:e)?|woonachtig|gedomicilieerd)\s+(?:(?i:op|te|in|aan)\s+)?)"
+                           + _STRAAT_NR + _GEMEENTE)
+
+# Tegenproef, bewust ruimer dan de maskeerregels: een straat met huisnummer binnen enkele woorden
+# na '[naam]'. bouw_zoekindex.py en build.py (klep 3d) weigeren dan. Een getal met een maand erna
+# is een datum, en een punt eindigt de zin, dus die tellen niet.
+_MAANDEN = "januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december"
+ADRES_TEGENPROEF = re.compile(r"\[naam\],?\s+(?:[A-Za-zÀ-ÿ'’:\u2013-]+\s+){0,4}?(?:[A-Za-zÀ-ÿ'’-]*"
+                              + _ACHTERVOEGSEL + r"|" + _REGISTER + r")\s+\d+(?!\d)(?!\s*(?i:" + _MAANDEN + r")\b)")
 
 # 4. Een contactformulier met veldlabels in plaats van een zin, zoals in de budgetten van de
 #    kerkfabrieken: "Contactpersoon <naam>", dan "Straat en nummer", "Postcode en gemeente",
@@ -197,6 +222,14 @@ def _lees_privacylijst():
 
 
 PRIVE_VOLLEDIG, _ACHTERNAAM_UIT_BESTAND, _BEROEP_UIT_BESTAND = _lees_privacylijst()
+
+
+def privacylijst_ok():
+    """De privacylijst bestaat en draagt namen, of is uitdrukkelijk leeg bedoeld ("leeg_bewust": true),
+    zoals bij wie de pijplijn voor een nieuwe stad start. Anders maskeert niets iets, en dan gaat er
+    geen tekst naar het model en komt er geen opkuis of zoekindex. Gedeeld door tag_items.py,
+    schoon_brontekst.py en bouw_zoekindex.py."""
+    return PRIVACY_BESTAND.exists() and (bool(PRIVE_VOLLEDIG) or bool(_PRIVACY_RUW.get("leeg_bewust")))
 
 
 def _omgekeerd(naam):
@@ -526,11 +559,10 @@ def main():
     # dan is het bestand kwijt, niet leeg bedoeld. Zonder deze stop zou een volgende publicatie
     # de namen stilzwijgend terugzetten: schoon_brontekst zou niets vinden om te maskeren, en de
     # waakhond zou ze als 'nieuwe kandidaten' melden in een uitvoer die niemand meer leest.
-    if not PRIVE_VOLLEDIG and NAAM_MASKER in DATA.read_text(encoding="utf-8"):
-        sys.exit("[STOP] %s ontbreekt, maar data.json bevat al '%s'.\n"
-                 "       De lijst is dus kwijt en niet leeg bedoeld. Zet het bestand terug\n"
-                 "       (het staat bewust niet in git) of maak het leeg als je echt niets\n"
-                 "       meer wil maskeren." % (PRIVACY_BESTAND.name, NAAM_MASKER))
+    if not privacylijst_ok():
+        sys.exit("[STOP] %s ontbreekt of is leeg, dus er wordt niets gemaskeerd.\n"
+                 "       Zet het bestand terug (het staat bewust niet in git). Start je voor een\n"
+                 "       nieuwe stad met een lege lijst, zet er dan \"leeg_bewust\": true in." % PRIVACY_BESTAND.name)
     geredacteerd = 0
 
     # 1) Lopende tekst (zoekindex + zichtbare velden): adres → '[e-mailadres]'.

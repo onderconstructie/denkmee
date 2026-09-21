@@ -128,6 +128,14 @@ def main():
             klein.add(m.group(1))
 
     # Per stuk één keer de namen-vensters uitrekenen, dat is veel goedkoper dan per woord.
+    # Al beoordeelde publieke namen herkennen we als volledig naampaar (in beide volgordes), niet
+    # per los woord: anders verdwijnt een burger die toevallig dezelfde voor- of familienaam draagt.
+    ruw = getattr(schoon_brontekst, "_PRIVACY_RUW", {}) or {}
+    publieke_paren = set()
+    for naam in ruw.get("beoordeeld_publiek", []):
+        delen = re.findall(r"[A-Za-zÀ-ÿ'’-]+", naam) if isinstance(naam, str) else []
+        for a, b in zip(delen, delen[1:]):
+            publieke_paren |= {(a + " " + b).lower(), (b + " " + a).lower()}
     kandidaten = {}      # woord -> {punten: [...], voorbeeld: str}
     for item_id, tekst in teksten.items():
         if not tekst:
@@ -136,6 +144,8 @@ def main():
         for m in RX_MARKER.finditer(tekst):
             venster = tekst[m.end():m.end() + VENSTER]
             for hw in RX_NAAMPAAR.finditer(venster):
+                if " ".join(hw.groups()).lower() in publieke_paren:
+                    continue                      # een al als publiek beoordeelde volledige naam
                 for deel in hw.groups():
                     w = deel.lower()
                     if w in STOP or w in klein or len(w) < 4:
@@ -147,6 +157,13 @@ def main():
                 k = kandidaten.setdefault(w, {"punten": set(), "voorbeeld": ctx})
                 k["punten"].add(item_id)
 
+    # Woorden die geen naam bleken (beoordeeld_geen_naam, in de lokale privacy_namen.json) tonen we
+    # niet opnieuw; publieke namen vielen hierboven al weg als volledig naampaar.
+    bekend = {w.lower() for w in ruw.get("beoordeeld_geen_naam", []) if isinstance(w, str)}
+    overgeslagen = [w for w in list(kandidaten) if w in bekend]
+    for w in overgeslagen:
+        kandidaten.pop(w)
+    print(f"al beoordeeld, niet opnieuw getoond: {len(overgeslagen):,}")
     print(f"woorden in de index          : {len(tokens):,}")
     print(f"stukken met brontekst        : {sum(1 for t in teksten.values() if t):,}")
     print(f"woorden die in HUN EIGEN stuk naast een persoonsaanduiding staan: {len(kandidaten):,}")

@@ -320,6 +320,8 @@ def main():
     # langs schoon_brontekst.py. Zonder deze regel blijft een naam die overal elders gemaskeerd
     # is, gewoon een werkende zoekterm: nagemeten stond een achternaam nog in de index terwijl hij
     # nergens meer op de pagina te zien was.
+    if not schoon_brontekst.privacylijst_ok():
+        sys.exit("[STOP] privacy_namen.json ontbreekt of is leeg: geen zoekindex zonder maskering.")
     gemaskeerd = 0
     context_adres = context_geb = 0
     for item_id, tekst in list(extra.items()):
@@ -334,6 +336,18 @@ def main():
         context_geb += g
     print("       namen gemaskeerd in de volledige tekst: %d vermelding(en)" % gemaskeerd)
     print("       woonadressen en geboortedatums gemaskeerd: %d en %d" % (context_adres, context_geb))
+
+    # Tegenproef, los van de maskeerregels hierboven: staat er na '[naam]' binnen een paar woorden
+    # nog een straat met een huisnummer, dan is een woonadres aan de maskering ontsnapt. Zo'n index
+    # gaat niet online, want dat adres maakt de persoon herleidbaar. Een straat zonder nummer (bv.
+    # 'z.n.') telt niet: die wijst geen woning aan. De build-klep 3d ziet de zoekindex niet (die
+    # bevat enkel losse woorden), daarom staat deze toets hier, waar de volledige tekst nog is.
+    adres_na_masker = schoon_brontekst.ADRES_TEGENPROEF
+    ontsnapt = sorted(i for i, t in extra.items() if t and adres_na_masker.search(t))
+    if ontsnapt:
+        sys.exit("[STOP] woonadres naast [naam] in de tekst voor de zoekindex, bij %d stuk(ken): %s"
+                 % (len(ontsnapt), ", ".join(ontsnapt[:10])))
+    print("       tegenproef adres naast [naam]: niets ontsnapt ✓")
 
     per_item = {}
     for item_id, tekst in extra.items():

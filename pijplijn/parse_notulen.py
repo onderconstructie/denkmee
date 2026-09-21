@@ -33,7 +33,7 @@ from pathlib import Path
 
 import pdfplumber
 
-NUM = re.compile(r'^(\d+)\.\s+([A-ZÀ-Ÿ][A-ZÀ-Ÿ0-9 /\-]{2,40})\.\s+(.*)$')   # 6. FINANCIËN-BELASTINGEN. ...
+NUM = re.compile(r'^(\d+)\.(?:\s+|(?=[A-ZÀ-Ÿ]))([A-ZÀ-Ÿ][A-ZÀ-Ÿ0-9 /\-]{2,40})\.\s+(.*)$')   # 6. FINANCIËN-BELASTINGEN. ...
 SPEC = re.compile(r'^(TP\d+|ACT\d+|V\d+)\.\s+([^.]+?)\.\s+(.*)$')            # TP01. TOEGEVOEGD PUNT. Naam - ...
 NAAM_SCHEIDING = re.compile(r'\s[-\u2013]\s')                         # tussen vraagsteller en onderwerp
 NOISE = re.compile(r'^(Notulen gemeenteraad|STAD MECHELEN|Gemeenteraad . Notulen|Vergadering van |NAMENS DE)')
@@ -49,10 +49,13 @@ def extract_text(pdf_path):
 
 
 def marker(line):
-    # Oudere notulen zetten een opsommingsteken (U+F0B7) voor de kop van een mondelinge vraag. Enkel
-    # daarvoor halen we het weg: bij toegevoegde punten en actualiteitsdebatten staat hetzelfde teken
-    # ook in de inhoudstafel, en dan liep de brontekst van zo'n punt over de hele zitting.
-    line = re.sub(r'^\uf0b7\s*(?=(?:V)\d+\.\s)', '', line)
+    # Oudere notulen (gemeenteraad januari, februari en juni 2025) zetten een opsommingsteken
+    # (U+F0B7) voor de kop van een mondelinge vraag en van een gewoon punt, en vanaf punt 10 staat
+    # er geen spatie na het nummer ("10.FINANCIËN-BELASTINGEN."). Zonder deze regel las de code in
+    # die zittingen geen enkel gewoon punt, en dus geen stemming. Enkel voor die twee koppen halen
+    # we het teken weg: bij toegevoegde punten en actualiteitsdebatten staat hetzelfde teken ook in
+    # de inhoudstafel, en dan liep de brontekst van zo'n punt over de hele zitting.
+    line = re.sub(r'^\uf0b7\s*(?=V?\d+\.)', '', line)
     m = NUM.match(line)
     if m:
         return m.group(1), m.group(2).strip(), m.group(3).strip(), "gewoon"

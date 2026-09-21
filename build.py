@@ -295,7 +295,7 @@ for i in _items:
         _t = str(i.get(v) or "")
         # Dezelfde regels als maskeer_context, behalve het contactformulier: dat staat enkel in de
         # tekst die de zoekindex voedt, niet in deze velden.
-        if (_sb.ADRES_NA_WOON.search(_t) or _sb.ADRES_NA_NAAM.search(_t)
+        if (_sb.ADRES_NA_WOON.search(_t) or _sb.ADRES_NA_NAAM.search(_t) or _sb.ADRES_TEGENPROEF.search(_t)
                 or _sb.EMAIL_VERHULD.search(_t) or _sb.GEB_TEKEN.search(_t)):
             _ctx_lek.append(str(i.get("id")))
             break

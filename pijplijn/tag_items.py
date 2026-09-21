@@ -143,12 +143,13 @@ _LIJST_OK = None
 
 
 def _privacylijst_ok(sb) -> bool:
-    """Ontbreekt de privacylijst terwijl data.json al gemaskeerde namen draagt, dan is dit geen
-    nieuwe stad maar een kapotte installatie, en dan maskeert maskeer_namen stil niets. Dezelfde
-    test als de harde stop in schoon_brontekst.main, maar hier VOOR de tekst naar de API gaat."""
+    """Zonder privacy_namen.json maskeert maskeer_namen stil niets, en dan gaat er geen tekst naar
+    het model. Een test op '[naam]' in data.json volstaat niet: run_all zet de data tijdens de run
+    opnieuw samen, en dan staat het masker er op dat moment niet in. Wie de pijplijn voor een andere
+    stad overneemt, maakt het bestand aan, desnoods met lege lijsten."""
     global _LIJST_OK
     if _LIJST_OK is None:
-        _LIJST_OK = bool(sb.PRIVE_VOLLEDIG) or sb.NAAM_MASKER not in sb.DATA.read_text(encoding="utf-8")
+        _LIJST_OK = sb.privacylijst_ok()
     return _LIJST_OK
 
 
@@ -173,7 +174,7 @@ def brontekst_voor_tagging(item: dict) -> str:
     try:
         import schoon_brontekst as _sb
         if not _privacylijst_ok(_sb):
-            raise RuntimeError("privacy_namen.json ontbreekt, terwijl data.json al gemaskeerde namen draagt")
+            raise RuntimeError("privacy_namen.json ontbreekt (maak het aan, desnoods met lege lijsten)")
         bron, _ = _sb.maskeer_namen(bron)
         ctx = _sb.maskeer_context(bron)
         bron = ctx[0] if isinstance(ctx, tuple) else ctx
@@ -277,7 +278,16 @@ Blijf strikt bij de feiten uit de brontekst. Verzin nooit een gevolg, cijfer, st
 
 
 def build_messages(item: dict, themes: list[str], buurten: list[str]) -> tuple[str, str]:
+    # Ook de titel gaat gemaskeerd naar het model: een titel kan een naam dragen ("aanvraag van ..."),
+    # en de opkuis van data.json komt pas na de tagging. Lukt dat niet, dan liever geen titel.
     bron = (item.get("titel") or "").strip()
+    try:
+        import schoon_brontekst as _sb
+        bron = _sb.maskeer_namen(bron)[0]
+        _ctx = _sb.maskeer_context(bron)
+        bron = _ctx[0] if isinstance(_ctx, tuple) else _ctx
+    except Exception:
+        bron = ""
     volledige = brontekst_voor_tagging(item)   # incl. de gekoppelde uittreksel-tekst (uit cache)
     if volledige:
         bron += "\n\nVolledige tekst:\n" + volledige
