@@ -57,6 +57,27 @@ def run(*args):
     subprocess.run([sys.executable, script, *map(str, args[1:])], cwd=BASE, check=True, env=env)
 
 
+def controle(script, samenvatting):
+    """Een controle die meldt maar de run niet stopt. De volledige uitvoer gaat naar
+    data/zoekcache/ (buiten git: de naamaudit kan namen bevatten); op het scherm komen enkel de
+    regels uit 'samenvatting' en een waarschuwing als het script een probleem meldt."""
+    print("›", script, "(controle)")
+    env = {**os.environ, "PYTHONUTF8": "1"}
+    uit = subprocess.run([sys.executable, "pijplijn/" + script], cwd=BASE, capture_output=True,
+                         text=True, encoding="utf-8", errors="replace", env=env)
+    tekst = (uit.stdout or "") + (uit.stderr or "")
+    log = BASE / "data" / "zoekcache" / (Path(script).stem + ".txt")
+    log.parent.mkdir(parents=True, exist_ok=True)
+    log.write_text(tekst, encoding="utf-8")
+    for regel in tekst.splitlines():
+        if regel.strip().startswith(samenvatting):
+            print("   " + regel.strip())
+    if uit.returncode:
+        print(f"   ! {script} meldt een probleem; de volledige uitvoer staat in {log.relative_to(BASE)}")
+    else:
+        print(f"   volledige uitvoer in {log.relative_to(BASE)}")
+
+
 def ensure_straten():
     """Volledige stratenlijst: enkel maken als ze er nog niet is (verandert zelden).
     straten_mechelen.py heeft enkel 'requests' + internet nodig (geen shapely meer:
@@ -320,6 +341,12 @@ def main():
     #     Ná schoon_brontekst (leest het geschoonde data.json) en vóór build (die kopieert
     #     zoekindex.json mee naar dist/). Pdf-extractie is gecachet; een gewone run kost seconden.
     run("bouw_zoekindex.py")
+
+    # 3e2) Controles op de zoekindex. De naamaudit zoekt woorden die in hun eigen stuk naast een
+    #      persoonsaanduiding staan (kandidaten voor een mens, geen oordeel); de meetlat toetst of
+    #      het label 'in het volledige stuk' klopt. Beide melden, geen van beide stopt de run.
+    controle("audit_namen.py", ("woorden die in HUN", "daarvan in hoogstens"))
+    controle("meetlat_zoek.py", ("steekproef van", "Meetlat", "[STOP]"))
 
     # 3f) Harde verwijzingen delven (MJP-actiecodes, zaaknummers, OMV-nummers): voedt de
     #     "verwante dossiers" in het dossierpaneel. build.py voegt verwijzingen.json in de site.

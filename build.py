@@ -155,6 +155,11 @@ if _items and not data.get("is_demo"):
     # aanwezigheidstest zou 100% melden terwijl de site de ambtelijke titel herhaalt in het
     # 'in mensentaal'-blok. Zelfde test als tag_items.py gebruikt om ongetagd te herkennen.
     _echt = lambda i: bool(i.get("decoded")) and i["decoded"].strip() != (i.get("titel") or "").strip()
+    _proef = [i.get("id") for i in _items if str(i.get("decoded") or "").startswith("[dry-run")]
+    if _proef:
+        sys.exit(f"[STOP] Live build geweigerd: {len(_proef)} samenvatting(en) zijn plaatshouders van een "
+                 f"proefrun (tag_items.py --dry-run), bv. {_proef[0]}. Herstel met git checkout -- data.json "
+                 f"en een volledige run_all.py.")
     _pct = 100 * sum(1 for i in _items if _echt(i)) // len(_items)
     if _pct < MIN_DECODED_PCT:
         sys.exit(f"[STOP] Live build geweigerd: maar {_pct}% van de {len(_items):,} punten heeft "

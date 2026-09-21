@@ -64,28 +64,85 @@ def marker(line):
     return None
 
 
+MAANDEN = "januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december"
+# Een paginavoet ("16 december 2025") kan midden in een stemformule vallen.
+_VOETREGEL = re.compile(r"^\s*\d{1,2}\s+(?:%s)\s+\d{4}\s*$" % MAANDEN, re.I | re.M)
+# Een telling ("23 stemmen voor", ook enkelvoud en over een regeleinde heen) of een eenparige stemming.
+_STEMDEEL = re.compile(r"(\d+)\s+(stemmen\s+voor|stem\s+voor|stemmen\s+tegen|stem\s+tegen|onthoudingen|onthouding)\b"
+                       r"|eenparigheid\s+van\s+stemmen")
+# Wat er tussen twee tellingen van dezelfde stemming mag staan: de namenlijst tussen haakjes,
+# een komma of puntkomma, en eventueel "en" of "met".
+_TUSSEN = re.compile(r"[\s,;]*(?:\((?:[^()]|\([^()]*\)){0,3000}\))?[\s,;]*(?:en\s+)?(?:met\s+)?")
+_PUNT_ZELF = re.compile(r"\bstemresultaat\s+(?:agenda)?punt\s+zelf\b")
+
+
+def _stemformules(low):
+    """Elke stemming in de tekst als eigen formule, in volgorde: een telling
+    {"voor", "tegen", "onthoudingen"} of {"eenparig": True}. Tellingen die elkaar opvolgen met
+    enkel een namenlijst, komma of "en" ertussen horen bij dezelfde stemming."""
+    formules, huidige, einde = [], None, None
+    for m in _STEMDEEL.finditer(low):
+        if m.group(1) is None:                          # "met eenparigheid van stemmen"
+            formules.append({"eenparig": True})
+            huidige, einde = None, m.end()
+            continue
+        getal = int(m.group(1))
+        if getal > 60:
+            # Een jaartal of paginanummer vlak voor "stemmen ...": de telling is dan niet zeker te
+            # lezen. Liever 'onbekend' dan een categorie die stil op 0 komt.
+            formules.append({"onbetrouwbaar": True})
+            huidige, einde = None, m.end()
+            continue
+        soort = "voor" if "voor" in m.group(2) else ("tegen" if "tegen" in m.group(2) else "onthoudingen")
+        tussen = low[einde:m.start()] if einde is not None else None
+        if huidige is not None and _TUSSEN.fullmatch(tussen) and soort not in huidige:
+            huidige[soort] = getal
+        else:
+            huidige = {soort: getal}
+            formules.append(huidige)
+        einde = m.end()
+    return [f if (f.get("eenparig") or f.get("onbetrouwbaar")) else
+            {"voor": f.get("voor", 0), "tegen": f.get("tegen", 0), "onthoudingen": f.get("onthoudingen", 0)}
+            for f in formules]
+
+
 def parse_stemming(blok):
-    low = blok.lower()
-    if "eenparigheid van stemmen" in low:
+    """De stemming over dit punt, of de eerlijke vaststelling dat er meer dan een was.
+
+    Een punt kan meerdere stemmingen dragen: eerst amendementen en dan "het agendapunt zelf",
+    of aparte deelbeslissingen (agenda en mandaat van een algemene vergadering, elk artikel
+    apart). Getallen uit verschillende stemmingen mogen nooit samen in een telling. Staat er
+    "Stemresultaat (agenda)punt zelf", dan tellen enkel de stemmingen daarna. Eén stemming blijft
+    'geteld' of 'eenparig', meerdere verschillende worden 'meerdere', met de lijst erbij."""
+    low = _VOETREGEL.sub("", blok).lower()
+    zelf = [m.start() for m in _PUNT_ZELF.finditer(low)]
+    deel = low[zelf[-1]:] if zelf else low
+    formules = _stemformules(deel)
+    if zelf and not formules:                  # de markering zonder stemming erna: hele tekst
+        deel = low
+        formules = _stemformules(deel)
+    if not formules:
+        if "niet ter stemming" in deel:
+            return {"modus": "niet-ter-stemming"}
+        if "mondeling beantwoord" in deel:
+            return {"modus": "mondeling-beantwoord"}
+        return {"modus": "geen"}
+    if any(f.get("onbetrouwbaar") for f in formules):
+        return {"modus": "onbekend"}
+    verschillend = []
+    for f in formules:
+        if f not in verschillend:
+            verschillend.append(f)
+    # Sanity: de Mechelse gemeenteraad telt 43 leden, dus een telling boven 43 kan niet kloppen
+    # (een verkeerd opgepikt cijfer). Dan is de telling onbetrouwbaar: we markeren ze als onbekend.
+    if any(not f.get("eenparig") and f["voor"] + f["tegen"] + f["onthoudingen"] > 43 for f in verschillend):
+        return {"modus": "onbekend"}
+    if len(verschillend) > 1:
+        return {"modus": "meerdere", "stemmingen": verschillend}
+    f = verschillend[0]
+    if f.get("eenparig"):
         return {"modus": "eenparig", "voor": None, "tegen": None, "onthoudingen": None}
-    v = re.search(r'(\d+)\s+stemmen voor', low)
-    te = re.search(r'(\d+)\s+stemmen tegen', low)
-    o = re.search(r'(\d+)\s+onthoudingen', low)
-    if v or te or o:
-        voor = int(v.group(1)) if v else 0
-        tegen = int(te.group(1)) if te else 0
-        onth = int(o.group(1)) if o else 0
-        # Sanity: de Mechelse gemeenteraad telt 43 leden, dus een telling boven 43 kan niet
-        # kloppen (een verkeerd opgepikt cijfer, bv. een jaartal dat tegen "stemmen tegen"
-        # plakte). Dan is de telling onbetrouwbaar: we markeren ze als onbekend.
-        if voor + tegen + onth > 43:
-            return {"modus": "onbekend"}
-        return {"modus": "geteld", "voor": voor, "tegen": tegen, "onthoudingen": onth}
-    if "niet ter stemming" in low:
-        return {"modus": "niet-ter-stemming"}
-    if "mondeling beantwoord" in low:
-        return {"modus": "mondeling-beantwoord"}
-    return {"modus": "geen"}
+    return {"modus": "geteld", "voor": f["voor"], "tegen": f["tegen"], "onthoudingen": f["onthoudingen"]}
 
 
 def parse_aanwezigheid(lines):

@@ -135,6 +135,23 @@ def uittreksel_tekst(item_id: str, klassen=None) -> str:
 MAX_BRON = 24000
 _BRON_CACHE = {}          # per stuk-id: de gemaskeerde brontekst, want content_key vraagt ze vaak op
 
+class MaskeerFout(Exception):
+    """De maskering van persoonsgegevens faalde: dit stuk gaat NIET naar het model."""
+
+
+_LIJST_OK = None
+
+
+def _privacylijst_ok(sb) -> bool:
+    """Ontbreekt de privacylijst terwijl data.json al gemaskeerde namen draagt, dan is dit geen
+    nieuwe stad maar een kapotte installatie, en dan maskeert maskeer_namen stil niets. Dezelfde
+    test als de harde stop in schoon_brontekst.main, maar hier VOOR de tekst naar de API gaat."""
+    global _LIJST_OK
+    if _LIJST_OK is None:
+        _LIJST_OK = bool(sb.PRIVE_VOLLEDIG) or sb.NAAM_MASKER not in sb.DATA.read_text(encoding="utf-8")
+    return _LIJST_OK
+
+
 def brontekst_voor_tagging(item: dict) -> str:
     """De brontekst die de tagging ziet: primair de officiële BESLUIT-tekst (klasse 'uittreksel',
     rijker dan de besluitenlijst); de bijlage-reglementen laten we hier weg (die voeden de zoek,
@@ -155,11 +172,18 @@ def brontekst_voor_tagging(item: dict) -> str:
         return _BRON_CACHE[sleutel]
     try:
         import schoon_brontekst as _sb
+        if not _privacylijst_ok(_sb):
+            raise RuntimeError("privacy_namen.json ontbreekt, terwijl data.json al gemaskeerde namen draagt")
         bron, _ = _sb.maskeer_namen(bron)
         ctx = _sb.maskeer_context(bron)
         bron = ctx[0] if isinstance(ctx, tuple) else ctx
-    except Exception:
-        pass                                     # maskering nooit fataal voor de tagging
+    except Exception as fout:
+        # Faalt de maskering, dan gaat dit stuk NIET naar het model en wordt het deze run niet
+        # getagd: geen ongemaskeerde namen bij een externe dienst, en bij een storing die alles
+        # raakt ook geen betaalde her-tag op de titel alleen. De volgende run probeert opnieuw.
+        print("   ! maskering faalde voor %s (%s): stuk overgeslagen" % (item.get("id") or "(stuk zonder id)",
+                                                                       type(fout).__name__))
+        raise MaskeerFout(item.get("id")) from fout
     bron = bron[:MAX_BRON]
     _BRON_CACHE[sleutel] = bron                  # content_key() vraagt dit per item meermaals op
     return bron
@@ -449,7 +473,10 @@ def batch_werklijst(doelen, themes, buurten, cache) -> dict:
     stukken zitten nog in de cache en vallen dus vanzelf weg. Ontdubbeld op identieke inhoud."""
     werk = {}
     for item in doelen:
-        key = content_key(item)
+        try:
+            key = content_key(item)
+        except MaskeerFout:
+            continue
         if key in cache or key in werk:
             continue
         werk[key] = build_messages(item, themes, buurten)
@@ -574,7 +601,10 @@ def main():
             return                                       # voorbeeld: geen merge, geen schrijf, geen kost
         batched = set(werk)
         for item in doelen:                              # de (her)getagde stukken in data.json gieten
-            key = content_key(item)
+            try:
+                key = content_key(item)
+            except MaskeerFout:
+                continue
             if key in batched and key in cache:
                 merge(item, schoon(cache[key], themes_set, straten, buurten_set), overwrite=True)
         DATA.with_suffix(".json.bak").write_text(DATA.read_text(encoding="utf-8"), encoding="utf-8")
@@ -589,7 +619,10 @@ def main():
         for item in doelen:
             if heeft_tagging(item) and not args.overwrite:
                 continue
-            key = content_key(item)
+            try:
+                key = content_key(item)
+            except MaskeerFout:
+                continue
             if key in cache:                               # cache-sleutel bevat de promptversie,
                 tags = cache[key]; uit_cache += 1          # dus een hit is altijd actueel → hervatbaar
             elif args.dry_run:
@@ -617,8 +650,12 @@ def main():
         print(f"\n[onderbroken] Gestopt. De {nieuw} nieuw getagde items zijn bewaard — "
               f"start dezelfde opdracht opnieuw om verder te gaan.")
 
-    if not args.dry_run:
-        DATA.with_suffix(".json.bak").write_text(DATA.read_text(encoding="utf-8"), encoding="utf-8")
+    if args.dry_run:
+        # Een proefrun schrijft niets weg: haar plaatshouders zouden als echte samenvatting in
+        # data.json blijven staan (een echte run overschrijft ze niet) en zo live kunnen gaan.
+        print(f"Klaar: DRY-RUN (niets betaald, niets weggeschreven). {len(doelen)} items bekeken.")
+        return
+    DATA.with_suffix(".json.bak").write_text(DATA.read_text(encoding="utf-8"), encoding="utf-8")
     strip_vraagteksten(data)
     DATA.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 

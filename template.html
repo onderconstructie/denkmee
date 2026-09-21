@@ -6869,6 +6869,12 @@ function stemNamenBodyHTML(item, st){
   return groep('Voor', 'g-voor', n.voor) + groep('Tegen', 'g-tegen', n.tegen) + groep('Onthouding', 'g-onth', n.onth);
 }
 function stemBalkHTML(st, item){
+  // Meerdere stemmingen in een punt (amendementen, of aparte deelbeslissingen): geen enkele
+  // telling is dan de uitslag van het hele punt, en getallen uit verschillende stemmingen mogen
+  // niet samen. We zeggen dat eerlijk en verwijzen naar de notulen.
+  if(st && st.modus==='meerdere'){
+    return '<div class="stem"><div class="stem-sum">Meerdere stemmingen in dit punt: zie de notulen</div></div>';
+  }
   if(!st || (st.modus!=='geteld' && st.modus!=='eenparig')) return '';
   if(st.modus==='eenparig'){
     return '<div class="stem"><div class="stem-bar"><span style="width:100%;background:#1a7f37"></span></div>'

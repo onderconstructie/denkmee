@@ -406,7 +406,7 @@ def maskeer_namen(tekst, met_achternamen=None):
         patroon = r"\s+".join(re.escape(deel) for deel in vorm.split())
         tekst, n = re.subn(r"\b%s\b" % patroon, NAAM_MASKER, tekst)
         aantal += n
-    tekst, n = BEROEP_NAAM.subn(r"\1 " + NAAM_MASKER, tekst)
+    tekst, n = BEROEP_NAAM.subn(r"\1 " + NAAM_MASKER, tekst) if BEROEP_NAAM else (tekst, 0)
     return tekst, aantal + n + gids + leden
 
 

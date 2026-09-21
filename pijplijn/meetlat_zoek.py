@@ -36,8 +36,11 @@ def main():
     ids = index["items"]
     toks = index["tokens"]
 
+    # Dezelfde stukken als de zoekindex: ook de besluiten van college, vast bureau en
+    # burgemeester, die hun volledige tekst uit een gekoppeld uittreksel halen.
     alle = {p["id"]: p for p in data.get("agendapunten", [])}
     alle.update({p["id"]: p for p in data.get("schriftelijke_vragen", [])})
+    alle.update({p["id"]: p for p in data.get("college_beslissingen", [])})
     vragen_cache = {}
     _vc_pad = BASE / "data" / "schriftelijke_vragen.json"
     if _vc_pad.exists():
@@ -70,6 +73,8 @@ def main():
         pdf = p.get("pdf")
         if pdf and (BASE / pdf).exists():
             vol.append(bz.pdf_tekst(BASE / pdf))
+        if item_id:
+            vol.append(bz.uittreksel_tekst(item_id))    # officiële uittreksel-tekst, zoals de bouwer
         in_vol = woord in bz.tokens("\n".join(vol))
         in_zoek = woord in bz.tokens(zoekbaar)
         ok = in_vol and not in_zoek
