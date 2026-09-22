@@ -100,7 +100,9 @@ def _register_zonder_achtervoegsel():
     except Exception:
         return []
     namen = [s.get("naam") for s in ruw.get("straten", []) if isinstance(s, dict)]
-    return sorted({n for n in namen if n and not re.search(_ACHTERVOEGSEL + "$", n, re.I)},
+    # Hoofdlettergevoelig: 'Grote Markt' draagt het achtervoegsel als los woord met een hoofdletter,
+    # en dat herkent _STRAAT_NR niet. Zulke straten moeten dus ook in het register.
+    return sorted({n for n in namen if n and not re.search(_ACHTERVOEGSEL + "$", n)},
                   key=len, reverse=True)
 
 

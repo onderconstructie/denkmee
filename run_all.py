@@ -9,6 +9,7 @@ Volgorde (dit is de volledige lijst; de volgorde is niet vrijblijvend, zie hiero
   1d)  fetch_uittreksels.py — individuele uittreksels/bijlagen per zitting (faalt zacht)
   1e)  fetch_budgetten.py  — meerjarenplannen, budgetten en jaarrekeningen (faalt zacht)
   2)   maak_data.py       — tijdigheid (art. 22 / 287) + sessies in data.json zetten
+  2b)  schoon beginnen: demo eruit, volgende zitting en is_demo uit de echte data
   3)   per zitting        — besluitenlijst + notulen uitlezen en als agendapunten
                             (met stemming per fractie) in data.json gieten
   3a)  parse_schriftelijke_vragen.py — de pdf's uitlezen naar data.json
@@ -17,6 +18,7 @@ Volgorde (dit is de volledige lijst; de volgorde is niet vrijblijvend, zie hiero
   3c)  tag_items.py       — AI-samenvattingen (optioneel, enkel met ANTHROPIC_API_KEY)
   3d)  schoon_brontekst.py — e-mailadressen uit de gepubliceerde velden redacteren
   3e)  bouw_zoekindex.py  — volledige-tekstindex voor de zoekbalk
+  3e2) controles: naamaudit (audit_namen.py) en meetlat (meetlat_zoek.py); melden, stoppen niet
   3f)  delf_verwijzingen.py — harde codes (MJP, zaaknummer, OMV) voor verwante dossiers
   3g)  parse_mjp_acties.py — de begrotingslijn achter elke MJP-code (faalt zacht)
   4)   build.py           — template.html + data.json  ->  dist/

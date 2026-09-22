@@ -146,7 +146,7 @@ def _privacylijst_ok(sb) -> bool:
     """Zonder privacy_namen.json maskeert maskeer_namen stil niets, en dan gaat er geen tekst naar
     het model. Een test op '[naam]' in data.json volstaat niet: run_all zet de data tijdens de run
     opnieuw samen, en dan staat het masker er op dat moment niet in. Wie de pijplijn voor een andere
-    stad overneemt, maakt het bestand aan, desnoods met lege lijsten."""
+    stad overneemt, maakt het bestand aan, met "leeg_bewust": true zolang de lijst nog leeg is."""
     global _LIJST_OK
     if _LIJST_OK is None:
         _LIJST_OK = sb.privacylijst_ok()
@@ -174,7 +174,7 @@ def brontekst_voor_tagging(item: dict) -> str:
     try:
         import schoon_brontekst as _sb
         if not _privacylijst_ok(_sb):
-            raise RuntimeError("privacy_namen.json ontbreekt (maak het aan, desnoods met lege lijsten)")
+            raise RuntimeError("privacy_namen.json ontbreekt of is leeg (zet \"leeg_bewust\": true voor een nieuwe stad)")
         bron, _ = _sb.maskeer_namen(bron)
         ctx = _sb.maskeer_context(bron)
         bron = ctx[0] if isinstance(ctx, tuple) else ctx
@@ -495,11 +495,12 @@ def batch_werklijst(doelen, themes, buurten, cache) -> dict:
 
 def batch_raming(werk: dict) -> tuple[int, int, float]:
     """Ruwe kostenraming. tekens/4 ≈ tokens; Sonnet 5 tokeniseert ~1,3× dichter (marge).
-    Introprijs t/m 2026-08-31: $2 in / $10 uit per 1M; Batches-API = 50% korting."""
+    Prijs van claude-sonnet-5 sinds 1/9/2026: $3 in / $15 uit per 1M (de introprijs van $2 / $10
+    liep tot 31/8/2026); Batches-API = 50% korting."""
     tekens = sum(len(s) + len(u) for s, u in werk.values())
     in_tok = int(tekens / 4 * 1.3)
     uit_tok = len(werk) * 400                       # ~400 tokens per JSON-samenvatting
-    kost = (in_tok / 1e6) * 2 * 0.5 + (uit_tok / 1e6) * 10 * 0.5
+    kost = (in_tok / 1e6) * 3 * 0.5 + (uit_tok / 1e6) * 15 * 0.5
     return in_tok, uit_tok, kost
 
 
