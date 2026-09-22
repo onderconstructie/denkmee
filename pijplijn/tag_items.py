@@ -510,7 +510,7 @@ def batch_run(werk: dict, go: bool, cache: dict) -> int:
     API-kost. Geeft het aantal nieuw gecachte stukken terug."""
     in_tok, uit_tok, kost = batch_raming(werk)
     print(f"Batch: {len(werk)} stukken te (her)taggen | ~{in_tok:,} in + ~{uit_tok:,} uit tokens | "
-          f"raming ~${kost:.2f}  ({MODEL}, introprijs + 50% batchkorting)")
+          f"raming ~${kost:.2f}  ({MODEL}, met 50% batchkorting)")
     if not go:
         print("(voorbeeld — niets ingediend, geen kost. Draai met  --batch --go  om echt te taggen.)")
         return 0
