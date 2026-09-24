@@ -8798,6 +8798,15 @@ function buildDossiers(){
   // die losse zaken niet laat samenklitten — nooit een ijzeren muur, nooit lijm. Eén
   // deterministische sleutel per document, geen trefwoord-ketens, dus geen vergaarbak.
   const CAP = 18, MINLEN = 6;
+  // Algemene titelwoorden (24/09/2026): het taalmodel beoordeelt elk titelwoord drie keer als
+  // onderwerp of algemeen, de meerderheid telt (klasseer_titelwoorden.py -> titelwoorden.json ->
+  // D.dos_algemeen). Een naam (hoofdletter midden in de titel) en een woord uit een AI-kernbegrip
+  // van het stuk zelf ('verhaal' in 'Verhaal van Mechelen') tellen nooit als algemene handtekening.
+  const DOS_ALG = new Set(D.dos_algemeen || []);
+  const kbWoorden = it => it._kbw || (it._kbw = new Set((it.kernbegrippen || []).flatMap(k => kbNorm(k).match(/[a-z][a-z\-]*/g) || [])));
+  const algemeen = (it, x) => DOS_ALG.has(x) && !it._ent.has(x) && !kbWoorden(it).has(x);
+  const DOS_ALG_STAM = new Set([...DOS_ALG].map(dosStam));
+  const specifiekeStam = s => df[s] >= 2 && !DOS_ALG_STAM.has(s);
   items.forEach(it => {
     // Kandidaten wegen op de STAM-frequentie; het zichtbare woord (_token) blijft origineel.
     const cand = it._tk
@@ -8856,6 +8865,67 @@ function buildDossiers(){
     });
     return ids;
   };
+  // MIDDENWEG (24/09/2026). Zeldzaam in de titels is niet hetzelfde als specifiek. Op het woord
+  // 'uitrol' hingen de uitrol van Diftar en een nieuwe mascotte aan elkaar, op 'tegenbod' een zendmast
+  // en een handelspand. Is de handtekening een algemeen woord, dan volstaat dat woord alleen niet:
+  // twee stukken horen enkel samen als ze nog iets delen, namelijk een titelwoord dat een onderwerp
+  // is, een zeldzaam kernbegrip, dezelfde ene straat of de verwijzing naar de raad. Wat niets deelt,
+  // valt terug op een woordpaar met minstens één onderwerp (hieronder) of blijft eenling. De grootste
+  // bevestigde groep houdt de sleutel. Gemeten op 24/09/2026 over alle 5.880 stukken: 472 stukken
+  // verschuiven, van de 133 splitsingen bleken er 122 terecht. Een eerste versie schrapte algemene
+  // woorden helemaal als handtekening; die splitste even vaak een echte zaak (Fietsostrade F1, de
+  // Algemene Bestuurlijke Politieverordening) als een valse koppeling.
+  items.forEach(it => { it._algTok = !!(it._token && algemeen(it, it._token)); });
+  const stammen = it => it._stSet || (it._stSet = new Set(it._tk.map(dosStam)));
+  const kbZeldzaam = it => Object.keys(it._kbOrig).filter(k => kbDf[k] >= 2 && kbDf[k] <= CAP);
+  const eenStraat = it => { const s = [...new Set((it.streets || []).map(kbNorm))]; return s.length === 1 ? s[0] : null; };
+  const bevestigd = (a, b) => {
+    // Een gedeeld titelwoord bevestigt enkel als het zelf een onderwerp is: zo beoordeeld door het
+    // taalmodel, hoe vaak het ook voorkomt ('Ragheno', 'politieverordening'), of een woord uit een
+    // kernbegrip van allebei de stukken. Algemene woorden ('vertegenwoordiging' en 'vergadering')
+    // koppelden anders Ecoso aan Woonstroom. Een hoofdletter telt hier niet: na een punt begint
+    // elke zin ermee ('Geven van opdracht').
+    const specifiek = x => !DOS_ALG.has(x) || (kbWoorden(a).has(x) && kbWoorden(b).has(x));
+    if(a._tk.some(x => stammen(b).has(dosStam(x)) && specifiek(x))) return true;
+    const kb = new Set(kbZeldzaam(b)); if(kbZeldzaam(a).some(k => kb.has(k))) return true;
+    const st = eenStraat(a); if(st && st === eenStraat(b)) return true;
+    // Een raadsbesluit en de verwijzing van het college of vast bureau voor dezelfde zaak (binnen
+    // 90 dagen) delen vaak enkel een algemeen woord; die route is zelf de bevestiging.
+    if(ketRaad(a) === ketRaad(b)) return false;
+    const raad = ketRaad(a) ? a : b, route = ketRaad(a) ? b : a;
+    const dagen = ketDag(raad.date) - ketDag(route.date);
+    return route._ketRoute && dagen >= 0 && dagen <= 90;
+  };
+  {
+    // Per kant en per stam van het algemene woord: de sleutel kan verschillen (een zwak woord krijgt
+    // de stad-rubriek erbij), en vroeger lijmde stap 2 die groepen via een gedeeld thema.
+    const perStam = {};
+    items.forEach(it => { if(it._token && !it._bbc) { const k = it._track + '::' + dosStam(it._token); (perStam[k] = perStam[k] || []).push(it); } });
+    Object.keys(perStam).sort().forEach(S => {
+      const g = perStam[S];
+      if(!g.some(it => it._algTok)) return;
+      const ouder = g.map((_, i) => i);
+      const wortel = i => ouder[i] === i ? i : (ouder[i] = wortel(ouder[i]));
+      for(let i = 0; i < g.length; i++) for(let j = i + 1; j < g.length; j++){
+        const zelfde = !g[i]._algTok && !g[j]._algTok && g[i]._key === g[j]._key;
+        if(zelfde || ((g[i]._algTok || g[j]._algTok) && bevestigd(g[i], g[j]))) ouder[wortel(i)] = wortel(j);
+      }
+      const comp = {}; g.forEach((it, i) => (comp[wortel(i)] = comp[wortel(i)] || []).push(it));
+      const delen = Object.values(comp).sort((a, b) => b.length - a.length || (a[0].id < b[0].id ? -1 : 1));
+      delen.forEach((deel, n) => {
+        if(deel.length === 1){
+          const it = deel[0];
+          if(it._algTok){ it._token = null; it._mwSolo = true; it._key = it._track + '::solo:' + it.id; }
+          return;
+        }
+        // De meest voorkomende oude sleutel blijft, zodat een bestaand dossier zijn adres houdt.
+        const tel = {}; deel.forEach(it => tel[it._key] = (tel[it._key] || 0) + 1);
+        const K = Object.keys(tel).sort((a, b) => tel[b] - tel[a] || (a < b ? -1 : 1))[0];
+        const nieuw = n === 0 ? K : K + '#' + deel[0].id;
+        deel.forEach(it => { it._key = nieuw; });
+      });
+    });
+  }
   // VANGNET voor eenlingen: het zeldzame WOORDPAAR. "Aktename jaarverslag klachten 2024"
   // heeft geen geldig handtekeningwoord ("jaarverslag" staat in 20 stukken, "klachten" in
   // 27, allebei boven de CAP), maar de combinatie komt maar in 8 stukken voor en wijst dus
@@ -8879,6 +8949,7 @@ function buildDossiers(){
     for(let i = 0; i < st.length; i++) for(let j = i+1; j < st.length; j++){
       const k = st[i]+'|'+st[j], n = paarDf[k];
       if(n < 2 || n > CAP) continue;
+      if(it._mwSolo && !specifiekeStam(st[i]) && !specifiekeStam(st[j])) continue;
       if(!beste || n < beste.n || (n === beste.n && k.length > beste.k.length)) beste = {k, n};
     }
     if(beste) it._key = it._track + '::paar:' + beste.k;
@@ -8905,7 +8976,7 @@ function buildDossiers(){
   //    orgaan-onafhankelijk), dan lijmen we hun groepen. De brug bestaat alleen tussen
   //    groepen met hetzelfde signaalwoord: geen kettingen, dus geen vergaarbak.
   const perStam = {};
-  items.forEach(it => { if(it._token && !it._bbc) { const s = dosStam(it._token); (perStam[it._track + '::' + s] = perStam[it._track + '::' + s] || []).push(it); } });
+  items.forEach(it => { if(it._token && !it._bbc && !it._algTok) { const s = dosStam(it._token); (perStam[it._track + '::' + s] = perStam[it._track + '::' + s] || []).push(it); } });
   Object.values(perStam).forEach(g => {
     if(g.length < 2 || g.length > 20) return;
     for(let i = 0; i < g.length; i++) for(let j = i+1; j < g.length; j++){

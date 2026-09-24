@@ -66,6 +66,14 @@ if verwijzingen_pad.exists():
     data["verwijzingen"] = verw.get("codes", {})
     print(f"Verwijzingen geladen: {len(data['verwijzingen'])} koppelende codes.")
 
+# 1c2) Algemene titelwoorden (klasseer_titelwoorden.py): de dossiervorming gebruikt ze nooit als
+#      handtekening. Ontbreekt het bestand, dan bundelt de site zoals voorheen.
+titelwoorden_pad = BASE / "titelwoorden.json"
+if titelwoorden_pad.exists():
+    tw = json.loads(titelwoorden_pad.read_text(encoding="utf-8")).get("woorden", {})
+    data["dos_algemeen"] = sorted(w for w, v in tw.items() if v == "a")
+    print(f"Titelwoorden geladen: {len(data['dos_algemeen'])} algemene woorden van {len(tw)}.")
+
 # 1d) Handmatige correcties op de dossiervorming (correcties.json, door de redactie
 #     onderhouden — NOOIT automatisch). Losmaken/samenvoegen ankeren op stabiele stuk-id's;
 #     de frontend past ze toe in buildDossiers. Ontbreekt het bestand, dan bouwt de site

@@ -21,7 +21,8 @@ Volgorde (dit is de volledige lijst; de volgorde is niet vrijblijvend, zie hiero
   3e2) controles: naamaudit (audit_namen.py) en meetlat (meetlat_zoek.py); melden, stoppen niet
   3f)  delf_verwijzingen.py — harde codes (MJP, zaaknummer, OMV) voor verwante dossiers
   3g)  parse_mjp_acties.py — de begrotingslijn achter elke MJP-code (faalt zacht)
-  4)   build.py           — template.html + data.json  ->  dist/
+  3h)  klasseer_titelwoorden.py — onderwerp of algemeen woord, voor de dossierbundeling (faalt zacht)
+  4)   build.py          — template.html + data.json  ->  dist/
   5)   opkuis             — tussenbestanden in de root wissen
 
 LET OP bij een losse stap: elk parse_*-script herschrijft ZIJN DEEL van data.json volledig.
@@ -217,6 +218,16 @@ def koppel_mjp_acties():
         print("  (overgeslagen: parse_mjp_acties.py faalde — besluiten blijven zonder budgetlijn.)")
 
 
+def klasseer_titelwoorden():
+    """Nieuwe titelwoorden laten beoordelen door het taalmodel (onderwerp of algemeen), voor de
+    dossierbundeling. Idempotent: enkel nieuwe woorden, dus een gewone run kost bijna niets. Faalt
+    het of ontbreekt de sleutel, dan bouwt de site verder; een nieuw woord telt dan als onderwerp."""
+    try:
+        run("klasseer_titelwoorden.py")
+    except subprocess.CalledProcessError:
+        print("  (overgeslagen: klasseer_titelwoorden.py faalde — nieuwe woorden tellen als onderwerp.)")
+
+
 def haal_zittingen():
     """De geplande zittingen van mechelen.be. Faalt dit (de stad wijzigt de opbouw van haar
     pagina), dan stopt de bouw NIET: het is één kaart op de site, geen kerngegeven. Zonder deze
@@ -357,6 +368,10 @@ def main():
     # 3g) De begrotingslijn achter elke MJP-code: doelstelling, actie, dienst en de bedragen
     #     per jaar uit het meerjarenplan. Ná 3f (zelfde code-oogst) en vóór build.
     koppel_mjp_acties()
+
+    # 3h) Nieuwe titelwoorden laten beoordelen: onderwerp of algemeen woord. De dossierbundeling
+    #     op de pagina gebruikt dat oordeel (titelwoorden.json, via build.py). Vóór build.
+    klasseer_titelwoorden()
 
     # 4) bouwen
     run("build.py")
