@@ -8129,6 +8129,11 @@ function dosAllItems(){
 }
 
 const DOS_STOP = new Set('goedkeuring goedkeuren aanvraag aanvragen gemeenteraad college besluit besluiten vaststelling definitieve voorlopige kennisname aanstelling aankoop verlenging tweede eerste reglement aanpassing wijziging nieuwe mechelen stedelijke stedelijk algemene principiele addendum gunning gunningsbeslissing fase locatie dossiers invoering toekenning uitbreiding verdeling middelen plaatsing concessie vergunning aanwending reserves kredietverschuiving kredietverschuivingen aanbesteding onderhoudsbestek subsidie subsidiereglement belastingreglement subsidieovereenkomst samenwerkingsovereenkomst jaarrekening particuliere binnenstad openbare ontwerpakte aankoopbelofte verkoopbelofte koopbelofte aankoopbeloftes grondafstand onderhandse minnelijke wederzijdse ontwerp ontwerpovereenkomst overeenkomst raamovereenkomst huurovereenkomst erfpacht opstalrecht verkoop verkoopovereenkomst aktename advisering verwijzing'.split(/\s+/));
+// Etiketwoorden (24/09/2026): ze benoemen het document of de herhaling, niet de zaak. Twee
+// vervolgvragen van hetzelfde raadslid, over de Brusselsesteenweg en over het zwembad, deelden
+// zo het woord 'vervolgvraag' en belandden in hetzelfde dossier; via 'behoud' kwam er een voorstel
+// over het straathoekwerk bij.
+'vervolg vervolgvraag vervolgvragen opvolging bijkomende versie finaal update behoud'.split(' ').forEach(w => DOS_STOP.add(w));
 function dosTokens(s){
   return [...new Set((s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/\b[a-z][a-z\-]{4,}\b/g)||[])].filter(w=>!DOS_STOP.has(w));
 }
