@@ -24,6 +24,7 @@ Vereist voor echte runs:  pip install anthropic  +  omgevingsvariabele ANTHROPIC
 from __future__ import annotations
 import os
 import sys
+import re
 import json
 import time
 import hashlib
@@ -389,6 +390,20 @@ def parse_tags(text: str) -> dict:
     return json.loads(t[start:end + 1], strict=False)
 
 
+# Een vraagsamenvatting noemt het raadslid bij de familienaam of 'het raadslid', nooit 'hij' of 'zij'
+# (regel 2 van de vraagprompt): uit een naam leid je niet af hoe iemand aangesproken wil worden. Op
+# 24/09/2026 hielden 9 van de 285 opnieuw gemaakte vraagsamenvattingen zich daar niet aan. Deze toets
+# vangt 'hij'/'hem' en een zin die met 'Ze'/'Zij' plus een werkwoord in het enkelvoud begint; een
+# 'ze' midden in de zin (meestal de stad) laat hij staan.
+_VOORNAAMWOORD = re.compile(
+    r"\b(hij|hem)\b|(?:^|[.!?]\s+)(?:zij|ze)\s+(?:\w+t|wil|kan|is|heeft|zal|mag)\b", re.I)
+
+
+def voornaamwoord_voor_raadslid(item: dict, tags: dict) -> bool:
+    return (item.get("type") in ("vraag", "schriftelijke_vraag")
+            and bool(_VOORNAAMWOORD.search(tags.get("decoded") or "")))
+
+
 # --------------------------------------------------------------------------
 # API (echt) en dry-run (gratis)
 # --------------------------------------------------------------------------
@@ -646,6 +661,11 @@ def main():
                 system, user = build_messages(item, themes, buurten)
                 try:
                     tags = parse_tags(call_api(system, user))
+                    for _ in range(2):                     # hoogstens twee nieuwe pogingen
+                        if not voornaamwoord_voor_raadslid(item, tags):
+                            break
+                        calls += 1
+                        tags = parse_tags(call_api(system, user))
                 except Exception as e:
                     print(f"  ! mislukt voor {item.get('id')}: {e}")
                     continue
