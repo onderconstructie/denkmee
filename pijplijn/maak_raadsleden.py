@@ -51,6 +51,7 @@ FRACTIE = {"VLAAMS BELANG":"Vlaams Belang", "cd&v Mechelen":"cd&v"}
 # afwijkende schrijfwijzen in notulen/website -> zelfde fractie
 ALIASSEN = {
  "Rina Rabau Nkandu": "Voor Mechelen",
+ "Rina Rabau": "Voor Mechelen",          # zo in de notulen van 2025 (stemlijsten, overheidsdelegatie)
  "Kristof Calvo": "Voor Mechelen",
  "Saïd Aghassaiy": "PVDA",
 }

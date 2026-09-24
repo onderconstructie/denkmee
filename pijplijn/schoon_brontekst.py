@@ -323,10 +323,14 @@ GEEN_PERSOON = re.compile(
     r"bond|punt|straat|laan|plein|weg|kaai|baan|park|huis|mechelen|brussel|antwerpen|leuven|"
     r"ruimtelijke|ordening|codex|decreet|beleid|reglement|overleg|kunstonderwijs|deeltijds|"
     r"januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\b")
+# Enkel de rol leest hoofdletterongevoelig; een naam begint met een hoofdletter. Tot 24/09/2026
+# gold (?i) voor het hele patroon, en dan telde ook "is bevoegd" of "en een" als naam: zo maskeerde
+# de opkuis gewone woorden in tien samenvattingen. Een familienaam in hoofdletters (JANSSENS) telt
+# wel: na de eerste letter mag elke letter.
 ONDERSTEUNENDE_ROL = re.compile(
-    r"(?i)(\b(?:interne preventieadviseur|preventieadviseur|arbeidsarts|vertrouwensperso[a-z]*|"
+    r"(\b(?i:interne preventieadviseur|preventieadviseur|arbeidsarts|vertrouwensperso[a-z]*|"
     r"hr-manager)\b[^\w\n]{0,4})("
-    r"[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der))?\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,})")
+    r"[A-ZÀ-Þ][A-Za-zÀ-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der))?\s+[A-ZÀ-Þ][A-Za-zÀ-ÿ'’\-]{2,})")
 # Dezelfde rollen, maar met een aanspreking of initialen tussen rol en naam ("preventieadviseur:
 # dhr. P. Achternaam", "arbeidsarts: dokter I. Achternaam"), en in lopende tekst met de naam
 # voorop ("I. Achternaam is arbeidsarts"). Zo stonden op 24/09/2026 de namen van een interne
@@ -338,13 +342,17 @@ _NAAM_STEUN = (r"(?:(?:[A-ZÀ-Þ]\.\s*){1,3}[A-ZÀ-Þ][a-zà-ÿ'’]+(?:\s*-\s*[
                r"|[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der))?\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,})")
 ROL_AANSPREKING_NAAM = re.compile(r"(\b" + _ROL_STEUN + r"\b[^\w\n]{0,4}"
                                   r"(?:(?i:dhr|mevr|mr|mw|dr|de heer|mevrouw|dokter)\.?\s+)?)(" + _NAAM_STEUN + ")")
+# Na een aanspreking volstaat ook een losse familienaam ("arbeidsarts: dokter Achternaam").
+ROL_AANSPREKING_ACHTERNAAM = re.compile(r"(\b" + _ROL_STEUN + r"\b[^\w\n]{0,4}"
+                                        r"(?i:dhr|mevr|mr|mw|dr|de heer|mevrouw|dokter)\.?\s+)"
+                                        r"([A-ZÀ-Þ][a-zà-ÿ'’]+(?:\s*-\s*[A-ZÀ-Þ][a-zà-ÿ'’]+)?)\b")
 NAAM_IS_ROL = re.compile(r"(" + _NAAM_STEUN + r")(,?\s+(?:is|als|blijft|wordt)\s+(?:de\s+)?(?:interne\s+)?"
                          + _ROL_STEUN + r"\b)")
 # De politieke waarnemers in zo'n commissie staan als "partij: naam" buiten de ledentabel. Ook zij
 # zijn geen mandataris in dit besluit; enkel wie in de witte lijst staat, blijft staan.
 PARTIJ_NAAM = re.compile(
-    r"(?i)(\b(?:n-va|vooruit|cd&v|pvda|groen|open vld|vlaams belang|vld|sp\.a)\b[^\w\n]{0,14})("
-    r"[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der|Vande|Vanden))?\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,})")
+    r"(\b(?i:n-va|vooruit|cd&v|pvda|groen|open vld|vlaams belang|vld|sp\.a)\b[^\w\n]{0,14})("
+    r"[A-ZÀ-Þ][A-Za-zÀ-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der|Vande|Vanden))?\s+[A-ZÀ-Þ][A-Za-zÀ-ÿ'’\-]{2,})")
 
 
 def _publieke_namen():
@@ -383,7 +391,9 @@ def _maskeer_paren(blok):
     uit, laatst, aantal = [], 0, 0
     for m in PERSOON_PAAR.finditer(blok):
         naam = m.group(0)
-        if naam in _PUBLIEK or GEEN_PERSOON.search(naam):
+        # Witruimte gelijktrekken: in de pdf breekt een naam soms over twee regels ("Kristof
+        # Calvo"), en dan vond de witte lijst de mandataris niet en maskeerde de code hem.
+        if " ".join(naam.split()) in _PUBLIEK or GEEN_PERSOON.search(naam):
             continue
         uit.append(blok[laatst:m.start()]); uit.append(NAAM_MASKER); laatst = m.end(); aantal += 1
     uit.append(blok[laatst:])
@@ -399,6 +409,12 @@ def maskeer_ledenlijst(tekst):
     een orgaan, vakgebied of plaats benoemen. Buiten zo'n stuk raakt de regel niets aan."""
     if not tekst:
         return tekst, 0
+    # De witte lijst meteen laden. Vroeger kwam ze pas bij de eerste ledenlijsttreffer, en tot dan
+    # toetste de rolregel tegen een lege lijst: een mandataris naast zo'n rol werd dan soms wel en
+    # soms niet gemaskeerd, afhankelijk van de volgorde in de run.
+    global _PUBLIEK
+    if _PUBLIEK is None:
+        _PUBLIEK = _publieke_namen()
     aantal = 0
     # Drie ingangen, want zo'n lijst heeft niet altijd tabelvorm: het besluit zelf (LEDENBLOK), een
     # opsomming met rolwoorden, en de samenvatting in lopende tekst (een rol plus meerdere namen).
@@ -412,16 +428,17 @@ def maskeer_ledenlijst(tekst):
 
     def _rol(m):
         naam = m.group(2)
-        if naam in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
+        if " ".join(naam.split()) in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
             return m.group(0)
         geteld[0] += 1
         return m.group(1) + NAAM_MASKER
     tekst = ONDERSTEUNENDE_ROL.sub(_rol, tekst)
     tekst = ROL_AANSPREKING_NAAM.sub(_rol, tekst)
+    tekst = ROL_AANSPREKING_ACHTERNAAM.sub(_rol, tekst)
 
     def _naam_voor_rol(m):
         naam = m.group(1)
-        if naam in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
+        if " ".join(naam.split()) in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
             return m.group(0)
         geteld[0] += 1
         return NAAM_MASKER + m.group(2)
