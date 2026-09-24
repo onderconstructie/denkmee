@@ -206,9 +206,10 @@ NAAM_MASKER = "[naam]"
 # van privesituaties van maken. Precies wat we op de site wilden vermijden, maar dan
 # leesbaarder. Ze staan dus in privacy_namen.json, dat in .gitignore staat.
 #
-# Ontbreekt dat bestand, dan maskeert deze stap niets. Voor wie de pijplijn overneemt voor zijn
-# eigen stad is dat het juiste gedrag: die begint met een lege lijst. Voor deze site zou het een
-# stille terugval zijn, en daarom staat er verderop een harde stop die dat geval herkent.
+# Ontbreekt dat bestand, of draagt het geen naam onder "volledig" en geen "leeg_bewust": true,
+# dan stopt de opkuis (privacylijst_ok() hieronder), en gaat er ook geen tekst naar het model en
+# komt er geen zoekindex. Wie de pijplijn voor een nieuwe stad overneemt en nog geen namen heeft,
+# zet "leeg_bewust": true in het bestand.
 PRIVACY_BESTAND = BASE / "privacy_namen.json"
 _PRIVACY_RUW = {}
 
@@ -326,6 +327,19 @@ ONDERSTEUNENDE_ROL = re.compile(
     r"(?i)(\b(?:interne preventieadviseur|preventieadviseur|arbeidsarts|vertrouwensperso[a-z]*|"
     r"hr-manager)\b[^\w\n]{0,4})("
     r"[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der))?\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,})")
+# Dezelfde rollen, maar met een aanspreking of initialen tussen rol en naam ("preventieadviseur:
+# dhr. P. Achternaam", "arbeidsarts: dokter I. Achternaam"), en in lopende tekst met de naam
+# voorop ("I. Achternaam is arbeidsarts"). Zo stonden op 24/09/2026 de namen van een interne
+# preventieadviseur en een arbeidsarts leesbaar in twee stukken over het syndicaal overleg.
+# Gemeten over data.json: de regels raken enkel die velden. Een naam blijft staan als ze op de
+# witte lijst staat of een orgaan benoemt (GEEN_PERSOON), net als bij ONDERSTEUNENDE_ROL.
+_ROL_STEUN = r"(?i:interne preventieadviseur|preventieadviseur|arbeidsarts|vertrouwensperso[a-z]*|hr-manager)"
+_NAAM_STEUN = (r"(?:(?:[A-ZÀ-Þ]\.\s*){1,3}[A-ZÀ-Þ][a-zà-ÿ'’]+(?:\s*-\s*[A-ZÀ-Þ][a-zà-ÿ'’]+)?"
+               r"|[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der))?\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,})")
+ROL_AANSPREKING_NAAM = re.compile(r"(\b" + _ROL_STEUN + r"\b[^\w\n]{0,4}"
+                                  r"(?:(?i:dhr|mevr|mr|mw|dr|de heer|mevrouw|dokter)\.?\s+)?)(" + _NAAM_STEUN + ")")
+NAAM_IS_ROL = re.compile(r"(" + _NAAM_STEUN + r")(,?\s+(?:is|als|blijft|wordt)\s+(?:de\s+)?(?:interne\s+)?"
+                         + _ROL_STEUN + r"\b)")
 # De politieke waarnemers in zo'n commissie staan als "partij: naam" buiten de ledentabel. Ook zij
 # zijn geen mandataris in dit besluit; enkel wie in de witte lijst staat, blijft staan.
 PARTIJ_NAAM = re.compile(
@@ -403,6 +417,15 @@ def maskeer_ledenlijst(tekst):
         geteld[0] += 1
         return m.group(1) + NAAM_MASKER
     tekst = ONDERSTEUNENDE_ROL.sub(_rol, tekst)
+    tekst = ROL_AANSPREKING_NAAM.sub(_rol, tekst)
+
+    def _naam_voor_rol(m):
+        naam = m.group(1)
+        if naam in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
+            return m.group(0)
+        geteld[0] += 1
+        return NAAM_MASKER + m.group(2)
+    tekst = NAAM_IS_ROL.sub(_naam_voor_rol, tekst)
     if PRIVAAT_CONTEXT.search(tekst):
         tekst = PARTIJ_NAAM.sub(_rol, tekst)
     return tekst, aantal + geteld[0]
@@ -548,7 +571,7 @@ def waakhond(data):
         print("Waakhond: geen nieuwe persoonsnamen om te beoordelen.")
         return
     print(f"Waakhond: {len(gezien)} naam/namen nog niet beoordeeld. Nakijken, en wie een gewone")
-    print("          burger is toevoegen aan PRIVE_VOLLEDIG in dit bestand:")
+    print("          burger is onder \"volledig\" in privacy_namen.json zetten (en daarna run_all):")
     for naam, context in sorted(gezien.items()):
         print(f"   - {naam}")
         print(f"     …{context[:150]}…")
@@ -557,8 +580,8 @@ def waakhond(data):
 def main():
     data = json.loads(DATA.read_text(encoding="utf-8"))
 
-    # Veiligheidsklep. Ontbreekt de privacylijst terwijl er in een vorige run wél gemaskeerd is,
-    # dan is het bestand kwijt, niet leeg bedoeld. Zonder deze stop zou een volgende publicatie
+    # Veiligheidsklep. Zegt privacylijst_ok() nee (geen bestand, of geen namen en geen
+    # leeg_bewust), dan is de lijst kwijt of leeg zonder dat iemand dat zo bedoelde. Zonder deze stop zou een volgende publicatie
     # de namen stilzwijgend terugzetten: schoon_brontekst zou niets vinden om te maskeren, en de
     # waakhond zou ze als 'nieuwe kandidaten' melden in een uitvoer die niemand meer leest.
     if not privacylijst_ok():
