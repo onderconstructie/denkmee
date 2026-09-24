@@ -39,7 +39,13 @@ OUT = Path("data") / "geplande_zittingen.json"
 
 MAANDEN = {"januari": 1, "februari": 2, "maart": 3, "april": 4, "mei": 5, "juni": 6,
            "juli": 7, "augustus": 8, "september": 9, "oktober": 10, "november": 11, "december": 12}
-DATUM = re.compile(r'(\d{1,2})\s+(' + "|".join(MAANDEN) + r')\s+(20\d{2})', re.IGNORECASE)
+# Een datum, met of zonder jaartal erachter. Sinds september 2026 zet de stad de datums per
+# jaar onder een kop (<h3>2027</h3>, daaronder "Dinsdag 19 oktober"); vroeger stond het jaartal
+# bij elke datum ("Dinsdag 20 oktober 2026"). Beide vormen lezen we.
+DATUM = re.compile(r'(\d{1,2})\s+(' + "|".join(MAANDEN) + r')(?:\s+(20\d{2}))?', re.IGNORECASE)
+# Een jaarkop of een lijstregel, in de volgorde waarin ze op de pagina staan.
+KOP_OF_REGEL = re.compile(r'<h[2-6][^>]*>\s*(20\d{2})\s*</h[2-6]>|<li[^>]*>(.*?)</li>',
+                          re.IGNORECASE | re.DOTALL)
 
 # Zelfde avond → beide organen.
 ORGANEN = ["Gemeenteraad", "Raad voor maatschappelijk welzijn"]
@@ -52,14 +58,22 @@ def parse_zittingen(tekst: str) -> list[str]:
     De stad zet een vast anker <a id="zittingen"> vlak vóór de datumlijst (een <ul>).
     Dat ankerpunt verandert minder snel dan de zichtbare kop, die al eens hernoemd is
     ('Data gemeenteraad', vroeger 'Zittingen van de gemeenteraad'). We mikken er dus
-    eerst op en lezen tot het einde van die lijst (</ul>). Valt het anker ooit weg,
-    dan vallen we terug op de bekende koppen (lijst eindigt dan bij 'Wie zetelt')."""
+    eerst op en lezen tot het einde van dat tekstblok (</div>): sinds september 2026 staan
+    er meerdere lijsten, één per jaar, dus het einde van de eerste </ul> is te vroeg. Valt
+    het anker ooit weg, dan vallen we terug op de bekende koppen (lijst eindigt dan bij
+    'Wie zetelt').
+
+    Omdat we nu tot het einde van het blok lezen, tellen enkel datums in een lijstregel
+    (<li>) mee, zoals vroeger enkel de datums in de lijst meetelden. Een datum zonder
+    jaartal krijgt het jaar van de laatste jaarkop erboven. Staat er geen jaarkop, dan
+    raden we niet en slaan we die datum over. Heeft het blok geen lijst (enkel mogelijk
+    via de terugvalkoppen), dan lezen we zoals vroeger alle datums met jaartal."""
     low = tekst.lower()
     anker = re.search(r'id=["\']zittingen["\']', low)
     if anker:
         i = anker.start()
-        eind = low.find("</ul>", i)
-        sectie = tekst[i: eind if eind != -1 else i + 1200]
+        eind = low.find("</div>", i)
+        sectie = tekst[i: eind if eind != -1 else i + 6000]
     else:
         KOPPEN = ("data gemeenteraad", "zittingen van de gemeenteraad", "data van de zittingen")
         i = next((low.find(k) for k in KOPPEN if low.find(k) != -1), -1)
@@ -67,9 +81,23 @@ def parse_zittingen(tekst: str) -> list[str]:
             return []
         j = low.find("wie zetelt", i)
         sectie = tekst[i: j if j != -1 else i + 4000]
-    iso = []
-    for d_, m_, y_ in DATUM.findall(sectie):
-        iso.append(date(int(y_), MAANDEN[m_.lower()], int(d_)).isoformat())
+    iso, jaar = [], None
+    delen = KOP_OF_REGEL.findall(sectie)
+    zonder_lijst = not any(regel for _, regel in delen)
+    if zonder_lijst:                             # geen lijst: alle datums met jaartal
+        delen = [("", sectie)]
+    for kop, regel in delen:
+        if kop:
+            jaar = int(kop)
+            continue
+        for d_, m_, y_ in DATUM.findall(regel):
+            j = int(y_) if y_ else (None if zonder_lijst else jaar)
+            if j is None:
+                continue
+            try:
+                iso.append(date(j, MAANDEN[m_.lower()], int(d_)).isoformat())
+            except ValueError:                   # onmogelijke datum (31 februari): overslaan
+                continue
     return sorted(set(iso))
 
 
