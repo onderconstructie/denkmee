@@ -10106,6 +10106,63 @@ function openDossierForItem(itemId){
   const t = document.getElementById('dossiers');
   if(t) t.scrollIntoView({ behavior:zacht(), block:'start' });
 }
+// ============= ZOEKVRAAG ONTLEDEN (sinds 25/09/2026) ============= */
+// Drie regels bovenop de gewone zoek. (1) Een woordgroep tussen aanhalingstekens ("Grote Markt")
+// zoekt die woorden naast elkaar en als hele woorden; een los woord blijft ook binnenin een woord
+// vinden ("overlast" vindt "geluidsoverlast"). (2) Staan alle termen samen in één stuk, dan komt
+// het dossier hoger; verspreid over het dossier blijft een treffer, maar lager. (3) Accenten tellen
+// niet mee, ook niet in titels en samenvattingen ("cafe" vindt "café"); tot nu negeerde enkel de
+// volledige-tekstindex ze.
+// Beperking bij (1): de volledige-tekstindex kent per stuk enkel WELKE woorden erin staan, niet in
+// welke volgorde. In het volledige stuk vinden we een woordgroep dus als alle woorden in hetzelfde
+// stuk staan, niet noodzakelijk naast elkaar; de hint onder de zoekbalk zegt dat eerlijk.
+const zkNorm = s => kwNorm(s).replace(/\s+/g, ' ');
+const ZK_RE = new Map();
+function zkWoordRe(t){
+  let re = ZK_RE.get(t);
+  if(!re){
+    const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    re = new RegExp('(?<![\\p{L}\\p{N}])' + t.split(' ').map(esc).join('\\s+') + '(?![\\p{L}\\p{N}])', 'u');
+    ZK_RE.set(t, re);
+  }
+  return re;
+}
+function zkTermen(q){
+  const termen = [];
+  const rest = q.replace(/["“”„]([^"“”„]*)["“”„]/g, (_, f) => {
+    const t = zkNorm(f).trim();
+    if(t) termen.push({ t, woorden: t.split(' '), exact: true, re: zkWoordRe(t), syn: [] });
+    return ' ';
+  });
+  rest.replace(/["“”„]/g, ' ').split(/\s+/).filter(Boolean).forEach(w => {
+    const t = zkNorm(w);
+    termen.push({ t, woorden: [t], exact: false, syn: synExtra(t) });
+  });
+  return termen;
+}
+// Genormaliseerde teksten, één keer per stuk of dossier berekend.
+const zkStuk = it => it._zk || (it._zk = zkNorm((it.titel || '') + ' ' + (it.decoded || '')));
+const zkTitel = it => it._zkT || (it._zkT = zkNorm(it.titel));
+const zkSam = it => it._zkS || (it._zkS = zkNorm(it.decoded));
+const zkDossier = d => d._zk || (d._zk = zkNorm(d._search));
+// Punten waarvan het volledige stuk dit EXACTE woord bevat (geen deel van een langer woord).
+function ftExact(w){
+  if(!FT_INDEX || w.length < 3) return null;
+  const key = 'x:' + w;
+  let hit = FT_CACHE.get(key);
+  if(!hit){ hit = new Set((FT_INDEX.tokens[w] || []).map(i => FT_INDEX.items[i])); FT_CACHE.set(key, hit); }
+  return hit;
+}
+// Staan alle woorden van een woordgroep in dit stuk, in titel en samenvatting of in het volledige stuk?
+const zkWoordenInStuk = (term, it) => term.woorden.every(w => zkWoordRe(w).test(zkStuk(it)) || !!(ftExact(w) && ftExact(w).has(it.id)));
+// Matcht één term dit ene stuk? Voedt de rangschikking "alle termen in hetzelfde stuk".
+function zkStukMatcht(term, it){
+  if(term.exact) return term.re.test(zkStuk(it)) || zkWoordenInStuk(term, it);
+  if(zkStuk(it).includes(term.t)) return true;
+  const h = ftHits(term.t);
+  if(h && h.items.has(it.id)) return true;
+  return term.syn.some(v => zkWoordRe(v).test(zkStuk(it)) || (() => { const hw = ftHitsWoord(v); return !!(hw && hw.items.has(it.id)); })());
+}
 function renderDossiers(keepPage){
   const grid = $('dosGrid');
   if(!grid) return;
@@ -10123,17 +10180,17 @@ function renderDossiers(keepPage){
   if(DOS_ALLEEN_GEVOLGD) list = list.filter(d => dosIsFollowed(d.id));
   const vc = $('dosVolgChip'); if(vc) vc.hidden = !DOS_ALLEEN_GEVOLGD;
   if(q){
-    // Meerdere woorden werken als AND: elk woord moet ergens in het dossier voorkomen,
-    // in d._search (titel + samenvatting van elk besluit) óf in het volledige stuk
-    // (via de index). De index laden we lui: de eerste zoekactie trapt hem af, en zodra
-    // hij binnen is verrijkt ftLaad() de al getoonde resultaten vanzelf.
+    // Meerdere termen werken als AND: elke term moet ergens in het dossier voorkomen, in
+    // d._search (naam, thema's, plaatsen, titels en samenvattingen) óf in het volledige stuk
+    // (via de index). De index laden we lui: de eerste zoekactie trapt hem af, en zodra hij
+    // binnen is verrijkt ftLaad() de al getoonde resultaten vanzelf. Een term is een los woord
+    // of een woordgroep tussen aanhalingstekens (zkTermen, hierboven).
     if(!FT_INDEX) ftLaad();
-    const terms = q.split(/\s+/).filter(Boolean);
-    // Per term: de getikte term zelf plus zijn synoniemen. AND blijft per term gelden;
-    // binnen één term telt elke variant (OR), in titel/samenvatting én in het volledige stuk.
-    const perTerm = terms.map(t => ({ t, syn: synExtra(t) }));
+    const termen = zkTermen(q);
+    // Een los woord: de getikte term plus zijn synoniemen (OR binnen de term), in titel en
+    // samenvatting of in het volledige stuk.
     const matcht = (d, v) => {
-      if(d._search.includes(v)) return true;
+      if(zkDossier(d).includes(v)) return true;
       const h = ftHits(v);
       return !!(h && h.dossiers.has(d.id));
     };
@@ -10142,43 +10199,60 @@ function renderDossiers(keepPage){
     // toegevoegd synoniem moet hoge precisie halen: "foor" mag "foorkramers" vinden, niet
     // de familienaam "Defoor".
     const matchtSyn = (d, v) => {
-      if(new RegExp('\\b' + v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(d._search)) return true;
+      if(new RegExp('\\b' + v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(zkDossier(d))) return true;
       const h = ftHitsWoord(v);
       return !!(h && h.dossiers.has(d.id));
     };
-    list = list.filter(d => perTerm.every(({t, syn}) => matcht(d, t) || syn.some(v => matchtSyn(d, v))));
+    // Een woordgroep: naast elkaar in titel of samenvatting, of alle woorden in hetzelfde stuk.
+    const matchtGroep = (d, term) => term.re.test(zkDossier(d)) || d.items.some(it => zkWoordenInStuk(term, it));
+    list = list.filter(d => termen.every(term => term.exact
+      ? matchtGroep(d, term)
+      : (matcht(d, term.t) || term.syn.some(v => matchtSyn(d, v)))));
     // Per dossier: welke punten matchen enkel via het volledige stuk? Dat voedt het label
     // op de kaart, het label per punt in het paneel, en een bescheiden relevantiebijdrage.
     FT_QUERY = new Map();
     FT_WOORD = new Map();
-    const ftVoedt = h => {
-      if(!h) return;
-      h.items.forEach(id => {
-        const d = ITEM2DOS.get(id);
-        if(!d) return;
-        let set = FT_QUERY.get(d.id);
-        if(!set){ set = new Set(); FT_QUERY.set(d.id, set); }
-        set.add(id);
-        const via = h.perItem && h.perItem.get(id);
-        if(via){
-          let w = FT_WOORD.get(id);
-          if(!w){ w = new Set(); FT_WOORD.set(id, w); }
-          via.forEach(x => w.add(x));
-        }
-      });
+    const ftPunt = (id, via) => {
+      const d = ITEM2DOS.get(id);
+      if(!d) return;
+      let set = FT_QUERY.get(d.id);
+      if(!set){ set = new Set(); FT_QUERY.set(d.id, set); }
+      set.add(id);
+      if(via){
+        let w = FT_WOORD.get(id);
+        if(!w){ w = new Set(); FT_WOORD.set(id, w); }
+        via.forEach(x => w.add(x));
+      }
     };
-    perTerm.forEach(({t, syn}) => {
-      ftVoedt(ftHits(t));
-      syn.forEach(v => ftVoedt(ftHitsWoord(v)));
+    const ftVoedt = h => { if(h) h.items.forEach(id => ftPunt(id, h.perItem && h.perItem.get(id))); };
+    let groepViaVolledig = false;
+    termen.forEach(term => {
+      if(!term.exact){
+        ftVoedt(ftHits(term.t));
+        term.syn.forEach(v => ftVoedt(ftHitsWoord(v)));
+        return;
+      }
+      // Een woordgroep die in een stuk niet letterlijk in titel of samenvatting staat, maar
+      // waarvan de woorden wél samen in het volledige stuk staan.
+      list.forEach(d => d.items.forEach(it => {
+        if(term.re.test(zkStuk(it)) || !zkWoordenInStuk(term, it)) return;
+        if(!term.woorden.some(w => ftExact(w) && ftExact(w).has(it.id))) return;
+        ftPunt(it.id, null);
+        groepViaVolledig = true;
+      }));
     });
-    // De eerlijkheids-hint: welke synoniemen droegen echt bij aan wat er nu op het scherm
-    // staat? Enkel die tonen we; zocht de expansie niets extra, dan zwijgt de hint.
-    const synGebruikt = [...new Set(perTerm.flatMap(({syn}) =>
+    // De eerlijkheids-hint: welke synoniemen droegen echt bij aan wat er nu op het scherm staat,
+    // en vond een woordgroep iets enkel via het volledige stuk (dus niet gegarandeerd naast
+    // elkaar)? Zocht de uitbreiding niets extra, dan zwijgt de hint.
+    const synGebruikt = [...new Set(termen.flatMap(({syn}) =>
       syn.filter(v => list.some(d => matchtSyn(d, v)))))];
     const hint = $('dosSynHint');
     if(hint){
-      hint.hidden = !synGebruikt.length;
-      hint.textContent = synGebruikt.length ? 'Ook gezocht op: ' + synGebruikt.join(', ') : '';
+      const delen = [];
+      if(synGebruikt.length) delen.push('Ook gezocht op: ' + synGebruikt.join(', ') + '.');
+      if(groepViaVolledig) delen.push('Een woordgroep tussen aanhalingstekens staat in titels en samenvattingen letterlijk; in het volledige stuk staan de woorden samen in één stuk, niet altijd naast elkaar.');
+      hint.hidden = !delen.length;
+      hint.textContent = delen.join(' ');
     }
     // Respecteer de "mijn dossiers"-filter: staat die aan (met profiel), dan zoeken we enkel
     // binnen wat jou raakt; staat hij uit, dan doorzoeken we de volledige catalogus.
@@ -10187,16 +10261,18 @@ function renderDossiers(keepPage){
     }
     // Rangschik op RELEVANTIE: een term in de dossiernaam telt zwaar, in een besluit-titel
     // minder, enkel in een samenvatting nog minder, en enkel in het volledige stuk het
-    // minst. Zo komt het dossier dat écht over de zoekterm gaat bovenaan, en een groot
-    // dossier waar de term terloops diep in één stuk opduikt zakt naar onder.
+    // minst. Staan alle termen samen in één stuk, dan telt dat erbovenop: wie "zwembad
+    // Hofstade" zoekt, wil eerst het dossier waar één besluit over allebei gaat.
+    const test = (term, tekst) => term.exact ? term.re.test(tekst) : tekst.includes(term.t);
     list.forEach(d => {
       let s = 0;
-      const naam = (d.name + ' ' + (d.title || '')).toLowerCase();
-      terms.forEach(t => {
-        if(naam.includes(t)) s += 100;
-        s += d.items.filter(i => (i.titel || '').toLowerCase().includes(t)).length * 10;
-        s += d.items.filter(i => (i.decoded || '').toLowerCase().includes(t)).length * 2;
+      const naam = zkNorm(d.name + ' ' + (d.title || ''));
+      termen.forEach(term => {
+        if(test(term, naam)) s += 100;
+        s += d.items.filter(i => test(term, zkTitel(i))).length * 10;
+        s += d.items.filter(i => test(term, zkSam(i))).length * 2;
       });
+      if(termen.length > 1 && d.items.some(it => termen.every(term => zkStukMatcht(term, it)))) s += 40;
       const ft = FT_QUERY.get(d.id);
       d._ftN = ft ? ft.size : 0;
       // Welke woorden verklaren dit dossier? Kortste eerst: die staat het dichtst bij wat je
