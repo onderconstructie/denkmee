@@ -9960,8 +9960,8 @@ function synMap(){
   });
   return SYN_MAP;
 }
-// De EXTRA zoekwoorden voor één term: de synoniemen van zijn groep (de term zelf blijft
-// zoals getikt, mét accenten, zodat het bestaande directe zoeken niet verandert). Ook via
+// De EXTRA zoekwoorden voor één term: de synoniemen van zijn groep, zonder de term zelf. Term
+// en synoniemen vergelijken we allebei zonder accenten (kwNorm). Ook via
 // een lichte stam ("stoepen" vindt de stoep-groep), dezelfde stam-regel als kwTest.
 function synExtra(term){
   const m = synMap();
@@ -10122,7 +10122,9 @@ function zkWoordRe(t){
   let re = ZK_RE.get(t);
   if(!re){
     const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    re = new RegExp('(?<![\\p{L}\\p{N}])' + t.split(' ').map(esc).join('\\s+') + '(?![\\p{L}\\p{N}])', 'u');
+    // Geen lookbehind: Safari kent die pas sinds iOS 16.4, en daarvoor brak de zoekbalk. Het
+    // patroon dient enkel voor test(), dus het teken vóór de term mag mee in de treffer.
+    re = new RegExp('(?:^|[^\\p{L}\\p{N}])' + t.split(' ').map(esc).join('\\s+') + '(?![\\p{L}\\p{N}])', 'u');
     ZK_RE.set(t, re);
   }
   return re;
