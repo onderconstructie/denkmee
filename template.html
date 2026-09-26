@@ -4566,7 +4566,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <span class="mp-ic" aria-hidden="true"><svg><use href="#ic-ster"/></svg></span>
       <span class="mp-text">
         <span class="mp-title" id="menuProfileTitle">Mijn Mechelen instellen</span>
-        <span class="mp-sub" id="menuProfileSub">Thema's en meldingen, in 3 stappen</span>
+        <span class="mp-sub" id="menuProfileSub">Thema's en nieuws, in 3 stappen</span>
       </span>
       <span class="mp-arr" aria-hidden="true"><span class="mp-arr-lbl" id="menuProfileArrLbl"></span>→</span>
     </button>
@@ -5071,10 +5071,10 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 3 · Meldingen -->
       <section class="wiz-step" data-step="3" hidden>
         <div class="wiz-eyebrow">Stap 3 · Op de hoogte blijven</div>
-        <h2 class="wiz-h">Wil ik een <em>melding</em> bij nieuws?</h2>
-        <p class="wiz-lede">Kom ik terug, dan zie ik wat er sinds mijn vorige bezoek nieuw is rond mijn thema's: een verse agenda of een nieuw besluit. Altijd uit mijn eigen browser.</p>
+        <h2 class="wiz-h">Hoe zie ik wat er <em>nieuw</em> is?</h2>
+        <p class="wiz-lede">Kom ik terug, dan toont Denk mee wat er sinds mijn vorige bezoek nieuw is rond mijn thema's: een verse agenda, een nieuw besluit of een nieuwe raadsvraag. Denk mee stuurt zelf niets: zolang ik de site niet open, blijft het stil.</p>
         <div class="field">
-          <label class="field-lbl">Meldingen bij nieuws</label>
+          <label class="field-lbl">Ook een seintje van mijn browser</label>
           <div class="seg-toggle" id="notifSeg">
             <button type="button" class="seg-opt" id="notifOn" onclick="setNotif(true)" aria-pressed="false">Aan</button>
             <button type="button" class="seg-opt on" id="notifOff" onclick="setNotif(false)" aria-pressed="true">Uit</button>
@@ -5492,7 +5492,7 @@ function renderHeroCockpit(){
   (PROFILE.themes || []).forEach(t => chips.push({label:t, step:1}));
   (PROFILE.keywords || []).forEach(k => chips.push({label:'#' + k, step:2}));
   const notifAan = !!(PROFILE.notify && PROFILE.notify.enabled);
-  chips.push({label:(notifAan ? '◉' : '◌') + ' meldingen ' + (notifAan ? 'aan' : 'uit'), step:3, cls:'hc-chip-notif'});
+  chips.push({label:(notifAan ? '◉' : '◌') + ' browserseintje ' + (notifAan ? 'aan' : 'uit'), step:3, cls:'hc-chip-notif'});
   const chip = c => `<button type="button" class="hc-chip${c.cls ? ' ' + c.cls : ''}" onclick="openWizard(${c.step})" title="Aanpassen in Mijn Mechelen">${c.icon || ''}${escape(c.label)}</button>`;
   const chipsHTML = chips.map(chip).join('');
   // Tellingen: alles wat mijn profiel raakt, elk met een link naar de sectie waar het staat.
@@ -5506,8 +5506,8 @@ function renderHeroCockpit(){
                     + col.filter(execMatchesProfile).length
                     + vb.filter(execMatchesProfile).length
                     + bm.filter(execMatchesProfile).length;   // de burgemeester ontbrak in de teller
-  const nieuw = NIEUW_SINDS.agenda + NIEUW_SINDS.besluit;
-  const nieuwDoel = NIEUW_SINDS.besluit ? '#recent' : '#agenda';
+  const nieuw = NIEUW_SINDS.agenda + NIEUW_SINDS.besluit + (NIEUW_SINDS.vraag || 0);
+  const nieuwDoel = NIEUW_SINDS.besluit ? '#recent' : NIEUW_SINDS.agenda ? '#agenda' : '#dossiers';
   // Een tik op een teller brengt je naar exact wat er geteld wordt: 'dossiers voor mij'
   // en 'volg ik' zetten de dossierlijst meteen in die stand.
   const stat = (num, lbl, href, fn) => `<a class="hc-stat" href="${href}"${fn ? ` onclick="event.preventDefault();${fn}()"` : ''}><span class="hc-num">${num}</span><span class="hc-lbl">${lbl}</span></a>`;
@@ -7033,21 +7033,21 @@ function syncNotifToggle(){
 function updateNotifDesc(){
   const d = $('notifDesc'); if(!d) return;
   const aan = !!(PROFILE.notify && PROFILE.notify.enabled);
-  if(!aan){ d.innerHTML = 'Uit: je ziet nieuws enkel als een melding op de pagina zelf, geen pop-up.'; return; }
-  if(!('Notification' in window)){ d.innerHTML = 'Aan: je ziet nieuws op de pagina. Je browser ondersteunt geen pop-ups.'; return; }
+  if(!aan){ d.innerHTML = 'Uit: je ziet het nieuws als melding op de pagina zelf, zonder seintje van je browser.'; return; }
+  if(!('Notification' in window)){ d.innerHTML = 'Aan: je ziet het nieuws op de pagina. Je browser kan geen seintjes tonen.'; return; }
   const p = Notification.permission;
-  if(p === 'granted'){ d.innerHTML = '✓ Aan: je browser toont een seintje terwijl je op de site bent, bovenop de melding op de pagina.'; }
-  else if(p === 'denied'){ d.innerHTML = 'Aan: nieuws zie je als melding op de pagina. Pop-ups zijn geblokkeerd in je browser; die zet je enkel via je browserinstellingen weer aan.'; }
-  else { d.innerHTML = 'Aan: nieuws zie je op de pagina. <button type="button" class="notif-perm-lnk" onclick="requestNotifPermission()">Geef je browser toestemming</button> voor een extra pop-up-seintje.'; }
+  if(p === 'granted'){ d.innerHTML = '✓ Aan: open je de site, dan geeft je browser ook een seintje. Is de site dicht, dan komt er niets.'; }
+  else if(p === 'denied'){ d.innerHTML = 'Aan: je ziet het nieuws op de pagina. Seintjes van je browser staan geblokkeerd; die zet je enkel in je browserinstellingen weer aan.'; }
+  else { d.innerHTML = 'Aan: je ziet het nieuws op de pagina. <button type="button" class="notif-perm-lnk" onclick="requestNotifPermission()">Geef je browser toestemming</button> voor een extra seintje wanneer je de site opent.'; }
 }
 function updatePermButton(){
   const btn = $('btnPerm'); if(!btn) return;
   btn.classList.remove('granted','denied'); btn.disabled = false;
-  if(!('Notification' in window)){ btn.textContent = 'Browser ondersteunt geen meldingen'; btn.classList.add('denied'); btn.disabled = true; return; }
+  if(!('Notification' in window)){ btn.textContent = 'Browser kan geen seintjes tonen'; btn.classList.add('denied'); btn.disabled = true; return; }
   const p = Notification.permission;
-  if(p === 'granted'){ btn.textContent = '✓ Meldingen toegestaan'; btn.classList.add('granted'); }
-  else if(p === 'denied'){ btn.textContent = '✕ Meldingen geblokkeerd in browser'; btn.classList.add('denied'); btn.disabled = true; }
-  else { btn.textContent = 'Vraag toestemming voor meldingen'; }
+  if(p === 'granted'){ btn.textContent = '✓ Seintjes toegestaan'; btn.classList.add('granted'); }
+  else if(p === 'denied'){ btn.textContent = '✕ Seintjes geblokkeerd in browser'; btn.classList.add('denied'); btn.disabled = true; }
+  else { btn.textContent = 'Vraag toestemming voor seintjes'; }
 }
 async function requestNotifPermission(){
   if(!('Notification' in window)) return;
@@ -7055,7 +7055,7 @@ async function requestNotifPermission(){
     const result = await Notification.requestPermission();
     updateNotifDesc();
     if(result === 'granted'){
-      try{ new Notification('Denk mee met Mechelen', { body: 'Je krijgt nu een seintje bij nieuws over je thema\u2019s.' }); }catch(e){}
+      try{ new Notification('Denk mee met Mechelen', { body: 'Open je Denk mee, dan krijg je nu ook een seintje bij nieuws over je thema\u2019s.' }); }catch(e){}
     }
   }catch(e){}
 }
@@ -7071,27 +7071,33 @@ function captureWizardNotify(){
 // bij een volgend bezoek wat er nieuw bij kwam én jouw profiel raakt. Met toestemming
 // komt er een browser-melding bij; zonder toestemming enkel de banner op de pagina.
 function nieuwTelwoord(n, ev, mv){ return n === 1 ? '1 nieuw ' + ev : n + ' nieuwe ' + mv; }
-function nieuwSamenvatting(nAgenda, nBesluit){
+const nieuwVragen = n => n === 1 ? '1 nieuwe raadsvraag' : n + ' nieuwe raadsvragen';
+const nieuwLijst = delen => delen.length < 3 ? delen.join(' en ') : delen.slice(0, -1).join(', ') + ' en ' + delen[delen.length - 1];
+function nieuwSamenvatting(nAgenda, nBesluit, nVraag){
   const delen = [];
   if(nBesluit) delen.push(nieuwTelwoord(nBesluit, 'besluit', 'besluiten'));
   if(nAgenda) delen.push(nieuwTelwoord(nAgenda, 'agendapunt', 'agendapunten'));
-  return 'Nieuw voor mij sinds mijn vorige bezoek: ' + delen.join(' en ') + '.';
+  if(nVraag) delen.push(nieuwVragen(nVraag));
+  return 'Nieuw voor mij sinds mijn vorige bezoek: ' + nieuwLijst(delen) + '.';
 }
-function toonNieuwBanner(nAgenda, nBesluit){
+function toonNieuwBanner(nAgenda, nBesluit, nVraag){
   const el = $('nieuwBanner'); if(!el) return;
   const delen = [];
   if(nBesluit) delen.push(`<strong>${nieuwTelwoord(nBesluit, 'besluit', 'besluiten')}</strong>`);
   if(nAgenda) delen.push(`<strong>${nieuwTelwoord(nAgenda, 'agendapunt', 'agendapunten')}</strong>`);
+  if(nVraag) delen.push(`<strong>${nieuwVragen(nVraag)}</strong>`);
   // De links gaan naar de nieuwe inhoud zelf: besluiten naar 'Recent beslist',
   // agendapunten naar 'Op de agenda'. Allebei nieuw → allebei een link.
   const acties = [];
   if(nBesluit) acties.push(`<a class="nb-link" href="#recent" onclick="sluitNieuwToast()">Naar de besluiten →</a>`);
   if(nAgenda) acties.push(`<a class="nb-link" href="#agenda" onclick="sluitNieuwToast()">Naar de agenda →</a>`);
+  // Een raadsvraag staat in haar dossier; 'Voor mij' toont de dossiers die je profiel raken.
+  if(nVraag && !nBesluit && !nAgenda) acties.push(`<a class="nb-link" href="#dossiers" onclick="sluitNieuwToast()">Naar mijn dossiers →</a>`);
   el.setAttribute('role', 'status');
   el.innerHTML =
       `<div class="nb-body">`
     +   `<div class="nb-kop">Nieuw voor mij</div>`
-    +   `<p class="nb-txt">Sinds mijn vorige bezoek: ${delen.join(' en ')}.</p>`
+    +   `<p class="nb-txt">Sinds mijn vorige bezoek: ${nieuwLijst(delen)}.</p>`
     +   `<div class="nb-acties">${acties.join('')}</div>`
     + `</div>`
     + `<button class="nb-close" type="button" onclick="sluitNieuwToast()" aria-label="Sluiten">×</button>`;
@@ -7522,38 +7528,57 @@ function checkNieuwSindsVorigBezoek(){
   if(!profileIsSet()) return;                          // enkel zinvol met een profiel
   /* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
   const KEY = 'denkmee.seen';
+  // Wat we per stuk onthouden (sinds 26/09/2026): 'a:' een agendapunt zonder besluit, 'b:' een punt
+  // mét besluit, 'c:' een besluit van college, vast bureau of burgemeester, 's:' een schriftelijke
+  // vraag, en 'v:2' als teken van deze opslag. Vroeger stond er voor elk agendapunt 'a:', ook na
+  // het besluit: wie een punt op de agenda zag, hoorde dan nooit dat de raad erover besliste. En
+  // de schriftelijke vragen telden niet mee. De privacyverklaring ("welke stukken je al zag") dekt
+  // dit nog altijd.
   const ag = D.agendapunten || [];
   const col = D.college_beslissingen || [];
-  const alleIds = [...ag.map(a => 'a:' + a.id), ...col.map(c => 'c:' + c.id)];
+  const sv = D.schriftelijke_vragen || [];
+  const heeftBesluit = a => !!(a.result || (a.lifecycle && a.lifecycle.besluit));
+  const alleIds = ['v:2', ...ag.map(a => (heeftBesluit(a) ? 'b:' : 'a:') + a.id),
+                   ...col.map(c => 'c:' + c.id), ...sv.map(v => 's:' + v.id)];
   let seen = null;
   try { const raw = localStorage.getItem(KEY); if(raw) seen = new Set(JSON.parse(raw)); } catch(e){}
   try { localStorage.setItem(KEY, JSON.stringify(alleIds)); } catch(e){}   // huidige stand altijd vastleggen
   if(!seen) return;                                    // eerste keer: alleen vastleggen, niets melden
 
-  const nieuweAg = ag.filter(a => !seen.has('a:' + a.id));
+  // Komt de lijst nog uit de vorige opslag, dan telt een besluit dat toen al bestond als gezien, en
+  // leggen we de vragen nu pas voor het eerst vast. Zo krijgt niemand eenmalig honderden 'nieuwe'
+  // besluiten en vragen te zien die er allang stonden.
+  const oud = !seen.has('v:2');
+  const gezien = a => heeftBesluit(a)
+    ? (seen.has('b:' + a.id) || (oud && seen.has('a:' + a.id)))
+    : (seen.has('a:' + a.id) || seen.has('b:' + a.id));
+  const nieuweAg = ag.filter(a => !gezien(a));
   const nieuweCol = col.filter(c => !seen.has('c:' + c.id));
-  if(!nieuweAg.length && !nieuweCol.length) return;    // geen nieuwe stukken → klaar
+  const nieuweSv = oud ? [] : sv.filter(v => !seen.has('s:' + v.id));
+  if(!nieuweAg.length && !nieuweCol.length && !nieuweSv.length) return;    // geen nieuwe stukken → klaar
 
   const when = PROFILE.notify ? PROFILE.notify.when : 'beide';
   const wilAgenda = when === 'agenda' || when === 'beide';
   const wilBesluit = when === 'besluit' || when === 'beide';
-  const heeftBesluit = a => !!(a.result || (a.lifecycle && a.lifecycle.besluit));
-  let nAgenda = 0, nBesluit = 0;
+  const raakt = x => PROFILE.alles || matchItem(x).length > 0;
+  let nAgenda = 0, nBesluit = 0, nVraag = 0;
   for(const a of nieuweAg){
-    if(!(PROFILE.alles || matchItem(a).length > 0)) continue;
-    if(heeftBesluit(a)){ if(wilBesluit) nBesluit++; }
+    if(!raakt(a)) continue;
+    if(a.type === 'vraag'){ if(when === 'beide') nVraag++; }   // een mondelinge vraag is geen besluit
+    else if(heeftBesluit(a)){ if(wilBesluit) nBesluit++; }
     else if(wilAgenda) nAgenda++;
   }
   if(wilBesluit) for(const c of nieuweCol){
     if(PROFILE.alles || execMatchesProfile(c)) nBesluit++;
   }
-  NIEUW_SINDS = { agenda: nAgenda, besluit: nBesluit };   // ook voor de hero-cockpit
-  if(nAgenda + nBesluit === 0) return;                 // wel nieuw, maar niets dat jou raakt
+  if(when === 'beide') for(const v of nieuweSv){ if(raakt(v)) nVraag++; }
+  NIEUW_SINDS = { agenda: nAgenda, besluit: nBesluit, vraag: nVraag };   // ook voor de hero-cockpit
+  if(nAgenda + nBesluit + nVraag === 0) return;        // wel nieuw, maar niets dat jou raakt
 
-  toonNieuwBanner(nAgenda, nBesluit);
+  toonNieuwBanner(nAgenda, nBesluit, nVraag);
   const bd = $('burgerDot'); if(bd) bd.hidden = false;     // ook de bol op de hamburger als blijvend signaal
   if(PROFILE.notify && PROFILE.notify.enabled && ('Notification' in window) && Notification.permission === 'granted'){
-    try { new Notification('Denk mee met Mechelen', { body: nieuwSamenvatting(nAgenda, nBesluit) }); } catch(e){}
+    try { new Notification('Denk mee met Mechelen', { body: nieuwSamenvatting(nAgenda, nBesluit, nVraag) }); } catch(e){}
   }
 }
 
@@ -7610,7 +7635,7 @@ document.addEventListener('keydown', e => {
 // ============= PROFIEL-WIZARD ============= */
 const WIZ_STEPS = 5;            // 0 welkom · 1 thema · 2 trefw · 3 meldingen · 4 klaar
 let WIZ_STEP = 0;
-const WIZ_TITLES = ['Welkom','Thema\u2019s','Trefwoorden','Meldingen','Klaar'];
+const WIZ_TITLES = ['Welkom','Thema\u2019s','Trefwoorden','Nieuws','Klaar'];
 
 function openWizard(step){
   /* Sleutel staat in de privacyverklaring (asgaupaust.be/privacy). Nieuwe of gewijzigde opslag: die pagina mee bijwerken. */
@@ -7710,7 +7735,7 @@ function renderWizardSummary(){
   rows.push(['Thema\u2019s', (PROFILE.themes||[]).length ? PROFILE.themes.join(', ') : null]);
   rows.push(['Trefwoorden', (PROFILE.keywords||[]).length ? PROFILE.keywords.map(k=>'#'+k).join(' ') : null]);
   const notifEnabled = !!(PROFILE.notify && PROFILE.notify.enabled);
-  rows.push(['Meldingen', notifEnabled ? 'Aan' : null]);
+  rows.push(['Browserseintje', notifEnabled ? 'Aan' : null]);
   $('wizSummary').innerHTML = rows.map(([k,v], i) =>
     `<button type="button" class="wiz-sum-row" onclick="wizGoto(${i+1})" aria-label="${k} aanpassen"><span class="wiz-sum-k">${k}</span><span class="wiz-sum-v${v?'':' is-empty'}">${v?escape(v):'\u2014 niet ingesteld'}</span></button>`
   ).join('');
@@ -8075,7 +8100,7 @@ function updateMenuProfile(){
   } else {
     title.textContent = 'Mijn Mechelen instellen';
     if(arrLbl) arrLbl.textContent = '';
-    sub.textContent = "Thema's en meldingen, in 3 stappen";
+    sub.textContent = "Thema's en nieuws, in 3 stappen";
     btn.classList.remove('is-set');
   }
 }
