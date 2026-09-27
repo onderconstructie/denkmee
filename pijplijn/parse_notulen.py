@@ -5,7 +5,8 @@ De besluitenlijst is het skelet (één regel per beslissing). De notulen voegen 
   - de aanwezigheidslijst (wie aanwezig / tijdelijk afwezig);
   - per punt het STEMGEDRAG (eenparig, of voor/tegen/onthoudingen);
   - de VOLLEDIGE tekst per punt (input voor de AI-samenvatting in stap 11);
-  - het actualiteitsdebat (ACT), toegevoegde punten (TP) en mondelinge vragen (V).
+  - het actualiteitsdebat (ACT), toegevoegde punten (TP) en mondelinge vragen (V);
+  - de toezeggingen (O-punten) bij het punt waar ze uit voortkomen.
 
 Koppeling met de besluitenlijst: via het puntnummer (1, 2, … / TP01 / ACT1 / V1).
 
@@ -33,12 +34,13 @@ from pathlib import Path
 
 import pdfplumber
 
-NUM = re.compile(r'^(\d+)\.(?:\s+|(?=[A-ZÀ-Ÿ]))([A-ZÀ-Ÿ][A-ZÀ-Ÿ0-9 /()\-]{2,60})\.\s+(.*)$')   # 6. FINANCIËN-BELASTINGEN. ...
-SPEC = re.compile(r'^(TP\d+|ACT\d*|HP\d+|V\d+)\.\s+([^.]+?)\.\s+(.*)$')            # TP01. TOEGEVOEGD PUNT. Naam - ...
+NUM = re.compile(r'^(\d+)\.(?:\s+|(?=[A-ZÀ-Ÿ]))([A-ZÀ-Ÿ][A-ZÀ-Ÿ0-9 /()&\-]{2,60})\.\s+(.*)$')  # 6. FINANCIËN-BELASTINGEN. ...
+SPEC = re.compile(r'^(TP\d+|ACT\d*|HP\d+|V\d+|O\d+)\.\s+([^.]+?)\.\s+(.*)$')       # TP01. TOEGEVOEGD PUNT. Naam - ...
 NAAM_SCHEIDING = re.compile(r'\s[-\u2013]\s')                         # tussen vraagsteller en onderwerp
 NOISE = re.compile(r'^(Notulen gemeenteraad|STAD MECHELEN|Gemeenteraad . Notulen|Vergadering van |NAMENS DE)')
 
-TYPE = {"ACT": "actualiteitsdebat", "TP": "toegevoegd", "HP": "politieverordening", "V": "vraag"}
+TYPE = {"ACT": "actualiteitsdebat", "TP": "toegevoegd", "HP": "politieverordening", "V": "vraag",
+        "O": "opdracht"}
 ROLLEN = ["plaatsvervangend voorzitter voor 10", "algemeen directeur",
           "gemeenteraadsleden", "schepenen", "burgemeester", "voorzitter", "afwezig voor 10"]
 
@@ -56,8 +58,11 @@ def marker(line):
     # actualiteitsdebatten en HP-punten (politieverordeningen): zolang hun kop niet herkend werd,
     # liep de tekst van het punt ervoor door tot de volgende kop en kreeg dat punt ook hun
     # stemming. Gemeten over alle 34 notulen: 14 punten erbij, geen punt weg, geen dubbele kop.
-    # Een rubriek mag haakjes dragen ("GEMEENTELIJKE ADMINISTRATIEVE SANCTIES (GAS)").
-    line = re.sub(r'^\uf0b7\s*(?=(?:V|TP|HP)?\d+\.|ACT\d*\.)', '', line)
+    # Een rubriek mag haakjes dragen ("GEMEENTELIJKE ADMINISTRATIEVE SANCTIES (GAS)") en een
+    # ampersand ("PREVENTIE & VEILIGHEID"). Tot 26/09/2026 ontbrak die ampersand: vier punten
+    # werden niet herkend, hadden geen stemming op de site, en twee punten ervoor kregen hun
+    # stemming erbij. Sindsdien worden ook de O-punten (toezeggingen, zie parse) herkend.
+    line = re.sub(r'^\uf0b7\s*(?=(?:V|TP|HP|O)?\d+\.|ACT\d*\.)', '', line)
     m = NUM.match(line)
     if m:
         return m.group(1), m.group(2).strip(), m.group(3).strip(), "gewoon"
@@ -177,6 +182,18 @@ def parse_aanwezigheid(lines):
             "ruw": " ".join(lines[a:eind])}
 
 
+def opdracht_titel(lines, i, rest):
+    """De titel van een O-punt loopt vaak door op de volgende regel, tot hij op een punt eindigt.
+    Een paginavoet ("27 januari 2025") kan ertussen vallen."""
+    delen = [rest]
+    for l in lines[i + 1:i + 4]:
+        if delen[-1].endswith(".") or l.startswith("Motivering") or marker(l):
+            break
+        if not _VOETREGEL.match(l):
+            delen.append(l)
+    return " ".join(delen).strip()
+
+
 def parse(pdf_path):
     text = extract_text(pdf_path)
     lines = [l.strip() for l in text.splitlines() if l.strip() and not NOISE.match(l)]
@@ -190,6 +207,19 @@ def parse(pdf_path):
     items = []
     for k, (i, (nr, cat, rest, soort)) in enumerate(punten):
         body = "\n".join(lines[i:grenzen[k + 1]])
+        if soort == "opdracht" and items:
+            # Een O-punt ("O1. OPDRACHT. KRCM uitnodigen op raadscommissie.") is een toezegging
+            # van de burgemeester of een schepen in het debat over het punt ervoor: "De gemeenteraad
+            # neemt kennis van het engagement van ...". Het staat niet op de agenda of de
+            # besluitenlijst, er wordt niet over gestemd, en de voorgeschiedenis verwijst naar dat
+            # punt (gemeten 26/09/2026: 45 O-punten, alle 45 zo). De tekst blijft daarom bij dat
+            # punt, want de samenvatting vermeldt de toezegging terecht; soms is ze zelfs het enige
+            # wat er gebeurde, als het punt zelf van de agenda ging. De kop wordt wel herkend, zodat
+            # de stemming van het punt enkel op zijn eigen tekst rust, en de titel staat apart.
+            ouder = items[-1]
+            ouder["tekst"] += "\n" + body
+            ouder.setdefault("toezeggingen", []).append({"nummer": nr, "titel": opdracht_titel(lines, i, rest)})
+            continue
         indiener, titel = None, rest
         if soort != "gewoon" and NAAM_SCHEIDING.search(rest):     # "Naam - onderwerp", ook met een lang streepje
             indiener, titel = [x.strip() for x in NAAM_SCHEIDING.split(rest, 1)]
@@ -214,7 +244,8 @@ def main():
 
     aw = res["aanwezigheid"]
     print(f"Aanwezig: {len(aw['aanwezig'])} · tijdelijk afwezig: {len(aw['afwezig'])}")
-    print(f"{len(res['punten'])} punten → {out.name}\n")
+    n_toez = sum(len(p.get("toezeggingen", [])) for p in res["punten"])
+    print(f"{len(res['punten'])} punten, {n_toez} toezeggingen → {out.name}\n")
     for p in res["punten"]:
         s = p["stemming"]
         stem = (s["modus"] if s["modus"] != "geteld"
