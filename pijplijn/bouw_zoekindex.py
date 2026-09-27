@@ -189,8 +189,15 @@ def pdf_tekst(pad: Path) -> str:
 
 
 def notulen_per_punt():
-    """(sessie_id, nummer) -> volledige notulentekst, via parse_notulen op de pdf's."""
+    """(sessie_id, nummer) -> volledige notulentekst, via parse_notulen op de pdf's.
+
+    De cache per pdf sleutelt ook op de inhoud van parse_notulen.py (sinds 27/09/2026). Vroeger
+    telde enkel de pdf zelf, dus na een parserwijziging bleef de zoekindex de oude uitlezing
+    gebruiken: punt 15 van 29/04/2025 stond zo nog met 85 woorden van punt 16 in de index, lang
+    nadat de parser dat punt al juist opsplitste. Nu leest een gewijzigde parser alles één keer
+    opnieuw uit."""
     import parse_notulen
+    parser_versie = hashlib.sha1(Path(parse_notulen.__file__).read_bytes()).hexdigest()[:12]
     SLUG = {"gemeenteraad": "gemeenteraad", "raad_voor_maatschappelijk_welzijn": "rmw"}
     uit = {}
     for mapnaam, slug in SLUG.items():
@@ -204,7 +211,7 @@ def notulen_per_punt():
             sessie_id = f"{slug}-{zitting.name.replace('-', '')}"
             # cache de geparste punten (parse_notulen leest de pdf zelf; cache ernaast)
             st = pdf.stat()
-            sleutel = hashlib.sha1(f"NOT|{pdf.as_posix()}|{st.st_mtime_ns}|{st.st_size}".encode()).hexdigest()
+            sleutel = hashlib.sha1(f"NOT|{parser_versie}|{pdf.as_posix()}|{st.st_mtime_ns}|{st.st_size}".encode()).hexdigest()
             cache = CACHE_DIR / (sleutel + ".json")
             if cache.exists():
                 punten = json.loads(cache.read_text(encoding="utf-8"))
