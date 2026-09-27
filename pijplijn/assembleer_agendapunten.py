@@ -119,6 +119,9 @@ def main():
             "indiener": it.get("indiener"),
             "stemming": note.get("stemming"),             # incl. per_fractie + kleur
             "brontekst": note.get("tekst"),               # volledige notulentekst → input AI-tagging + 'Toon originele tekst'
+            # Toezeggingen (O-punten in de notulen): een engagement van de burgemeester of een schepen
+            # in het debat over dit punt. Er wordt niet over gestemd; de site toont ze bij het punt.
+            **({"toezeggingen": [t["titel"] for t in note["toezeggingen"]]} if note.get("toezeggingen") else {}),
             **({"zitting": "besloten"} if besloten else {}),
         })
 

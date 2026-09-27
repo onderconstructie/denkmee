@@ -264,6 +264,9 @@ BEROEP_NAAM = re.compile(
 # Velden die op de site terechtkomen (zoekindex of zichtbaar): brontekst wordt doorzocht;
 # vraag/antwoord staan in de dossier-uitklap; decoded is de samenvatting; titel de kop.
 VELDEN = ("brontekst", "decoded", "vraag", "antwoord", "titel")
+# Velden met een lijst van korte teksten: de kernbegrippen van de tagger en, sinds 27/09/2026, de
+# toezeggingen uit de notulen ("O1. OPDRACHT. ..."). Ze krijgen dezelfde opkuis als de lopende tekst.
+LIJSTVELDEN = ("kernbegrippen", "toezeggingen")
 LIJSTEN = ("agendapunten", "college_beslissingen", "schriftelijke_vragen")
 
 
@@ -488,7 +491,7 @@ def maskeer_namen(tekst, met_achternamen=None):
 def tekst_van(item):
     """Alle doorzoekbare tekst van één stuk aan elkaar, om er patronen op te toetsen."""
     delen = []
-    for veld in VELDEN + ("kernbegrippen",):
+    for veld in VELDEN + LIJSTVELDEN:
         waarde = item.get(veld)
         if isinstance(waarde, str):
             delen.append(waarde)
@@ -614,7 +617,7 @@ def main():
     #    de STOP-boodschap ("draai schoon_brontekst.py opnieuw") de verkeerde kant op.
     for lijst in LIJSTEN:
         for item in data.get(lijst, []):
-            for veld in VELDEN + ("kernbegrippen",):
+            for veld in VELDEN + LIJSTVELDEN:
                 waarde = item.get(veld)
                 if isinstance(waarde, str) and EMAIL.search(waarde):
                     item[veld] = EMAIL.sub("[e-mailadres]", waarde)
@@ -648,7 +651,7 @@ def main():
     rekeningen = 0
     for lijst in LIJSTEN:
         for item in data.get(lijst, []):
-            for veld in VELDEN + ("kernbegrippen",):
+            for veld in VELDEN + LIJSTVELDEN:
                 waarde = item.get(veld)
                 if isinstance(waarde, str):
                     nieuw, n1 = IBAN.subn(REK_MASKER, waarde)
@@ -674,7 +677,7 @@ def main():
             # in de brontekst terwijl de samenvatting enkel de achternaam gebruikt.
             heel = tekst_van(item)
             met_achter = any(v in heel for v in PRIVE_VORMEN)
-            for veld in VELDEN + ("kernbegrippen",):
+            for veld in VELDEN + LIJSTVELDEN:
                 waarde = item.get(veld)
                 if isinstance(waarde, str):
                     nieuw, n = maskeer_namen(waarde, met_achter)
@@ -703,7 +706,7 @@ def main():
     geb_teken = 0
     for lijst in LIJSTEN:
         for item in data.get(lijst, []):
-            for veld in VELDEN + ("kernbegrippen",):
+            for veld in VELDEN + LIJSTVELDEN:
                 waarde = item.get(veld)
                 if isinstance(waarde, str):
                     nieuw, a, g = maskeer_context(waarde)

@@ -3537,6 +3537,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dosm-ev-org.bm{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
 .dosm-ev-org.sv{ background:transparent; color:var(--pink-text); box-shadow:inset 0 0 0 1px var(--pink); }
 .dosm-event.sv::before{ background:var(--paper); box-shadow:0 0 0 2px var(--pink); }
+/* Toezegging in de raad (sinds 27/09/2026): een licht kader onder de samenvatting, zonder gekleurd
+   lijntje opzij. Een toezegging is een engagement uit het debat, geen besluit. */
+.toez{ margin-top:.55rem; padding:.5rem .7rem; border-radius:10px; background:var(--app-soft); font-size:.86rem; line-height:1.45; color:var(--ink-2); }
+.toez-lbl{ display:block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--app-text); margin-bottom:.2rem; }
+.toez ul{ margin:0; padding-left:1.1rem; }
 .dosm-ev-indiener{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink-dim); margin-bottom:.4rem; letter-spacing:.01em; }
 /* De grondvorm is neutraal, want de stukken kennen tweeëntwintig uitkomsten en wij kleuren
    er maar drie. Een vaststelling of een aktename hoort er dus rustig uit te zien, niet als

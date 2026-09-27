@@ -1,0 +1,4 @@
+{
+  "_leesmij": "Woorden waarin een korter zoekwoord toevallig zit, zonder dat het er iets mee te maken heeft: 'sport' zit in 'transport', 'raad' in 'leidraad'. Zo'n woord telt in de zoekbalk niet als treffer voor een zoekwoord dat er middenin of achteraan in zit; staat het zoekwoord vooraan ('trans'), dan wel. Handmatig bijgehouden, zoals synoniemen.json. Een woord toevoegen: eerst meten welke dossiers dan wegvallen.",
+  "woorden": ["transport", "leidraad"]
+}

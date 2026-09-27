@@ -74,6 +74,13 @@ if titelwoorden_pad.exists():
     data["dos_algemeen"] = sorted(w for w, v in tw.items() if v == "a")
     print(f"Titelwoorden geladen: {len(data['dos_algemeen'])} algemene woorden van {len(tw)}.")
 
+# 1c3) Valse samenstellingen voor de zoekbalk (valse_samenstellingen.json, handmatig): "transport" is
+#      geen treffer voor "sport". Ontbreekt het bestand, dan zoekt de site zoals voorheen.
+valse_pad = BASE / "valse_samenstellingen.json"
+if valse_pad.exists():
+    data["valse_samenstellingen"] = json.loads(valse_pad.read_text(encoding="utf-8")).get("woorden", [])
+    print(f"Valse samenstellingen geladen: {len(data['valse_samenstellingen'])}.")
+
 # 1d) Handmatige correcties op de dossiervorming (correcties.json, door de redactie
 #     onderhouden — NOOIT automatisch). Losmaken/samenvoegen ankeren op stabiele stuk-id's;
 #     de frontend past ze toe in buildDossiers. Ontbreekt het bestand, dan bouwt de site

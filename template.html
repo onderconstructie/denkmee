@@ -3537,6 +3537,11 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dosm-ev-org.bm{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
 .dosm-ev-org.sv{ background:transparent; color:var(--pink-text); box-shadow:inset 0 0 0 1px var(--pink); }
 .dosm-event.sv::before{ background:var(--paper); box-shadow:0 0 0 2px var(--pink); }
+/* Toezegging in de raad (sinds 27/09/2026): een licht kader onder de samenvatting, zonder gekleurd
+   lijntje opzij. Een toezegging is een engagement uit het debat, geen besluit. */
+.toez{ margin-top:.55rem; padding:.5rem .7rem; border-radius:10px; background:var(--app-soft); font-size:.86rem; line-height:1.45; color:var(--ink-2); }
+.toez-lbl{ display:block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--app-text); margin-bottom:.2rem; }
+.toez ul{ margin:0; padding-left:1.1rem; }
 .dosm-ev-indiener{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.72rem; color:var(--ink-dim); margin-bottom:.4rem; letter-spacing:.01em; }
 /* De grondvorm is neutraal, want de stukken kennen tweeëntwintig uitkomsten en wij kleuren
    er maar drie. Een vaststelling of een aktename hoort er dus rustig uit te zien, niet als
@@ -6080,6 +6085,7 @@ function personalRecentCardHTML(p){
       </header>
       <h5 class="prc-titel">${p.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${p.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(p.titel)}</h5>
       ${decoded}
+      ${toezHTML(p.toezeggingen)}
       <footer class="prc-foot">
         <div class="prc-themes">${themes}</div>
         <a class="prc-link" href="#dossiers" onclick="event.preventDefault(); openDossierForItem('${p.id}')">→ Bekijk in dossiers</a>
@@ -8123,6 +8129,7 @@ function dosAllItems(){
       decoded:a.decoded||'', themes:a.themes||[], streets:a.streets||[],
       hood:a.neighborhood||null, schepen:a.schepen||null, url:a.url||null, uittreksel_url:a.uittreksel_url||null, kernbegrippen:a.kernbegrippen||[],
       indiener:a.type==='vraag' ? (a.indiener||null) : null,
+      toezeggingen:a.toezeggingen||[],
       result:a.result||null, status:a.status||null, stemming:a.stemming||null,
       notulenPublished: a.lifecycle?.notulen?.published || a.notulen?.published || null,
       brontekst:a.brontekst||'', categorie:null
@@ -9520,7 +9527,7 @@ function buildDossiers(){
       // doorzoekt de zoekbalk de eigenlijke inhoud van de beslissingen, niet enkel labels.
       _search: (name + ' ' + themes.join(' ') + ' ' + places.join(' ') + ' ' +
                 schepenen.join(' ') + ' ' +
-                g.map(i => (i.titel||'') + ' ' + (i.decoded||'')).join(' ')
+                g.map(i => (i.titel||'') + ' ' + (i.decoded||'') + ' ' + (i.toezeggingen||[]).join(' ')).join(' ')
                ).toLowerCase()
     };
   });
@@ -9932,7 +9939,7 @@ function ftHits(term){
   const perItem = new Map();
   const exact = new Set();
   for(const w of FT_VOCAB){
-    if(!w.includes(key) || !ftOpGrens(key, w)) continue;
+    if(!w.includes(key) || !ftOpGrens(key, w) || zkValsIn(key, w)) continue;
     for(const i of FT_INDEX.tokens[w]){
       const id = FT_INDEX.items[i];
       items.add(id);
@@ -10168,7 +10175,7 @@ function zkTermen(q){
   return termen;
 }
 // Genormaliseerde teksten, één keer per stuk of dossier berekend.
-const zkStuk = it => it._zk || (it._zk = zkNorm((it.titel || '') + ' ' + (it.decoded || '')));
+const zkStuk = it => it._zk || (it._zk = zkNorm((it.titel || '') + ' ' + (it.decoded || '') + ' ' + (it.toezeggingen || []).join(' ')));
 const zkTitel = it => it._zkT || (it._zkT = zkNorm(it.titel));
 const zkSam = it => it._zkS || (it._zkS = zkNorm(it.decoded));
 const zkDossier = d => d._zk || (d._zk = zkNorm(d._search));
@@ -10185,10 +10192,40 @@ const zkWoordenInStuk = (term, it) => term.woorden.every(w => zkWoordRe(w).test(
 // Matcht één term dit ene stuk? Voedt de rangschikking "alle termen in hetzelfde stuk".
 function zkStukMatcht(term, it){
   if(term.exact) return term.re.test(zkStuk(it)) || zkWoordenInStuk(term, it);
-  if(zkStuk(it).includes(term.t)) return true;
+  if(zkBevat(term.t, zkStuk(it))) return true;
   const h = ftHits(term.t);
   if(h && h.items.has(it.id)) return true;
   return term.syn.some(v => zkWoordRe(v).test(zkStuk(it)) || (() => { const hw = ftHitsWoord(v); return !!(hw && hw.items.has(it.id)); })());
+}
+// ============= TOEZEGGINGEN (sinds 27/09/2026) ============= */
+// Een toezegging (O-punt in de notulen) is een engagement van de burgemeester of een schepen in het
+// debat over een punt, bv. "IVAREM als vaststeller voor ABP-overtredingen bespreken in raadscommissie
+// Veiligheid". Er wordt niet over gestemd; we tonen ze bij het punt waar ze uit voortkomen.
+function toezHTML(lijst){
+  if(!lijst || !lijst.length) return '';
+  const lbl = lijst.length === 1 ? 'Toezegging in de raad' : 'Toezeggingen in de raad';
+  const uitleg = 'Een engagement van de burgemeester of een schepen tijdens het debat over dit punt, zoals de notulen het noteren. Er wordt niet over gestemd.';
+  const inhoud = lijst.length === 1 ? escape(lijst[0]) : '<ul>' + lijst.map(t => `<li>${escape(t)}</li>`).join('') + '</ul>';
+  return `<div class="toez" title="${escape(uitleg)}"><span class="toez-lbl">${lbl}</span>${inhoud}</div>`;
+}
+// ============= VALSE SAMENSTELLINGEN (sinds 27/09/2026) ============= */
+// "sport" zit in "transport", "raad" in "leidraad": letters, geen samenstelling. Een woord uit
+// valse_samenstellingen.json telt niet als treffer voor een zoekwoord dat er middenin of achteraan in
+// zit; staat het zoekwoord vooraan ("trans"), dan wel. Gemeten vóór de invoering: "sport" vond 18
+// dossiers enkel via "transport" (werftransporten, drugtransport, transportkosten).
+let ZK_VALS = null;
+function zkVals(t){
+  if(!ZK_VALS) ZK_VALS = (D.valse_samenstellingen || []).map(kwNorm);
+  return ZK_VALS.filter(e => e.indexOf(t) > 0);
+}
+function zkValsIn(t, woord){ return zkVals(t).some(e => woord.includes(e)); }
+// Bevat de tekst de term, ook nadat de valse samenstellingen voor die term eruit zijn?
+function zkBevat(t, tekst){
+  if(!tekst.includes(t)) return false;
+  const vals = zkVals(t);
+  if(!vals.length) return true;
+  const re = new RegExp('[a-z0-9\\-]*(?:' + vals.map(e => e.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')[a-z0-9\\-]*', 'g');
+  return tekst.replace(re, ' ').includes(t);
 }
 function renderDossiers(keepPage){
   const grid = $('dosGrid');
@@ -10217,7 +10254,7 @@ function renderDossiers(keepPage){
     // Een los woord: de getikte term plus zijn synoniemen (OR binnen de term), in titel en
     // samenvatting of in het volledige stuk.
     const matcht = (d, v) => {
-      if(zkDossier(d).includes(v)) return true;
+      if(zkBevat(v, zkDossier(d))) return true;
       const h = ftHits(v);
       return !!(h && h.dossiers.has(d.id));
     };
@@ -10290,7 +10327,7 @@ function renderDossiers(keepPage){
     // minder, enkel in een samenvatting nog minder, en enkel in het volledige stuk het
     // minst. Staan alle termen samen in één stuk, dan telt dat erbovenop: wie "zwembad
     // Hofstade" zoekt, wil eerst het dossier waar één besluit over allebei gaat.
-    const test = (term, tekst) => term.exact ? term.re.test(tekst) : tekst.includes(term.t);
+    const test = (term, tekst) => term.exact ? term.re.test(tekst) : zkBevat(term.t, tekst);
     list.forEach(d => {
       let s = 0;
       const naam = zkNorm(d.name + ' ' + (d.title || ''));
@@ -10452,6 +10489,7 @@ function openDossier(id){
         })()}</span></div>` : ''}
         ${indiener}
         ${decoded}
+        ${toezHTML(it.toezeggingen)}
         ${stemBalkHTML(it.stemming, it)}
         ${actions.length?`<div class="dosm-ev-actions">${actions.join('')}</div>`:''}
       </div>`;
