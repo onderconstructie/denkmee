@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0f0d0a">
-<title>De Illusie van het Stadhuis · As Gau Paust</title>
+<title>De Illusie van het Stadhuis</title>
 <!--
   DE ILLUSIE VAN HET STADHUIS
   Minimalistische 2D-animatie bij het script voor As Gau Paust: vijf scènes, zwart, wit en rood,
@@ -33,6 +33,8 @@
 
   ADRESOPTIES. ?versie=origineel|herwerkt   ?t=12.5 (begintijd in seconden)   ?ondertitels=0
                ?opname=1 (enkel het beeld, zonder bediening; zo leest exporteer.py de film uit)
+               #herwerkt opent ook de herwerkte versie. Dat werkt ook waar een adres geen ?-opties
+               doorgeeft, zoals een privépagina op claude.ai.
 
   EXPORTEREN naar MP4 met ondertitelbestand: python animatie/exporteer.py (uitleg in dat bestand).
 
@@ -40,23 +42,25 @@
   de SIL Open Font License 1.1 (de licentieteksten staan in fonts/ in deze repo).
 -->
 <style>
+/* Bewust één donkere look, zoals een filmspeler: geen lichte variant, maar wel alle kleuren expliciet. */
 :root{
+  color-scheme:dark;
   --inkt:#1a1712; --papier:#f5f1e8; --rood:#e4002b;
   --balk:#0f0d0a; --balk-2:#1b1814; --balk-tekst:#e6dfd2; --balk-dim:#a39b8d;
   --lijn:rgba(245,241,232,.18);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--balk)}
-body{min-height:100vh;background:var(--balk);color:var(--balk-tekst);
-  font-family:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5;
+body{min-height:100vh;background:var(--balk);color:var(--balk-tekst);padding-inline:16px;
+  font:16px/1.5 'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
   display:flex;flex-direction:column;align-items:center}
 button,select{font:inherit;color:inherit}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
 .sans{font-family:'Geist',system-ui,sans-serif}
 
 /* De speler past altijd op het scherm: breedte volgt de hoogte min de bedieningsbalk. */
-#speler{width:min(100vw, calc((100vh - 58px) * 16 / 9))}
-#doek{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;
+#speler{width:min(100%, calc((100vh - 58px) * 16 / 9))}
+#doek{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;
   container-type:inline-size;user-select:none;-webkit-user-select:none}
 #doek > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 
@@ -96,7 +100,7 @@ button,select{font:inherit;color:inherit}
 select{background:var(--balk);border:1px solid var(--lijn);border-radius:8px;height:38px;padding:0 .5rem;
   color:var(--balk-tekst)}
 
-#scriptpaneel{width:min(100vw, 1100px);padding:1.4rem 1rem 3rem}
+#scriptpaneel{width:min(100%, 1100px);padding-block:1.4rem 3rem}
 #scriptpaneel summary{cursor:pointer;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.78rem;
   letter-spacing:.12em;text-transform:uppercase;color:var(--balk-dim)}
 #scriptpaneel h2{font-size:1rem;font-weight:600;margin:1.6rem 0 .5rem;color:var(--papier)}
@@ -116,13 +120,17 @@ select{background:var(--balk);border:1px solid var(--lijn);border-radius:8px;hei
 #scriptpaneel .notities p{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem;
   letter-spacing:.12em;text-transform:uppercase;color:var(--balk-dim);margin-bottom:.4rem}
 #scriptpaneel .notities li{margin:.4rem 0 .4rem 1.1rem;list-style:disc}
-#scriptpaneel .knoppen{margin-top:1.6rem}
+#scriptpaneel .knoppen{margin-top:1.6rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem}
+#srtMelding{font-size:.85rem;color:var(--balk-dim)}
+#srtVeld{flex-basis:100%;width:100%;padding:.8rem;border:1px solid var(--lijn);border-radius:8px;
+  background:var(--balk-2);color:var(--balk-tekst);font:.8rem/1.5 'JetBrains Mono',ui-monospace,monospace}
 #scriptpaneel .knoppen button{background:none;border:1px solid var(--lijn);border-radius:999px;padding:.55rem 1rem;
   cursor:pointer;font-size:.82rem}
 #scriptpaneel .knoppen button:hover{border-color:var(--rood)}
 
 /* Opnamestand: enkel het beeld, exact 16:9 over het hele venster (exporteer.py draait op 1920x1080). */
 body.opname #bediening,body.opname #scriptpaneel,body.opname #grootSpelen{display:none!important}
+body.opname{padding:0}
 body.opname #speler{width:100vw}
 body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
 @media (max-width:700px){ #sceneNaam{display:none} }
@@ -194,7 +202,11 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
 <details id="scriptpaneel">
   <summary>Script, tijdcodes en notities</summary>
   <div id="scriptlijst"></div>
-  <div class="knoppen"><button id="knopSrt" type="button">Ondertitels downloaden (.srt)</button></div>
+  <div class="knoppen">
+    <button id="knopSrt" type="button">Ondertitels kopiëren (.srt)</button>
+    <span id="srtMelding" role="status"></span>
+    <textarea id="srtVeld" rows="12" readonly hidden aria-label="Ondertitels in SRT-formaat"></textarea>
+  </div>
 </details>
 
 <script>
@@ -1169,7 +1181,9 @@ function maakKeuze(laag, dyn){
 const Q = new URLSearchParams(location.search);
 const OPNAME = Q.get('opname') === '1';
 const RUSTIG = !OPNAME && matchMedia('(prefers-reduced-motion: reduce)').matches;
-let VKEY = VERSIES[Q.get('versie')] ? Q.get('versie') : 'origineel';
+// De versie komt uit ?versie=, of uit #herwerkt: een kaal anker komt ook door waar ?-opties wegvallen.
+const ANKER = location.hash.slice(1);
+let VKEY = VERSIES[Q.get('versie')] ? Q.get('versie') : VERSIES[ANKER] ? ANKER : 'origineel';
 let V, TL, MODULES = [];
 let T = 0, SPEELT = false, VORIGE = null, OT_AAN = Q.get('ondertitels') !== '0';
 
@@ -1238,7 +1252,8 @@ function lus(nu){
 function speel(){ if (T >= TL.duur - .05) T = 0; SPEELT = true; VORIGE = null; $('grootSpelen').hidden = true; requestAnimationFrame(lus); balkBij(); }
 function pauze(){ SPEELT = false; balkBij(); }
 function wissel(){ SPEELT ? pauze() : speel(); }
-function naar(t){ T = klem(t, 0, TL.duur); teken(); }
+// Wie verspringt, wil het beeld zien: de grote afspeelknop gaat dan weg.
+function naar(t){ T = klem(t, 0, TL.duur); if (!OPNAME) $('grootSpelen').hidden = true; teken(); }
 
 function vulScript(){
   const lijst = $('scriptlijst');
@@ -1287,21 +1302,42 @@ function koppelBediening(){
   schuif.addEventListener('change', () => { balkBij.sleept = false; });
   $('kiesVersie').addEventListener('change', e => {
     bouw(e.target.value);
-    const u = new URL(location.href); u.searchParams.set('versie', VKEY); history.replaceState(null, '', u);
+    // Het adres volgt de keuze, zodat een gekopieerde link dezelfde versie opent. In een afgeschermd
+    // venster kan dat geweigerd worden; de speler werkt dan gewoon verder.
+    try {
+      const u = new URL(location.href);
+      if (u.searchParams.has('versie')) u.searchParams.set('versie', VKEY); else u.hash = VKEY;
+      history.replaceState(null, '', u);
+    } catch (fout) {}
   });
   const ot = $('knopOT');
   const zetOT = aan => { OT_AAN = aan; ot.setAttribute('aria-pressed', String(aan)); teken(); };
   ot.addEventListener('click', () => zetOT(!OT_AAN));
   ot.setAttribute('aria-pressed', String(OT_AAN));
-  const vol = () => document.fullscreenElement ? document.exitFullscreen() : $('doek').requestFullscreen?.();
+  // Volledig scherm is een extraatje: op een gsm of in sommige vensters mag het niet, en dan gebeurt er niets.
+  const vol = () => {
+    try { (document.fullscreenElement ? document.exitFullscreen() : $('doek').requestFullscreen?.())?.catch?.(() => {}); }
+    catch (fout) {}
+  };
   $('knopVol').addEventListener('click', vol);
+  // De ondertitels naar het klembord, om te plakken in een bestand op .srt. Een downloadknop werkt
+  // niet overal (op claude.ai mag een pagina geen .srt aanbieden); kopiëren wel. Lukt ook dat niet,
+  // dan verschijnt de tekst om zelf te selecteren. Als bestand schrijft exporteer.py de .srt.
   $('knopSrt').addEventListener('click', () => {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([srt()], { type: 'text/plain;charset=utf-8' }));
-    a.download = `de-illusie-van-het-stadhuis-${VKEY}.srt`;
-    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    const tekst = srt(), veld = $('srtVeld'), melding = $('srtMelding');
+    const toonVeld = () => {
+      veld.value = tekst; veld.hidden = false; veld.focus(); veld.select();
+      melding.textContent = 'Selecteer en kopieer de tekst hieronder.';
+    };
+    try {
+      navigator.clipboard.writeText(tekst)
+        .then(() => { veld.hidden = true; melding.textContent = 'Gekopieerd. Plak de tekst in een bestand dat eindigt op .srt.'; })
+        .catch(toonVeld);
+    } catch (fout){ toonVeld(); }
   });
   document.addEventListener('keydown', e => {
+    // Sneltoetsen enkel zonder Ctrl, Cmd of Alt: Ctrl+C kopieert, Ctrl+F zoekt.
+    if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest('textarea')) return;
     if (e.target.closest('select, input') && e.key !== ' ') return;
     if (e.key === ' ' || e.key === 'k'){ e.preventDefault(); wissel(); }
     else if (e.key === 'ArrowRight') naar(T + 5);
@@ -1332,6 +1368,7 @@ window.ILLUSIE = {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
+  document.documentElement.lang = 'nl';
   if (OPNAME) document.body.classList.add('opname');
   await laadLetters();
   T = parseFloat(Q.get('t')) || 0;
