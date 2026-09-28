@@ -91,7 +91,6 @@ button,select{font:inherit;color:inherit}
   cursor:pointer;font-size:.8rem}
 #bediening button:hover,#bediening button:focus-visible{border-color:var(--rood);outline:none}
 #bediening button[aria-pressed="false"]{opacity:.5}
-#bediening button:disabled{opacity:.3;cursor:not-allowed}
 #bediening svg{width:15px;height:15px;fill:currentColor}
 #tijd{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.78rem;color:var(--balk-dim);
   min-width:7.6em;font-variant-numeric:tabular-nums}
@@ -121,7 +120,6 @@ select{background:var(--balk);border:1px solid var(--lijn);border-radius:8px;hei
 #scriptpaneel .notities p{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem;
   letter-spacing:.12em;text-transform:uppercase;color:var(--balk-dim);margin-bottom:.4rem}
 #scriptpaneel .notities li{margin:.4rem 0 .4rem 1.1rem;list-style:disc}
-#scriptpaneel .uitleg{max-width:68ch;margin-top:1rem;color:var(--balk-dim)}
 #scriptpaneel .knoppen{margin-top:1.6rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem}
 #srtMelding{font-size:.85rem;color:var(--balk-dim)}
 #srtVeld{flex-basis:100%;width:100%;padding:.8rem;border:1px solid var(--lijn);border-radius:8px;
@@ -196,10 +194,6 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
       </select>
     </label>
     <button id="knopOT" aria-pressed="true" title="Ondertitels aan of uit (C)">OT</button>
-    <button id="knopStem" aria-pressed="false" disabled title="Dit toestel heeft geen Nederlandse computerstem">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zm11.5 3a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 15.5 12z"/></svg>
-      <span>Stem</span>
-    </button>
     <button id="knopVol" aria-label="Volledig scherm" title="Volledig scherm (F)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM6 15v3h3v2H4v-5zm12 0h2v5h-5v-2h3z"/></svg>
     </button>
@@ -207,9 +201,6 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
 </main>
 <details id="scriptpaneel">
   <summary>Script, tijdcodes en notities</summary>
-  <p class="uitleg">Er is nog geen ingesproken stem. Met de knop Stem leest de computerstem van je eigen
-    toestel elke zin voor wanneer de ondertitel verschijnt (een Vlaamse stem als je toestel er een heeft).
-    Het Mechelse zinnetje leest ze niet: dat hoort een echte Mechelaar te zeggen.</p>
   <div id="scriptlijst"></div>
   <div class="knoppen">
     <button id="knopSrt" type="button">Ondertitels kopiëren (.srt)</button>
@@ -1189,7 +1180,6 @@ function bouw(sleutel){
   VKEY = sleutel; V = VERSIES[sleutel]; TL = bouwTijdlijn(V);
   const lagen = $('lagen'), dyn = $('dyn');
   lagen.textContent = ''; dyn.textContent = '';
-  if (KAN_SPREKEN) stemStil();
   MODULES = [maakSluimer, maakArchief, maakNudge, maakKeuze].map(f => f(el('g', {}, lagen), dyn));
   T = klem(T, 0, TL.duur);
   $('kiesVersie').value = sleutel;
@@ -1237,63 +1227,19 @@ function balkBij(){
   $('knopSpeel').setAttribute('aria-label', SPEELT ? 'Pauzeren' : 'Afspelen');
 }
 
-/* De computerstem van het toestel leest mee. Ze begint elke zin wanneer de ondertitel verschijnt,
-   nooit midden in een zin, en slaat het Mechels over. In de opnamestand zwijgt ze: een export heeft
-   geen geluid. */
-const KAN_SPREKEN = !OPNAME && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
-const STEM = { aan: KAN_SPREKEN, stem: null, vorige: null };
-function kiesStem(){
-  const alle = speechSynthesis.getVoices();
-  STEM.stem = alle.find(v => /^nl[-_]BE/i.test(v.lang)) || alle.find(v => /^nl[-_]NL/i.test(v.lang))
-           || alle.find(v => /^nl\b/i.test(v.lang)) || null;
-  stemknopBij();
-}
-function stemknopBij(){
-  const k = $('knopStem');
-  k.disabled = !STEM.stem;
-  k.setAttribute('aria-pressed', String(STEM.aan && !!STEM.stem));
-  k.title = STEM.stem ? `Voorlezen met de computerstem van dit toestel (${STEM.stem.name})`
-                      : 'Dit toestel heeft geen Nederlandse computerstem';
-}
-function stemStil(){ if (KAN_SPREKEN) speechSynthesis.cancel(); STEM.vorige = null; }
-function stemBij(){
-  if (!STEM.aan || !STEM.stem || !SPEELT) return;
-  let c = null;
-  for (const x of TL.cues) if (T >= x.a && T < x.b){ c = x; break; }
-  if (!c || c === STEM.vorige) return;
-  STEM.vorige = c;
-  if (c.dialect || T - c.a > .5) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(c.tekst);
-  u.voice = STEM.stem; u.lang = STEM.stem.lang;
-  speechSynthesis.speak(u);
-}
-// Sommige browsers (Safari op iPhone) spreken pas na een eerste zin binnen de klik zelf.
-function stemWakker(){
-  if (!STEM.aan || !STEM.stem) return;
-  const u = new SpeechSynthesisUtterance(' ');
-  u.volume = 0; speechSynthesis.speak(u);
-}
-
 function lus(nu){
   if (!SPEELT) return;
   if (VORIGE !== null) T = Math.min(TL.duur, T + Math.min(.1, (nu - VORIGE) / 1000));
   VORIGE = nu;
   teken();
-  stemBij();
   if (T >= TL.duur){ SPEELT = false; balkBij(); return; }
   requestAnimationFrame(lus);
 }
-function speel(){
-  if (T >= TL.duur - .05) T = 0;
-  SPEELT = true; VORIGE = null; $('grootSpelen').hidden = true;
-  if (KAN_SPREKEN){ stemStil(); stemWakker(); }
-  requestAnimationFrame(lus); balkBij();
-}
-function pauze(){ SPEELT = false; if (KAN_SPREKEN) stemStil(); balkBij(); }
+function speel(){ if (T >= TL.duur - .05) T = 0; SPEELT = true; VORIGE = null; $('grootSpelen').hidden = true; requestAnimationFrame(lus); balkBij(); }
+function pauze(){ SPEELT = false; balkBij(); }
 function wissel(){ SPEELT ? pauze() : speel(); }
 // Wie verspringt, wil het beeld zien: de grote afspeelknop gaat dan weg.
-function naar(t){ T = klem(t, 0, TL.duur); if (!OPNAME){ $('grootSpelen').hidden = true; stemStil(); } teken(); }
+function naar(t){ T = klem(t, 0, TL.duur); if (!OPNAME) $('grootSpelen').hidden = true; teken(); }
 
 function vulScript(){
   const lijst = $('scriptlijst');
@@ -1355,16 +1301,6 @@ function koppelBediening(){
   ot.addEventListener('click', () => zetOT(!OT_AAN));
   ot.setAttribute('aria-pressed', String(OT_AAN));
   // Volledig scherm is een extraatje: op een gsm of in sommige vensters mag het niet, en dan gebeurt er niets.
-  $('knopStem').addEventListener('click', () => {
-    STEM.aan = !STEM.aan;
-    if (STEM.aan) stemWakker(); else stemStil();
-    stemknopBij();
-  });
-  if (KAN_SPREKEN){
-    kiesStem();
-    if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', kiesStem);
-    else speechSynthesis.onvoiceschanged = kiesStem;
-  }
   const vol = () => {
     try { (document.fullscreenElement ? document.exitFullscreen() : $('doek').requestFullscreen?.())?.catch?.(() => {}); }
     catch (fout) {}
