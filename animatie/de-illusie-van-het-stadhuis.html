@@ -466,6 +466,200 @@ const STREPEN = [K70.espresso, K70.roest, K70.vermiljoen, K70.mosterd, K70.goud]
 const INKT = K70.espresso, PAPIER = K70.creme, ROOD = K70.vermiljoen;
 
 /* ==========================================================================
+   3B. HET PERSONAGE
+   Eén burger, die we twee keer zien: in scène 1 onderuitgezakt en in profiel, verzonken in de
+   telefoon; in scène 4 rechtop en van voren, wakker. Zelfde kapsel (een shag met pony), zelfde
+   grote bril, mosterdgele col, bruine ribfluwelen olifantspijpen en plateauzolen.
+   Getekend met vlakken en een vaste omlijning, met een donkerdere tint voor de schaduwkant.
+   ========================================================================== */
+const PERSOON = {
+  huid: '#a86f4c', huidS: '#8a5638', blos: '#cf7c5c',
+  haar: '#2b1a10', haarL: '#553622',
+  trui: '#e2a33b', truiS: '#c4852a', truiL: '#f3c768',
+  broek: '#6b4226', broekS: '#52321b', ribbel: '#825530',
+  schoen: '#a5432a', schoenL: '#c65a3a', zool: '#2a1b11',
+  bril: '#2a1b11', glas: '#fbf2e0',
+};
+const LIJN = { stroke: '#3b2416', 'stroke-width': 3.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' };
+const DUN = { stroke: '#3b2416', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', fill: 'none' };
+
+/* In profiel, naar links gekeerd en voorovergebogen, op een bank van opzij. Oorsprong: het zitvlak. */
+function tekenBurgerZij(ouder, dyn, id){
+  const P = PERSOON, F = {};
+  const g = el('g', {}, ouder);
+  // --- de bank, van opzij: gietijzer, latten in doorsnede ---
+  const IJZER = '#2a1b11', HOUT = '#8a5a35';
+  el('path', { d: 'M40 8L50 66M-64 8L-72 66', stroke: IJZER, 'stroke-width': 9, 'stroke-linecap': 'round', fill: 'none' }, g);
+  el('path', { d: 'M-74 66h20M44 66h20', stroke: IJZER, 'stroke-width': 7, 'stroke-linecap': 'round' }, g);
+  el('path', { d: 'M44 4L70 -112', stroke: IJZER, 'stroke-width': 9, 'stroke-linecap': 'round' }, g);
+  for (const [x, y] of [[57, -28], [63, -60], [69, -92]])
+    el('rect', { x: x - 6, y: y - 13, width: 13, height: 26, rx: 4, fill: HOUT, ...LIJN, 'stroke-width': 3, transform: `rotate(13 ${x} ${y})` }, g);
+  el('rect', { x: -80, y: 8, width: 140, height: 9, rx: 4, fill: IJZER }, g);
+  for (let i = 0; i < 5; i++) el('rect', { x: -80 + i * 27, y: 0, width: 23, height: 10, rx: 4, fill: HOUT, ...LIJN, 'stroke-width': 3 }, g);
+
+  // --- benen: het verre been donker en een tikje naar achter, het nabije ervoor ---
+  const PIJP = 'M44 -16C50 -8 48 0 40 2L-62 2C-70 2-76 2-80 4C-78 20-78 36-74 50C-72 56-68 60-64 62L-118 62C-112 50-106 36-104 20C-102 8-102-4-100-14C-98-26-90-33-78-34C-60-36-42-33-30-30C-18-27 4-20 44-16Z';
+  const schoen = (b, kleur) => {
+    el('rect', { x: -127, y: 60, width: 67, height: 9, rx: 4, fill: P.zool }, b);
+    el('path', { d: 'M-112 61C-124 61-132 57-129 51C-127 47-120 46-114 48Z', fill: kleur, ...LIJN, 'stroke-width': 3 }, b);
+  };
+  const ver = el('g', { transform: 'translate(18 -3)' }, g);
+  schoen(ver, '#86351f');
+  el('path', { d: PIJP, fill: P.broekS, ...LIJN }, ver);
+  schoen(g, P.schoen);
+  el('path', { d: 'M-124 53C-122 51-119 50-116 51', ...DUN, stroke: P.schoenL, 'stroke-width': 2 }, g);
+  el('path', { d: PIJP, fill: P.broek, ...LIJN }, g);
+  el('path', { d: 'M-93 0C-92 18-94 38-100 57M-85 8C-85 26-85 42-87 59', ...DUN, stroke: P.ribbel, 'stroke-width': 2 }, g);   // ribfluweel
+  el('path', { d: 'M-78 -26C-56 -28-36 -24-20 -21', ...DUN, stroke: P.broekS, 'stroke-width': 2.5 }, g);                       // plooi op de dij
+
+  // --- de romp, met een ronde rug: onderuitgezakt ---
+  F.romp = el('g', {}, g);
+  const r = F.romp;
+  el('path', { d: 'M-26 -20C-36 -34-42 -52-40 -66C-39 -78-37 -84-34 -88L-8 -104C8 -110 30 -104 40 -86C50 -68 50 -40 44 -20L40 -12C18 -16-4 -18-26 -20Z',
+               fill: P.trui, ...LIJN }, r);
+  el('path', { d: 'M30 -96C42 -84 47 -64 46 -44C45 -32 43 -24 40 -16L28 -17C36 -42 38 -72 30 -96Z', fill: P.truiS }, r);    // schaduw op de rug
+  el('path', { d: 'M-24 -26C-2 -24 22 -21 42 -18', ...DUN, stroke: P.truiS, 'stroke-width': 2 }, r);                        // boord
+  for (let i = 0; i < 7; i++){ const x = -18 + i * 9.5; el('line', { x1: x, y1: -17 - i * .2, x2: x + .5, y2: -25 - i * .1, stroke: P.truiS, 'stroke-width': 2, 'stroke-linecap': 'round' }, r); }
+  // hals en rolkraag
+  el('path', { d: 'M-30 -98L-44 -114L-28 -122L-16 -104Z', fill: P.huid, ...LIJN }, r);
+  el('ellipse', { cx: -21, cy: -97, rx: 19, ry: 9, fill: P.trui, ...LIJN, transform: 'rotate(-32 -21 -97)' }, r);
+  for (const k of [-12, -5, 2, 9]){
+    const a = -32 * Math.PI / 180, x = -21 + k * Math.cos(a), y = -97 + k * Math.sin(a);
+    el('line', { x1: f2(x + 5 * Math.sin(a)), y1: f2(y - 5 * Math.cos(a)), x2: f2(x - 5 * Math.sin(a)), y2: f2(y + 5 * Math.cos(a)), stroke: P.truiS, 'stroke-width': 2, 'stroke-linecap': 'round' }, r);
+  }
+
+  // --- het hoofd, diep voorover. Kopcoördinaten: midden (0,0); de hals hangt aan (8,30). ---
+  F.hoofd = el('g', { transform: 'translate(-34 -110) rotate(-38)' }, r);
+  const h = el('g', { transform: 'translate(-8 -30)' }, F.hoofd);
+  el('path', { d: 'M2 -36C-16 -36-28 -26-29 -12C-29.5 -8-29 -6-31 -3C-34 1-39 6-40 9C-41 12-38 14-33 14C-32 16-32.5 18-31 19.5C-32 21-32 23-30 24.5C-30.5 27-29 30-24 32C-18 34.5-8 33 0 29C10 24 22 18 28 6C33 -8 26 -30 2 -36Z',
+               fill: P.huid, ...LIJN }, h);
+  el('path', { d: 'M-2 28C8 23 18 16 24 6C20 18 12 26 0 30Z', fill: P.huidS }, h);                                      // schaduw onder de kaak
+  el('ellipse', { cx: -17, cy: 12, rx: 6.5, ry: 4, fill: P.blos, opacity: .55 }, h);
+  el('path', { d: 'M-31 21.5L-26.5 22', ...DUN, 'stroke-width': 2 }, h);                                                 // mond
+  el('path', { d: 'M-24 -5C-21.5 -2.5-18.5 -2.5-16 -4.5', ...DUN, 'stroke-width': 2.5 }, h);                            // neergeslagen oog
+  el('path', { d: 'M-27 -13C-23 -16.5-18 -16.5-14 -14.5', ...DUN, stroke: P.haar, 'stroke-width': 3.5 }, h);            // wenkbrauw
+  // de haren: een shag met pony, over de oren, met een krul in de nek
+  el('path', { d: 'M-30 -13C-36 -26-30 -40-12 -44C8 -49 29 -41 37 -25C44 -12 42 8 36 22C33 30 30 38 24 42C20 44 16 40 18 34C18 26 14 16 10 12C8 6 6 0 2 -6C-4 -11-12 -11-18 -12C-22 -12-26 -11-30 -13Z',
+               fill: P.haar, ...LIJN }, h);
+  el('path', { d: 'M-2 -8C-1 0-2 8-4 14C-6 14-8 12-8 10C-7 4-7 -2-7 -8Z', fill: P.haar }, h);                          // bakkebaard
+  el('path', { d: 'M-20 -37C-8 -43 8 -43 20 -36M29 -22C34 -10 33 4 29 16M14 -30C20 -24 22 -14 22 -4', ...DUN, stroke: P.haarL, 'stroke-width': 3 }, h);
+  // de bril: een groot glas van opzij, waarin het scherm oplicht
+  el('path', { d: 'M-24 -9L8 -7', ...DUN, stroke: P.bril, 'stroke-width': 3 }, h);
+  el('rect', { x: -33, y: -15, width: 11, height: 22, rx: 5.5, fill: P.glas, 'fill-opacity': .3, stroke: P.bril, 'stroke-width': 3 }, h);
+  F.glasGloed = el('rect', { x: -31.5, y: -13.5, width: 8, height: 19, rx: 4, fill: '#ffe29a', opacity: .75 }, h);
+  el('path', { d: 'M-30 -11L-30 -6', stroke: '#fffaf0', 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .8 }, h);
+
+  // --- de nabije arm, de handen en de telefoon: de ellebogen op de dijen ---
+  el('path', { d: 'M8 -98C16 -84 10 -62 -8 -46C-18 -38-28 -34-38 -34C-54 -38-70 -46-84 -52L-88 -66C-72 -62-58 -60-46 -58C-38 -58-32 -62-28 -70C-24 -80-22 -90-16 -100Z',
+               fill: P.trui, ...LIJN }, r);
+  el('path', { d: 'M2 -86C6 -72 0 -58 -12 -48C-20 -42-28 -39-36 -39C-24 -46-10 -58-4 -76Z', fill: P.truiS }, r);        // schaduw in de mouw
+  el('path', { d: 'M-80 -50L-86 -68L-94 -66L-88 -48Z', fill: P.trui, ...LIJN, 'stroke-width': 3 }, r);                  // manchet
+  F.telefoon = el('g', { transform: 'translate(-103 -72) rotate(-24)' }, r);
+  const t = F.telefoon;
+  el('ellipse', { cx: 10, cy: 8, rx: 7, ry: 9, fill: P.huidS, ...LIJN, 'stroke-width': 3 }, t);                        // verre hand
+  el('rect', { x: -11, y: -20, width: 22, height: 40, rx: 5, fill: '#2a1b11' }, t);
+  el('rect', { x: -8, y: -16, width: 16, height: 32, rx: 2.5, fill: '#f0c35c' }, t);
+  const tc = el('clipPath', { id: id + 'tel' }, dyn);
+  el('rect', { x: -8, y: -16, width: 16, height: 32, rx: 2.5 }, tc);
+  F.scroll = el('g', {}, el('g', { 'clip-path': `url(#${id}tel)` }, t));
+  for (let i = 0; i < 10; i++) el('rect', { x: -5, y: -16 + i * 8, width: i % 3 ? 10 : 7, height: 3.5, rx: 1.75, fill: '#6b4226', opacity: .55 }, F.scroll);
+  el('path', { d: 'M-88 -62C-96 -66-102 -62-102 -56C-102 -50-96 -46-90 -48C-86 -49-84 -54-86 -58Z', fill: P.huid, ...LIJN, 'stroke-width': 3 }, r);   // nabije hand
+  F.duim = el('ellipse', { cx: -103, cy: -70, rx: 4, ry: 6.5, fill: P.huid, ...LIJN, 'stroke-width': 2.5, transform: 'rotate(-60 -103 -70)' }, r);
+  return { g, F };
+}
+
+/* Van voren, rechtop op een bank. Oorsprong: het midden van het zitvlak. */
+function tekenBurgerVoor(ouder){
+  const P = PERSOON, F = {};
+  const g = el('g', {}, ouder);
+  const IJZER = '#2a1b11', HOUT = '#8a5a35';
+  // --- de bank, van voren, met gietijzeren zijkanten ---
+  for (const s of [-1, 1]){
+    el('path', { d: `M${s * 176} -122C${s * 184} -122 ${s * 186} -112 ${s * 180} -104L${s * 178} 66`, stroke: IJZER, 'stroke-width': 11, 'stroke-linecap': 'round', fill: 'none' }, g);
+    el('path', { d: `M${s * 168} 66h${s * 22}`, stroke: IJZER, 'stroke-width': 8, 'stroke-linecap': 'round' }, g);
+  }
+  for (const y of [-112, -86, -60]) el('rect', { x: -194, y, width: 388, height: 18, rx: 7, fill: HOUT, ...LIJN, 'stroke-width': 3 }, g);
+  el('rect', { x: -200, y: -8, width: 400, height: 16, rx: 7, fill: HOUT, ...LIJN, 'stroke-width': 3 }, g);
+
+  // --- benen: knieën naar ons toe, olifantspijpen, plateauzolen ---
+  for (const s of [-1, 1]){
+    const x = s * 23;
+    el('rect', { x: x - 25, y: 61, width: 50, height: 9, rx: 4, fill: P.zool, ...LIJN, 'stroke-width': 2.5 }, g);
+    el('path', { d: `M${x - 21} 62C${x - 23} 49 ${x + 23} 49 ${x + 21} 62Z`, fill: P.schoen, ...LIJN, 'stroke-width': 3 }, g);
+    el('path', { d: `M${x - 12} 56C${x - 8} 54 ${x - 3} 53.5 ${x + 2} 54`, ...DUN, stroke: P.schoenL, 'stroke-width': 2 }, g);
+    el('path', { d: `M${x - 21} -10C${x - 22} 10 ${x - 17} 24 ${x - 16} 34C${x - 17} 42 ${x - 21} 50 ${x - 26} 56L${x + 26} 56C${x + 21} 50 ${x + 17} 42 ${x + 16} 34C${x + 17} 24 ${x + 22} 10 ${x + 21} -10Z`,
+                 fill: P.broek, ...LIJN }, g);
+    el('path', { d: `M${x - 14} 2C${x - 6} -4 ${x + 6} -4 ${x + 14} 2`, ...DUN, stroke: P.ribbel, 'stroke-width': 2.5 }, g);   // knie
+    el('path', { d: `M${x - 7} 12C${x - 8} 30 ${x - 10} 44 ${x - 13} 53M${x + 7} 12C${x + 8} 30 ${x + 10} 44 ${x + 13} 53M${x} 12V54`, ...DUN, stroke: P.ribbel, 'stroke-width': 2 }, g);
+    if (s > 0) el('path', { d: `M${x + 8} -8C${x + 19} 6 ${x + 16} 24 ${x + 14} 34C${x + 17} 42 ${x + 20} 49 ${x + 24} 54L${x + 15} 54C${x + 10} 44 ${x + 12} 20 ${x + 8} -8Z`, fill: P.broekS }, g);
+  }
+
+  F.lijf = el('g', {}, g);
+  const L = F.lijf;
+  // --- romp: schouders, een taille, een geribde boord ---
+  el('path', { d: 'M-13 -144L13 -144L12 -120L-12 -120Z', fill: P.huid, ...LIJN }, L);                                   // hals
+  el('path', { d: 'M-24 -126C-46 -125-60 -118-62 -102C-62 -76-56 -48-54 -24C-54 -8-48 0-38 0L38 0C48 0 54 -8 54 -24C56 -48 62 -76 62 -102C60 -118 46 -125 24 -126Z',
+               fill: P.trui, ...LIJN }, L);
+  el('path', { d: 'M34 -122C50 -118 58 -110 59 -98C58 -74 53 -46 51 -24C51 -12 46 -4 38 -2C42 -30 46 -60 44 -88C43 -104 40 -114 34 -122Z', fill: P.truiS }, L);
+  el('path', { d: 'M-52 -16C-20 -12 20 -12 52 -16L52 -4C50 -1 46 0 38 0L-38 0C-46 0-50 -1-52 -4Z', fill: P.trui, ...LIJN, 'stroke-width': 3 }, L);   // boord
+  for (let i = -5; i <= 5; i++) el('line', { x1: i * 9, y1: -11, x2: i * 9, y2: -3, stroke: P.truiS, 'stroke-width': 2, 'stroke-linecap': 'round' }, L);
+  el('path', { d: 'M-27 -136C-27 -145 27 -145 27 -136L25 -119C16 -114-16 -114-25 -119Z', fill: P.trui, ...LIJN }, L);   // rolkraag
+  for (const x of [-17, -8.5, 0, 8.5, 17]) el('line', { x1: x, y1: -137, x2: x, y2: -120, stroke: P.truiS, 'stroke-width': 2, 'stroke-linecap': 'round' }, L);
+
+  // --- hoofd ---
+  F.hoofd = el('g', {}, L);
+  const h = F.hoofd;
+  // shag: gelaagd, over de oren, met de punten naar buiten gekruld
+  el('path', { d: 'M-62 -138C-56 -142-56 -150-58 -160C-62 -186-50 -222-24 -234C-8 -242 8 -242 24 -234C50 -222 62 -186 58 -160C56 -150 56 -142 62 -138C52 -134 44 -138 40 -146L-40 -146C-44 -138-52 -134-62 -138Z',
+               fill: P.haar, ...LIJN }, h);
+  el('path', { d: 'M-50 -168C-52 -186-44 -208-26 -220M50 -168C52 -186 44 -208 26 -220', ...DUN, stroke: P.haarL, 'stroke-width': 3 }, h);
+  el('path', { d: 'M0 -214C20 -214 32 -200 32 -180C32 -158 18 -140 0 -140C-18 -140 -32 -158 -32 -180C-32 -200 -20 -214 0 -214Z', fill: P.huid, ...LIJN }, h);
+  el('path', { d: 'M-12 -142C-6 -139 6 -139 12 -142C8 -147-8 -147-12 -142Z', fill: P.huidS }, h);
+  for (const s of [-1, 1]) el('ellipse', { cx: s * 21, cy: -157, rx: 6.5, ry: 4, fill: P.blos, opacity: .6 }, h);
+  // lokken voor de oren
+  for (const s of [-1, 1]) el('path', { d: `M${s * 30} -196C${s * 38} -184 ${s * 38} -166 ${s * 33} -154C${s * 30} -158 ${s * 29} -170 ${s * 30} -196Z`, fill: P.haar, ...LIJN, 'stroke-width': 3 }, h);
+  // pony
+  el('path', { d: 'M-35 -186C-38 -214-14 -226 0 -224C18 -226 40 -214 35 -186C28 -197 18 -200 9 -195C2 -203-11 -203-17 -195C-24 -200-31 -196-35 -186Z', fill: P.haar, ...LIJN }, h);
+  el('path', { d: 'M-20 -216C-8 -221 8 -221 20 -216', ...DUN, stroke: P.haarL, 'stroke-width': 3 }, h);
+  F.brauwen = el('g', {}, h);
+  for (const s of [-1, 1]) el('path', { d: `M${s * 7} -193C${s * 12} -197 ${s * 20} -197 ${s * 26} -193`, ...DUN, stroke: P.haar, 'stroke-width': 4 }, F.brauwen);
+  // ogen achter de bril
+  F.ogen = [-1, 1].map(s => {
+    const o = el('g', {}, h);
+    el('ellipse', { cx: s * 15, cy: -176, rx: 6.5, ry: 6.5, fill: '#fffaf0' }, o);
+    el('circle', { cx: s * 15 + 1, cy: -175, r: 3.6, fill: '#2a1b11' }, o);
+    el('circle', { cx: s * 15 + 2.2, cy: -176.5, r: 1.3, fill: '#fffaf0' }, o);
+    return o;
+  });
+  for (const s of [-1, 1]){
+    el('rect', { x: s * 15 - 13, y: -188, width: 26, height: 24, rx: 9, fill: P.glas, 'fill-opacity': .22, stroke: P.bril, 'stroke-width': 3.5 }, h);
+    el('path', { d: `M${s * 15 - 7} -183L${s * 15 - 2} -186`, stroke: '#fffaf0', 'stroke-width': 2.5, 'stroke-linecap': 'round', opacity: .8 }, h);
+  }
+  el('path', { d: 'M-2 -178C-1 -181 1 -181 2 -178', ...DUN, stroke: P.bril, 'stroke-width': 3 }, h);
+  el('path', { d: 'M-3 -166C-5 -160-3 -157 0 -157C3 -157 5 -160 3 -166', ...DUN, stroke: P.huidS, 'stroke-width': 2.5 }, h);   // neus
+  F.mond = el('path', { d: 'M-11 -151C-6 -143 6 -143 11 -151C6 -148 -6 -148 -11 -151Z', fill: '#7a2e1f', ...LIJN, 'stroke-width': 2.5 }, h);
+
+  // --- armen: de bovenarmen langs het lijf, de onderarmen naar voren, de telefoon voor de borst ---
+  for (const s of [-1, 1]){
+    el('path', { d: `M${s * 42} -122C${s * 60} -122 ${s * 72} -112 ${s * 73} -94C${s * 75} -78 ${s * 74} -62 ${s * 68} -50C${s * 62} -40 ${s * 48} -42 ${s * 32} -54L${s * 34} -72C${s * 42} -68 ${s * 48} -66 ${s * 52} -70C${s * 54} -80 ${s * 54} -96 ${s * 50} -106Z`,
+                 fill: s > 0 ? P.truiS : P.trui, ...LIJN }, L);
+    el('path', { d: `M${s * 52} -70C${s * 50} -62 ${s * 46} -58 ${s * 40} -58`, ...DUN, stroke: P.truiS, 'stroke-width': 2 }, L);
+  }
+  F.telefoon = el('g', {}, L);
+  el('rect', { x: -17, y: -106, width: 34, height: 54, rx: 7, fill: '#2a1b11', stroke: '#3b2416', 'stroke-width': 3 }, F.telefoon);
+  el('rect', { x: -13, y: -102, width: 26, height: 46, rx: 4.5, fill: 'none', stroke: '#f0c35c', 'stroke-width': 2, opacity: .7 }, F.telefoon);
+  F.handen = [-1, 1].map(s => {
+    const hg = el('g', {}, L);
+    el('path', { d: `M${s * 34} -72C${s * 26} -80 ${s * 14} -78 ${s * 13} -68C${s * 12} -58 ${s * 20} -52 ${s * 30} -55Z`, fill: P.huid, ...LIJN, 'stroke-width': 3 }, hg);
+    el('path', { d: `M${s * 14} -64C${s * 18} -64 ${s * 22} -62 ${s * 24} -58`, ...DUN, stroke: P.huidS, 'stroke-width': 2 }, hg);
+    const duim = el('ellipse', { cx: s * 10, cy: -100, rx: 4.5, ry: 7.5, fill: P.huid, ...LIJN, 'stroke-width': 2.5, transform: `rotate(${s * 20} ${s * 10} -100)` }, hg);
+    el('path', { d: `M${s * 16} -76C${s * 13} -86 ${s * 11} -94 ${s * 10} -100`, ...DUN, stroke: '#3b2416', 'stroke-width': 3 }, hg);
+    return { hg, duim, s };
+  });
+  return { g, F };
+}
+
+/* ==========================================================================
    4. SCÈNE 1: DE COGNITIEVE SLUIMER
    Een strak, blinkend stadhuis als een zonnige prent uit de jaren zeventig: een gestreepte zon,
    wolkjes, omlijnde vormen. Uit de deur drijven PR-bubbels naar de smartphone van een burger op
@@ -576,41 +770,13 @@ function maakSluimer(laag, dyn){
     .map(([x, y, d]) => ({ x, y, d, e: ster(huis, x, y, 18) }));
   S.fonkels.forEach(f => f.e.setAttribute('fill', K70.cremeLicht));
 
-  // --- de bank en de burger: in profiel, naar het stadhuis gekeerd, hoofd gebogen over de telefoon.
-  //     Eerst de omlijning van het hele lijf, dan de kleuren: zo leest de figuur als één uitgeknipte vorm. ---
-  const TRUI = '#c9954a', BROEK = K70.bruin, HUID = '#8a5a3c';
+  // --- de bank en de burger: in profiel, naar het stadhuis gekeerd, voorovergebogen over de telefoon ---
   const bank = el('g', {}, cam);
-  el('ellipse', { cx: 1630, cy: 914, rx: 230, ry: 11, fill: 'rgba(59,36,22,.16)' }, bank);
-  for (const y of [766, 796]) el('rect', { x: 1452, y, width: 356, height: 16, rx: 6, fill: K70.hout, ...R }, bank);
-  for (const x of [1470, 1778]) el('rect', { x, y: 766, width: 12, height: 86, fill: INKT }, bank);
-  S.telGloed = el('ellipse', { cx: 1570, cy: 758, rx: 74, ry: 56, fill: 'url(#telgloed)', opacity: .55 }, bank);
-  const leden = [
-    ['M1652 834C1664 796 1644 762 1612 744', 58, TRUI],       // romp
-    ['M1650 840L1576 846', 40, BROEK],                        // dij
-    ['M1576 846L1568 900', 34, BROEK],                        // scheen, onderaan wijd: een broek met olifantspijpen
-    ['M1606 740L1590 724', 22, HUID],                         // hals
-  ];
-  for (const [d, w] of leden) el('path', { d, stroke: INKT, 'stroke-width': w + 7, 'stroke-linecap': 'round', fill: 'none' }, bank);
-  el('circle', { cx: 1578, cy: 712, r: 37.5, fill: INKT }, bank);
-  el('rect', { x: 1440, y: 846, width: 380, height: 20, rx: 7, fill: K70.hout, ...R }, bank);
-  for (const x of [1464, 1782]) el('rect', { x, y: 864, width: 14, height: 46, fill: INKT }, bank);
-  for (const [d, w, kleur] of leden) el('path', { d, stroke: kleur, 'stroke-width': w, 'stroke-linecap': 'round', fill: 'none' }, bank);
-  el('path', { d: 'M1552 896L1588 896L1592 906L1546 906Z', fill: BROEK, ...R }, bank);
-  el('ellipse', { cx: 1552, cy: 910, rx: 26, ry: 9, fill: INKT }, bank);
-  S.hoofd = el('g', {}, bank);
-  el('circle', { cx: 1578, cy: 712, r: 34, fill: HUID }, S.hoofd);
-  el('path', { d: 'M1546 700Q1560 668 1600 676Q1618 684 1612 708Q1590 690 1560 704Z', fill: INKT }, S.hoofd);   // haar
-  S.oog1 = el('ellipse', { cx: 1558, cy: 721, rx: 3.8, ry: 3.8, fill: INKT }, S.hoofd);
-  el('path', { d: 'M1614 752L1608 808L1570 800', stroke: INKT, 'stroke-width': 28, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'none' }, bank);
-  el('path', { d: 'M1614 752L1608 808L1570 800', stroke: '#b98440', 'stroke-width': 21, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'none' }, bank);
-  const tel = el('g', { transform: 'translate(1556 790) rotate(-38)' }, bank);
-  el('rect', { x: -13, y: -22, width: 26, height: 44, rx: 6, fill: INKT }, tel);
-  el('rect', { x: -10, y: -18, width: 20, height: 36, rx: 3, fill: K70.goud }, tel);
-  const telClip = el('clipPath', { id: 'telclip' }, dyn);
-  el('rect', { x: -10, y: -18, width: 20, height: 36 }, telClip);
-  S.scroll = el('g', {}, el('g', { 'clip-path': 'url(#telclip)' }, tel));
-  for (let i = 0; i < 9; i++) el('rect', { x: -7, y: -18 + i * 9, width: i % 3 ? 14 : 9, height: 4, rx: 2, fill: K70.bruin, opacity: .55 }, S.scroll);
-  el('circle', { cx: 1566, cy: 800, r: 11, fill: HUID, ...R }, bank);
+  const BX = 1660, BY = 842, BK = 1.14;                                                   // plaats en grootte van de bank
+  el('ellipse', { cx: BX - 20, cy: BY + 67 * BK, rx: 170, ry: 11, fill: 'rgba(59,36,22,.16)' }, bank);
+  S.telGloed = el('ellipse', { cx: BX - 96 * BK, cy: BY - 88 * BK, rx: 96, ry: 78, fill: 'url(#telgloed)', opacity: .55 }, bank);
+  S.burger = tekenBurgerZij(el('g', { transform: `translate(${BX} ${BY}) scale(${BK})` }, bank), dyn, 's1');
+  const TEL = [BX - 103 * BK, BY - 72 * BK];                                            // waar de bubbels heen gaan
 
   // --- de bubbels: eenvormig, drie woorden, en allemaal op weg naar hetzelfde scherm ---
   const WOORDEN = ['Participatie', 'Transparantie', 'Bruisende stad'];
@@ -670,18 +836,22 @@ function maakSluimer(laag, dyn){
       const s = p < 1 ? Math.sin(p * Math.PI) : 0;
       f.e.setAttribute('transform', `translate(${f.x} ${f.y}) scale(${Math.max(.001, s).toFixed(3)}) rotate(${f2(lt * 50)}) translate(${-f.x} ${-f.y})`);
     }
-    S.scroll.setAttribute('transform', `translate(0 ${f2(-((lt * 18) % 27))})`);
-    const knipper = (lt % 4.1) < .13 ? .15 : 1;
-    S.oog1.setAttribute('ry', (3.8 * knipper).toFixed(2));
-    S.hoofd.setAttribute('transform', `translate(0 ${f2(Math.sin(lt * 1.4) * 1.6)})`);
+    // de burger: ademt, knikt traag weg, en de duim scrolt
+    const F = S.burger.F;
+    F.scroll.setAttribute('transform', `translate(0 ${f2(-((lt * 14) % 24))})`);
+    const zak = 4 * E.inUit2(klem(lt / s1.duur));
+    F.hoofd.setAttribute('transform', `translate(-34 -110) rotate(${f2(-38 - zak + Math.sin(lt * 1.3) * 1.6)})`);
+    F.romp.setAttribute('transform', `translate(10 -16) scale(1 ${(1 + .012 * Math.sin(lt * 1.7)).toFixed(4)}) rotate(${f2(-zak * .4)}) translate(-10 16)`);
+    const veeg = (lt * 1.6) % 1;
+    F.duim.setAttribute('transform', `translate(${f2(-2 * Math.sin(veeg * Math.PI))} ${f2(3 - 6 * E.inUit2(veeg))}) rotate(-60 -103 -70)`);
 
     let flits = 0;
     for (const b of S.bubbels){
       const u = (lt - b.start) / b.reis;
       if (u < 0 || u > 1){ b.g.setAttribute('opacity', 0); continue; }
       const q = E.inUit2(u);
-      const x = (1 - q) * (1 - q) * 800 + 2 * (1 - q) * q * b.p1[0] + q * q * 1556;
-      const y = (1 - q) * (1 - q) * 776 + 2 * (1 - q) * q * b.p1[1] + q * q * 788 + Math.sin(u * 9 + b.fase) * 12 * (1 - q);
+      const x = (1 - q) * (1 - q) * 800 + 2 * (1 - q) * q * b.p1[0] + q * q * TEL[0];
+      const y = (1 - q) * (1 - q) * 776 + 2 * (1 - q) * q * b.p1[1] + q * q * TEL[1] + Math.sin(u * 9 + b.fase) * 12 * (1 - q);
       const s = E.terug(fase(u, 0, .16)) * (1 - .96 * E.in2(fase(u, .7, 1)));
       const rek = 1 + .06 * Math.sin(u * 14 + b.fase) * (1 - q);                      // een beetje rekken en krimpen
       zet(b.g, { transform: `translate(${f2(x)} ${f2(y)}) rotate(${f2(Math.sin(u * 5 + b.fase) * 5)}) scale(${Math.max(.001, s * rek).toFixed(3)} ${Math.max(.001, s / rek).toFixed(3)})`,
@@ -689,6 +859,7 @@ function maakSluimer(laag, dyn){
       flits += Math.exp(-Math.pow((u - .97) / .04, 2));
     }
     S.telGloed.setAttribute('opacity', (.5 + .45 * klem(flits)).toFixed(3));
+    F.glasGloed.setAttribute('opacity', f2(.5 + .5 * klem(flits)));
   };
   return S;
 }
@@ -1131,37 +1302,10 @@ function maakNudge(laag, dyn){
     return { k, x };
   });
 
-  // --- de burger: rechtop, recht in de camera, in een mosterdgele col en een broek met olifantspijpen ---
+  // --- de burger: rechtop, wakker, recht in de camera ---
   S.fig = el('g', {}, g);
-  const fg = S.fig, TRUI = K70.mosterd, BROEK = K70.bruin, HUID = '#8a5a3c';
-  el('ellipse', { cx: 960, cy: 912, rx: 240, ry: 11, fill: 'rgba(59,36,22,.16)' }, fg);
-  for (const y of [740, 770]) el('rect', { x: 770, y, width: 380, height: 16, rx: 7, fill: K70.hout, ...R }, fg);
-  for (const x of [786, 1122]) el('rect', { x, y: 740, width: 12, height: 106, fill: INKT }, fg);
-  el('path', { d: 'M904 670Q960 652 1016 670L1008 846L912 846Z', fill: TRUI, ...R }, fg);                 // romp
-  el('path', { d: 'M944 640L976 640L980 674L940 674Z', fill: TRUI, ...R }, fg);                             // col
-  S.hoofd = el('g', {}, fg);
-  el('circle', { cx: 960, cy: 608, r: 41, fill: HUID, ...R }, S.hoofd);
-  el('path', { d: 'M919 604Q920 560 960 562Q1000 560 1001 604Q990 584 960 582Q930 584 919 604Z', fill: INKT }, S.hoofd);   // haar
-  S.ogen = [944, 976].map(x => el('ellipse', { cx: x, cy: 610, rx: 7, ry: 7, fill: K70.cremeLicht, ...R, 'stroke-width': 2 }, S.hoofd));
-  S.pupillen = [944, 976].map(x => el('circle', { cx: x, cy: 611, r: 3, fill: INKT }, S.hoofd));
-  el('path', { d: 'M950 630Q960 638 970 630', fill: 'none', stroke: INKT, 'stroke-width': 3, 'stroke-linecap': 'round' }, S.hoofd);   // een glimlach
-  el('rect', { x: 760, y: 842, width: 400, height: 20, rx: 8, fill: K70.hout, ...R }, fg);
-  for (const x of [780, 1126]) el('rect', { x, y: 862, width: 14, height: 44, fill: INKT }, fg);
-  el('path', { d: 'M916 846L948 846L956 900L904 900Z', fill: BROEK, ...R }, fg);                            // olifantspijpen
-  el('path', { d: 'M972 846L1004 846L1016 900L964 900Z', fill: BROEK, ...R }, fg);
-  el('ellipse', { cx: 928, cy: 906, rx: 28, ry: 9, fill: INKT }, fg);
-  el('ellipse', { cx: 992, cy: 906, rx: 28, ry: 9, fill: INKT }, fg);
-  el('circle', { cx: 931, cy: 850, r: 23, fill: BROEK, ...R }, fg);
-  el('circle', { cx: 989, cy: 850, r: 23, fill: BROEK, ...R }, fg);
-  for (const d of ['M910 686L902 770L944 784', 'M1010 686L1018 770L976 784']){
-    el('path', { d, stroke: INKT, 'stroke-width': 29, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'none' }, fg);
-    el('path', { d, stroke: TRUI, 'stroke-width': 22, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'none' }, fg);
-  }
-  el('rect', { x: 935, y: 736, width: 50, height: 78, rx: 10, fill: INKT, stroke: K70.goud, 'stroke-width': 2.5 }, fg);
-  el('circle', { cx: 960, cy: 750, r: 4, fill: K70.bruin }, fg);
-  // handen aan weerszijden van de telefoon; de duimen tikken
-  S.duimen = [[934, -1], [986, 1]].map(([x, z]) =>
-    el('ellipse', { cx: x, cy: 786, rx: 9.5, ry: 15, fill: HUID, ...R, 'stroke-width': 2.5, transform: `rotate(${z * 12} ${x} 786)` }, fg));
+  el('ellipse', { cx: 960, cy: 912, rx: 230, ry: 11, fill: 'rgba(59,36,22,.16)' }, S.fig);
+  S.burger = tekenBurgerVoor(el('g', { transform: 'translate(960 846)' }, S.fig));
 
   // --- de regenboogstrepen die het archief wegvegen (boven alles, niet geknipt) ---
   S.veeg = el('g', {}, wortel);
@@ -1228,13 +1372,21 @@ function maakNudge(laag, dyn){
     zet(S.melding, { opacity: f2(fase(druk, .25, .55)), transform: `translate(0 ${f2((1 - E.terug(fase(druk, .25, .7))) * 20)})` });
     S.draaiknoppen.forEach((d, i) => d.k.setAttribute('transform',
       `rotate(${f2(Math.sin(lt * .8 + i) * 12 + (lt > klaar ? 90 * E.terug(fase(lt, klaar, klaar + .6)) : 0))} ${d.x} 684)`));
+    // de burger: de duimen tikken, het hoofd wiegt mee, knippert, en kijkt op als het antwoord er is
+    const F = S.burger.F;
     const tikt = lt > tTyp && lt < klaar;
-    S.duimen.forEach((d, i) => d.setAttribute('transform',
-      `translate(0 ${tikt ? f2(-Math.max(0, Math.sin(lt * 26 + i * Math.PI)) * 5) : 0}) rotate(${i ? 12 : -12} ${i ? 986 : 934} 786)`));
-    S.hoofd.setAttribute('transform', `rotate(${f2(Math.sin(lt * 1.2) * 2)} 960 650)`);
-    const kn = (lt % 3.7) > 3.58 ? .15 : 1;
-    S.ogen.forEach(o => o.setAttribute('ry', f2(7 * kn)));
-    S.pupillen.forEach(p => p.setAttribute('opacity', kn < 1 ? 0 : 1));
+    F.handen.forEach((d, i) => {
+      const op = tikt ? Math.max(0, Math.sin(lt * 26 + i * Math.PI)) : 0;
+      d.duim.setAttribute('transform', `translate(0 ${f2(-op * 4)}) rotate(${d.s * 20} ${d.s * 10} -100)`);
+      d.hg.setAttribute('transform', `translate(0 ${f2(op * 1.2)})`);
+    });
+    const opkijk = E.terug(fase(lt, klaar + .35, klaar + .9));
+    F.hoofd.setAttribute('transform', `rotate(${f2(Math.sin(lt * 1.2) * 2.4)} 0 -140) translate(0 ${f2(-2 * opkijk)})`);
+    F.brauwen.setAttribute('transform', `translate(0 ${f2(-3.5 * opkijk)})`);
+    F.mond.setAttribute('transform', `translate(0 -148) scale(${(1 + .18 * opkijk).toFixed(3)} ${(1 + .35 * opkijk).toFixed(3)}) translate(0 148)`);
+    const kn = (lt % 3.7) > 3.58 ? .12 : 1;
+    F.ogen.forEach(o => o.setAttribute('transform', `translate(0 -176) scale(1 ${kn}) translate(0 176)`));
+    F.lijf.setAttribute('transform', `translate(0 ${f2(Math.sin(lt * 1.6) * 1.2)})`);
   };
   return S;
 }
