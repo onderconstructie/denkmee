@@ -63,6 +63,11 @@ privacy_namen*
 *.log
 *.out
 
+# Exports van de animatie (animatie/exporteer.py). Een film en zijn ondertitels zijn met één
+# commando opnieuw te maken, en een MP4 van een tiental megabyte hoort niet in git.
+animatie/*.mp4
+animatie/*.srt
+
 # Lokale knoppen (dubbelklik op dit toestel) en de eenmalige logo-hulpstukken: blijven lokaal,
 # niet nodig om te bouwen.
 *.bat
