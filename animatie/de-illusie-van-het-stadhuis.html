@@ -33,7 +33,7 @@
   schuiven mee. Is de voice-over ingesproken, geef dan een zin 'extra' seconden tot beeld en stem
   gelijk lopen.
 
-  ADRESOPTIES. ?versie=origineel|herwerkt   ?t=12.5 (begintijd in seconden)   ?ondertitels=0
+  ADRESOPTIES. ?versie=origineel|herwerkt   ?t=12.5 (begintijd in seconden)   ?ondertitels=0   ?korrel=0|1
                ?opname=1 (enkel het beeld, zonder bediening; zo leest exporteer.py de film uit)
                #herwerkt opent ook de herwerkte versie. Dat werkt ook waar een adres geen ?-opties
                doorgeeft, zoals een privépagina op claude.ai.
@@ -1638,9 +1638,13 @@ function maakKorrel(){
     cx.putImageData(d, 0, 0);
     laag.style.backgroundImage = `url(${c.toDataURL('image/png')})`;
   }
+  // In de export staat de korrel standaard uit (KORREL), en als ze aan staat, ligt ze stil. Ruis kan
+  // een videocodec niet samenpersen: met springende korrel werd de MP4 460 MB, met stilliggende korrel
+  // nog drie keer zo groot als zonder. En een platform dat de film opnieuw codeert, maakt er blokjes van.
+  laag.style.display = KORREL ? '' : 'none';
   let vorige = -1;
   S.render = T => {
-    const n = RUSTIG ? 0 : Math.floor(T * 12);
+    const n = RUSTIG || OPNAME ? 0 : Math.floor(T * 12);
     if (n === vorige) return;
     vorige = n;
     const r = toeval(n * 7919 + 13);
@@ -2020,6 +2024,8 @@ async function geluidWav(van = 0, tot = TL.duur){
 const Q = new URLSearchParams(location.search);
 const OPNAME = Q.get('opname') === '1';
 const RUSTIG = !OPNAME && matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Filmkorrel: in de speler aan, in de export enkel met ?korrel=1 (zie maakKorrel).
+const KORREL = OPNAME ? Q.get('korrel') === '1' : Q.get('korrel') !== '0';
 // De versie komt uit ?versie=, of uit #herwerkt: een kaal anker komt ook door waar ?-opties wegvallen.
 const ANKER = location.hash.slice(1);
 let VKEY = VERSIES[Q.get('versie')] ? Q.get('versie') : VERSIES[ANKER] ? ANKER : 'origineel';
