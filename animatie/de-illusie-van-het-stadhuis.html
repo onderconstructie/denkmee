@@ -115,6 +115,8 @@ button,select{font:inherit;color:inherit}
 #bediening button:hover,#bediening button:focus-visible{border-color:var(--rood);outline:none}
 #bediening button[aria-pressed="false"]{opacity:.5}
 #bediening button[hidden]{display:none}
+#geluidMelding{font-size:.8rem;color:var(--mosterd);flex-basis:100%;order:9}
+#geluidMelding[hidden]{display:none}
 #bediening svg{width:15px;height:15px;fill:currentColor}
 #tijd{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.78rem;color:var(--balk-dim);
   min-width:7.6em;font-variant-numeric:tabular-nums}
@@ -214,6 +216,7 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
     <button id="knopGeluid" aria-pressed="true" aria-label="Geluid" title="Geluid aan of uit (M)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path id="icoonGeluid" d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
     </button>
+    <span id="geluidMelding" role="status" hidden></span>
     <button id="knopVol" aria-label="Volledig scherm" title="Volledig scherm (F)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM6 15v3h3v2H4v-5zm12 0h2v5h-5v-2h3z"/></svg>
     </button>
@@ -2431,11 +2434,19 @@ const GELUID = {
   kan(){ return !OPNAME && !!(window.AudioContext || window.webkitAudioContext); },
   start(t){
     this.stop();
-    if (!this.aan || !this.kan()) return;
+    if (!this.aan || !this.kan()) return toonGeluidMelding();
     try {
-      if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      if (this.ctx.state === 'suspended') this.ctx.resume();
-    } catch (fout){ return; }
+      // iPhone en iPad: als 'afspeler' klinkt webgeluid ook met de stille modus aan
+      if (navigator.audioSession) navigator.audioSession.type = 'playback';
+      if (!this.ctx){
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        // mocht de browser het geluid pas later laten beginnen: dan meteen op de juiste plek in de film
+        this.ctx.addEventListener('statechange', () => { if (this.ctx.state === 'running' && SPEELT && !this.bus) this.start(T); toonGeluidMelding(); });
+      }
+      if (this.ctx.state !== 'running') this.ctx.resume().catch(() => {});
+      this.ontgrendel();
+    } catch (fout){ return toonGeluidMelding(); }
+    if (this.ctx.state !== 'running'){ setTimeout(toonGeluidMelding, 700); return; }
     this.bus = this.ctx.createGain();
     this.bus.connect(this.ctx.destination);
     this.K = maakKlankbord(this.ctx, this.bus);
@@ -2449,7 +2460,32 @@ const GELUID = {
     planGeluid(this.K, this.lijst, this.gepland, tot, this.c0 + (this.gepland - this.T0), eerste);
     this.gepland = tot;
   },
+  // Oudere iPhones kennen navigator.audioSession niet. Een stil fragment dat meespeelt in een
+  // <audio>-element zet het toestel dan in de stand 'afspelen', en dan klinkt ook het webgeluid.
+  ontgrendel(){
+    try {
+      if (!this.stilte){
+        const n = 4410, b = new Uint8Array(44 + n * 2), dv = new DataView(b.buffer);
+        const w = (o, x) => { for (let i = 0; i < x.length; i++) b[o + i] = x.charCodeAt(i); };
+        w(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true);
+        dv.setUint16(22, 1, true); dv.setUint32(24, 44100, true); dv.setUint32(28, 88200, true); dv.setUint16(32, 2, true);
+        dv.setUint16(34, 16, true); w(36, 'data'); dv.setUint32(40, n * 2, true);
+        let x = ''; for (const c of b) x += String.fromCharCode(c);
+        this.stilte = new Audio('data:audio/wav;base64,' + btoa(x));
+        this.stilte.loop = true; this.stilte.setAttribute('playsinline', '');
+      }
+      this.stilte.play().catch(() => {});
+    } catch (fout){}
+  },
+  // Staat het geluid aan maar houdt de browser het tegen? Dan maakt een tik het wakker.
+  wekker(){
+    if (!this.ctx || this.ctx.state === 'running') return false;
+    if (navigator.audioSession) navigator.audioSession.type = 'playback';
+    this.ctx.resume().catch(() => {}); this.ontgrendel();
+    return true;
+  },
   stop(){
+    if (this.stilte) this.stilte.pause();
     if (!this.bus) return;
     const b = this.bus, K = this.K;
     b.gain.setTargetAtTime(0, this.ctx.currentTime, .03);
@@ -2461,6 +2497,15 @@ const GELUID = {
     return this.T0 + (this.ctx.currentTime - this.c0) - (this.ctx.outputLatency || this.ctx.baseLatency || 0);
   },
 };
+// Een korte melding in de bedieningsbalk als het geluid aan staat maar niet klinkt.
+function toonGeluidMelding(){
+  const m = document.getElementById('geluidMelding');
+  if (!m || OPNAME) return;
+  let tekst = '';
+  if (GELUID.aan && !GELUID.kan()) tekst = 'Deze browser speelt het geluid niet af. De MP4 heeft het wel.';
+  else if (GELUID.aan && SPEELT && GELUID.ctx && GELUID.ctx.state !== 'running') tekst = 'Geen geluid? Tik op de luidspreker. Op een iPhone: zet de stille modus uit.';
+  m.textContent = tekst; m.hidden = !tekst;
+}
 const ICOON_GELUID = 'M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z';
 const ICOON_STIL = 'M3 9v6h4l5 4V5L7 9zm12.1-.5l2.4 2.4 2.4-2.4 1.1 1.1-2.4 2.4 2.4 2.4-1.1 1.1-2.4-2.4-2.4 2.4-1.1-1.1 2.4-2.4-2.4-2.4z';
 
@@ -2535,7 +2580,7 @@ function lus(nu){
   requestAnimationFrame(lus);
 }
 function speel(){ if (T >= TL.duur - .05) T = 0; SPEELT = true; VORIGE = null; $('grootSpelen').hidden = true; GELUID.start(T); requestAnimationFrame(lus); balkBij(); }
-function pauze(){ SPEELT = false; GELUID.stop(); balkBij(); }
+function pauze(){ SPEELT = false; GELUID.stop(); toonGeluidMelding(); balkBij(); }
 function wissel(){ SPEELT ? pauze() : speel(); }
 // Wie verspringt, wil het beeld zien: de grote afspeelknop gaat dan weg.
 function naar(t){ T = klem(t, 0, TL.duur); if (!OPNAME) $('grootSpelen').hidden = true; if (SPEELT) GELUID.start(T); teken(); }
@@ -2605,9 +2650,11 @@ function koppelBediening(){
     kg.setAttribute('aria-pressed', String(aan));
     $('icoonGeluid').setAttribute('d', aan ? ICOON_GELUID : ICOON_STIL);
     if (SPEELT){ if (aan) GELUID.start(T); else GELUID.stop(); }
+    toonGeluidMelding();
   };
-  kg.addEventListener('click', () => zetGeluid(!GELUID.aan));
+  kg.addEventListener('click', () => { if (GELUID.aan && GELUID.wekker()) return; zetGeluid(!GELUID.aan); });
   kg.hidden = !GELUID.kan();
+  toonGeluidMelding();
   // Volledig scherm is een extraatje: op een gsm of in sommige vensters mag het niet, en dan gebeurt er niets.
   const vol = () => {
     try { (document.fullscreenElement ? document.exitFullscreen() : $('doek').requestFullscreen?.())?.catch?.(() => {}); }
