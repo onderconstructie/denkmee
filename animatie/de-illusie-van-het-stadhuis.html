@@ -33,7 +33,7 @@
   schuiven mee. Is de voice-over ingesproken, geef dan een zin 'extra' seconden tot beeld en stem
   gelijk lopen.
 
-  ADRESOPTIES. ?versie=origineel|herwerkt   ?t=12.5 (begintijd in seconden)   ?ondertitels=0   ?korrel=0|1
+  ADRESOPTIES. ?versie=origineel|herwerkt   ?t=12.5 (begintijd in seconden)   ?ondertitels=0   ?korrel=0|1   ?muziek=0
                ?opname=1 (enkel het beeld, zonder bediening; zo leest exporteer.py de film uit)
                #herwerkt opent ook de herwerkte versie. Dat werkt ook waar een adres geen ?-opties
                doorgeeft, zoals een privépagina op claude.ai.
@@ -42,6 +42,10 @@
   browser maakt alle geluiden zelf, uit ruis en tonen. Er zitten geen geluidsbestanden in. Elke scène
   zegt in S.geluid() welk geluid ze wanneer maakt, met dezelfde tijden als haar beeld; hoe elk geluid
   klinkt, staat in KLANK. Er is geen stem: die wordt apart ingesproken.
+
+  MUZIEK. Achtergrondmuziek in de stijl van de jaren zeventig (elektrische piano, funky bas, clavinet,
+  disco-strijkers, synthesizer, koper), ook door de browser zelf gespeeld. componeer() schrijft per
+  scène een stuk, op een tempo dat in hele maten precies in die scène past; ?muziek=0 laat ze weg.
 
   EXPORTEREN naar MP4 met geluid en ondertitelbestand: python animatie/exporteer.py (uitleg daar).
 
@@ -1182,15 +1186,15 @@ function maakArchief(laag, dyn){
     zet(S.titel, { opacity: f2(to),
       transform: `translate(960 ${f2(200 + Math.sin(tt * 1.6) * 4)}) scale(${pop.toFixed(3)}) translate(-960 -200)` });
   };
-  // geluid: de kamer en de klok, de laden, het papier, de stift of de veeg, de lampen, de schijnwerper,
-  // de stempel en de knipperende titel. De klok stopt als de stempel valt.
+  // geluid: de kamer, de laden, het papier, de stift of de veeg, de lampen, de schijnwerper,
+  // de stempel en de knipperende titel
   S.geluid = () => {
     const s2 = TL.scenes[1], s3 = TL.scenes[2], s4 = TL.scenes[3];
     const tDoc = s2.start + (s2.beats.document ?? s2.duur * .62);
     const tStempel = s3.start + (s3.beats.stempel ?? 4);
     const tTitel = s3.start + (s3.beats.titel ?? 4.7);
     const tDicht = s2.cues[1] ? s2.cues[1].a - s2.start : 7;
-    const G = [{ soort: 'archief', t: s2.start + 1.5, tot: s4.start + .3, klokTot: tStempel }];
+    const G = [{ soort: 'archief', t: s2.start + 1.5, tot: s4.start + .3 }];
     S.laden.forEach((l, i) => G.push({ soort: 'lade', t: s2.start + tDicht + l.na + .24, voor: .22, pan: -.5 + i * .25, zaad: i + 1 }));
     [[0, -.45], [.14, 0], [.28, .35]].forEach(([d, pan], i) => G.push({ soort: 'papier', t: tDoc - .5 + d, pan, zaad: 10 + i }));
     if (B.documenten === 'censuur'){
@@ -1598,7 +1602,7 @@ function maakKeuze(laag, dyn){
       transform: `translate(960 777) scale(${Math.max(.001, E.terug(pU)).toFixed(3)}) rotate(${f2(-4 * (1 - E.uit3(pU)))}) translate(-960 -777)` });
     zicht(S.eind, lt > tE + .6);
   };
-  // geluid: de strepen, de helften die openklappen, het oog, de zon, de veeg naar de eindkaart
+  // geluid: de strepen, de helften die openklappen, het oog, de veeg naar de eindkaart (de zon klinkt in de muziek)
   S.geluid = () => {
     const s5 = TL.scenes[4], a = s5.start, b = s5.beats;
     const tE = b.eindkaart ?? s5.duur - 7, tR = b.rechts ?? 5;
@@ -1608,7 +1612,6 @@ function maakKeuze(laag, dyn){
       { soort: 'zoef', t: a + .3, duur: .75, f0: 450, f1: 2000, pan0: 0, pan1: .8, sterkte: .45, zaad: 6 },
       { soort: 'glans', t: a + .95, pan: .5 },
       { soort: 'klik', t: a + tR + .9, f: 5000, sterkte: .2, pan: .5 },
-      { soort: 'zon', t: a + tR, tot: TL.duur, helder: a + tE + .7 },
       { soort: 'zoef', t: a + tE, duur: .9, f0: 300, f1: 2500, pan0: .6, pan1: -.8, sterkte: .7, zaad: 7 },
       { soort: 'plop', t: a + tE + .72, toon: 4, sterkte: 1.2 },
       { soort: 'rits', t: a + tE + .9, duur: .5, sterkte: .5 },
@@ -1664,13 +1667,17 @@ function maakKorrel(){
    ========================================================================== */
 // Het klankbord: de context, gedeelde ruis (vast zaad) en de ingang van de mix. Een compressor houdt
 // harde klappen en zachte ruis dicht bij elkaar, een begrenzer vangt de hoogste pieken op.
-const VOLUME = 1.75;
+const VOLUME = 1.75, MUZIEK_VOLUME = .1;
 // Het niveau van elke soort, afgesteld door elk geluid apart te meten (piek en luidste halve seconde),
 // met de stempel als luidste klap. Kleine geluiden (tikken, tegeltjes) zijn kort; daar telt de piek.
 const NIVEAU = {
   stempel: 1, dreun: .67, lade: .8, papier: 1.3, tv: 1.3, zoef: 3.2, schuif: 1.2, plop: 1.8, klik: 2.4,
   belletje: 1.3, glans: 1.1, tik: 2.5, tegel: 2.2, bloop: 1.3, pling: 1.3, neon: 3, stift: 3, veeg: 1.7,
-  rits: 2.6, ratel: 4.3, buiten: 1.1, archief: 1, schijnwerper: 1, kamer: 1.6, zon: .6,
+  rits: 2.6, ratel: 4.3, buiten: 1.1, archief: 1, schijnwerper: 1, kamer: 1.6,
+  // de muziek, op dezelfde manier afgesteld: de snaredrum even stevig als de basdrum, de bas iets
+  // terug, en clavinet, hihat en houtblok hoorbaar
+  mKick: 1, mSnare: 2.6, mRim: 2.9, mHat: 3, mCrash: 1.3, mHout: 2.8, mBas: .74, mRhodes: 1.4, mClav: 7,
+  mSnaren: 1.15, mLead: 1.5, mVibes: 2.2, mKoper: 1.1, mRiser: 1.6, mTapestop: 1,
 };
 function maakKlankbord(ctx, naar){
   if (!ctx._ruis){
@@ -1680,6 +1687,16 @@ function maakKlankbord(ctx, naar){
     let v = 0;
     for (let i = 0; i < n; i++){ const x = r() * 2 - 1; w[i] = x; v = (v + .02 * x) / 1.02; b[i] = v * 3.5; }
     ctx._ruis = { wit, bruin };
+  }
+  // galm voor de muziek: een kunstmatige zaal van ruim twee seconden, donker gekleurd
+  if (!ctx._galm){
+    const sr = ctx.sampleRate, n = Math.round(sr * 2.2), ir = ctx.createBuffer(2, n, sr), r = toeval(123);
+    for (let k = 0; k < 2; k++){
+      const d = ir.getChannelData(k);
+      let y = 0;
+      for (let i = 0; i < n; i++){ const t = i / sr, x = t < .012 ? 0 : (r() * 2 - 1) * Math.exp(-t / .3); y += .45 * (x - y); d[i] = y; }
+    }
+    ctx._galm = ir;
   }
   const comp = ctx.createDynamicsCompressor();
   comp.threshold.value = -14; comp.knee.value = 10; comp.ratio.value = 2; comp.attack.value = .01; comp.release.value = .3;
@@ -1696,7 +1713,11 @@ function maakKlankbord(ctx, naar){
   }
   plafond.curve = kromme; plafond.oversample = '4x';
   laag.connect(comp); comp.connect(master); master.connect(rem); rem.connect(plafond); plafond.connect(naar);
-  return { ctx, wit: ctx._ruis.wit, bruin: ctx._ruis.bruin, in: laag, bronnen: [], niveau: 1 };
+  // de muziek krijgt een eigen bus en galm, en gaat dan door dezelfde compressor: een klap drukt haar even weg
+  const muziek = ctx.createGain(), galm = ctx.createConvolver();
+  muziek.gain.value = MUZIEK_VOLUME; muziek.connect(laag);
+  galm.buffer = ctx._galm; galm.connect(muziek);
+  return { ctx, wit: ctx._ruis.wit, bruin: ctx._ruis.bruin, in: laag, muziek, galm, bronnen: [], uitgangen: [], niveau: 1 };
 }
 const KL = {
   // ruis vanaf t, duur seconden, naar een knoop; 'bruin' is dieper en rommeliger dan 'wit'
@@ -1723,12 +1744,20 @@ const KL = {
   // de uitgang van één geluid: op het niveau van zijn soort, naar de mix
   uit(K){
     const g = K.ctx.createGain();
-    g.gain.value = K.niveau; g.connect(K.in);
+    g.gain.value = K.niveau; g.connect(K.in); K.uitgangen.push(g);
     return g;
   },
   pan(K, p){
     const s = K.ctx.createStereoPanner();
     s.pan.value = klem(p || 0, -1, 1); s.connect(KL.uit(K));
+    return s;
+  },
+  // de uitgang van een instrument: naar de muziekbus, en een deel naar de galm
+  muz(K, p, galm = 0){
+    const s = K.ctx.createStereoPanner(), g = K.ctx.createGain();
+    s.pan.value = klem(p || 0, -1, 1); g.gain.value = K.niveau;
+    s.connect(g); g.connect(K.muziek); K.uitgangen.push(g);
+    if (galm){ const z = K.ctx.createGain(); z.gain.value = galm; g.connect(z); z.connect(K.galm); K.uitgangen.push(z); }
     return s;
   },
   // een toon die van f0 naar f1 glijdt
@@ -1837,7 +1866,7 @@ const KLANK = {
   // een tegeltje dat op zijn plaats valt
   tegel(K, e, t){
     const uit = KL.pan(K, e.pan);
-    KL.toon(K, t, { f0: [1760, 1976, 2217, 2637, 2960, 3520][e.toon % 6], d: .05, top: .06 }, uit);
+    KL.toon(K, t, { f0: [1396.9, 1568, 1760, 2093, 2349.3, 2793.8][e.toon % 6], d: .05, top: .06 }, uit);    // F-pentatonisch
     KL.ruis(K, t, .02, KL.filt(K, 'highpass', 4000, .7, KL.env(K, t, .0005, 0, .008, .05, uit)), 'wit', e.toon * .13);
   },
   // iets dat in beeld springt
@@ -1902,7 +1931,7 @@ const KLANK = {
   // het oog gaat open: een opwaarts akkoordje en wat glinstering
   glans(K, e, t){
     const uit = KL.pan(K, e.pan);
-    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => KL.toon(K, t + i * .07, { f0: f, a: .012, d: 1.5, top: .05 }, uit));
+    [698.46, 880, 1046.5, 1396.91].forEach((f, i) => KL.toon(K, t + i * .07, { f0: f, a: .012, d: 1.5, top: .05 }, uit));   // F groot, zoals de muziek
     KL.ruis(K, t, .8, KL.filt(K, 'highpass', 7000, .7, KL.env(K, t, .15, .1, .5, .025, uit)), 'wit', .5);
   },
   // de titel knippert aan als een oude neonletter: zoemen dat meeflakkert, dan zacht brommen
@@ -1911,7 +1940,7 @@ const KLANK = {
     t = Math.max(0, t);
     const g = c.createGain(); g.gain.setValueAtTime(0, t); g.connect(uit);
     const bp = KL.filt(K, 'bandpass', 1300, 1.2, KL.filt(K, 'lowpass', 3500, .7, g));
-    KL.osc(K, t, 3.6, 118, 'sawtooth', 1, bp); KL.osc(K, t, 3.6, 236, 'square', .5, bp);
+    KL.osc(K, t, 3.6, 110, 'sawtooth', 1, bp); KL.osc(K, t, 3.6, 220, 'square', .5, bp);
     const fases = RUSTIG ? [[0, .03]] : [[0, .05], [.18, 0], [.4, .05], [.58, .016], [.9, .05]];
     for (const [a, v] of fases.concat([[1.4, .014], [3.2, 0]])) g.gain.setTargetAtTime(v, t + a, .006);
     for (const a of RUSTIG ? [] : [0, .4, .9]) KL.toon(K, t + a, { f0: 2900, d: .04, top: .05 }, uit);
@@ -1928,7 +1957,7 @@ const KLANK = {
     const zak = Math.max(.25, 1 - Math.max(0, 3 - sprong) / 3 * .75);
     const g = KL.verloop(K, sprong ? [[t, 0], [t + .3, .25], [t + duur - .5, .25], [t + duur, 0]]
                                    : [[t, 0], [t + .2, 1], [t + 3, .25], [t + duur - .5, .25], [t + duur, 0]], uit);
-    for (const [f, a] of [[100, .016], [200, .009], [300, .004]]) KL.osc(K, t, duur, f, 'sine', a, g);
+    for (const [f, a] of [[110, .016], [220, .009], [330, .004]]) KL.osc(K, t, duur, f, 'sine', a, g);        // een A: zuiver onder D klein
   },
   // buiten: wind, en af en toe een vogeltje
   buiten(K, e, t, sprong = 0){
@@ -1951,16 +1980,12 @@ const KLANK = {
     }
     return lfo;
   },
-  // het archief: een doffe kamertoon en een klok die tikt, tot de stempel valt
+  // het archief: een doffe kamertoon (de klok tikt nu in de muziek, als houtblok)
   archief(K, e, t, sprong = 0){
     const duur = Math.max(.5, e.tot - e.t - sprong), uit = KL.pan(K, .25);
     const g = KL.verloop(K, [[t, 0], [t + .8, 1], [t + duur - .6, 1], [t + duur, 0]], uit);
     const kg = K.ctx.createGain(); kg.gain.value = .06; kg.connect(g);
     KL.ruis(K, t, duur, KL.filt(K, 'highpass', 70, .6, KL.filt(K, 'lowpass', 380, .6, kg)), 'bruin', .9);
-    for (let k = Math.ceil(sprong + .5); k < (e.klokTot ?? e.tot) - e.t; k++){
-      const tt = t + (k - sprong);
-      KL.ruis(K, tt, .02, KL.filt(K, 'bandpass', k % 2 ? 2500 : 3300, 6, KL.env(K, tt, .0005, 0, .012, .09, g)), 'wit', k * .07);
-    }
   },
   // een lichte kamer
   kamer(K, e, t, sprong = 0){
@@ -1968,36 +1993,43 @@ const KLANK = {
     const g = KL.verloop(K, [[t, 0], [t + .6, .02], [t + duur - .6, .02], [t + duur, 0]], KL.pan(K, 0));
     KL.ruis(K, t, duur, KL.filt(K, 'highpass', 90, .6, KL.filt(K, 'lowpass', 600, .6, g)), 'bruin', 1.4);
   },
-  // de zon achter het open oog: een warm akkoord dat opzwelt, helderder wordt bij de eindkaart en uitdooft
-  zon(K, e, t, sprong = 0){
-    const duur = Math.max(.5, e.tot - e.t - sprong), nu = e.t + sprong, h = t + Math.max(0, e.helder - nu);
-    const g = KL.verloop(K, [[t, 0], [t + Math.max(.3, 2 - sprong), .045], [h, .045], [h + 1, .06], [t + duur - 2.5, .06], [t + duur, 0]], KL.pan(K, 0));
-    const lp = KL.filt(K, 'lowpass', 700, .5, g);
-    lp.frequency.setValueAtTime(700, h); lp.frequency.linearRampToValueAtTime(1800, h + 1);
-    for (const f of [196, 246.94, 293.66, 392]) for (const d of [-1.2, 1.2]) KL.osc(K, t, duur, f + d, 'triangle', .25, lp);
-  },
 };
 
 // Plan de gebeurtenissen waarvan het begin tussen film-tijd van en tot valt. nul is de contexttijd
 // die bij 'van' hoort. Bij het eerste venster klinkt wat al bezig was, vanaf het juiste punt verder.
+// Na afloop van een geluid gaan zijn uitgangen los: anders blijft de browser elke uitgeklonken noot
+// narekenen, en dat liep bij de muziek op tot een veelvoud van de speelduur.
 function planGeluid(K, lijst, van, tot, nul, eerste){
+  const speel = (e, t, sprong) => {
+    const b0 = K.bronnen.length, u0 = K.uitgangen.length;
+    KLANK[e.soort](K, e, t, sprong);
+    const bron = K.bronnen.slice(b0), uit = K.uitgangen.slice(u0);
+    let rest = bron.length;
+    const los = () => { if (--rest === 0) for (const u of uit) try { u.disconnect(); } catch (fout){} };
+    for (const b of bron) b.onended = los;
+  };
   for (const e of lijst){
     const begin = e.t - (e.voor || 0);
     K.niveau = NIVEAU[e.soort] ?? 1;
     if (e.tot !== undefined){
-      if (begin >= van && begin < tot) KLANK[e.soort](K, e, nul + (e.t - van), 0);
-      else if (eerste && begin < van && e.tot > van + .3) KLANK[e.soort](K, e, nul, van - e.t);
-    } else if (begin >= van && begin < tot) KLANK[e.soort](K, e, nul + (e.t - van));
+      if (begin >= van && begin < tot) speel(e, nul + (e.t - van), 0);
+      else if (eerste && begin < van && e.tot > van + .3) speel(e, nul, van - e.t);
+    } else if (begin >= van && begin < tot) speel(e, nul + (e.t - van));
   }
 }
 function geluidLijst(){ return MODULES.flatMap(m => m.geluid ? m.geluid() : []).sort((a, b) => a.t - b.t); }
 
 // Voor exporteer.py: het geluid van van tot tot, in één keer uitgerekend, als WAV (16 bit, stereo,
 // 48 kHz) in stukken base64, zodat het door de verbinding met het script past.
-async function geluidWav(van = 0, tot = TL.duur){
+// welke: 'muziek' of 'geluiden' voor één spoor apart (bv. om later met een stem te mengen).
+async function geluidWav(van = 0, tot = TL.duur, welke){
   const sr = 48000, n = Math.max(1, Math.round((tot - van) * sr));
-  const oc = new OfflineAudioContext(2, n, sr);
-  planGeluid(maakKlankbord(oc, oc.destination), geluidLijst(), van, tot, 0, true);
+  const oc = new OfflineAudioContext(2, n, sr), K = maakKlankbord(oc, oc.destination);
+  const lijst = geluidLijst().filter(e => !welke || (welke === 'muziek') === /^m[A-Z]/.test(e.soort));
+  const STAP = 4;
+  planGeluid(K, lijst, van, Math.min(tot, van + STAP), 0, true);
+  for (let w = van + STAP; w < tot; w += STAP)
+    oc.suspend(Math.max(0, w - van - .5)).then(() => { planGeluid(K, lijst, w, Math.min(tot, w + STAP), w - van, false); oc.resume(); });
   const buf = await oc.startRendering();
   const L = buf.getChannelData(0), R = buf.getChannelData(1), bytes = new Uint8Array(44 + n * 4), dv = new DataView(bytes.buffer);
   const tekst = (o, s) => { for (let i = 0; i < s.length; i++) bytes[o + i] = s.charCodeAt(i); };
@@ -2019,6 +2051,359 @@ async function geluidWav(van = 0, tot = TL.duur){
 }
 
 /* ==========================================================================
+   7D. MUZIEK
+   Achtergrondmuziek zoals de bibliotheekmuziek en de tv-thema's van de jaren zeventig: een
+   elektrische piano met tremolo, een funky bas, een clavinet met wah, disco-strijkers, een
+   synthesizermelodie, koper en droge drums. Ook dit maakt de browser zelf.
+   Elke scène krijgt haar eigen stuk, op een tempo dat zo is afgesteld dat het in hele maten precies
+   in de scène past. Eén thema komt terug: loom op de vibrafoon in scène 1, vrolijk in scène 4, en op
+   de eindkaart, met het slotakkoord precies op 'Denk mee.'.
+   ========================================================================== */
+const MIDI = n => 440 * Math.pow(2, (n - 69) / 12);                   // midi-nummer naar hertz
+// Akkoorden: de grondtoon voor de bas, en de klank zoals een toetsenist ze zou leggen.
+const AKKOORD = {
+  F: { grond: 41, klank: [57, 60, 64, 67] },            // F groot met none: A C E G
+  Fmaj9: { grond: 41, klank: [53, 57, 60, 64, 67] },
+  Bb: { grond: 34, klank: [50, 53, 57, 60] },           // Bes groot met none: D F A C
+  Am: { grond: 45, klank: [55, 57, 60, 64] },           // A klein 7: G A C E
+  C7sus: { grond: 36, klank: [58, 60, 65, 67] },        // C7 met kwart: Bes C F G
+  C7: { grond: 36, klank: [58, 62, 64, 69] },           // C13: Bes D E A
+  Dm: { grond: 38, klank: [53, 57, 60, 64] },           // D klein met none: F A C E
+  Dm7: { grond: 38, klank: [50, 53, 57, 60] },          // D F A C
+  A7: { grond: 33, klank: [55, 58, 61, 64] },           // A7 met kleine none: G Bes Cis E
+  G7: { grond: 43, klank: [53, 57, 59, 64] },           // G13: F A B E
+  D79: { grond: 38, klank: [54, 60, 65, 69] },          // D7 met overmatige none: Fis C F A
+};
+// Het thema, in tellen vanaf het begin van zijn eerste maat: [tel, noot, duur in tellen].
+const THEMA = {
+  A: { maten: 2, noten: [[0, 65, .5], [.5, 69, .5], [1, 72, .75], [2, 74, .5], [2.5, 72, .5], [3, 69, 1],
+                         [4, 67, .5], [4.5, 69, .5], [5, 72, .5], [5.5, 69, .5], [6, 65, 1.5]] },
+  A1: { maten: 1, noten: [[0, 65, .5], [.5, 69, .5], [1, 72, .75], [2, 74, .5], [2.5, 72, .5], [3, 69, 1]] },
+  B: { maten: 2, noten: [[0, 70, .5], [.5, 74, .5], [1, 77, .75], [2, 76, .5], [2.5, 74, .5], [3, 72, 1],
+                         [4, 69, .5], [4.5, 67, .5], [5, 69, .5], [5.5, 72, .5], [6, 65, 2]] },
+  slot: { maten: 1, noten: [[0, 67, .5], [1, 69, .5], [2, 70, .5], [3, 72, 1]] },
+};
+
+function componeer(){
+  if (!MUZIEK) return [];
+  const [, s2, s3, s4, s5] = TL.scenes, M = [], r = toeval(1970);
+  // een tikje menselijk: niet elke noot exact op de tel
+  const zet = (soort, t, extra = {}, speling = .006) => M.push({ soort, t: t + (r() * 2 - 1) * speling, ...extra });
+  // n hele maten van a tot b, op een tempo dicht bij bpm
+  const raster = (a, b, bpm) => {
+    const maten = Math.max(1, Math.round((b - a) * bpm / 240)), tel = (b - a) / (maten * 4);
+    return { a, b, maten, tel, t: (m, x) => a + (m * 4 + x) * tel };
+  };
+  const tot = (t, d, eind) => Math.max(.05, Math.min(d, eind - t - .02));
+  const thema = (R, m0, instr, delen, v, transp, eind) => {
+    let vorig = null, m = m0;
+    for (const deel of delen){
+      for (const [x, n, d] of THEMA[deel].noten){
+        const t = R.t(m, x);
+        if (t >= eind - .05) return;
+        zet(instr, t, { n: n + transp, d: tot(t, d * R.tel * .92, eind), v, vorig }, .004);
+        vorig = n + transp;
+      }
+      m += THEMA[deel].maten;
+    }
+  };
+
+  // 1. De sluimer: een loom, zoet deuntje in F, op de maat van een zondagmiddag. Bij de duik zakt
+  //    het weg als een band die stilvalt.
+  {
+    const R = raster(0, s2.start, 84), eind = s2.start;
+    for (let m = 0; m < R.maten; m++){
+      const ak = AKKOORD[m % 2 ? 'Bb' : 'F'], T = x => R.t(m, x);
+      zet('mRhodes', T(0), { noten: ak.klank, d: tot(T(0), R.tel * 2.6, eind), v: .5 });
+      zet('mRhodes', T(2.6), { noten: ak.klank.slice(1), d: tot(T(2.6), R.tel * 1.2, eind), v: .32 });
+      for (const [x, iv, d] of [[0, 0, 1.3], [1.6, 0, .3], [2, 7, .9], [3, 12, .45], [3.6, 9, .35]])
+        zet('mBas', T(x), { n: ak.grond + iv, d: tot(T(x), d * R.tel, eind), v: .6 });
+      if (m === 0) continue;
+      zet('mKick', T(0), { v: .45 }); zet('mKick', T(2), { v: .35 });
+      zet('mRim', T(1), { v: .5 }); zet('mRim', T(3), { v: .5 });
+      for (let x = 0; x < 4; x++){ zet('mHat', T(x), { v: .3 }); zet('mHat', T(x + .62), { v: .18 }); }
+    }
+    thema(R, 1, 'mVibes', ['A', 'A'], .55, 12, eind);
+    zet('mTapestop', s2.start, { noten: AKKOORD.F.klank, d: 1.1, v: .7 }, 0);
+  }
+
+  // 2. Het archief: donkere funk in D klein, als in een detectivereeks; een houtblok tikt als een klok.
+  {
+    const R = raster(s2.start + 1.5, s3.start, 96), eind = s3.start;
+    const reeks = ['Dm7', 'Dm7', 'Bb', 'A7'];
+    const BAS = {
+      Dm7: [[0, 0, .4], [.75, 0, .2], [1.5, 12, .2], [2, 3, .4], [2.75, 5, .2], [3, 7, .3], [3.5, 10, .2], [3.75, 12, .2]],
+      Dm7b: [[0, 0, .4], [.75, 0, .2], [1.5, 7, .2], [2, 0, .3], [2.5, 3, .2], [3, 5, .3], [3.5, 6, .2], [3.75, 7, .2]],
+      Bb: [[0, 0, .5], [.75, 0, .2], [1.5, 12, .2], [2, 7, .4], [3, 0, .3], [3.5, 4, .2], [3.75, 7, .2]],
+      A7: [[0, 0, .5], [.75, 0, .2], [1.5, 12, .2], [2, 7, .4], [3, 10, .3], [3.5, 11, .25], [3.75, 12, .2]],
+    };
+    for (let m = 0; m < R.maten; m++){
+      const naam = reeks[m % 4], ak = AKKOORD[naam], T = x => R.t(m, x);
+      for (const [x, iv, d] of (naam === 'Dm7' && m % 4 === 1 ? BAS.Dm7b : BAS[naam]))
+        zet('mBas', T(x), { n: ak.grond + iv, d: tot(T(x), d * R.tel, eind), v: .75 });
+      zet('mHout', T(0), { hoog: true, v: .5 }); zet('mHout', T(2), { v: .45 });
+      for (let k = 0; k < 16; k++) zet('mHat', T(k / 4), { v: k % 4 === 2 ? .28 : k % 2 ? .1 : .18 });
+      if (m >= 1){
+        zet('mKick', T(0), { v: .75 }); zet('mKick', T(2.75), { v: .55 }); zet('mKick', T(3.5), { v: .45 });
+        zet('mSnare', T(1), { v: .6 }); zet('mSnare', T(3), { v: .65 });
+      }
+      if (m >= 2){
+        for (const x of [.25, .75, 1.75, 2.25, 3.25]) zet('mClav', T(x), { noten: ak.klank.slice(1, 3), v: .55 });
+        const x = m % 2 ? .5 : 1.5;
+        zet('mRhodes', T(x), { noten: ak.klank, d: tot(T(x), R.tel * (m % 2 ? 1.5 : .9), eind), v: .4 });
+      }
+    }
+  }
+
+  // 3. De ingreep: een kloppende lage D die aanzwelt tot de stempel, stilte op de klap, een koperstoot
+  //    bij de titel, dan zelfzekere funk in D dorisch, met een roffel naar de regenboogveeg.
+  {
+    const tSt = s3.start + (s3.beats.stempel ?? 4), tTi = s3.start + (s3.beats.titel ?? 4.7), eind = s4.start - .35;
+    const puls = 60 / 100 / 2;
+    for (let k = 0, t = s3.start + .35; t < tSt - .18; k++, t += puls){
+      zet('mBas', t, { n: 38, d: puls * .6, v: .35 + .4 * (t - s3.start) / (tSt - s3.start) }, .002);
+      zet('mHat', t, { v: k % 2 ? .12 : .18 }, .002);
+    }
+    const rs = Math.max(s3.start + .35, tSt - 2.4);
+    zet('mRiser', rs, { d: tSt - .12 - rs, v: .8 }, 0);
+    zet('mKoper', tTi, { noten: AKKOORD.D79.klank, d: .8, v: 1 }, 0);
+    zet('mBas', tTi, { n: 38, d: .7, v: .9 }, 0); zet('mKick', tTi, { v: .9 }, 0); zet('mCrash', tTi, { v: .7 }, 0);
+    const R = raster(tTi + 1.1, eind, 100);
+    const reeks = ['Dm7', 'Dm7', 'G7', 'G7'];
+    for (let m = 0; m < R.maten; m++){
+      const naam = reeks[m % 4], ak = AKKOORD[naam], T = x => R.t(m, x);
+      for (const [x, iv, d] of [[0, 0, .3], [.5, 12, .15], [.75, 0, .15], [1.5, 10, .2], [2, 12, .2], [2.5, 0, .25], [3, 7, .2], [3.5, 10, .2]])
+        zet('mBas', T(x), { n: ak.grond + iv, d: tot(T(x), d * R.tel, eind), v: .75 });
+      zet('mKick', T(0), { v: .8 }); zet('mKick', T(1.75), { v: .5 }); zet('mKick', T(2.5), { v: .65 });
+      zet('mSnare', T(1), { v: .65 }); zet('mSnare', T(3), { v: .7 });
+      zet('mSnare', T(2.25), { v: .15 }); zet('mSnare', T(3.75), { v: .18 });                   // spooknoten
+      for (let k = 0; k < 16; k++) zet('mHat', T(k / 4), { v: k % 2 ? .1 : .2, open: k === 14 });
+      for (const x of [0, .5, 1.25, 1.75, 2.5, 3, 3.25]) zet('mClav', T(x), { noten: ak.klank.slice(0, 3), v: .5 });
+      if (m % 4 === 3) zet('mKoper', T(3.5), { noten: ak.klank.map(n => n + 12), d: R.tel * .45, v: .6 });
+      if (m % 2 === 0) zet('mRhodes', T(0), { noten: ak.klank, d: tot(T(0), R.tel * 1.8, eind), v: .38 });
+      if (m === R.maten - 1) for (let k = 0; k < 8; k++) zet('mSnare', T(2 + k / 4), { v: .3 + .06 * k });
+    }
+  }
+
+  // 4. Denk mee: vrolijke disco-funk in F, met het thema op de synthesizer zodra de tv aanspringt.
+  {
+    const R = raster(s4.start, s5.start, 112), eind = s5.start;
+    zet('mCrash', s4.start, { v: .75 }, 0);
+    const reeks = ['F', 'Am', 'Bb', 'C7sus'];
+    for (let m = 0; m < R.maten; m++){
+      const naam = m === 0 ? 'C7sus' : reeks[(m - 1) % 4], ak = AKKOORD[naam], T = x => R.t(m, x);
+      for (let x = 0; x < 4; x++){
+        zet('mKick', T(x), { v: .8 });
+        zet('mHat', T(x + .5), { open: true, v: .22 }); zet('mHat', T(x + .25), { v: .09 }); zet('mHat', T(x + .75), { v: .09 });
+      }
+      zet('mSnare', T(1), { v: .62 }); zet('mSnare', T(3), { v: .66 });
+      for (let k = 0; k < 8; k++) zet('mBas', T(k / 2), { n: ak.grond + (k % 2 ? 12 : 0), d: tot(T(k / 2), R.tel * .38, eind), v: .72 });
+      if (m > 0) zet('mSnaren', T(0), { noten: ak.klank.map(n => n + 12), d: tot(T(0), R.tel * 3.9, eind), v: .5 });
+      for (let k = 1; k < 16; k += 2) zet('mClav', T(k / 4), { noten: ak.klank.slice(0, 2).map(n => n + 12), v: .4 });
+      if (naam === 'C7sus' && m > 0) zet('mRhodes', T(2), { noten: AKKOORD.C7.klank, d: tot(T(2), R.tel * 1.8, eind), v: .4 });
+    }
+    thema(R, 1, 'mLead', ['A', 'B'], .75, 0, eind);
+    thema(R, 5, 'mLead', ['A', 'B'], .7, 12, eind);
+  }
+
+  // 5. De keuze: een slaperig akkoord links, strijkers bij de keuze, het thema op de eindkaart, en het
+  //    slotakkoord precies op de laatste zin: 'Denk mee.'
+  {
+    const a = s5.start, b = s5.beats, tR = a + (b.rechts ?? 5), tE = a + (b.eindkaart ?? s5.duur - 7);
+    const slot = s5.cues[s5.cues.length - 1].a, eind = TL.duur;
+    zet('mRhodes', a + .4, { noten: AKKOORD.Dm.klank, d: tR - a - .4, v: .32 }, 0);
+    zet('mBas', a + .4, { n: 38, d: tR - a - .6, v: .4 }, 0);
+    zet('mSnaren', tR, { noten: AKKOORD.Bb.klank.map(n => n + 12), d: tE - tR + .2, v: .55, aanzet: .6 }, 0);
+    zet('mBas', tR, { n: 34, d: tE - tR, v: .45 }, 0);
+    const R = raster(tE, slot, 96);
+    const plan = { 1: [['C7sus'], ['slot']], 2: [['F', 'C7sus'], ['A1', 'slot']], 3: [['F', 'Bb', 'C7sus'], ['A', 'slot']],
+                   4: [['F', 'Am', 'Bb', 'C7sus'], ['A', 'B']] }[Math.min(4, R.maten)];
+    for (let m = 0; m < R.maten; m++){
+      const ak = AKKOORD[plan[0][Math.min(m, plan[0].length - 1)]], T = x => R.t(m, x);
+      zet('mKick', T(0), { v: .6 }); zet('mKick', T(2), { v: .5 }); zet('mSnare', T(1), { v: .4 }); zet('mSnare', T(3), { v: .45 });
+      for (let k = 0; k < 8; k++) zet('mHat', T(k / 2), { v: k % 2 ? .1 : .18 });
+      for (const [x, iv, d] of [[0, 0, 1.4], [1.5, 7, .4], [2, 12, .9], [3, 7, .4], [3.5, 10, .4]])
+        zet('mBas', T(x), { n: ak.grond + iv, d: tot(T(x), d * R.tel, slot), v: .65 });
+      zet('mRhodes', T(0), { noten: ak.klank, d: tot(T(0), R.tel * 3.6, slot), v: .42 });
+      zet('mSnaren', T(0), { noten: ak.klank.map(n => n + 12), d: tot(T(0), R.tel * 3.9, slot), v: .45 });
+    }
+    thema(R, 0, 'mLead', plan[1], .75, 0, slot);
+    zet('mRhodes', slot, { noten: AKKOORD.Fmaj9.klank, d: eind - slot - .3, v: .55 }, 0);
+    zet('mSnaren', slot, { noten: [65, 69, 72, 76, 79], d: Math.max(.5, eind - slot - 1.4), v: .5, los: .6 }, 0);
+    zet('mBas', slot, { n: 41, d: 2.6, v: .7 }, 0);
+    zet('mKick', slot, { v: .85 }, 0); zet('mCrash', slot, { v: .7 }, 0);
+    zet('mLead', slot, { n: 77, d: 2.2, v: .6, vorig: 72 }, 0);
+  }
+  return M;
+}
+function maakMuziek(){ return { render(){}, geluid: componeer }; }
+
+// De instrumenten. Elk gaat via KL.muz naar de muziekbus, met wat galm waar dat past.
+Object.assign(KLANK, {
+  mKick(K, e, t){
+    const v = e.v ?? 1, uit = KL.muz(K, 0);
+    KL.toon(K, t, { f0: 125, f1: 46, glij: .07, a: .002, d: .3, top: .85 * v }, uit);
+    KL.ruis(K, t, .02, KL.filt(K, 'lowpass', 2600, .7, KL.env(K, t, .0005, 0, .012, .22 * v, uit)), 'wit', t % 1.9);
+  },
+  mSnare(K, e, t){
+    const v = e.v ?? 1, uit = KL.muz(K, .05, .18);
+    KL.ruis(K, t, .25, KL.filt(K, 'highpass', 900, .7, KL.filt(K, 'bandpass', 2000, .6, KL.env(K, t, .001, .008, .17, .5 * v, uit))), 'wit', t % 1.9);
+    KL.toon(K, t, { f0: 190, f1: 150, glij: .06, d: .1, top: .32 * v, type: 'triangle' }, uit);
+  },
+  mRim(K, e, t){                                                          // de rand van de snaredrum
+    const v = e.v ?? 1, uit = KL.muz(K, -.1, .12);
+    KL.ruis(K, t, .03, KL.filt(K, 'bandpass', 1700, 3, KL.env(K, t, .0005, 0, .03, .35 * v, uit)), 'wit', t % 1.9);
+    KL.toon(K, t, { f0: 540, d: .025, top: .2 * v }, uit);
+  },
+  mHat(K, e, t){
+    const v = e.v ?? 1, uit = KL.muz(K, .25);
+    KL.ruis(K, t, e.open ? .35 : .06, KL.filt(K, 'highpass', 7200, .7, KL.env(K, t, .0008, 0, e.open ? .28 : .04, .22 * v, uit)), 'wit', (t * 7.3) % 1.9);
+  },
+  mCrash(K, e, t){
+    const v = e.v ?? 1, uit = KL.muz(K, -.2, .25);
+    KL.ruis(K, t, 1.8, KL.filt(K, 'highpass', 4200, .5, KL.env(K, t, .002, .02, 1.6, .2 * v, uit)), 'wit', t % 1.9);
+  },
+  mHout(K, e, t){                                                         // houtblok: tik, tak
+    const v = e.v ?? 1, uit = KL.muz(K, .35, .1);
+    KL.toon(K, t, { f0: e.hoog ? 1150 : 850, d: .06, top: .25 * v }, uit);
+    KL.ruis(K, t, .02, KL.filt(K, 'bandpass', 2400, 2, KL.env(K, t, .0005, 0, .01, .12 * v, uit)), 'wit', t % 1.9);
+  },
+  mBas(K, e, t){                                                          // basgitaar, met de vingers
+    const c = K.ctx, v = e.v ?? 1, f = MIDI(e.n), d = Math.max(.05, e.d), uit = KL.muz(K, 0);
+    t = Math.max(0, t);
+    const g = c.createGain(), p = g.gain;
+    p.setValueAtTime(0, t); p.linearRampToValueAtTime(.42 * v, t + .006); p.setTargetAtTime(.3 * v, t + .006, .08); p.setTargetAtTime(0, t + d, .03);
+    g.connect(uit);
+    const lp = KL.filt(K, 'lowpass', 1000, 2.2, g);
+    lp.frequency.setValueAtTime(Math.min(3200, f * 9), t); lp.frequency.exponentialRampToValueAtTime(Math.max(200, f * 3), t + .14);
+    for (const [type, det, a] of [['sawtooth', 0, .6], ['triangle', 5, .9]]){
+      const o = c.createOscillator(), og = c.createGain();
+      o.type = type; o.frequency.value = f; o.detune.value = det; og.gain.value = a;
+      o.connect(og); og.connect(lp); o.start(t); o.stop(t + d + .2); K.bronnen.push(o);
+    }
+  },
+  mRhodes(K, e, t){                                                       // elektrische piano, met tremolo van links naar rechts
+    const c = K.ctx, v = e.v ?? 1, d = Math.max(.1, e.d);
+    t = Math.max(0, t);
+    const pan = c.createStereoPanner(), lfo = c.createOscillator(), diep = c.createGain();
+    lfo.frequency.value = 4.3; diep.gain.value = .45; lfo.connect(diep); diep.connect(pan.pan);
+    const g = c.createGain(); g.gain.value = K.niveau; pan.connect(g); g.connect(K.muziek);
+    const s = c.createGain(); s.gain.value = .22; g.connect(s); s.connect(K.galm);
+    K.uitgangen.push(g, s);
+    lfo.start(t); lfo.stop(t + d + 1.2); K.bronnen.push(lfo);
+    for (const n of e.noten){
+      const f = MIDI(n), draag = c.createOscillator(), mod = c.createOscillator(), mg = c.createGain(), amp = c.createGain(), pa = amp.gain;
+      draag.frequency.value = f; mod.frequency.value = f;
+      mg.gain.setValueAtTime(f * (1.1 + .9 * v), t); mg.gain.setTargetAtTime(f * .15, t, .3);
+      mod.connect(mg); mg.connect(draag.frequency);
+      pa.setValueAtTime(0, t); pa.linearRampToValueAtTime(.11 * v, t + .004); pa.setTargetAtTime(.0001, t + .004, 1.1); pa.setTargetAtTime(0, t + d, .12);
+      draag.connect(amp); amp.connect(pan);
+      const tine = c.createOscillator(), tg = c.createGain();                // de korte, hoge 'tine' in de aanslag
+      tine.frequency.value = f * 7; tg.gain.setValueAtTime(.012 * v, t); tg.gain.setTargetAtTime(0, t, .02);
+      tine.connect(tg); tg.connect(pan);
+      for (const o of [draag, mod, tine]){ o.start(t); o.stop(t + d + .8); K.bronnen.push(o); }
+    }
+  },
+  mClav(K, e, t){                                                         // clavinet met wah: het funky 'tsjika'
+    const c = K.ctx, v = e.v ?? 1;
+    t = Math.max(0, t);
+    const g = KL.env(K, t, .002, .01, e.d || .07, .09 * v, KL.muz(K, .3, .05));
+    const bp = KL.filt(K, 'bandpass', 800, 3.5, KL.filt(K, 'highpass', 300, .7, g));
+    bp.frequency.setValueAtTime(650, t); bp.frequency.exponentialRampToValueAtTime(2600, t + .045);
+    for (const n of e.noten){
+      const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = MIDI(n);
+      o.connect(bp); o.start(t); o.stop(t + .2); K.bronnen.push(o);
+    }
+  },
+  mSnaren(K, e, t){                                                       // disco-strijkers: drie licht ontstemde zaagtanden per noot
+    const c = K.ctx, v = e.v ?? 1, d = Math.max(.3, e.d);
+    t = Math.max(0, t);
+    const g = c.createGain(), p = g.gain;
+    p.setValueAtTime(0, t); p.linearRampToValueAtTime(.05 * v, t + (e.aanzet ?? .25)); p.setTargetAtTime(0, t + d, e.los ?? .35);
+    g.connect(KL.muz(K, 0, .35));
+    const lp = KL.filt(K, 'lowpass', 2600, .5, g);
+    const lfo = c.createOscillator(), diep = c.createGain();
+    lfo.frequency.value = 5.2; diep.gain.value = 4; lfo.connect(diep); lfo.start(t); lfo.stop(t + d + 2); K.bronnen.push(lfo);
+    e.noten.forEach((n, i) => {
+      for (const det of [-8, 0, 8]){
+        const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = MIDI(n); o.detune.value = det + (i % 2 ? 2 : -2);
+        diep.connect(o.detune); o.connect(lp); o.start(t); o.stop(t + d + 2); K.bronnen.push(o);
+      }
+    });
+  },
+  mLead(K, e, t){                                                         // synthesizermelodie, met een glijder tussen de noten
+    const c = K.ctx, v = e.v ?? 1, f = MIDI(e.n), d = Math.max(.08, e.d);
+    t = Math.max(0, t);
+    const g = c.createGain(), p = g.gain;
+    p.setValueAtTime(0, t); p.linearRampToValueAtTime(.16 * v, t + .012); p.setTargetAtTime(.12 * v, t + .012, .1); p.setTargetAtTime(0, t + d, .06);
+    g.connect(KL.muz(K, 0, .2));
+    const lp = KL.filt(K, 'lowpass', 2000, 5, g);
+    lp.frequency.setValueAtTime(3400, t); lp.frequency.setTargetAtTime(1300, t, .12);
+    const van = e.vorig ? MIDI(e.vorig) : f;
+    const vib = c.createOscillator(), vd = c.createGain();
+    vib.frequency.value = 5.5; vd.gain.setValueAtTime(0, t); vd.gain.linearRampToValueAtTime(d > .5 ? 14 : 0, t + Math.min(d, .5)); vib.connect(vd);
+    for (const [type, mul, a] of [['sawtooth', 1, 1], ['square', .5, .45]]){
+      const o = c.createOscillator(), og = c.createGain();
+      o.type = type; og.gain.value = a;
+      o.frequency.setValueAtTime(van * mul, t); o.frequency.exponentialRampToValueAtTime(f * mul, t + (e.vorig ? .045 : .001));
+      vd.connect(o.detune); o.connect(og); og.connect(lp); o.start(t); o.stop(t + d + .4); K.bronnen.push(o);
+    }
+    vib.start(t); vib.stop(t + d + .4); K.bronnen.push(vib);
+  },
+  mVibes(K, e, t){                                                        // vibrafoon, met zijn trage beving
+    const c = K.ctx, v = e.v ?? 1, f = MIDI(e.n), d = Math.max(.1, e.d);
+    t = Math.max(0, t);
+    const trem = c.createGain(); trem.gain.value = .75; trem.connect(KL.muz(K, -.25, .35));
+    const lfo = c.createOscillator(), ld = c.createGain();
+    lfo.frequency.value = 5.6; ld.gain.value = .25; lfo.connect(ld); ld.connect(trem.gain);
+    const amp = c.createGain(), pa = amp.gain;
+    pa.setValueAtTime(0, t); pa.linearRampToValueAtTime(.12 * v, t + .004); pa.setTargetAtTime(0, t + .004, Math.min(1.2, d * .9 + .3));
+    amp.connect(trem);
+    for (const [mul, a] of [[1, 1], [4, .07], [10, .02]]){
+      const o = c.createOscillator(), og = c.createGain();
+      o.frequency.value = f * mul; og.gain.value = a; o.connect(og); og.connect(amp); o.start(t); o.stop(t + d + 1.5); K.bronnen.push(o);
+    }
+    lfo.start(t); lfo.stop(t + d + 1.5); K.bronnen.push(lfo);
+  },
+  mKoper(K, e, t){                                                        // een koperstoot
+    const c = K.ctx, v = e.v ?? 1, d = Math.max(.2, e.d);
+    t = Math.max(0, t);
+    const g = c.createGain(), p = g.gain;
+    p.setValueAtTime(0, t); p.linearRampToValueAtTime(.09 * v, t + .025); p.setTargetAtTime(.05 * v, t + .03, .2); p.setTargetAtTime(0, t + d, .12);
+    g.connect(KL.muz(K, 0, .3));
+    const lp = KL.filt(K, 'lowpass', 500, 1.4, g);
+    lp.frequency.setValueAtTime(500, t); lp.frequency.linearRampToValueAtTime(3600, t + .04); lp.frequency.setTargetAtTime(1500, t + .05, .15);
+    for (const n of e.noten) for (const det of [-6, 6]){
+      const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = MIDI(n); o.detune.value = det;
+      o.connect(lp); o.start(t); o.stop(t + d + .6); K.bronnen.push(o);
+    }
+  },
+  mRiser(K, e, t){                                                        // ruis die aanzwelt naar een klap
+    const d = e.d || 2;
+    t = Math.max(0, t);
+    const g = K.ctx.createGain();
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.2 * (e.v ?? 1), t + d); g.gain.setTargetAtTime(0, t + d, .02);
+    g.connect(KL.muz(K, 0, .3));
+    const bp = KL.filt(K, 'bandpass', 300, 1.5, g);
+    bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(6000, t + d);
+    KL.ruis(K, t, d + .1, bp, 'wit', .9);
+  },
+  mTapestop(K, e, t){                                                     // het akkoord zakt weg, als een band die stilvalt
+    const c = K.ctx, d = e.d || 1, v = e.v ?? 1;
+    t = Math.max(0, t);
+    const g = c.createGain(); g.gain.setValueAtTime(.08 * v, t); g.gain.linearRampToValueAtTime(0, t + d);
+    g.connect(KL.muz(K, 0, .2));
+    const lp = KL.filt(K, 'lowpass', 3000, .7, g);
+    lp.frequency.setValueAtTime(3000, t); lp.frequency.exponentialRampToValueAtTime(250, t + d);
+    for (const n of e.noten){
+      const o = c.createOscillator(); o.type = 'triangle'; o.frequency.value = MIDI(n);
+      o.detune.setValueAtTime(0, t); o.detune.linearRampToValueAtTime(-1400, t + d);
+      o.connect(lp); o.start(t); o.stop(t + d + .05); K.bronnen.push(o);
+    }
+  },
+});
+
+/* ==========================================================================
    8. DE SPELER
    ========================================================================== */
 const Q = new URLSearchParams(location.search);
@@ -2026,6 +2411,8 @@ const OPNAME = Q.get('opname') === '1';
 const RUSTIG = !OPNAME && matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Filmkorrel: in de speler aan, in de export enkel met ?korrel=1 (zie maakKorrel).
 const KORREL = OPNAME ? Q.get('korrel') === '1' : Q.get('korrel') !== '0';
+// Achtergrondmuziek: standaard aan, ?muziek=0 laat enkel de geluiden over.
+const MUZIEK = Q.get('muziek') !== '0';
 // De versie komt uit ?versie=, of uit #herwerkt: een kaal anker komt ook door waar ?-opties wegvallen.
 const ANKER = location.hash.slice(1);
 let VKEY = VERSIES[Q.get('versie')] ? Q.get('versie') : VERSIES[ANKER] ? ANKER : 'origineel';
@@ -2079,7 +2466,7 @@ function bouw(sleutel){
   VKEY = sleutel; V = VERSIES[sleutel]; TL = bouwTijdlijn(V);
   const lagen = $('lagen'), dyn = $('dyn');
   lagen.textContent = ''; dyn.textContent = '';
-  MODULES = [maakSluimer, maakArchief, maakNudge, maakKeuze, maakKorrel].map(f => f(el('g', {}, lagen), dyn));
+  MODULES = [maakSluimer, maakArchief, maakNudge, maakKeuze, maakKorrel, maakMuziek].map(f => f(el('g', {}, lagen), dyn));
   GELUID.lijst = geluidLijst();
   if (SPEELT) GELUID.start(T);
   T = klem(T, 0, TL.duur);

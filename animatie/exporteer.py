@@ -19,9 +19,10 @@ Gebruik:
   python animatie/exporteer.py --hoogte 720           kleiner en sneller, om na te kijken
   python animatie/exporteer.py --van 40 --tot 62      enkel een stuk, in seconden
   python animatie/exporteer.py --zonder-geluid        stil beeld, bv. om zelf geluid onder te leggen
+  python animatie/exporteer.py --zonder-muziek        wel de geluiden, geen achtergrondmuziek
   python animatie/exporteer.py --met-korrel           met de filmkorrel van de speler (zie hieronder)
 
-De MP4 heeft de geluiden van de film (papier, laden, de stempel, de tv, ...), maar geen stem: de
+De MP4 heeft de geluiden en de muziek van de film (papier, laden, de stempel, ...), maar geen stem: de
 voice-over wordt apart ingesproken. De .srt bevat elke zin met zijn tijdcode, handig om de stem op af
 te stemmen en om mee te uploaden naar sociale media.
 Exports landen standaard naast dit script en staan in .gitignore: een film hoort niet in git.
@@ -115,6 +116,7 @@ def main():
     ap.add_argument("--hoogte", type=int, default=1080, help="beeldhoogte in pixels (breedte volgt uit 16:9)")
     ap.add_argument("--zonder-ondertitels", action="store_true", help="geen ondertitels in beeld (wel in de .srt)")
     ap.add_argument("--zonder-geluid", action="store_true", help="geen geluid in de MP4")
+    ap.add_argument("--zonder-muziek", action="store_true", help="de geluiden wel, de achtergrondmuziek niet")
     ap.add_argument("--met-korrel", action="store_true", help="met filmkorrel (de MP4 wordt zo'n drie keer groter)")
     ap.add_argument("--van", type=float, default=0.0, help="begintijd in seconden")
     ap.add_argument("--tot", type=float, default=None, help="eindtijd in seconden (standaard: het einde)")
@@ -140,7 +142,7 @@ def main():
     uit = (a.uit or HIER / naam).resolve()
     uit.parent.mkdir(parents=True, exist_ok=True)
     adres = (FILM.as_uri() + f"?opname=1&versie={a.versie}" + ("&ondertitels=0" if a.zonder_ondertitels else "")
-             + ("&korrel=1" if a.met_korrel else ""))
+             + ("&korrel=1" if a.met_korrel else "") + ("&muziek=0" if a.zonder_muziek else ""))
     ffmpeg = ffmpeg_pad()
 
     # Eerst de lengte en de ondertitels ophalen; de .srt enkel bij een volledige export, want haar
