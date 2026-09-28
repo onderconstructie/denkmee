@@ -25,7 +25,7 @@
                As Gau Paust de gemeenteraad streamt, en de eindkaart zegt 'Een hyperlokaal
                burgerjournalistiek experiment' in plaats van 'Magazine voor de meedenkende Mechelaar'.
     herwerkt   een voorstel met dezelfde beelden, waarin de tekst alleen zegt wat Denk mee echt doet
-               en meet. De redenen staan in de notities onder de speler.
+               en meet, in vlotte spreektaal. De redenen staan in de notities onder de speler.
 
   TEKST AANPASSEN. Alle tekst staat in VERSIES, bovenaan het script hieronder. De timing volgt
   vanzelf: elke ondertitel krijgt de tijd die een rustige stem nodig heeft (TEMPO), elke scène duurt
@@ -242,7 +242,7 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
      extra      seconden extra voor deze zin (om later op de echte stem af te stemmen)
    ========================================================================== */
 const DIALECT = 'As gau paust dat de paus oep au paust, paust dan ma gau eet anders.';
-const VERTALING = 'Als je denkt dat de machthebber aan jou denkt, denk dan maar snel wat anders.';
+const VERTALING = 'Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders.';
 
 const VERSIES = {
   origineel: {
@@ -301,7 +301,7 @@ const VERSIES = {
   herwerkt: {
     naam: 'Herwerkt voorstel',
     notities: [
-      'Dezelfde beelden als het origineel. De tekst zegt alleen wat Denk mee echt doet en meet, in gewone woorden.',
+      'Dezelfde beelden als het origineel. De tekst zegt alleen wat Denk mee echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf.',
       'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van het college enkel de titel online. Dat mag volgens de wet, en het kan beter.',
       'De toon past bij een platform dat burgers, journalisten en gemeentebesturen wil inspireren. De stad krijgt geen verwijt; de film toont wat er kan.',
       'De film zegt dat een taalmodel helpt bij het vertalen, zoals de site dat ook zegt.',
@@ -312,38 +312,38 @@ const VERSIES = {
       documenten: 'titel',
       stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
       tweedeBalk: 'optijd',
-      slogan: 'Een hyperlokaal burgerjournalistiek experiment',
+      slogan: 'Burgerjournalistiek van om de hoek',
       url: 'denkmee.asgaupaust.be',
     },
     scenes: [
-      { titel: 'De cognitieve sluimer', vo: [
-        'Waarom lezen zo weinig mensen wat hun stad beslist?',
-        'De stukken zijn lang en ambtelijk. Zelf alles nalezen kost veel tijd.',
-        'Dus gaan we af op wat de stad er zelf over vertelt.',
+      { titel: 'In slaap gesust', vo: [
+        'Wie leest er nu echt wat de stad beslist?',
+        'Die stukken zijn lang en droog. Wie heeft daar tijd voor?',
+        'Dus geloven we maar wat de stad er zelf over vertelt.',
       ]},
-      { titel: 'De realiteit van asymmetrische informatie', vo: [
-        'Toch beslist de stad elke week over uw straat, uw geld en uw buurt.',
-        'Het college vergadert daarover achter gesloten deuren. Zo wil de wet het.',
-        'De stad publiceert haar beslissingen bijna altijd op tijd.',
-        { tekst: 'Maar van negen op de tien beslissingen van het college staat enkel de titel online.', beats: { document: -1.1 } },
+      { titel: 'Wat je niet ziet', vo: [
+        'Toch beslist de stad elke week over je straat, je geld en je buurt.',
+        'Het college vergadert achter gesloten deuren. Dat zegt de wet.',
+        'De beslissingen komen wel bijna altijd op tijd online.',
+        { tekst: 'Alleen: van negen op de tien beslissingen zie je enkel de titel.', beats: { document: -1.1 } },
       ]},
-      { titel: 'De psychologische interventie', vo: [
-        'Zoals de Mechelse volksmond zegt:',
+      { titel: 'Wakker geschud', vo: [
+        'Of zoals ze in Mechelen zeggen:',
         { tekst: DIALECT, vertaling: VERTALING, dialect: true, extra: .8, beats: { stempel: -.45, titel: .25 } },
-        'As Gau Paust is een hyperlokaal burgerjournalistiek experiment.',
-        'We maken de bestuursdocumenten van de stad makkelijker te vinden en te lezen.',
-        'Wat niet online staat, kunt u opvragen. Denk mee zet de aanvraag voor u klaar.',
+        'As Gau Paust is een experiment: burgerjournalistiek van om de hoek.',
+        'We maken de stukken van de stad makkelijk te vinden en te lezen.',
+        'Staat iets niet online? Vraag het op. Denk mee zet je aanvraag klaar.',
       ]},
-      { titel: 'Nudging naar actief burgerschap', vo: [
-        'Op Denk mee staan de beslissingen van de stad in gewone taal.',
-        { tekst: 'Zoek op uw straat, en u ziet wat er beslist is.', beats: { typen: .2 } },
-        'Een taalmodel helpt bij het vertalen.',
-        'Daarom staat bij elk stuk de officiële bron, zodat u ook ons kunt controleren.',
+      { titel: 'Zelf kijken', vo: [
+        'Op Denk mee lees je wat de stad beslist, in gewone taal.',
+        { tekst: 'Tik je straat in en je ziet wat er beslist is.', beats: { typen: .2 } },
+        'Een taalmodel helpt mee vertalen.',
+        'Daarom staat de officiële bron er altijd bij. Zo kun je ook ons controleren.',
       ]},
-      { titel: 'De confrontatie', vo: [
-        { tekst: 'U hoeft niet alles te volgen.', beats: { links: 0 } },
-        { tekst: 'Kies één dossier dat u aangaat.', beats: { rechts: 0 } },
-        { tekst: 'We willen burgers, journalisten en gemeentebesturen inspireren.', beats: { eindkaart: -.5 } },
+      { titel: 'Jouw keuze', vo: [
+        { tekst: 'Je hoeft niet alles te volgen.', beats: { links: 0 } },
+        { tekst: 'Kies één dossier dat jou raakt.', beats: { rechts: 0 } },
+        { tekst: 'We willen burgers, journalisten en gemeenten op ideeën brengen.', beats: { eindkaart: -.5 } },
         'Binnenkort ook in andere steden.',
         'Denk mee.',
       ]},
@@ -457,13 +457,18 @@ const TOREN = 'M0 20H6V0H22V20H30V0H46V20H54V0H70V20H78V0H94V20H104V242H68V208L5
 function ster(ouder, x, y, r){
   return el('path', { d: `M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z`, fill: '#fff' }, ouder);
 }
+// Een ondertitel over twee regels: zo evenwichtig mogelijk, maar liefst na een punt of komma, waar
+// ook een stem even stopt ('Vraag het op. / Denk mee...' in plaats van 'Vraag het / op. Denk mee...'),
+// en nooit na een lidwoord of voorzetsel ('wat de stad / er zelf...' in plaats van 'wat de / stad...').
+const LOSSE_WOORDJES = /\s(de|het|een|en|of|van|op|in|te|ter|je|u|uw|aan|met|om|voor|over|bij|naar|zo|dat)$/i;
 function breek(t, max = 42){
   if (t.length <= max) return [t];
   const w = t.split(' ');
   let best = null;
   for (let i = 1; i < w.length; i++){
     const a = w.slice(0, i).join(' '), b = w.slice(i).join(' ');
-    const s = Math.max(a.length, b.length);
+    const lang = Math.max(a.length, b.length);
+    const s = lang - (/[.?!]$/.test(a) ? 14 : /[,:;]$/.test(a) ? 12 : 0) + (LOSSE_WOORDJES.test(a) ? 6 : 0) + (lang > max + 4 ? 100 : 0);
     if (!best || s < best.s) best = { s, r: [a, b] };
   }
   return best.r;
@@ -1340,7 +1345,7 @@ function maakNudge(laag, dyn){
            { x: 1132, y: 596, class: 'sans', 'font-size': 21, fill: INKT }), 628);
   S.melding = el('g', { opacity: 0 }, sb);
   el('rect', { x: 1110, y: 566, width: 670, height: 46, rx: 23, fill: INKT }, S.melding);
-  pasIn(tx(S.melding, 'Uw mailprogramma opent met een ingevulde aanvraag. U verstuurt ze zelf.',
+  pasIn(tx(S.melding, 'Je eigen mailclient opent met een ingevulde aanvraag. Jij verstuurt zelf.',
            { x: 1445, y: 596, class: 'sans', 'font-size': 18, fill: PAPIER, 'text-anchor': 'middle' }), 630);
   // beeldbuis: lijntjes, een schittering, en het oplichten bij het aanzetten
   const lijnen = el('g', { opacity: .06 }, buis);
