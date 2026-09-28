@@ -14,7 +14,8 @@
 
   AFSPELEN. Open dit bestand in een browser. Een dubbelklik volstaat: er is geen server of
   internet nodig, want de lettertypes zitten erin. Spatie speelt en pauzeert, de pijltjes springen
-  vijf seconden, 1 tot 5 kiezen een scène, C zet de ondertitels aan of uit, F geeft volledig scherm.
+  vijf seconden, 1 tot 5 kiezen een scène, C zet de ondertitels aan of uit, M het geluid, F geeft
+  volledig scherm.
   Onder de speler staat het script met tijdcodes: klik op een zin en de film springt ernaartoe.
 
   TWEE VERSIES (kiezen onder de speler, of met ?versie=herwerkt in het adres):
@@ -37,7 +38,12 @@
                #herwerkt opent ook de herwerkte versie. Dat werkt ook waar een adres geen ?-opties
                doorgeeft, zoals een privépagina op claude.ai.
 
-  EXPORTEREN naar MP4 met ondertitelbestand: python animatie/exporteer.py (uitleg in dat bestand).
+  GELUID. Papier, laden, de stempel, de tv, duimen op een scherm, wind en een tikkende klok: de
+  browser maakt alle geluiden zelf, uit ruis en tonen. Er zitten geen geluidsbestanden in. Elke scène
+  zegt in S.geluid() welk geluid ze wanneer maakt, met dezelfde tijden als haar beeld; hoe elk geluid
+  klinkt, staat in KLANK. Er is geen stem: die wordt apart ingesproken.
+
+  EXPORTEREN naar MP4 met geluid en ondertitelbestand: python animatie/exporteer.py (uitleg daar).
 
   Geen trackers, geen cookies, geen externe bestanden. Lettertypes: Fraunces, Jost en JetBrains Mono,
   onder de SIL Open Font License 1.1 (de licenties staan in OFL-Fraunces.txt en OFL-Jost.txt naast
@@ -104,6 +110,7 @@ button,select{font:inherit;color:inherit}
   cursor:pointer;font-size:.8rem}
 #bediening button:hover,#bediening button:focus-visible{border-color:var(--rood);outline:none}
 #bediening button[aria-pressed="false"]{opacity:.5}
+#bediening button[hidden]{display:none}
 #bediening svg{width:15px;height:15px;fill:currentColor}
 #tijd{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.78rem;color:var(--balk-dim);
   min-width:7.6em;font-variant-numeric:tabular-nums}
@@ -200,6 +207,9 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
       </select>
     </label>
     <button id="knopOT" aria-pressed="true" title="Ondertitels aan of uit (C)">OT</button>
+    <button id="knopGeluid" aria-pressed="true" aria-label="Geluid" title="Geluid aan of uit (M)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="icoonGeluid" d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+    </button>
     <button id="knopVol" aria-label="Volledig scherm" title="Volledig scherm (F)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM6 15v3h3v2H4v-5zm12 0h2v5h-5v-2h3z"/></svg>
     </button>
@@ -861,6 +871,19 @@ function maakSluimer(laag, dyn){
     S.telGloed.setAttribute('opacity', (.5 + .45 * klem(flits)).toFixed(3));
     F.glasGloed.setAttribute('opacity', f2(.5 + .5 * klem(flits)));
   };
+  // geluid: buiten, de bubbels (een blub als ze verschijnen, een belletje in de telefoon), de duik
+  S.geluid = () => {
+    const s1 = TL.scenes[0], s2 = TL.scenes[1], G = [{ soort: 'buiten', t: 0, tot: s2.start + 1.2 }];
+    S.bubbels.forEach((b, i) => {
+      const a = s1.start + b.start;
+      if (a > s2.start - .3) return;
+      G.push({ soort: 'bloop', t: a + .04, toon: i % 3, pan: -.15 });
+      if (a + b.reis * .95 < s2.start + .2) G.push({ soort: 'pling', t: a + b.reis * .95, pan: .55 });
+    });
+    G.push({ soort: 'zoef', t: s2.start, duur: 1.5, f0: 180, f1: 2200, sterkte: .7, zaad: 1 },
+           { soort: 'dreun', t: s2.start + 1.42 });
+    return G;
+  };
   return S;
 }
 
@@ -1159,6 +1182,33 @@ function maakArchief(laag, dyn){
     zet(S.titel, { opacity: f2(to),
       transform: `translate(960 ${f2(200 + Math.sin(tt * 1.6) * 4)}) scale(${pop.toFixed(3)}) translate(-960 -200)` });
   };
+  // geluid: de kamer en de klok, de laden, het papier, de stift of de veeg, de lampen, de schijnwerper,
+  // de stempel en de knipperende titel. De klok stopt als de stempel valt.
+  S.geluid = () => {
+    const s2 = TL.scenes[1], s3 = TL.scenes[2], s4 = TL.scenes[3];
+    const tDoc = s2.start + (s2.beats.document ?? s2.duur * .62);
+    const tStempel = s3.start + (s3.beats.stempel ?? 4);
+    const tTitel = s3.start + (s3.beats.titel ?? 4.7);
+    const tDicht = s2.cues[1] ? s2.cues[1].a - s2.start : 7;
+    const G = [{ soort: 'archief', t: s2.start + 1.5, tot: s4.start + .3, klokTot: tStempel }];
+    S.laden.forEach((l, i) => G.push({ soort: 'lade', t: s2.start + tDicht + l.na + .24, voor: .22, pan: -.5 + i * .25, zaad: i + 1 }));
+    [[0, -.45], [.14, 0], [.28, .35]].forEach(([d, pan], i) => G.push({ soort: 'papier', t: tDoc - .5 + d, pan, zaad: 10 + i }));
+    if (B.documenten === 'censuur'){
+      [S.velA, S.velB].forEach((vel, vi) => vel.balken.forEach((b, i) =>
+        G.push({ soort: 'stift', t: tDoc + .35 + vi * .5 + i * .11, pan: vi ? .3 : -.15, zaad: 40 + vi * 20 + i })));
+      G.push({ soort: 'veeg', t: tStempel + .7, duur: .8, f: 1400 });                     // de balken gaan weg
+    } else {
+      G.push({ soort: 'veeg', t: tDoc + .4, duur: 1.1, pan: .35 });                        // de tekst verdwijnt
+      G.push({ soort: 'veeg', t: tStempel + .7, duur: .9, f: 1500 });                      // en komt terug
+    }
+    G.push({ soort: 'klik', t: s3.start + .1, f: 2600, sterkte: .55, pan: -.3 },          // de lampen gaan uit
+           { soort: 'papier', t: s3.start + .02, pan: -.4, zaad: 21, sterkte: .7 },       // map en lijst schuiven weg
+           { soort: 'papier', t: s3.start + .15, pan: .15, zaad: 22, sterkte: .8, duur: .6 },
+           { soort: 'schijnwerper', t: s3.start + .22, tot: s4.start + .1 },
+           { soort: 'stempel', t: tStempel, voor: .26 },
+           { soort: 'neon', t: tTitel });
+    return G;
+  };
   return S;
 }
 
@@ -1388,6 +1438,27 @@ function maakNudge(laag, dyn){
     F.ogen.forEach(o => o.setAttribute('transform', `translate(0 -176) scale(1 ${kn}) translate(0 176)`));
     F.lijf.setAttribute('transform', `translate(0 ${f2(Math.sin(lt * 1.6) * 1.2)})`);
   };
+  // geluid: de regenboogveeg, de stapel die uiteenvalt, de tegeltjes, de kaarten, de tv, het tikken
+  S.geluid = () => {
+    const s4 = TL.scenes[3], s5 = TL.scenes[4], a = s4.start;
+    const G = [{ soort: 'zoef', t: a - .35, duur: 1.25, f0: 250, f1: 3500, pan0: -.9, pan1: .9, zaad: 2 },
+               { soort: 'kamer', t: a, tot: TL.duur },
+               { soort: 'papier', t: a + 1.0, duur: .5, zaad: 31, pan: -.5, sterkte: .8 },
+               { soort: 'plop', t: a + .5, pan: -.45, toon: 0 },
+               { soort: 'plop', t: a + 2.05, pan: -.3, toon: 2 },
+               { soort: 'rits', t: a + 2.7, duur: 1.2, pan: -.4, sterkte: .8 },
+               { soort: 'schuif', t: a + 1.3, duur: .9, pan: .6 },
+               { soort: 'tv', t: a + 2.05, pan: .5 },
+               { soort: 'zoef', t: a + 2.0, duur: .7, f0: 200, f1: 900, sterkte: .45, zaad: 3 }];
+    S.vakjes.map(v => 1.9 + v.d).sort((x, y) => x - y).filter((_, i) => i % 4 === 0)
+      .forEach((tt, i) => G.push({ soort: 'tegel', t: a + tt, toon: i, pan: -.45 }));
+    const tTyp = s4.beats.typen ?? 6, klaar = tTyp + 11 / 7;                               // 'Grote Markt': 11 tekens
+    for (let k = 1; k <= 11; k++) G.push({ soort: 'tik', t: a + tTyp + k / 7, zaad: k, pan: .05 });
+    G.push({ soort: 'plop', t: a + klaar + .32, pan: .5, toon: 1 }, { soort: 'plop', t: a + klaar + .57, pan: .5, toon: 3 },
+           { soort: 'ratel', t: a + klaar, pan: .75 }, { soort: 'klik', t: a + klaar + 2.6, f: 2600, pan: .55, sterkte: .6 },
+           { soort: 'belletje', t: a + klaar + 2.85, pan: .5 });
+    return G;
+  };
   return S;
 }
 
@@ -1527,6 +1598,23 @@ function maakKeuze(laag, dyn){
       transform: `translate(960 777) scale(${Math.max(.001, E.terug(pU)).toFixed(3)}) rotate(${f2(-4 * (1 - E.uit3(pU)))}) translate(-960 -777)` });
     zicht(S.eind, lt > tE + .6);
   };
+  // geluid: de strepen, de helften die openklappen, het oog, de zon, de veeg naar de eindkaart
+  S.geluid = () => {
+    const s5 = TL.scenes[4], a = s5.start, b = s5.beats;
+    const tE = b.eindkaart ?? s5.duur - 7, tR = b.rechts ?? 5;
+    return [
+      { soort: 'zoef', t: a, duur: .5, f0: 3000, f1: 300, sterkte: .6, zaad: 4 },
+      { soort: 'zoef', t: a + .3, duur: .75, f0: 400, f1: 1800, pan0: 0, pan1: -.8, sterkte: .45, zaad: 5 },
+      { soort: 'zoef', t: a + .3, duur: .75, f0: 450, f1: 2000, pan0: 0, pan1: .8, sterkte: .45, zaad: 6 },
+      { soort: 'glans', t: a + .95, pan: .5 },
+      { soort: 'klik', t: a + tR + .9, f: 5000, sterkte: .2, pan: .5 },
+      { soort: 'zon', t: a + tR, tot: TL.duur, helder: a + tE + .7 },
+      { soort: 'zoef', t: a + tE, duur: .9, f0: 300, f1: 2500, pan0: .6, pan1: -.8, sterkte: .7, zaad: 7 },
+      { soort: 'plop', t: a + tE + .72, toon: 4, sterkte: 1.2 },
+      { soort: 'rits', t: a + tE + .9, duur: .5, sterkte: .5 },
+      { soort: 'plop', t: a + tE + 1.32, toon: 5 },
+    ];
+  };
   return S;
 }
 
@@ -1562,6 +1650,371 @@ function maakKorrel(){
 }
 
 /* ==========================================================================
+   7C. GELUID
+   Alle geluiden maakt de browser zelf, uit ruis en tonen (Web Audio): er zitten geen
+   geluidsbestanden in. Elke scène zegt in S.geluid() welk geluid ze wanneer maakt, met dezelfde
+   tijden als haar beeld; KLANK weet hoe elk geluid klinkt. Tijdens het afspelen wordt telkens het
+   komende stukje ingepland; exporteer.py rekent alles in één keer uit voor de MP4.
+   Een gebeurtenis: { soort, t (het moment zelf), voor (aanloop in seconden), tot (voor geluid
+   dat blijft klinken), pan (-1 links tot 1 rechts), sterkte, zaad, ... }.
+   ========================================================================== */
+// Het klankbord: de context, gedeelde ruis (vast zaad) en de ingang van de mix. Een compressor houdt
+// harde klappen en zachte ruis dicht bij elkaar, een begrenzer vangt de hoogste pieken op.
+const VOLUME = 1.75;
+// Het niveau van elke soort, afgesteld door elk geluid apart te meten (piek en luidste halve seconde),
+// met de stempel als luidste klap. Kleine geluiden (tikken, tegeltjes) zijn kort; daar telt de piek.
+const NIVEAU = {
+  stempel: 1, dreun: .67, lade: .8, papier: 1.3, tv: 1.3, zoef: 3.2, schuif: 1.2, plop: 1.8, klik: 2.4,
+  belletje: 1.3, glans: 1.1, tik: 2.5, tegel: 2.2, bloop: 1.3, pling: 1.3, neon: 3, stift: 3, veeg: 1.7,
+  rits: 2.6, ratel: 4.3, buiten: 1.1, archief: 1, schijnwerper: 1, kamer: 1.6, zon: .6,
+};
+function maakKlankbord(ctx, naar){
+  if (!ctx._ruis){
+    const n = ctx.sampleRate * 2, r = toeval(99);
+    const wit = ctx.createBuffer(1, n, ctx.sampleRate), bruin = ctx.createBuffer(1, n, ctx.sampleRate);
+    const w = wit.getChannelData(0), b = bruin.getChannelData(0);
+    let v = 0;
+    for (let i = 0; i < n; i++){ const x = r() * 2 - 1; w[i] = x; v = (v + .02 * x) / 1.02; b[i] = v * 3.5; }
+    ctx._ruis = { wit, bruin };
+  }
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -14; comp.knee.value = 10; comp.ratio.value = 2; comp.attack.value = .01; comp.release.value = .3;
+  const master = ctx.createGain(), rem = ctx.createDynamicsCompressor();
+  master.gain.value = VOLUME;
+  rem.threshold.value = -5; rem.knee.value = 0; rem.ratio.value = 20; rem.attack.value = .002; rem.release.value = .1;
+  const laag = ctx.createBiquadFilter();
+  laag.type = 'highpass'; laag.frequency.value = 45; laag.Q.value = .7;
+  // een zacht plafond: tot 0,7 verandert er niets, daarboven buigen de toppen af naar -1 dB
+  const plafond = ctx.createWaveShaper(), kromme = new Float32Array(4097);
+  for (let i = 0; i < kromme.length; i++){
+    const x = i / 2048 - 1, m = Math.abs(x);
+    kromme[i] = m <= .7 ? x : Math.sign(x) * (.7 + .19 * Math.tanh((m - .7) / .19));
+  }
+  plafond.curve = kromme; plafond.oversample = '4x';
+  laag.connect(comp); comp.connect(master); master.connect(rem); rem.connect(plafond); plafond.connect(naar);
+  return { ctx, wit: ctx._ruis.wit, bruin: ctx._ruis.bruin, in: laag, bronnen: [], niveau: 1 };
+}
+const KL = {
+  // ruis vanaf t, duur seconden, naar een knoop; 'bruin' is dieper en rommeliger dan 'wit'
+  ruis(K, t, duur, naar, soort = 'wit', off = 0){
+    const s = K.ctx.createBufferSource();
+    s.buffer = K[soort]; s.loop = true; s.connect(naar);
+    t = Math.max(0, t); s.start(t, ((off % 1.9) + 1.9) % 1.9); s.stop(t + duur + .05);
+    K.bronnen.push(s);
+  },
+  // een omhulsel: aanzet a, aanhouden h, uitsterven d (exponentieel) tot stilte
+  env(K, t, a, h, d, top, naar){
+    const g = K.ctx.createGain(), p = g.gain;
+    t = Math.max(0, t);
+    p.setValueAtTime(.0001, t); p.linearRampToValueAtTime(top, t + a);
+    p.setValueAtTime(top, t + a + h); p.exponentialRampToValueAtTime(.0001, t + a + h + d);
+    g.connect(naar);
+    return g;
+  },
+  filt(K, type, f, Q, naar){
+    const b = K.ctx.createBiquadFilter();
+    b.type = type; b.frequency.value = f; b.Q.value = Q ?? .8; b.connect(naar);
+    return b;
+  },
+  // de uitgang van één geluid: op het niveau van zijn soort, naar de mix
+  uit(K){
+    const g = K.ctx.createGain();
+    g.gain.value = K.niveau; g.connect(K.in);
+    return g;
+  },
+  pan(K, p){
+    const s = K.ctx.createStereoPanner();
+    s.pan.value = klem(p || 0, -1, 1); s.connect(KL.uit(K));
+    return s;
+  },
+  // een toon die van f0 naar f1 glijdt
+  toon(K, t, { f0, f1, glij = .05, a = .003, h = 0, d, top, type = 'sine' }, naar){
+    t = Math.max(0, t);
+    const o = K.ctx.createOscillator();
+    o.type = type; o.frequency.setValueAtTime(f0, t);
+    if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + glij);
+    o.connect(KL.env(K, t, a, h, d, top, naar));
+    o.start(t); o.stop(t + a + h + d + .05);
+    K.bronnen.push(o);
+  },
+  // een toon die blijft klinken, voor bromtonen en akkoorden
+  osc(K, t, duur, f, type, sterkte, naar){
+    const o = K.ctx.createOscillator(), g = K.ctx.createGain();
+    o.type = type; o.frequency.value = f; g.gain.value = sterkte;
+    o.connect(g); g.connect(naar); t = Math.max(0, t); o.start(t); o.stop(t + duur + .05);
+    K.bronnen.push(o);
+    return o;
+  },
+  // een volumeverloop over een reeks [tijd, waarde]-punten, lineair ertussen
+  verloop(K, punten, naar){
+    const g = K.ctx.createGain(), p = g.gain;
+    punten.forEach(([t, v], i) => i ? p.linearRampToValueAtTime(v, Math.max(0, t)) : p.setValueAtTime(v, Math.max(0, t)));
+    g.connect(naar);
+    return g;
+  },
+};
+
+const KLANK = {
+  // een vel dat over tafel of over een ander vel schuift, met wat geknisper
+  papier(K, e, t){
+    const r = toeval(e.zaad || 7), duur = e.duur || .42, s = e.sterkte ?? 1, uit = KL.pan(K, e.pan);
+    const hp = KL.filt(K, 'highpass', 450, .7, KL.env(K, t, .035, duur * .4, duur * .55, .3 * s, uit));
+    const bp = KL.filt(K, 'bandpass', 900, .6, hp);
+    bp.frequency.setValueAtTime(700 + r() * 300, t); bp.frequency.exponentialRampToValueAtTime(2600 + r() * 1400, t + duur * .75);
+    KL.ruis(K, t, duur + .1, bp, 'wit', r() * 2);
+    for (let i = 0; i < 6; i++){
+      const tt = t + .03 + r() * duur * .8;
+      KL.ruis(K, tt, .04, KL.filt(K, 'bandpass', 2200 + r() * 3000, 2.5, KL.env(K, tt, .001, 0, .016 + r() * .012, (.12 + r() * .12) * s, uit)), 'wit', r() * 2);
+    }
+  },
+  // een metalen lade die dichtschuift en dichtklapt
+  lade(K, e, t){
+    const s = e.sterkte ?? 1, uit = KL.pan(K, e.pan), r = toeval(e.zaad || 3);
+    KL.ruis(K, t - .22, .26, KL.filt(K, 'lowpass', 700, .7, KL.env(K, t - .22, .16, .02, .05, .1 * s, uit)), 'bruin', r() * 2);
+    KL.toon(K, t, { f0: 140, f1: 52, glij: .09, d: .22, top: .5 * s }, uit);
+    KL.ruis(K, t, .12, KL.filt(K, 'lowpass', 2200, .7, KL.env(K, t, .001, 0, .06, .35 * s, uit)), 'wit', r() * 2);
+    for (const [f, a, d] of [[410, .07, .4], [1090, .045, .28], [1790, .03, .2], [2650, .02, .14]])
+      KL.toon(K, t, { f0: f * (.97 + r() * .06), d, top: a * s }, uit);
+  },
+  // de stempel: suist omlaag, slaat met een houten dreun, en komt met een plopje weer los
+  stempel(K, e, t){
+    const uit = KL.pan(K, 0);
+    const bp = KL.filt(K, 'bandpass', 2400, 1.2, KL.env(K, t - .26, .2, 0, .06, .16, uit));
+    bp.frequency.setValueAtTime(2600, Math.max(0, t - .26)); bp.frequency.exponentialRampToValueAtTime(450, Math.max(.001, t));
+    KL.ruis(K, t - .26, .3, bp, 'wit', .4);
+    KL.toon(K, t, { f0: 96, f1: 36, glij: .16, d: .5, top: .95 }, uit);
+    KL.toon(K, t, { f0: 190, f1: 95, glij: .05, d: .12, top: .3, type: 'triangle' }, uit);
+    KL.ruis(K, t, .1, KL.filt(K, 'bandpass', 760, 5, KL.env(K, t, .001, 0, .07, .9, uit)), 'wit', .8);
+    KL.ruis(K, t, .2, KL.filt(K, 'lowpass', 1100, .7, KL.env(K, t, .001, 0, .16, .45, uit)), 'bruin', 1.1);
+    KL.ruis(K, t + .38, .1, KL.filt(K, 'bandpass', 380, 3, KL.env(K, t + .38, .006, 0, .07, .2, uit)), 'wit', 1.5);
+  },
+  // een stift die een regel zwart maakt
+  stift(K, e, t){
+    const uit = KL.pan(K, e.pan), r = toeval(e.zaad || 5);
+    const bp = KL.filt(K, 'bandpass', 1600, 1.6, KL.env(K, t, .01, .06, .06, .12, uit));
+    bp.frequency.setValueAtTime(1400 + r() * 300, t); bp.frequency.linearRampToValueAtTime(2300 + r() * 400, t + .12);
+    KL.ruis(K, t, .16, bp, 'wit', r() * 2);
+  },
+  // tekst die van het papier verdwijnt (of terugkomt): een zachte veeg
+  veeg(K, e, t){
+    const duur = e.duur || 1, uit = KL.pan(K, e.pan);
+    KL.ruis(K, t, duur + .2, KL.filt(K, 'bandpass', e.f || 1100, .9, KL.env(K, t, .08, duur * .5, duur * .5, .09 * (e.sterkte ?? 1), uit)), 'wit', 1.7);
+  },
+  // een lucht die voorbij zoeft; kan van links naar rechts gaan
+  zoef(K, e, t){
+    const c = K.ctx, duur = e.duur || .8, s = e.sterkte ?? 1;
+    t = Math.max(0, t);
+    const p = c.createStereoPanner();
+    p.pan.setValueAtTime(e.pan0 || 0, t); p.pan.linearRampToValueAtTime(e.pan1 ?? e.pan0 ?? 0, t + duur); p.connect(KL.uit(K));
+    const g = c.createGain();
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.3 * s, t + duur * .55); g.gain.exponentialRampToValueAtTime(.0001, t + duur);
+    g.connect(p);
+    const bp = KL.filt(K, 'bandpass', e.f0 || 300, 1.1, g);
+    bp.frequency.setValueAtTime(e.f0 || 300, t); bp.frequency.exponentialRampToValueAtTime(e.f1 || 3000, t + duur * .8);
+    KL.ruis(K, t, duur + .05, bp, 'wit', (e.zaad || 0) * .31);
+  },
+  // een diepe dreun, als het beeld zwart wordt
+  dreun(K, e, t){
+    const uit = KL.pan(K, 0);
+    KL.toon(K, t, { f0: 58, f1: 27, glij: .9, a: .01, d: 1.5, top: .6 }, uit);
+    KL.ruis(K, t, 1.2, KL.filt(K, 'lowpass', 140, .7, KL.env(K, t, .02, .1, 1, .35, uit)), 'bruin', .6);
+  },
+  // een PR-bubbel die verschijnt, en het belletje als hij in de telefoon verdwijnt
+  bloop(K, e, t){
+    const k = [1, 1.19, 1.335][e.toon % 3], uit = KL.pan(K, e.pan);
+    KL.toon(K, t, { f0: 250 * k, f1: 560 * k, glij: .07, a: .006, d: .14, top: .11 }, uit);
+    KL.toon(K, t + .01, { f0: 500 * k, f1: 1120 * k, glij: .07, a: .006, d: .08, top: .03 }, uit);
+  },
+  pling(K, e, t){
+    const uit = KL.pan(K, e.pan);
+    KL.toon(K, t, { f0: 1568, d: .28, top: .07 }, uit);
+    KL.toon(K, t, { f0: 2349, d: .18, top: .035 }, uit);
+  },
+  // een tegeltje dat op zijn plaats valt
+  tegel(K, e, t){
+    const uit = KL.pan(K, e.pan);
+    KL.toon(K, t, { f0: [1760, 1976, 2217, 2637, 2960, 3520][e.toon % 6], d: .05, top: .06 }, uit);
+    KL.ruis(K, t, .02, KL.filt(K, 'highpass', 4000, .7, KL.env(K, t, .0005, 0, .008, .05, uit)), 'wit', e.toon * .13);
+  },
+  // iets dat in beeld springt
+  plop(K, e, t){
+    const k = [1, 1.12, 1.26, 1.335, .75, 1.5][e.toon % 6], s = e.sterkte ?? 1, uit = KL.pan(K, e.pan);
+    KL.toon(K, t, { f0: 320 * k, f1: 780 * k, glij: .045, a: .004, d: .1, top: .24 * s }, uit);
+    KL.ruis(K, t, .02, KL.filt(K, 'bandpass', 1800, 1, KL.env(K, t, .0005, 0, .01, .12 * s, uit)), 'wit', e.toon * .21);
+  },
+  // een stijgende rits: een balk die volloopt, een schaduw die openschuift
+  rits(K, e, t){
+    const c = K.ctx, duur = e.duur || .6, s = e.sterkte ?? 1, uit = KL.pan(K, e.pan);
+    t = Math.max(0, t);
+    const am = c.createGain(); am.gain.value = .5;
+    am.connect(KL.env(K, t, .05, Math.max(0, duur - .15), .1, .05 * s, uit));
+    const o = c.createOscillator();
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(180, t); o.frequency.exponentialRampToValueAtTime(760, t + duur);
+    o.connect(KL.filt(K, 'bandpass', 1200, 1, am));
+    const trem = c.createOscillator(), tg = c.createGain();
+    trem.frequency.value = 38; tg.gain.value = .5; trem.connect(tg); tg.connect(am.gain);
+    o.start(t); trem.start(t); o.stop(t + duur + .15); trem.stop(t + duur + .15);
+    K.bronnen.push(o, trem);
+  },
+  // de televisie schuift binnen en stoot tot stilstand
+  schuif(K, e, t){
+    const duur = e.duur || .9, uit = KL.pan(K, e.pan);
+    const lp = KL.filt(K, 'lowpass', 300, .8, KL.env(K, t, duur * .3, .02, duur * .45, .22, uit));
+    lp.frequency.setValueAtTime(250, Math.max(0, t)); lp.frequency.exponentialRampToValueAtTime(900, Math.max(.001, t + duur * .35));
+    KL.ruis(K, t, duur + .1, lp, 'bruin', .77);
+    KL.toon(K, t + duur * .36, { f0: 90, f1: 60, glij: .08, d: .16, top: .28 }, uit);
+  },
+  // de beeldbuis springt aan: relais, een doffe 'toem' en statische ruis
+  tv(K, e, t){
+    const uit = KL.pan(K, e.pan);
+    KL.ruis(K, t, .03, KL.filt(K, 'bandpass', 1900, 2, KL.env(K, t, .0005, 0, .025, .4, uit)), 'wit', .31);
+    KL.toon(K, t + .01, { f0: 62, f1: 50, glij: .2, a: .005, d: .3, top: .3 }, uit);
+    KL.ruis(K, t + .02, .6, KL.filt(K, 'bandpass', 5200, .6, KL.env(K, t + .02, .01, .06, .4, .11, uit)), 'wit', 1.23);
+  },
+  // een duim op het scherm van de telefoon
+  tik(K, e, t){
+    const r = toeval(e.zaad || 1), uit = KL.pan(K, e.pan);
+    KL.toon(K, t, { f0: 1150 + r() * 250, d: .018, top: .09 }, uit);
+    KL.ruis(K, t, .02, KL.filt(K, 'bandpass', 3200, 2, KL.env(K, t, .0005, 0, .01, .1, uit)), 'wit', r() * 2);
+  },
+  // draaiknoppen die verspringen
+  ratel(K, e, t){
+    const uit = KL.pan(K, e.pan);
+    for (let i = 0; i < 5; i++)
+      KL.ruis(K, t + i * .07, .02, KL.filt(K, 'bandpass', 3800, 3, KL.env(K, t + i * .07, .0005, 0, .008, .09, uit)), 'wit', i * .17);
+  },
+  // een schakelaar of een knop
+  klik(K, e, t){
+    const s = e.sterkte ?? 1, f = e.f || 3000, uit = KL.pan(K, e.pan);
+    KL.ruis(K, t, .04, KL.filt(K, 'bandpass', f, 2, KL.env(K, t, .0005, 0, .02, .45 * s, uit)), 'wit', f / 7919);
+    KL.toon(K, t, { f0: 170, f1: 90, glij: .03, d: .05, top: .18 * s }, uit);
+  },
+  // de melding dat de aanvraag klaarstaat
+  belletje(K, e, t){
+    const uit = KL.pan(K, e.pan);
+    KL.toon(K, t, { f0: 1046.5, a: .004, d: .6, top: .09 }, uit); KL.toon(K, t, { f0: 2093, d: .3, top: .02 }, uit);
+    KL.toon(K, t + .11, { f0: 1318.5, a: .004, d: .8, top: .09 }, uit); KL.toon(K, t + .11, { f0: 2637, d: .35, top: .02 }, uit);
+  },
+  // het oog gaat open: een opwaarts akkoordje en wat glinstering
+  glans(K, e, t){
+    const uit = KL.pan(K, e.pan);
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => KL.toon(K, t + i * .07, { f0: f, a: .012, d: 1.5, top: .05 }, uit));
+    KL.ruis(K, t, .8, KL.filt(K, 'highpass', 7000, .7, KL.env(K, t, .15, .1, .5, .025, uit)), 'wit', .5);
+  },
+  // de titel knippert aan als een oude neonletter: zoemen dat meeflakkert, dan zacht brommen
+  neon(K, e, t){
+    const c = K.ctx, uit = KL.pan(K, 0);
+    t = Math.max(0, t);
+    const g = c.createGain(); g.gain.setValueAtTime(0, t); g.connect(uit);
+    const bp = KL.filt(K, 'bandpass', 1300, 1.2, KL.filt(K, 'lowpass', 3500, .7, g));
+    KL.osc(K, t, 3.6, 118, 'sawtooth', 1, bp); KL.osc(K, t, 3.6, 236, 'square', .5, bp);
+    const fases = RUSTIG ? [[0, .03]] : [[0, .05], [.18, 0], [.4, .05], [.58, .016], [.9, .05]];
+    for (const [a, v] of fases.concat([[1.4, .014], [3.2, 0]])) g.gain.setTargetAtTime(v, t + a, .006);
+    for (const a of RUSTIG ? [] : [0, .4, .9]) KL.toon(K, t + a, { f0: 2900, d: .04, top: .05 }, uit);
+  },
+
+  // --- geluid dat blijft klinken: t is waar het begint, sprong hoeveel seconden al voorbij zijn ---
+  // de schijnwerper: een zware schakelaar, dan het brommen van de lamp
+  schijnwerper(K, e, t, sprong = 0){
+    const uit = KL.pan(K, -.2), duur = Math.max(.3, e.tot - e.t - sprong);
+    if (!sprong){
+      KL.ruis(K, t, .05, KL.filt(K, 'bandpass', 1400, 2, KL.env(K, t, .0005, 0, .03, .5, uit)), 'wit', .2);
+      KL.toon(K, t, { f0: 75, f1: 45, glij: .1, d: .3, top: .35 }, uit);
+    }
+    const zak = Math.max(.25, 1 - Math.max(0, 3 - sprong) / 3 * .75);
+    const g = KL.verloop(K, sprong ? [[t, 0], [t + .3, .25], [t + duur - .5, .25], [t + duur, 0]]
+                                   : [[t, 0], [t + .2, 1], [t + 3, .25], [t + duur - .5, .25], [t + duur, 0]], uit);
+    for (const [f, a] of [[100, .016], [200, .009], [300, .004]]) KL.osc(K, t, duur, f, 'sine', a, g);
+  },
+  // buiten: wind, en af en toe een vogeltje
+  buiten(K, e, t, sprong = 0){
+    const c = K.ctx, duur = Math.max(.5, e.tot - e.t - sprong), uit = KL.pan(K, 0);
+    const g = KL.verloop(K, [[t, 0], [t + .8, 1], [t + duur - 1, 1], [t + duur, 0]], uit);
+    const wg = c.createGain(); wg.gain.value = .045; wg.connect(g);
+    const lfo = KL.osc(K, t, duur, .13, 'sine', .018, wg.gain);
+    KL.ruis(K, t, duur, KL.filt(K, 'highpass', 60, .6, KL.filt(K, 'lowpass', 450, .6, wg)), 'bruin', .3);
+    const r = toeval(55);
+    for (let b = .9; b < e.tot - e.t - .6; b += 1.7 + r() * 1.8){
+      const f0 = 2800 + r() * 900, n = 3 + Math.floor(r() * 2), p = -.65 + r() * .45;
+      if (b < sprong) continue;
+      const pg = c.createStereoPanner(); pg.pan.value = p; pg.connect(g);
+      for (let i = 0; i < n; i++){
+        const tt = t + (b - sprong) + i * .11, o = c.createOscillator();
+        o.frequency.setValueAtTime(f0, tt); o.frequency.linearRampToValueAtTime(f0 * 1.35, tt + .035); o.frequency.linearRampToValueAtTime(f0 * 1.1, tt + .07);
+        o.connect(KL.env(K, tt, .005, .02, .05, .035, pg)); o.start(tt); o.stop(tt + .1);
+        K.bronnen.push(o);
+      }
+    }
+    return lfo;
+  },
+  // het archief: een doffe kamertoon en een klok die tikt, tot de stempel valt
+  archief(K, e, t, sprong = 0){
+    const duur = Math.max(.5, e.tot - e.t - sprong), uit = KL.pan(K, .25);
+    const g = KL.verloop(K, [[t, 0], [t + .8, 1], [t + duur - .6, 1], [t + duur, 0]], uit);
+    const kg = K.ctx.createGain(); kg.gain.value = .06; kg.connect(g);
+    KL.ruis(K, t, duur, KL.filt(K, 'highpass', 70, .6, KL.filt(K, 'lowpass', 380, .6, kg)), 'bruin', .9);
+    for (let k = Math.ceil(sprong + .5); k < (e.klokTot ?? e.tot) - e.t; k++){
+      const tt = t + (k - sprong);
+      KL.ruis(K, tt, .02, KL.filt(K, 'bandpass', k % 2 ? 2500 : 3300, 6, KL.env(K, tt, .0005, 0, .012, .09, g)), 'wit', k * .07);
+    }
+  },
+  // een lichte kamer
+  kamer(K, e, t, sprong = 0){
+    const duur = Math.max(.5, e.tot - e.t - sprong);
+    const g = KL.verloop(K, [[t, 0], [t + .6, .02], [t + duur - .6, .02], [t + duur, 0]], KL.pan(K, 0));
+    KL.ruis(K, t, duur, KL.filt(K, 'highpass', 90, .6, KL.filt(K, 'lowpass', 600, .6, g)), 'bruin', 1.4);
+  },
+  // de zon achter het open oog: een warm akkoord dat opzwelt, helderder wordt bij de eindkaart en uitdooft
+  zon(K, e, t, sprong = 0){
+    const duur = Math.max(.5, e.tot - e.t - sprong), nu = e.t + sprong, h = t + Math.max(0, e.helder - nu);
+    const g = KL.verloop(K, [[t, 0], [t + Math.max(.3, 2 - sprong), .045], [h, .045], [h + 1, .06], [t + duur - 2.5, .06], [t + duur, 0]], KL.pan(K, 0));
+    const lp = KL.filt(K, 'lowpass', 700, .5, g);
+    lp.frequency.setValueAtTime(700, h); lp.frequency.linearRampToValueAtTime(1800, h + 1);
+    for (const f of [196, 246.94, 293.66, 392]) for (const d of [-1.2, 1.2]) KL.osc(K, t, duur, f + d, 'triangle', .25, lp);
+  },
+};
+
+// Plan de gebeurtenissen waarvan het begin tussen film-tijd van en tot valt. nul is de contexttijd
+// die bij 'van' hoort. Bij het eerste venster klinkt wat al bezig was, vanaf het juiste punt verder.
+function planGeluid(K, lijst, van, tot, nul, eerste){
+  for (const e of lijst){
+    const begin = e.t - (e.voor || 0);
+    K.niveau = NIVEAU[e.soort] ?? 1;
+    if (e.tot !== undefined){
+      if (begin >= van && begin < tot) KLANK[e.soort](K, e, nul + (e.t - van), 0);
+      else if (eerste && begin < van && e.tot > van + .3) KLANK[e.soort](K, e, nul, van - e.t);
+    } else if (begin >= van && begin < tot) KLANK[e.soort](K, e, nul + (e.t - van));
+  }
+}
+function geluidLijst(){ return MODULES.flatMap(m => m.geluid ? m.geluid() : []).sort((a, b) => a.t - b.t); }
+
+// Voor exporteer.py: het geluid van van tot tot, in één keer uitgerekend, als WAV (16 bit, stereo,
+// 48 kHz) in stukken base64, zodat het door de verbinding met het script past.
+async function geluidWav(van = 0, tot = TL.duur){
+  const sr = 48000, n = Math.max(1, Math.round((tot - van) * sr));
+  const oc = new OfflineAudioContext(2, n, sr);
+  planGeluid(maakKlankbord(oc, oc.destination), geluidLijst(), van, tot, 0, true);
+  const buf = await oc.startRendering();
+  const L = buf.getChannelData(0), R = buf.getChannelData(1), bytes = new Uint8Array(44 + n * 4), dv = new DataView(bytes.buffer);
+  const tekst = (o, s) => { for (let i = 0; i < s.length; i++) bytes[o + i] = s.charCodeAt(i); };
+  tekst(0, 'RIFF'); dv.setUint32(4, 36 + n * 4, true); tekst(8, 'WAVEfmt '); dv.setUint32(16, 16, true);
+  dv.setUint16(20, 1, true); dv.setUint16(22, 2, true); dv.setUint32(24, sr, true); dv.setUint32(28, sr * 4, true);
+  dv.setUint16(32, 4, true); dv.setUint16(34, 16, true); tekst(36, 'data'); dv.setUint32(40, n * 4, true);
+  for (let i = 0; i < n; i++){
+    dv.setInt16(44 + i * 4, klem(L[i], -1, 1) * 32767, true);
+    dv.setInt16(46 + i * 4, klem(R[i], -1, 1) * 32767, true);
+  }
+  const stukken = [], STUK = 3 * 1024 * 1024;
+  for (let o = 0; o < bytes.length; o += STUK){
+    const deel = bytes.subarray(o, o + STUK);
+    let s = '';
+    for (let i = 0; i < deel.length; i += 32768) s += String.fromCharCode.apply(null, deel.subarray(i, i + 32768));
+    stukken.push(btoa(s));
+  }
+  return stukken;
+}
+
+/* ==========================================================================
    8. DE SPELER
    ========================================================================== */
 const Q = new URLSearchParams(location.search);
@@ -1573,6 +2026,46 @@ let VKEY = VERSIES[Q.get('versie')] ? Q.get('versie') : VERSIES[ANKER] ? ANKER :
 let V, TL, MODULES = [];
 let T = 0, SPEELT = false, VORIGE = null, OT_AAN = Q.get('ondertitels') !== '0';
 
+// Het geluid tijdens het afspelen: telkens het komende stukje inplannen. Het beeld volgt dan de klok
+// van het geluid, zodat beide gelijk blijven lopen, ook als het venster even hapert.
+const GELUID = {
+  aan: true, ctx: null, K: null, bus: null, lijst: [], gepland: 0, T0: 0, c0: 0,
+  kan(){ return !OPNAME && !!(window.AudioContext || window.webkitAudioContext); },
+  start(t){
+    this.stop();
+    if (!this.aan || !this.kan()) return;
+    try {
+      if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+    } catch (fout){ return; }
+    this.bus = this.ctx.createGain();
+    this.bus.connect(this.ctx.destination);
+    this.K = maakKlankbord(this.ctx, this.bus);
+    this.T0 = t; this.c0 = this.ctx.currentTime + .04; this.gepland = t;
+    this.plan(t, true);
+  },
+  plan(t, eerste = false){
+    if (!this.bus) return;
+    const tot = t + .8;
+    if (tot <= this.gepland && !eerste) return;
+    planGeluid(this.K, this.lijst, this.gepland, tot, this.c0 + (this.gepland - this.T0), eerste);
+    this.gepland = tot;
+  },
+  stop(){
+    if (!this.bus) return;
+    const b = this.bus, K = this.K;
+    b.gain.setTargetAtTime(0, this.ctx.currentTime, .03);
+    setTimeout(() => { for (const x of K.bronnen) try { x.stop(); } catch (fout){} try { b.disconnect(); } catch (fout){} }, 250);
+    this.bus = null; this.K = null;
+  },
+  tijd(){
+    if (!this.bus || this.ctx.state !== 'running') return null;
+    return this.T0 + (this.ctx.currentTime - this.c0) - (this.ctx.outputLatency || this.ctx.baseLatency || 0);
+  },
+};
+const ICOON_GELUID = 'M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z';
+const ICOON_STIL = 'M3 9v6h4l5 4V5L7 9zm12.1-.5l2.4 2.4 2.4-2.4 1.1 1.1-2.4 2.4 2.4 2.4-1.1 1.1-2.4-2.4-2.4 2.4-1.1-1.1 2.4-2.4-2.4-2.4z';
+
 const $ = id => document.getElementById(id);
 const ond = $('onderschrift'), ondRegel = ond.querySelector('.regel'), ondVert = ond.querySelector('.vertaling');
 
@@ -1581,6 +2074,8 @@ function bouw(sleutel){
   const lagen = $('lagen'), dyn = $('dyn');
   lagen.textContent = ''; dyn.textContent = '';
   MODULES = [maakSluimer, maakArchief, maakNudge, maakKeuze, maakKorrel].map(f => f(el('g', {}, lagen), dyn));
+  GELUID.lijst = geluidLijst();
+  if (SPEELT) GELUID.start(T);
   T = klem(T, 0, TL.duur);
   $('kiesVersie').value = sleutel;
   controleerOndertitels();
@@ -1634,15 +2129,18 @@ function lus(nu){
   if (!SPEELT) return;
   if (VORIGE !== null) T = Math.min(TL.duur, T + Math.min(.1, (nu - VORIGE) / 1000));
   VORIGE = nu;
+  const ta = GELUID.tijd();
+  if (ta !== null && Math.abs(ta - T) > .03) T = klem(ta, 0, TL.duur);
+  GELUID.plan(T);
   teken();
-  if (T >= TL.duur){ SPEELT = false; balkBij(); return; }
+  if (T >= TL.duur){ SPEELT = false; GELUID.stop(); balkBij(); return; }
   requestAnimationFrame(lus);
 }
-function speel(){ if (T >= TL.duur - .05) T = 0; SPEELT = true; VORIGE = null; $('grootSpelen').hidden = true; requestAnimationFrame(lus); balkBij(); }
-function pauze(){ SPEELT = false; balkBij(); }
+function speel(){ if (T >= TL.duur - .05) T = 0; SPEELT = true; VORIGE = null; $('grootSpelen').hidden = true; GELUID.start(T); requestAnimationFrame(lus); balkBij(); }
+function pauze(){ SPEELT = false; GELUID.stop(); balkBij(); }
 function wissel(){ SPEELT ? pauze() : speel(); }
 // Wie verspringt, wil het beeld zien: de grote afspeelknop gaat dan weg.
-function naar(t){ T = klem(t, 0, TL.duur); if (!OPNAME) $('grootSpelen').hidden = true; teken(); }
+function naar(t){ T = klem(t, 0, TL.duur); if (!OPNAME) $('grootSpelen').hidden = true; if (SPEELT) GELUID.start(T); teken(); }
 
 function vulScript(){
   const lijst = $('scriptlijst');
@@ -1703,6 +2201,15 @@ function koppelBediening(){
   const zetOT = aan => { OT_AAN = aan; ot.setAttribute('aria-pressed', String(aan)); teken(); };
   ot.addEventListener('click', () => zetOT(!OT_AAN));
   ot.setAttribute('aria-pressed', String(OT_AAN));
+  const kg = $('knopGeluid');
+  const zetGeluid = aan => {
+    GELUID.aan = aan;
+    kg.setAttribute('aria-pressed', String(aan));
+    $('icoonGeluid').setAttribute('d', aan ? ICOON_GELUID : ICOON_STIL);
+    if (SPEELT){ if (aan) GELUID.start(T); else GELUID.stop(); }
+  };
+  kg.addEventListener('click', () => zetGeluid(!GELUID.aan));
+  kg.hidden = !GELUID.kan();
   // Volledig scherm is een extraatje: op een gsm of in sommige vensters mag het niet, en dan gebeurt er niets.
   const vol = () => {
     try { (document.fullscreenElement ? document.exitFullscreen() : $('doek').requestFullscreen?.())?.catch?.(() => {}); }
@@ -1733,6 +2240,7 @@ function koppelBediening(){
     else if (e.key === 'ArrowLeft') naar(T - 5);
     else if (e.key === 'Home') naar(0);
     else if (e.key === 'c') zetOT(!OT_AAN);
+    else if (e.key === 'm') zetGeluid(!GELUID.aan);
     else if (e.key === 'f') vol();
     else if (/^[1-5]$/.test(e.key)) naar(TL.scenes[+e.key - 1].start);
   });
@@ -1752,6 +2260,7 @@ window.ILLUSIE = {
   get duur(){ return TL.duur; },
   toon(t){ naar(t); },
   srt,
+  geluidWav,
   get versie(){ return VKEY; },
   get tijdlijn(){ return TL; },
 };

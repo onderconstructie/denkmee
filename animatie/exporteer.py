@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-"""exporteer.py: zet de animatie om naar een MP4, met de ondertitels ernaast als .srt.
+"""exporteer.py: zet de animatie om naar een MP4 met geluid, met de ondertitels ernaast als .srt.
 
 De film is een webpagina (de-illusie-van-het-stadhuis.html) die elk beeld uitrekent uit de tijd
 alleen. Dit script opent ze in een onzichtbare browser, zet de klok beeld per beeld verder, maakt
 telkens een schermafdruk en geeft die door aan ffmpeg. Zo is de export beeldexact: geen haperingen
 of gemiste beelden zoals bij een schermopname. Omdat elk beeld los staat van het vorige, kunnen
 meerdere browsers tegelijk elk een stuk van de film maken; ffmpeg plakt de stukken daarna aan elkaar.
+Het geluid rekent de pagina zelf uit, in één keer en even exact, en ffmpeg zet het onder het beeld.
 
 Eenmalig nodig:
   python -m pip install playwright imageio-ffmpeg
@@ -17,12 +18,15 @@ Gebruik:
   python animatie/exporteer.py --zonder-ondertitels   schoon beeld; de tekst staat enkel in de .srt
   python animatie/exporteer.py --hoogte 720           kleiner en sneller, om na te kijken
   python animatie/exporteer.py --van 40 --tot 62      enkel een stuk, in seconden
+  python animatie/exporteer.py --zonder-geluid        stil beeld, bv. om zelf geluid onder te leggen
 
-De MP4 heeft geen geluid: de voice-over wordt apart ingesproken. De .srt bevat elke zin met zijn
-tijdcode, handig om de stem op af te stemmen en om mee te uploaden naar sociale media.
+De MP4 heeft de geluiden van de film (papier, laden, de stempel, de tv, ...), maar geen stem: de
+voice-over wordt apart ingesproken. De .srt bevat elke zin met zijn tijdcode, handig om de stem op af
+te stemmen en om mee te uploaden naar sociale media.
 Exports landen standaard naast dit script en staan in .gitignore: een film hoort niet in git.
 """
 import argparse
+import base64
 import math
 import multiprocessing as mp
 import os
@@ -105,6 +109,7 @@ def main():
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--hoogte", type=int, default=1080, help="beeldhoogte in pixels (breedte volgt uit 16:9)")
     ap.add_argument("--zonder-ondertitels", action="store_true", help="geen ondertitels in beeld (wel in de .srt)")
+    ap.add_argument("--zonder-geluid", action="store_true", help="geen geluid in de MP4")
     ap.add_argument("--van", type=float, default=0.0, help="begintijd in seconden")
     ap.add_argument("--tot", type=float, default=None, help="eindtijd in seconden (standaard: het einde)")
     ap.add_argument("--kwaliteit", type=int, default=18, help="x264 CRF: lager is beter en groter (standaard 18)")
@@ -174,10 +179,27 @@ def main():
                 print("Let op, de pagina gaf onderweg een fout: " + fout[0])
         lijst = Path(tmp) / "stukken.txt"
         lijst.write_text("".join(f"file '{Path(t['stuk']).as_posix()}'\n" for t in taken), encoding="utf-8")
+        beeld = Path(tmp) / "beeld.mp4"
         r = subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0",
-                            "-i", str(lijst), "-c", "copy", "-movflags", "+faststart", str(uit)])
+                            "-i", str(lijst), "-c", "copy", str(beeld)])
         if r.returncode:
             sys.exit(f"Aan elkaar plakken mislukt (ffmpeg code {r.returncode}).")
+        # Het geluid: de pagina rekent het uit voor precies zo lang als het beeld duurt, en geeft een WAV.
+        if a.zonder_geluid:
+            geluid = []
+        else:
+            print("  geluid uitrekenen...", flush=True)
+            with sync_playwright() as p:
+                browser, pagina, fouten = open_film(p, adres, breedte, hoogte, a.chromium)
+                stukken = pagina.evaluate("([v, t]) => ILLUSIE.geluidWav(v, t)", [van, van + beelden / a.fps])
+                browser.close()
+            wav = Path(tmp) / "geluid.wav"
+            wav.write_bytes(b"".join(base64.b64decode(s) for s in stukken))
+            geluid = ["-i", str(wav), "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "192k"]
+        r = subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-i", str(beeld), *geluid,
+                            "-c:v", "copy", "-movflags", "+faststart", str(uit)])
+        if r.returncode:
+            sys.exit(f"Geluid en beeld samenvoegen mislukt (ffmpeg code {r.returncode}).")
     print(f"Klaar in {time.time() - begin:.0f} s: {uit} ({uit.stat().st_size / 1e6:.1f} MB)")
 
 
