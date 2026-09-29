@@ -248,7 +248,7 @@ const VERTALING = 'Denk je dat de paus aan jou denkt? Denk dan maar gauw iets an
 
 const SCRIPT = {
   notities: [
-    'Eén werkwoord draagt de film: denken. De stad hangt een spandoek uit ("De stad denkt aan jou"), het Mechelse spreekwoord waar As Gau Paust zijn naam aan dankt zet het recht ("Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders."), en de film eindigt met de oproep "Denk mee."',
+    'De stad hangt een spandoek uit: #2800love, naar de postcode van Mechelen. "Zegt de stad." Het Mechelse spreekwoord waar As Gau Paust zijn naam aan dankt, zet het recht: "Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders." De film eindigt met de oproep "Denk mee."',
     'De tekst zegt alleen wat de site van As Gau Paust echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf. De site heet in de film niet "Denk mee": die woorden zijn de oproep op het einde.',
     'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van het college enkel de titel online. Dat mag volgens de wet, en het kan beter.',
     'De knipoog naar het spandoek gaat over stadsmarketing, niet over het werk van de stad: de film zegt er meteen bij dat ze bijna altijd netjes op tijd publiceert. Het platform wil burgers, journalisten én gemeenten inspireren.',
@@ -257,7 +257,7 @@ const SCRIPT = {
     'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op de site ook zegt.',
   ],
   beeld: {
-    spandoek: 'De stad denkt aan jou',
+    spandoek: '#2800love',
     map: ['BESLUITEN', 'COLLEGE'],
     stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
     slogan: 'Burgerjournalistiek van om de hoek',
@@ -456,7 +456,7 @@ const INKT = K70.espresso, PAPIER = K70.creme, ROOD = K70.vermiljoen;
    donkerdere tint voor de schaduwkant en een lichtere waar het licht valt.
    ========================================================================== */
 const PERSOON = {
-  huid: '#a86f4c', huidS: '#8a5638', blos: '#cf7c5c',
+  huid: '#f1c7a5', huidS: '#dba283', huidLijn: '#b8775a', blos: '#ec9580',
   haar: '#2b1a10', haarL: '#553622',
   trui: '#e2a33b', truiS: '#c4852a', truiL: '#f3c768',
   broek: '#6b4226', broekS: '#52321b', ribbel: '#825530',
@@ -572,7 +572,7 @@ function tekenBurgerZij(ouder, dyn, id){
   el('path', { d: 'M-80 -44L-86 -62L-95 -60L-89 -42Z', fill: P.trui, ...LIJN, 'stroke-width': 3 }, r);
   el('path', { d: 'M-83 -46L-88 -60M-87 -45L-92 -59', ...DUN, stroke: P.truiS, 'stroke-width': 1.3 }, r);
   el('path', { d: 'M-88 -58C-96 -64-104 -62-106 -55C-108 -48-102 -42-94 -42C-89 -43-85 -48-86 -54Z', fill: P.huid, ...LIJN, 'stroke-width': 3 }, r);
-  el('path', { d: 'M-100 -48C-97 -46-93 -46-90 -48', ...DUN, stroke: P.huidS, 'stroke-width': 1.6 }, r);
+  el('path', { d: 'M-100 -48C-97 -46-93 -46-90 -48', ...DUN, stroke: P.huidLijn, 'stroke-width': 1.6 }, r);
   F.duim = el('ellipse', { cx: -103, cy: -70, rx: 4, ry: 7, fill: P.huid, ...LIJN, 'stroke-width': 2.5, transform: 'rotate(-60 -103 -70)' }, r);
   return { g, F };
 }
@@ -681,7 +681,7 @@ function tekenBurgerVoor(ouder){
     el('path', { d: `M${s * 29} -195L${s * 33} -192`, stroke: P.bril, 'stroke-width': 3, 'stroke-linecap': 'round' }, gz);
   }
   el('path', { d: 'M-2.5 -190C-1 -193 1 -193 2.5 -190', ...DUN, stroke: P.bril, 'stroke-width': 3 }, gz);
-  el('path', { d: 'M1 -182C0 -176-3 -171-4 -168C-2 -165 2 -165 5 -167', ...DUN, stroke: P.huidS, 'stroke-width': 2.4 }, gz);
+  el('path', { d: 'M1 -182C0 -176-3 -171-4 -168C-2 -165 2 -165 5 -167', ...DUN, stroke: P.huidLijn, 'stroke-width': 2.4 }, gz);
   F.mond = el('g', {}, gz);
   F.mondVorm = el('path', { fill: '#7a2e1f', ...LIJN, 'stroke-width': 2.2 }, F.mond);
   F.tanden = el('path', { fill: '#fffaf0' }, F.mond);
@@ -714,7 +714,7 @@ function tekenBurgerVoor(ouder){
     const duim = el('g', {}, hg);                                                                  // de duimen liggen op het scherm, aan de andere kant
     el('path', { d: `M${s * 34} -54C${s * 40} -62 ${s * 39} -78 ${s * 30} -86C${s * 23} -91 ${s * 13} -89 ${s * 8} -82C${s * 4} -76 ${s * 5} -67 ${s * 10} -62C${s * 15} -56 ${s * 25} -51 ${s * 34} -54Z`,
                  fill: kl, ...LIJN, 'stroke-width': 2.8 }, hg);
-    el('path', { d: `M${s * 9} -76C${s * 14} -74 ${s * 19} -74 ${s * 24} -77M${s * 10} -68C${s * 15} -66 ${s * 20} -66 ${s * 25} -69`, ...DUN, stroke: P.huidS, 'stroke-width': 2 }, hg);
+    el('path', { d: `M${s * 9} -76C${s * 14} -74 ${s * 19} -74 ${s * 24} -77M${s * 10} -68C${s * 15} -66 ${s * 20} -66 ${s * 25} -69`, ...DUN, stroke: P.huidLijn, 'stroke-width': 2 }, hg);
     return { hg, duim, s };
   });
   return { g, F };
@@ -1087,7 +1087,7 @@ function maakSluimer(laag, dyn){
   S.doekVlak = el('g', {}, S.doek);
   el('path', { d: `M${DK.x0} ${DK.y}Q${dm} ${DK.y + 7} ${DK.x1} ${DK.y}V${DK.y + DK.h}Q${dm} ${DK.y + DK.h + 7} ${DK.x0} ${DK.y + DK.h}Z`, fill: K70.cremeLicht, ...R, 'stroke-width': 3 }, S.doekVlak);
   el('path', { d: `M${DK.x0 + 6} ${DK.y + 7}Q${dm} ${DK.y + 14} ${DK.x1 - 6} ${DK.y + 7}M${DK.x0 + 6} ${DK.y + DK.h - 6}Q${dm} ${DK.y + DK.h + 1} ${DK.x1 - 6} ${DK.y + DK.h - 6}`, fill: 'none', stroke: ROOD, 'stroke-width': 3 }, S.doekVlak);
-  const dt = pasIn(tx(S.doekVlak, V.beeld.spandoek.toUpperCase(), { x: dm - 14, y: DK.y + 40, class: 'sans', 'font-size': 29, 'font-weight': 800, fill: ROOD, 'text-anchor': 'middle', 'letter-spacing': 2 }), DK.x1 - DK.x0 - 86);
+  const dt = pasIn(tx(S.doekVlak, V.beeld.spandoek, { x: dm - 14, y: DK.y + 42, class: 'sans', 'font-size': 44, 'font-weight': 800, fill: ROOD, 'text-anchor': 'middle', 'letter-spacing': 1 }), DK.x1 - DK.x0 - 86);
   const hx = dm - 14 + dt.getComputedTextLength() / 2 + 22, hy = DK.y + 24;
   el('path', { d: `M${f2(hx)} ${hy}C${f2(hx - 3)} ${hy - 5} ${f2(hx - 12)} ${hy - 4} ${f2(hx - 12)} ${hy + 3}C${f2(hx - 12)} ${hy + 9} ${f2(hx - 4)} ${hy + 13} ${f2(hx)} ${hy + 17}C${f2(hx + 4)} ${hy + 13} ${f2(hx + 12)} ${hy + 9} ${f2(hx + 12)} ${hy + 3}C${f2(hx + 12)} ${hy - 4} ${f2(hx + 3)} ${hy - 5} ${f2(hx)} ${hy}Z`, fill: ROOD }, S.doekVlak);
 
