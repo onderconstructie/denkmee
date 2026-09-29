@@ -11,6 +11,8 @@ Het geluid rekent de pagina zelf uit, in één keer en even exact, en ffmpeg zet
 Eenmalig nodig:
   python -m pip install playwright imageio-ffmpeg
   python -m playwright install chromium
+Staat die browser er niet (meer), bv. na een update van Playwright, dan neemt het script een Chromium
+die Playwright eerder installeerde, of die je meegeeft met --chromium PAD.
 
 Gebruik:
   python animatie/exporteer.py                        de film, 1920x1080, 30 beelden/s
@@ -64,8 +66,45 @@ def ffmpeg_pad():
         return pad
 
 
+def zoek_chromium():
+    """Een Chromium die Playwright eerder al installeerde, ook van een andere versie. Na een update
+    van het pakket zonder 'playwright install' zoekt Playwright een nieuwere browser dan er staat;
+    de film heeft die niet nodig, elke Chromium tekent haar even goed."""
+    mappen = [os.environ.get("PLAYWRIGHT_BROWSERS_PATH"), Path.home() / ".cache" / "ms-playwright",
+              Path.home() / "Library" / "Caches" / "ms-playwright",
+              Path(os.environ["LOCALAPPDATA"]) / "ms-playwright" if os.environ.get("LOCALAPPDATA") else None]
+    namen = ["chrome-linux/chrome", "chrome-linux64/chrome", "chrome-win/chrome.exe", "chrome-win64/chrome.exe",
+             "chrome-mac/Chromium.app/Contents/MacOS/Chromium", "chrome-mac-arm64/Chromium.app/Contents/MacOS/Chromium"]
+    for m in mappen:
+        if not m or not Path(m).is_dir():
+            continue
+        for d in sorted(Path(m).glob("chromium-*"), reverse=True):                    # de nieuwste eerst
+            for n in namen:
+                if (d / n).is_file():
+                    return str(d / n)
+    return None
+
+
+def start_browser(p, chromium):
+    """Start Chromium: het opgegeven pad, anders die van Playwright, anders een eerder geïnstalleerde.
+    Geeft de browser terug en het pad dat de werkers moeten gebruiken."""
+    if chromium:
+        return p.chromium.launch(executable_path=chromium), chromium
+    try:
+        return p.chromium.launch(), None
+    except Exception as e:                                                             # playwright.Error
+        if "Executable doesn't exist" not in str(e):
+            raise
+        ander = zoek_chromium()
+        if not ander:
+            sys.exit("Playwright vindt zijn browser niet. Installeer hem met: python -m playwright install chromium\n"
+                     "of geef een eigen Chromium mee met --chromium PAD (of zet CHROMIUM_PAD).")
+        print(f"Playwright vindt zijn eigen browser niet; ik gebruik {ander}", flush=True)
+        return p.chromium.launch(executable_path=ander), ander
+
+
 def open_film(p, adres, breedte, hoogte, chromium):
-    browser = p.chromium.launch(executable_path=chromium) if chromium else p.chromium.launch()
+    browser, _ = start_browser(p, chromium)
     pagina = browser.new_page(viewport={"width": breedte, "height": hoogte}, device_scale_factor=1)
     fouten = []
     pagina.on("pageerror", lambda e: fouten.append(str(e)))
@@ -143,9 +182,15 @@ def main():
              + ("&korrel=1" if a.met_korrel else "") + ("&muziek=0" if a.zonder_muziek else ""))
     ffmpeg = ffmpeg_pad()
 
-    # Eerst de lengte en de ondertitels ophalen; de .srt enkel bij een volledige export, want haar
-    # tijdcodes gelden voor de hele film.
+    if a.tijdelijk:
+        a.tijdelijk.mkdir(parents=True, exist_ok=True)
+
+    # Eerst de browser kiezen (één keer, zodat elke werker dezelfde gebruikt), dan de lengte en de
+    # ondertitels ophalen; de .srt enkel bij een volledige export, want haar tijdcodes gelden voor
+    # de hele film.
     with sync_playwright() as p:
+        browser, a.chromium = start_browser(p, a.chromium)
+        browser.close()
         browser, pagina, fouten = open_film(p, adres, breedte, hoogte, a.chromium)
         if fouten:
             sys.exit("De pagina gaf een fout: " + fouten[0])
