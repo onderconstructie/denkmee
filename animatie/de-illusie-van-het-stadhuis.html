@@ -2441,12 +2441,16 @@ const GELUID = {
       if (!this.ctx){
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         // mocht de browser het geluid pas later laten beginnen: dan meteen op de juiste plek in de film
-        this.ctx.addEventListener('statechange', () => { if (this.ctx.state === 'running' && SPEELT && !this.bus) this.start(T); toonGeluidMelding(); });
+        this.ctx.addEventListener('statechange', () => this.herstart());
       }
-      if (this.ctx.state !== 'running') this.ctx.resume().catch(() => {});
+      if (this.ctx.state !== 'running') this.ctx.resume().then(() => this.herstart(), () => {});
       this.ontgrendel();
     } catch (fout){ return toonGeluidMelding(); }
-    if (this.ctx.state !== 'running'){ setTimeout(toonGeluidMelding, 700); return; }
+    if (this.ctx.state !== 'running'){
+      // niet elke browser meldt netjes wanneer het geluid klaar is: dus ook zelf even gaan kijken
+      for (const ms of [250, 700, 1500]) setTimeout(() => this.herstart(), ms);
+      return;
+    }
     this.bus = this.ctx.createGain();
     this.bus.connect(this.ctx.destination);
     this.K = maakKlankbord(this.ctx, this.bus);
@@ -2477,9 +2481,15 @@ const GELUID = {
       this.stilte.play().catch(() => {});
     } catch (fout){}
   },
+  // Het geluid hoort te spelen maar speelt nog niet: begin alsnog, op de juiste plek in de film.
+  herstart(){
+    if (this.aan && SPEELT && !this.bus && this.ctx && this.ctx.state === 'running') this.start(T);
+    toonGeluidMelding();
+  },
   // Staat het geluid aan maar houdt de browser het tegen? Dan maakt een tik het wakker.
   wekker(){
-    if (!this.ctx || this.ctx.state === 'running') return false;
+    if (!this.ctx) return false;
+    if (this.ctx.state === 'running'){ if (SPEELT && !this.bus){ this.start(T); return true; } return false; }
     if (navigator.audioSession) navigator.audioSession.type = 'playback';
     this.ctx.resume().catch(() => {}); this.ontgrendel();
     return true;
@@ -2503,7 +2513,8 @@ function toonGeluidMelding(){
   if (!m || OPNAME) return;
   let tekst = '';
   if (GELUID.aan && !GELUID.kan()) tekst = 'Deze browser speelt het geluid niet af. De MP4 heeft het wel.';
-  else if (GELUID.aan && SPEELT && GELUID.ctx && GELUID.ctx.state !== 'running') tekst = 'Geen geluid? Tik op de luidspreker. Op een iPhone: zet de stille modus uit.';
+  else if (GELUID.aan && SPEELT && GELUID.ctx && (GELUID.ctx.state !== 'running' || !GELUID.bus))
+    tekst = 'Geen geluid? Tik op de luidspreker. Op een iPhone: zet de stille modus uit.';
   m.textContent = tekst; m.hidden = !tekst;
 }
 const ICOON_GELUID = 'M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z';
