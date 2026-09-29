@@ -917,13 +917,20 @@ function maakSluimer(laag, dyn){
   el('rect', { x: -900, y: 818, width: 3720, height: 900, fill: '#d8ba88' }, huis);
   const P0 = { x: -300, y: 818, b: 2520, h: 400, sc: 2 };
   const doek = document.createElement('canvas'), c = doek.getContext && doek.getContext('2d');
-  const kasseien = (rij, stuk) => {                                                         // per rij: hoogte, breedte, plaatsen
+  const kasseien = rij => {                                                                 // per rij: y, hoogte, breedte en de eerste x
     for (let y = 822, i = 0; y < P0.y + P0.h; i++){
       const h = 5 + (y - 822) * .075, w = h * 1.55, dx = (i % 2) * w / 2;
       rij(y, h, w, dx + Math.floor((P0.x - dx) / w) * w);
       y += h;
     }
   };
+  // zonder canvas, of als de afbeelding niet laadt: dezelfde kasseien als patroon
+  const alsPatroon = voor => kasseien((y, h, w, x0) => {
+    const id = 's1kassei' + Math.round(y), pat = el('pattern', { id, width: f2(w), height: f2(h), patternUnits: 'userSpaceOnUse', x: f2(x0), y: f2(y) }, dyn);
+    el('rect', { x: f2(h * .1), y: f2(h * .1), width: f2(w - h * .2), height: f2(h * .78), rx: f2(h * .36), fill: '#e7cea1' }, pat);
+    el('path', { d: `M${f2(h * .42)} ${f2(h * .3)}H${f2(w - h * .42)}`, stroke: '#f3e1bd', 'stroke-width': f2(Math.max(1, h * .13)), 'stroke-linecap': 'round' }, pat);
+    huis.insertBefore(el('rect', { x: P0.x, y: f2(y), width: P0.b, height: f2(h + .3), fill: `url(#${id})` }), voor);
+  });
   if (c){
     doek.width = P0.b * P0.sc; doek.height = P0.h * P0.sc;
     c.setTransform(P0.sc, 0, 0, P0.sc, -P0.x * P0.sc, -P0.y * P0.sc);
@@ -939,14 +946,13 @@ function maakSluimer(laag, dyn){
       c.stroke();
     });
     const beeld = el('image', { x: P0.x, y: P0.y, width: P0.b, height: P0.h, preserveAspectRatio: 'none' }, huis);
-    WACHT.push(new Promise(r => { beeld.addEventListener('load', r, { once: true }); beeld.addEventListener('error', r, { once: true }); setTimeout(r, 4000); }));
+    WACHT.push(new Promise(r => {
+      beeld.addEventListener('load', r, { once: true });
+      beeld.addEventListener('error', () => { alsPatroon(beeld); beeld.remove(); r(); }, { once: true });
+      setTimeout(r, 4000);
+    }));
     beeld.setAttribute('href', doek.toDataURL('image/jpeg', .92));
-  } else kasseien((y, h, w, x0) => {                                                         // zonder canvas: als patroon
-    const id = 's1kassei' + Math.round(y), pat = el('pattern', { id, width: f2(w), height: f2(h), patternUnits: 'userSpaceOnUse', x: f2(x0), y: f2(y) }, dyn);
-    el('rect', { x: f2(h * .1), y: f2(h * .1), width: f2(w - h * .2), height: f2(h * .78), rx: f2(h * .36), fill: '#e7cea1' }, pat);
-    el('path', { d: `M${f2(h * .42)} ${f2(h * .3)}H${f2(w - h * .42)}`, stroke: '#f3e1bd', 'stroke-width': f2(Math.max(1, h * .13)), 'stroke-linecap': 'round' }, pat);
-    el('rect', { x: P0.x, y: f2(y), width: P0.b, height: f2(h + .3), fill: `url(#${id})` }, huis);
-  });
+  } else alsPatroon(null);
   el('rect', { x: -900, y: 818, width: 3720, height: 900, fill: verloop(dyn, 's1plein', [[0, '#f4e2c0', .55], [.3, '#f4e2c0', 0], [.75, '#8a5a35', 0], [1, '#8a5a35', .12]]) }, huis);
   el('ellipse', { cx: 800, cy: 850, rx: 460, ry: 60, fill: 'url(#s1gloed)', opacity: .6 }, huis);
   el('rect', { x: -900, y: 818, width: 3720, height: 4, fill: INKT }, huis);
