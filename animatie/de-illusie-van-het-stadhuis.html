@@ -90,6 +90,9 @@ button,select{font:inherit;color:inherit}
   box-shadow:.3cqw .3cqw 0 rgba(28,18,11,.5);
   font:500 2.4cqw/1.28 'Jost',system-ui,sans-serif;opacity:0;pointer-events:none}
 #onderschrift .regel{display:block}
+/* Een zin verschijnt per zinsdeel (zie toonOnderschrift); woorden met nadruk krijgen het mosterdgeel. */
+#onderschrift .w{display:inline-block}
+#onderschrift .nadruk{color:#f6c969;font-weight:700}
 #onderschrift .vertaling{display:block;margin-top:.3em;font-size:.74em;font-weight:400;color:#ecd6ae}
 #onderschrift.dialect .regel{font-family:'Fraunces',Georgia,serif;font-weight:600;
   font-variation-settings:'SOFT' 100,'WONK' 1,'opsz' 72}
@@ -235,20 +238,26 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
      beats      beelden die op deze zin wachten, met hun verschuiving in seconden
                 ten opzichte van het begin van de zin (bv. de stempel valt net ervoor)
      extra      seconden extra voor deze zin (om later op de echte stem af te stemmen)
+     wacht      seconden stilte vóór deze zin (een pauze voor de clou)
+     inBeeld    true: de zin staat niet onderaan, maar in het beeld zelf (de slotzin)
+   In de tekst: *woorden tussen sterretjes* krijgen nadruk, en een zin verschijnt per zinsdeel,
+   zoals een stem die even stopt: na een punt, vraagteken of dubbelpunt, of waar een | staat.
    ========================================================================== */
 const DIALECT = 'As gau paust dat de paus oep au paust, paust dan ma gau eet anders.';
 const VERTALING = 'Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders.';
 
 const SCRIPT = {
   notities: [
+    'Eén werkwoord draagt de film: denken. De stad hangt een spandoek uit ("De stad denkt aan jou"), het Mechelse spreekwoord waar As Gau Paust zijn naam aan dankt zet het recht ("Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders."), en de film eindigt met de oproep "Denk mee."',
     'De tekst zegt alleen wat de site van As Gau Paust echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf. De site heet in de film niet "Denk mee": die woorden zijn de oproep op het einde.',
     'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van het college enkel de titel online. Dat mag volgens de wet, en het kan beter.',
-    'De toon past bij een platform dat burgers, journalisten en gemeentebesturen wil inspireren. De stad krijgt geen verwijt; de film toont wat er kan.',
-    'De film zegt dat een taalmodel helpt bij het vertalen, zoals de site dat ook zegt.',
+    'De knipoog naar het spandoek gaat over stadsmarketing, niet over het werk van de stad: de film zegt er meteen bij dat ze bijna altijd netjes op tijd publiceert. Het platform wil burgers, journalisten én gemeenten inspireren.',
+    'De film zegt dat een taalmodel mee vertaalt, zoals de site dat ook zegt, en dat de bron erbij staat.',
     '339 is het aantal officiële uittreksels dat de site aan een beslissing koppelde. Controleer dat getal voor je de film publiceert.',
     'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op de site ook zegt.',
   ],
   beeld: {
+    spandoek: 'De stad denkt aan jou',
     map: ['BESLUITEN', 'COLLEGE'],
     stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
     slogan: 'Burgerjournalistiek van om de hoek',
@@ -256,29 +265,29 @@ const SCRIPT = {
   },
   scenes: [
     { titel: 'In slaap gesust', vo: [
-      'Wie leest er nu echt wat de stad beslist?',
-      'Te lang, te droog. Dus geloven we maar wat de stad zelf vertelt.',
+      { tekst: 'Zegt de stad.', extra: .3, beats: { gaap: .15 } },
+      { tekst: 'En *jij* scrolt verder.', wacht: .3, extra: .3 },
     ]},
     { titel: 'Wat je niet ziet', vo: [
-      { tekst: 'Toch beslist de stad elke week over je straat en je geld.', beats: { laden: .9 } },
-      'Ze publiceert bijna altijd op tijd.',
-      { tekst: 'Alleen: van negen op de tien beslissingen zie je enkel de titel.', beats: { document: -1.1 } },
+      { tekst: 'Elke week beslist ze over *jouw* straat,| *jouw* buurt,| *jouw* geld.', beats: { laden: .9 } },
+      { tekst: 'Ze zet het bijna altijd netjes op tijd online.', beats: { document: -.3 } },
+      { tekst: 'Alleen: van negen op de tien beslissingen zie je *enkel de titel*.', beats: { weg: .7 } },
     ]},
     { titel: 'Wakker geschud', vo: [
       { tekst: DIALECT, vertaling: VERTALING, dialect: true, extra: .5, beats: { stempel: -.45, titel: .25 } },
-      'As Gau Paust: burgerjournalistiek van om de hoek.',
+      '*As Gau Paust*: burgerjournalistiek van om de hoek.',
     ]},
     { titel: 'Zelf kijken', vo: [
-      { tekst: 'Tik je straat in en lees wat de stad besliste, in gewone taal.', beats: { typen: .9 } },
-      'Een taalmodel helpt vertalen. De bron staat erbij: controleer ons gerust.',
-      { tekst: 'Staat iets niet online? Wij zetten je aanvraag klaar.', beats: { aanvraag: .7 } },
+      { tekst: 'Tik je straat in. Lees wat er beslist is, in *gewone taal*.', beats: { typen: 1.4 } },
+      { tekst: 'Een taalmodel vertaalt mee. De bron staat erbij. *Controleer ons maar.*', beats: { tv: 0 } },
+      { tekst: 'Enkel een titel? *Vraag de rest op.* Wij zetten je aanvraag klaar.', beats: { aanvraag: 1.3 } },
     ]},
     { titel: 'Jouw keuze', vo: [
       { tekst: 'Je hoeft niet alles te volgen.', beats: { links: 0 } },
-      { tekst: 'Kies één dossier dat jou raakt.', beats: { rechts: 0 } },
-      { tekst: 'Wij willen burgers, journalisten en gemeenten inspireren.', beats: { eindkaart: -.5 } },
-      'Binnenkort ook in andere steden.',
-      'Denk mee.',
+      { tekst: 'Kies *één* dossier dat jou raakt.', beats: { rechts: 0 } },
+      { tekst: 'Voor burgers, journalisten *én* gemeenten.', beats: { eindkaart: -.5 } },
+      'Binnenkort ook in *jouw* stad.',
+      { tekst: 'Denk mee.', inBeeld: true },
     ]},
   ],
 };
@@ -302,7 +311,7 @@ const MIN_ONDERTITEL = 1.3;  // korter leest niemand
 // Per scène: hoe lang het beeld loopt vóór de eerste zin, hoe lang na de laatste, en de minimumduur.
 // Samen ongeveer een minuut.
 const KADER = [
-  { voor: 1.0, na: .6,  min: 8 },    // 1 sluimer: eerst het stadhuis laten zien
+  { voor: 2.2, na: .6,  min: 8.4 },  // 1 sluimer: eerst het stadhuis en het spandoek, dan de clou
   { voor: 1.8, na: .6,  min: 11 },   // 2 archief: eerst door de gevel
   { voor: 2.2, na: .6,  min: 11 },   // 3 ingreep: de lampen uit en de schijnwerper, dan de stempel
   { voor: 1.5, na: .7,  min: 12 },   // 4 grafieken en de site op tv
@@ -318,8 +327,10 @@ function bouwTijdlijn(script){
     const beats = {}, eigen = [];
     sv.vo.forEach((z, j) => {
       const c = typeof z === 'string' ? { tekst: z } : { ...z };
+      c.plat = c.tekst.replace(/[*|]/g, '');                                           // zonder opmaak
       if (c.dialect && j > 0) t += .4;
-      const duur = Math.max(MIN_ONDERTITEL, c.tekst.length / (c.dialect ? TEMPO_DIALECT : TEMPO) + (c.extra || 0));
+      t += c.wacht || 0;
+      const duur = Math.max(MIN_ONDERTITEL, c.plat.length / (c.dialect ? TEMPO_DIALECT : TEMPO) + (c.extra || 0));
       c.a = begin + t; c.b = begin + t + duur; c.scene = i;
       for (const [naam, sprong] of Object.entries(c.beats || {})) beats[naam] = t + sprong;
       eigen.push(c); cues.push(c);
@@ -360,6 +371,16 @@ const E = {
   inUit3: p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2,
   terug: p => { const c = 1.70158; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); },
 };
+// Sleutelbeelden: K is een lijst [tijd, waarde, waarde, ...], oplopend in tijd. Tussen twee sleutels
+// glijdt elke waarde zacht over, zoals een animator de tussenbeelden zou tekenen.
+function sleutel(K, t){
+  if (t <= K[0][0]) return K[0].slice(1);
+  for (let i = 1; i < K.length; i++) if (t < K[i][0]){
+    const a = K[i - 1], b = K[i], p = E.inUit2((t - a[0]) / (b[0] - a[0]));
+    return a.slice(1).map((v, j) => mix(v, b[j + 1], p));
+  }
+  return K[K.length - 1].slice(1);
+}
 // Vast zaad: elke frame, elke export en elke herlading ziet er exact hetzelfde uit.
 function toeval(zaad){
   let s = zaad >>> 0;
@@ -470,8 +491,9 @@ function tekenBurgerZij(ouder, dyn, id){
   const ver = el('g', { transform: 'translate(18 -3)' }, g);
   schoen(ver, '#86351f');
   el('path', { d: PIJP, fill: P.broekS, ...LIJN }, ver);
-  schoen(g, P.schoen);
-  el('path', { d: 'M-126 53C-124 51-121 50-118 51', ...DUN, stroke: P.schoenL, 'stroke-width': 2 }, g);
+  F.voet = el('g', {}, g);                                                                          // de nabije voet tikt loom
+  schoen(F.voet, P.schoen);
+  el('path', { d: 'M-126 53C-124 51-121 50-118 51', ...DUN, stroke: P.schoenL, 'stroke-width': 2 }, F.voet);
   el('path', { d: PIJP, fill: P.broek, ...LIJN }, g);
   el('path', { d: 'M-94 0C-93 18-95 38-101 57M-86 8C-86 26-86 42-88 59M-78 14C-77 30-76 44-74 56', ...DUN, stroke: P.ribbel, 'stroke-width': 1.8 }, g);
   el('path', { d: 'M-78 -26C-56 -28-36 -24-20 -21', ...DUN, stroke: P.broekS, 'stroke-width': 2.5 }, g);
@@ -505,10 +527,23 @@ function tekenBurgerZij(ouder, dyn, id){
   el('path', { d: 'M-2 28C8 23 18 16 24 6C20 18 12 26 0 30Z', fill: P.huidS }, h);
   el('path', { d: 'M-29 -8C-30 0-35 6-38 9C-34 10-32 14-31 18C-30 24-28 29-24 31C-26 22-26 10-24 -4Z', fill: '#ffe29a', opacity: .3 }, h);   // het licht van het scherm
   el('ellipse', { cx: -17, cy: 12, rx: 6.5, ry: 4, fill: P.blos, opacity: .55 }, h);
-  el('path', { d: 'M-31 21.5C-29.5 22.4-28 22.5-26.5 22', ...DUN, 'stroke-width': 2 }, h);
-  el('path', { d: 'M-24 -5C-21.5 -2.5-18.5 -2.5-16 -4.5', ...DUN, 'stroke-width': 2.5 }, h);
-  el('path', { d: 'M-18 -3.5l-2 3', ...DUN, 'stroke-width': 1.6 }, h);
-  el('path', { d: 'M-27 -13C-23 -16.5-18 -16.5-14 -14.5', ...DUN, stroke: P.haar, 'stroke-width': 3.5 }, h);
+  // mond, oog en wenkbrauw worden elk beeld opnieuw gezet: een glimlach, een geeuw, oogleden die zakken
+  F.mondOpen = el('path', { fill: '#6b2418', stroke: INKT, 'stroke-width': 1.4, 'stroke-linejoin': 'round' }, h);
+  F.mondLijn = el('path', { ...DUN, 'stroke-width': 2 }, h);
+  F.oog = el('path', { ...DUN, 'stroke-width': 2.5 }, h);
+  F.wimper = el('path', { d: 'M-18 -3.5l-2 3', ...DUN, 'stroke-width': 1.6 }, h);
+  F.brauw = el('path', { d: 'M-27 -13C-23 -16.5-18 -16.5-14 -14.5', ...DUN, stroke: P.haar, 'stroke-width': 3.5 }, h);
+  F.zetGezicht = (lach, open, dicht, brauw) => {
+    F.mondLijn.setAttribute('d', `M-31 21.5C-29.5 ${f2(22.4 + .8 * lach)} -28 ${f2(22.5 + .6 * lach)} -26.5 ${f2(22 - 1.8 * lach)}`);
+    F.mondLijn.style.display = open > .15 ? 'none' : '';
+    F.mondOpen.style.display = open > .05 ? '' : 'none';
+    F.mondOpen.setAttribute('d', `M-31.8 21Q${f2(-31.6 + .6 * open)} ${f2(21.4 + 12 * open)} ${f2(-26.2)} ${f2(22 + 6 * open)}L-25.6 21.4Z`);
+    const d = dicht;                                                                               // 0: neergeslagen, 1: dichtgeknepen
+    F.oog.setAttribute('d', `M${f2(-24 - .5 * d)} ${f2(-5 + d)}C-21.5 ${f2(-2.5 - .7 * d)} -18.5 ${f2(-2.5 - .7 * d)} ${f2(-16 + .5 * d)} ${f2(-4.5 + .3 * d)}`);
+    F.wimper.style.display = d > .6 ? 'none' : '';
+    F.brauw.setAttribute('transform', `translate(0 ${f2(-brauw * 3)})`);
+  };
+  F.zetGezicht(0, 0, 0, 0);
   // de lok over het oor, en de pony
   el('path', { d: 'M5 -31C11 -23 14 -11 13 -1C12 7 13 13 17 19C11 20 7 16 5 10C3 4 2 -5 1 -13C0 -21 1 -27 5 -31Z', fill: P.haar, ...LIJN, 'stroke-width': 2.6 }, h);
   el('path', { d: 'M-33 -12C-38 -24-31 -38-16 -41C-6 -43 2 -38 4 -30C-2 -32-9 -30-14 -24C-19 -18-25 -13-33 -12Z', fill: P.haar, ...LIJN, 'stroke-width': 3 }, h);
@@ -571,16 +606,17 @@ function tekenBurgerVoor(ouder){
   el('path', { d: 'M0 -38V-12', ...DUN, stroke: P.broekS, 'stroke-width': 2.5 }, g);
   for (const s of [-1, 1]){
     const x = s * 24, kl = s < 0 ? P.broekS : P.broek;
-    el('rect', { x: x - 26, y: 60, width: 52, height: 12, rx: 5, fill: P.zool, ...LIJN, 'stroke-width': 2.5 }, g);
-    el('path', { d: `M${x - 23} 61C${x - 25} 49 ${x + 25} 49 ${x + 23} 61Z`, fill: P.schoen, ...LIJN, 'stroke-width': 2.5 }, g);
-    el('path', { d: `M${x - 20} 66H${x + 20}`, stroke: '#6b4226', 'stroke-width': 2 }, g);
+    const b = s > 0 ? (F.been = el('g', {}, g)) : g;                                              // het rechterbeen tikt de maat
+    el('rect', { x: x - 26, y: 60, width: 52, height: 12, rx: 5, fill: P.zool, ...LIJN, 'stroke-width': 2.5 }, b);
+    el('path', { d: `M${x - 23} 61C${x - 25} 49 ${x + 25} 49 ${x + 23} 61Z`, fill: P.schoen, ...LIJN, 'stroke-width': 2.5 }, b);
+    el('path', { d: `M${x - 20} 66H${x + 20}`, stroke: '#6b4226', 'stroke-width': 2 }, b);
     el('path', { d: `M${x - 20} -18C${x - 22} -6 ${x - 21} 4 ${x - 19} 12C${x - 18} 22 ${x - 16} 28 ${x - 16} 34C${x - 17} 44 ${x - 23} 51 ${x - 29} 57` +
                     `L${x + 29} 57C${x + 23} 51 ${x + 17} 44 ${x + 16} 34C${x + 16} 28 ${x + 18} 22 ${x + 19} 12C${x + 21} 4 ${x + 22} -6 ${x + 20} -18C${x + 12} -25 ${x - 12} -25 ${x - 20} -18Z`,
-                 fill: kl, ...LIJN }, g);
-    el('path', { d: `M${x - 8} 18C${x - 9} 32 ${x - 12} 44 ${x - 16} 54M${x} 20V55M${x + 8} 18C${x + 9} 32 ${x + 12} 44 ${x + 16} 54`, ...DUN, stroke: s < 0 ? P.broek : P.ribbel, 'stroke-width': 1.8 }, g);
-    if (s > 0) el('path', { d: `M${x + 10} -14C${x + 18} -2 ${x + 18} 20 ${x + 14} 38C${x + 17} 46 ${x + 21} 51 ${x + 25} 55L${x + 16} 55C${x + 11} 46 ${x + 12} 20 ${x + 10} -14Z`, fill: P.ribbel, opacity: .5 }, g);
-    el('path', { d: `M${x - 9} -13C${x - 3} -17 ${x + 5} -17 ${x + 11} -12`, ...DUN, stroke: s < 0 ? P.broek : P.ribbel, 'stroke-width': 2.5 }, g);
-    el('path', { d: `M${x - 15} 12C${x - 7} 16 ${x + 7} 16 ${x + 15} 12`, ...DUN, stroke: P.broekS, 'stroke-width': 2 }, g);
+                 fill: kl, ...LIJN }, b);
+    el('path', { d: `M${x - 8} 18C${x - 9} 32 ${x - 12} 44 ${x - 16} 54M${x} 20V55M${x + 8} 18C${x + 9} 32 ${x + 12} 44 ${x + 16} 54`, ...DUN, stroke: s < 0 ? P.broek : P.ribbel, 'stroke-width': 1.8 }, b);
+    if (s > 0) el('path', { d: `M${x + 10} -14C${x + 18} -2 ${x + 18} 20 ${x + 14} 38C${x + 17} 46 ${x + 21} 51 ${x + 25} 55L${x + 16} 55C${x + 11} 46 ${x + 12} 20 ${x + 10} -14Z`, fill: P.ribbel, opacity: .5 }, b);
+    el('path', { d: `M${x - 9} -13C${x - 3} -17 ${x + 5} -17 ${x + 11} -12`, ...DUN, stroke: s < 0 ? P.broek : P.ribbel, 'stroke-width': 2.5 }, b);
+    el('path', { d: `M${x - 15} 12C${x - 7} 16 ${x + 7} 16 ${x + 15} 12`, ...DUN, stroke: P.broekS, 'stroke-width': 2 }, b);
   }
 
   F.lijf = el('g', {}, g);
@@ -618,28 +654,46 @@ function tekenBurgerVoor(ouder){
                  fill: P.haar, ...LIJN, 'stroke-width': 3 }, h);
   el('path', { d: 'M8 -236C22 -234 32 -226 36 -214M-8 -236C-18 -234-26 -228-30 -220M44 -212C51 -194 51 -174 48 -160M40 -198C43 -186 43 -172 42 -162M-48 -178C-50 -168-48 -158-44 -150',
                ...DUN, stroke: P.haarL, 'stroke-width': 2.5 }, h);
-  F.brauwen = el('g', {}, h);
-  for (const s of [-1, 1])
-    el('path', { d: `M${s * 6} -202C${s * 11} -208 ${s * 20} -209 ${s * 26} -205C${s * 20} -205 ${s * 11} -204 ${s * 6} -200Z`, fill: P.haar, stroke: P.haar, 'stroke-width': 2, 'stroke-linejoin': 'round' }, F.brauwen);
+  // Het gezicht is één groep: schuift ze opzij, dan lijkt het hoofd te draaien. De iris kijkt rond
+  // binnen het oogwit, de wenkbrauwen bewegen elk apart, en de mond wordt elk beeld opnieuw getekend.
+  F.gezicht = el('g', {}, h);
+  const gz = F.gezicht;
+  F.brauwen = el('g', {}, gz);
+  F.brauw = [-1, 1].map(s => {
+    const b = el('g', {}, F.brauwen);
+    el('path', { d: `M${s * 6} -202C${s * 11} -208 ${s * 20} -209 ${s * 26} -205C${s * 20} -205 ${s * 11} -204 ${s * 6} -200Z`, fill: P.haar, stroke: P.haar, 'stroke-width': 2, 'stroke-linejoin': 'round' }, b);
+    return b;
+  });
   F.ogen = [-1, 1].map(s => {
-    const o = el('g', {}, h), x = s * 15;
+    const o = el('g', {}, gz), x = s * 15;
     el('ellipse', { cx: x, cy: -188, rx: 7.5, ry: 7, fill: '#fffaf0' }, o);
-    el('circle', { cx: x + 1, cy: -187.5, r: 4.5, fill: '#6b4226' }, o);
-    el('circle', { cx: x + 1, cy: -187.5, r: 2.5, fill: '#1c110a' }, o);
-    el('circle', { cx: x + 2.7, cy: -189.6, r: 1.5, fill: '#fffaf0' }, o);
+    const iris = el('g', {}, o);
+    el('circle', { cx: x + 1, cy: -187.5, r: 4.5, fill: '#6b4226' }, iris);
+    el('circle', { cx: x + 1, cy: -187.5, r: 2.5, fill: '#1c110a' }, iris);
+    el('circle', { cx: x + 2.7, cy: -189.6, r: 1.5, fill: '#fffaf0' }, iris);
     el('path', { d: `M${x - 8} -189C${x - 4} -195.5 ${x + 4} -195.5 ${x + 8} -189`, ...DUN, stroke: P.haar, 'stroke-width': 2.6 }, o);
+    o.iris = iris;
     return o;
   });
   for (const s of [-1, 1]){
-    el('rect', { x: s * 15 - 14, y: -201, width: 28, height: 25, rx: 10, fill: P.glas, 'fill-opacity': .18, stroke: P.bril, 'stroke-width': 3.5 }, h);
-    el('path', { d: `M${s * 15 - 8} -195L${s * 15 - 3} -198`, stroke: '#fffaf0', 'stroke-width': 2.5, 'stroke-linecap': 'round', opacity: .85 }, h);
-    el('path', { d: `M${s * 29} -195L${s * 33} -192`, stroke: P.bril, 'stroke-width': 3, 'stroke-linecap': 'round' }, h);
+    el('rect', { x: s * 15 - 14, y: -201, width: 28, height: 25, rx: 10, fill: P.glas, 'fill-opacity': .18, stroke: P.bril, 'stroke-width': 3.5 }, gz);
+    el('path', { d: `M${s * 15 - 8} -195L${s * 15 - 3} -198`, stroke: '#fffaf0', 'stroke-width': 2.5, 'stroke-linecap': 'round', opacity: .85 }, gz);
+    el('path', { d: `M${s * 29} -195L${s * 33} -192`, stroke: P.bril, 'stroke-width': 3, 'stroke-linecap': 'round' }, gz);
   }
-  el('path', { d: 'M-2.5 -190C-1 -193 1 -193 2.5 -190', ...DUN, stroke: P.bril, 'stroke-width': 3 }, h);
-  el('path', { d: 'M1 -182C0 -176-3 -171-4 -168C-2 -165 2 -165 5 -167', ...DUN, stroke: P.huidS, 'stroke-width': 2.4 }, h);
-  F.mond = el('g', {}, h);
-  el('path', { d: 'M-11 -159C-6 -150 6 -150 11 -159C6 -156-6 -156-11 -159Z', fill: '#7a2e1f', ...LIJN, 'stroke-width': 2.2 }, F.mond);
-  el('path', { d: 'M-7.5 -157.4C-3 -156.2 3 -156.2 7.5 -157.4L6.6 -155.4C2 -154.7-2 -154.7-6.6 -155.4Z', fill: '#fffaf0' }, F.mond);
+  el('path', { d: 'M-2.5 -190C-1 -193 1 -193 2.5 -190', ...DUN, stroke: P.bril, 'stroke-width': 3 }, gz);
+  el('path', { d: 'M1 -182C0 -176-3 -171-4 -168C-2 -165 2 -165 5 -167', ...DUN, stroke: P.huidS, 'stroke-width': 2.4 }, gz);
+  F.mond = el('g', {}, gz);
+  F.mondVorm = el('path', { fill: '#7a2e1f', ...LIJN, 'stroke-width': 2.2 }, F.mond);
+  F.tanden = el('path', { fill: '#fffaf0' }, F.mond);
+  // de mond uit drie getallen: halve breedte, hoe ver open (0 tot 1), hoe breed de lach (0 tot 1)
+  F.zetMond = (hw, open, lach) => {
+    const cy = -157 - 2 * lach, bov = cy + 1 - 1.2 * open - .8 * lach, ond = cy + 2.2 + 12 * open + 3.5 * lach;
+    F.mondVorm.setAttribute('d', `M${f2(-hw)} ${f2(cy)}Q0 ${f2(bov)} ${f2(hw)} ${f2(cy)}Q0 ${f2(ond)} ${f2(-hw)} ${f2(cy)}Z`);
+    const tw = hw * .68, zicht2 = klem(lach * 2 - .4) * klem(open * 6);
+    F.tanden.setAttribute('d', `M${f2(-tw)} ${f2(cy + .7)}Q0 ${f2(bov + 1.8)} ${f2(tw)} ${f2(cy + .7)}L${f2(tw * .9)} ${f2(cy + 2 + 2 * open)}Q0 ${f2(bov + 3.4 + 2.6 * open)} ${f2(-tw * .9)} ${f2(cy + 2 + 2 * open)}Z`);
+    F.tanden.setAttribute('opacity', f2(zicht2));
+  };
+  F.zetMond(11, .1, 1);
 
   // --- de armen: bovenarmen langs het lijf, de ellebogen gebogen, de telefoon voor de borst ---
   for (const s of [-1, 1]){
@@ -1026,6 +1080,16 @@ function maakSluimer(laag, dyn){
   borstwering(halle, 900, 1380, 504, 22, HL);
   for (let i = 0; i < 5; i++) pinakel(halle, 985 + i * 76, 506, 44, 11, HL);
   S.fonkels.push(torentje(halle, 1382, 470, 588, 30, 70, HL));
+  // het spandoek van de stad, over de arcaden van de lakenhalle: het rolt af bij het begin
+  S.doek = el('g', {}, huis);
+  const DK = { x0: 910, x1: 1370, y: 700, h: 58 }, dm = (DK.x0 + DK.x1) / 2;
+  el('path', { d: `M${DK.x0 + 2} ${DK.y + 3}L${DK.x0 - 8} ${DK.y - 16}M${DK.x1 - 2} ${DK.y + 3}L${DK.x1 + 8} ${DK.y - 16}`, stroke: INKT, 'stroke-width': 2, 'stroke-linecap': 'round' }, S.doek);
+  S.doekVlak = el('g', {}, S.doek);
+  el('path', { d: `M${DK.x0} ${DK.y}Q${dm} ${DK.y + 7} ${DK.x1} ${DK.y}V${DK.y + DK.h}Q${dm} ${DK.y + DK.h + 7} ${DK.x0} ${DK.y + DK.h}Z`, fill: K70.cremeLicht, ...R, 'stroke-width': 3 }, S.doekVlak);
+  el('path', { d: `M${DK.x0 + 6} ${DK.y + 7}Q${dm} ${DK.y + 14} ${DK.x1 - 6} ${DK.y + 7}M${DK.x0 + 6} ${DK.y + DK.h - 6}Q${dm} ${DK.y + DK.h + 1} ${DK.x1 - 6} ${DK.y + DK.h - 6}`, fill: 'none', stroke: ROOD, 'stroke-width': 3 }, S.doekVlak);
+  const dt = pasIn(tx(S.doekVlak, V.beeld.spandoek.toUpperCase(), { x: dm - 14, y: DK.y + 40, class: 'sans', 'font-size': 29, 'font-weight': 800, fill: ROOD, 'text-anchor': 'middle', 'letter-spacing': 2 }), DK.x1 - DK.x0 - 86);
+  const hx = dm - 14 + dt.getComputedTextLength() / 2 + 22, hy = DK.y + 24;
+  el('path', { d: `M${f2(hx)} ${hy}C${f2(hx - 3)} ${hy - 5} ${f2(hx - 12)} ${hy - 4} ${f2(hx - 12)} ${hy + 3}C${f2(hx - 12)} ${hy + 9} ${f2(hx - 4)} ${hy + 13} ${f2(hx)} ${hy + 17}C${f2(hx + 4)} ${hy + 13} ${f2(hx + 12)} ${hy + 9} ${f2(hx + 12)} ${hy + 3}C${f2(hx + 12)} ${hy - 4} ${f2(hx + 3)} ${hy - 5} ${f2(hx)} ${hy}Z`, fill: ROOD }, S.doekVlak);
 
   // Het belfort
   const belfort = el('g', {}, huis);
@@ -1155,7 +1219,7 @@ function maakSluimer(laag, dyn){
     el('path', { d: `M${-breed / 2 + 30} ${hoog / 2 - 3}l-10 20l30-17Z`, fill: TINTEN[w], ...R }, vorm);
     el('rect', { ...pil, fill: TINTEN[w], ...R }, vorm);
     el('ellipse', { cx: -breed / 2 + 36, cy: -hoog / 2 + 15, rx: 17, ry: 5.5, fill: K70.cremeLicht, opacity: .8 }, vorm);
-    S.bubbels.push({ g: bg, start: .8 + i * 1.35, reis: 4.8 + r() * .8, p1: [980 + r() * 300, 240 + r() * 190], fase: r() * 6.28 });
+    S.bubbels.push({ g: bg, start: .5 + i * 1.05, reis: 3.4 + r() * .6, p1: [980 + r() * 300, 240 + r() * 190], fase: r() * 6.28 });
   }
 
   S.donker = el('rect', { x: 0, y: 0, width: 1920, height: 1080, fill: '#1c110a', opacity: 0 }, g);
@@ -1209,14 +1273,30 @@ function maakSluimer(laag, dyn){
       d.kop.setAttribute('transform', `rotate(${f2(-58 * pik)} -6 -9)`);
       d.lijf.setAttribute('transform', `rotate(${f2(-12 * pik)} 2 12)`);
     }
-    // de burger: ademt, knikt traag weg, en de duim scrolt
+    // het spandoek rolt af
+    zicht(S.doek, lt > .2);
+    S.doekVlak.setAttribute('transform', `translate(0 700) scale(1 ${Math.max(.001, E.terug(fase(lt, .2, .75))).toFixed(3)}) translate(0 -700)`);
+    // De burger acteert: scrolt met korte vegen, glimlacht als er een bubbel binnenkomt, geeuwt bij
+    // 'Zegt de stad.', tikt loom met de voet, en knikt vlak voor de duik in slaap: het hoofd zakt,
+    // schiet even op, en zakt weer.
     const F = S.burger.F;
-    F.scroll.setAttribute('transform', `translate(0 ${f2(-((lt * 14) % 24))})`);
+    let binnen = 0;
+    for (const b of S.bubbels){ const ta = b.start + b.reis * .97; binnen = Math.max(binnen, Math.exp(-Math.pow((lt - ta - .12) / .24, 2))); }
+    const tg = lt - (s1.beats.gaap ?? 2.4);
+    const gaap = tg > 0 && tg < 1.6 ? (tg < .45 ? E.inUit2(tg / .45) : tg < 1.05 ? 1 : 1 - E.inUit2((tg - 1.05) / .55)) : 0;
+    const sl = lt - (s1.duur - 2.1);
+    const knik = sl <= 0 ? 0 : sl < 1.3 ? E.inUit2(sl / 1.3) : sl < 1.42 ? 1 - .85 * E.uit2((sl - 1.3) / .12) : .15 + .85 * E.inUit2(klem((sl - 1.42) / 1.2));
+    const wakker = (1 - gaap) * (1 - klem(knik * 1.5));
+    const veeg = (lt % .95) / .95, duimOp = veeg < .32 ? E.inUit2(veeg / .32) : 1 - E.inUit2(klem((veeg - .32) / .25));
+    if (wakker > .5) F.scroll.setAttribute('transform', `translate(0 ${f2(-((Math.floor(lt / .95) * 24 + 24 * E.uit3(klem(veeg / .32))) % 24))})`);
+    F.duim.setAttribute('transform', `translate(${f2(-2 * duimOp * wakker)} ${f2((3 - 6 * duimOp) * wakker)}) rotate(-60 -103 -70)`);
     const zak = 4 * E.inUit2(klem(lt / s1.duur));
-    F.hoofd.setAttribute('transform', `translate(-34 -110) rotate(${f2(-38 - zak + Math.sin(lt * 1.3) * 1.6)})`);
-    F.romp.setAttribute('transform', `translate(10 -16) scale(1 ${(1 + .012 * Math.sin(lt * 1.7)).toFixed(4)}) rotate(${f2(-zak * .4)}) translate(-10 16)`);
-    const veeg = (lt * 1.6) % 1;
-    F.duim.setAttribute('transform', `translate(${f2(-2 * Math.sin(veeg * Math.PI))} ${f2(3 - 6 * E.inUit2(veeg))}) rotate(-60 -103 -70)`);
+    F.hoofd.setAttribute('transform', `translate(-34 -110) rotate(${f2(-38 - zak + Math.sin(lt * 1.3) * 1.4 * wakker + 27 * gaap - 16 * knik - 3 * binnen)})`);
+    F.romp.setAttribute('transform', `translate(10 -16) scale(1 ${(1 + .014 * Math.sin(lt * 1.5) + .035 * gaap).toFixed(4)}) rotate(${f2(-zak * .4 + 6 * gaap - 2 * knik)}) translate(-10 16)`);
+    const knipper = (lt % 2.7) > 2.56 ? 1 : 0;
+    F.zetGezicht(binnen * wakker, gaap, Math.max(gaap, klem(knik * 1.4), knipper), gaap - .6 * knik);
+    F.telefoon.setAttribute('transform', `translate(-103 -72) rotate(${f2(-24 + 12 * knik)})`);
+    F.voet.setAttribute('transform', `rotate(${f2(8 * Math.pow(Math.max(0, Math.sin(lt * Math.PI * 1.6)), 3) * wakker)} -62 68)`);
 
     let flits = 0;
     for (const b of S.bubbels){
@@ -1237,7 +1317,8 @@ function maakSluimer(laag, dyn){
   };
   // geluid: buiten, de bubbels (een blub als ze verschijnen, een belletje in de telefoon), de duik
   S.geluid = () => {
-    const s1 = TL.scenes[0], s2 = TL.scenes[1], G = [{ soort: 'buiten', t: 0, tot: s2.start + 1.2 }];
+    const s1 = TL.scenes[0], s2 = TL.scenes[1], G = [{ soort: 'buiten', t: 0, tot: s2.start + 1.2 },
+                                                     { soort: 'papier', t: s1.start + .22, duur: .5, pan: .3, sterkte: .6, zaad: 40 }];   // het spandoek
     S.bubbels.forEach((b, i) => {
       const a = s1.start + b.start;
       if (a > s2.start - .3) return;
@@ -1539,6 +1620,7 @@ function maakArchief(laag, dyn){
     zicht(g, aan);
     if (!aan) return;
     const tDoc = s2.start + (s2.beats.document ?? s2.duur * .62);
+    const tWeg = s2.start + (s2.beats.weg ?? (s2.beats.document ?? s2.duur * .62) + .4);        // de tekst van het besluit verdwijnt
     const tStempel = s3.start + (s3.beats.stempel ?? 4);
     const tTitel = s3.start + (s3.beats.titel ?? 4.7);
     g.setAttribute('opacity', fase(T, s2.start + 1.5, s2.start + 2.1).toFixed(3));
@@ -1602,11 +1684,11 @@ function maakArchief(laag, dyn){
     // ...en in scène 2 verdwijnt de tekst van het besluit: enkel de titel blijft
     const tNa = T - tStempel;
     S.velB.weg.forEach((e, i) => {
-      const wegP = fase(T, tDoc + .4 + i * .08, tDoc + .55 + i * .08);
+      const wegP = fase(T, tWeg + i * .08, tWeg + .15 + i * .08);
       const terugP = fase(tNa, .7 + i * .06, .9 + i * .06);
       e.setAttribute('opacity', f2(1 - wegP + terugP));
     });
-    S.velB.leeg.setAttribute('opacity', f2(fase(T, tDoc + 1.4, tDoc + 1.9) * (1 - fase(tNa, .5, .8))));
+    S.velB.leeg.setAttribute('opacity', f2(fase(T, tWeg + 1.0, tWeg + 1.5) * (1 - fase(tNa, .5, .8))));
 
     // scène 3: schemer, schijnwerper, stof
     dek(S.dim, .55 * fase(T, s3.start, s3.start + 1.0));
@@ -1667,13 +1749,14 @@ function maakArchief(laag, dyn){
   S.geluid = () => {
     const s2 = TL.scenes[1], s3 = TL.scenes[2], s4 = TL.scenes[3];
     const tDoc = s2.start + (s2.beats.document ?? s2.duur * .62);
+    const tWeg = s2.start + (s2.beats.weg ?? (s2.beats.document ?? s2.duur * .62) + .4);        // de tekst van het besluit verdwijnt
     const tStempel = s3.start + (s3.beats.stempel ?? 4);
     const tTitel = s3.start + (s3.beats.titel ?? 4.7);
     const tDicht = s2.beats.laden ?? 3;
     const G = [{ soort: 'archief', t: s2.start + 1.5, tot: s4.start + .3 }];
     S.laden.forEach((l, i) => G.push({ soort: 'lade', t: s2.start + tDicht + l.na + .24, voor: .22, pan: -.5 + i * .25, zaad: i + 1 }));
     [[0, -.45], [.14, 0], [.28, .35]].forEach(([d, pan], i) => G.push({ soort: 'papier', t: tDoc - .5 + d, pan, zaad: 10 + i }));
-    G.push({ soort: 'veeg', t: tDoc + .4, duur: 1.1, pan: .35 },                         // de tekst verdwijnt
+    G.push({ soort: 'veeg', t: tWeg, duur: 1.1, pan: .35 },                              // de tekst verdwijnt
            { soort: 'veeg', t: tStempel + .7, duur: .9, f: 1500 });                       // en komt terug
     G.push({ soort: 'klik', t: s3.start + .1, f: 2600, sterkte: .55, pan: -.3 },          // de lampen gaan uit
            { soort: 'papier', t: s3.start + .02, pan: -.4, zaad: 21, sterkte: .7 },       // map en lijst schuiven weg
@@ -1941,20 +2024,57 @@ function maakNudge(laag, dyn){
     zet(S.melding, { opacity: f2(fase(druk, .25, .55)), transform: `translate(0 ${f2((1 - E.terug(fase(druk, .25, .7))) * 20)})` });
     S.draaiknoppen.forEach((d, i) => d.k.setAttribute('transform',
       `rotate(${f2(Math.sin(lt * .8 + i) * 12 + (lt > klaar ? 90 * E.terug(fase(lt, klaar, klaar + .6)) : 0))} ${d.x} 684)`));
-    // de burger: de duimen tikken, het hoofd wiegt mee, knippert, en kijkt op als het antwoord er is
+    // De burger acteert. Ze komt met de zetel omhoog, kijkt naar de tv die aanspringt, tikt de straat
+    // in, schrikt blij van het antwoord, leest mee op de tv, trekt een wenkbrauw op bij 'Controleer ons
+    // maar', en knipoogt als de aanvraag klaarstaat. Tussendoor wiegt ze mee op de maat van de muziek.
     const F = S.burger.F;
+    const tTv = s4.beats.tv ?? klaar + 1, tVraag = s4.beats.aanvraag ?? klaar + 2.6;
     const tikt = lt > tTyp && lt < klaar;
-    F.handen.forEach((d, i) => {
-      const op = tikt ? Math.max(0, Math.sin(lt * 26 + i * Math.PI)) : 0;                     // de duimen tikken: de handen wippen mee
-      d.hg.setAttribute('transform', `translate(0 ${f2(-op * 2.2)})`);
+    const maten = Math.max(1, Math.round(s4.duur * 112 / 240)), tel = s4.duur / (maten * 4);    // de maat, zoals componeer() ze rekent
+    const telN = Math.floor(lt / tel), puls = Math.pow(1 - (lt / tel) % 1, 3);
+    // waar ze kijkt: [tijd, gezicht opzij, omlaag, iris opzij, omlaag]
+    const [gx, gy, ix, iy] = sleutel([
+      [2.4, 0, 0, 0, 0], [2.6, 5, 0, 2.4, 0], [2.95, 5, 0, 2.4, 0], [3.15, 0, 1.5, 0, 2.2],       // de tv springt aan, dan de telefoon
+      [klaar + .3, 0, 1.5, 0, 2.2], [klaar + .45, 0, -.6, 0, -.8],                                   // het antwoord: ze kijkt op
+      [tTv + .5, 0, -.6, 0, -.8], [tTv + .8, 5.5, 0, 2.5, -.3], [tTv + 2.9, 5.5, 0, 2.5, -.3], [tTv + 3.2, 0, 0, 0, 0],
+      [tVraag - .45, 0, 0, 0, 0], [tVraag - .25, 0, 1.5, 0, 2.2], [tVraag + .35, 0, 1.5, 0, 2.2], [tVraag + .6, 0, 0, 0, 0],
+    ], lt);
+    F.gezicht.setAttribute('transform', `translate(${f2(gx)} ${f2(gy)})`);
+    // de uitdrukkingen, elk een curve van 0 tot 1
+    const vk = lt - (klaar + .35);
+    const verbaasd = vk > 0 && vk < 1 ? (vk < .12 ? vk / .12 : vk < .5 ? 1 : 1 - (vk - .5) / .5) : 0;
+    const blij = fase(lt, klaar + .6, klaar + 1.1) * (1 - fase(lt, tTv + 1.2, tTv + 2));
+    const zeker = fase(lt, tTv + 3.1, tTv + 3.4) * (1 - fase(lt, tTv + 4.4, tTv + 4.8));        // 'Controleer ons maar.'
+    const kn2 = lt - (tVraag + .95), knipoog = kn2 > 0 && kn2 < .42 ? Math.sin(Math.PI * kn2 / .42) : 0;
+    const gericht = tikt ? 1 : 0;
+    // de mond: halve breedte, hoe open, hoe breed de lach
+    let hw = mix(11, 9.5, gericht), open = mix(.1, .05, gericht), lach = mix(1, .45, gericht);
+    hw = mix(hw, 13, blij); open = mix(open, .55, blij);
+    hw = mix(hw, 12, Math.max(zeker, knipoog) * .8); open = mix(open, .25, knipoog);
+    hw = mix(hw, 6.5, verbaasd); open = mix(open, .9, verbaasd); lach = mix(lach, 0, verbaasd);
+    F.zetMond(hw, open, lach);
+    // de ogen: knipperen op onregelmatige momenten, groot van verbazing, één dicht voor de knipoog
+    const knip = [3.55, 6.1, 8.35, 12.4, 13.3].some(t0 => lt > t0 && lt < t0 + .14) ? .12 : 1;
+    const wijd = 1 + .14 * verbaasd;
+    F.ogen.forEach((o, j) => {
+      const cx = (j ? 1 : -1) * 15, sy = wijd * (j === 1 ? Math.min(knip, 1 - .88 * knipoog) : knip);
+      o.setAttribute('transform', `translate(${cx} -188) scale(${wijd.toFixed(3)} ${sy.toFixed(3)}) translate(${-cx} 188)`);
+      o.iris.setAttribute('transform', `translate(${f2(ix)} ${f2(iy)})`);
     });
-    const opkijk = E.terug(fase(lt, klaar + .35, klaar + .9));
-    F.hoofd.setAttribute('transform', `rotate(${f2(Math.sin(lt * 1.2) * 2.4)} 0 -140) translate(0 ${f2(-2 * opkijk)})`);
-    F.brauwen.setAttribute('transform', `translate(0 ${f2(-3.5 * opkijk)})`);
-    F.mond.setAttribute('transform', `translate(0 -156) scale(${(1 + .18 * opkijk).toFixed(3)} ${(1 + .35 * opkijk).toFixed(3)}) translate(0 156)`);
-    const kn = (lt % 3.7) > 3.58 ? .12 : 1;
-    F.ogen.forEach(o => o.setAttribute('transform', `translate(0 -188) scale(1 ${kn}) translate(0 188)`));
-    F.lijf.setAttribute('transform', `translate(0 ${f2(Math.sin(lt * 1.6) * 1.2)})`);
+    F.brauw.forEach((b, j) => b.setAttribute('transform',
+      `translate(0 ${f2(-5 * verbaasd - 1.5 * blij + 1.2 * gericht - (j === 1 ? 4 * zeker - 1.5 * knipoog : 0))})`));
+    // de handen wippen mee met de duimen, en de rechter tikt 'vraag op' aan
+    const dr = lt - tVraag, tap = dr > -.08 && dr < .16 ? Math.sin(Math.PI * (dr + .08) / .24) : 0;
+    F.handen.forEach((d, i) => {
+      const op = tikt ? Math.max(0, Math.sin(lt * 26 + i * Math.PI)) : 0;
+      d.hg.setAttribute('transform', `translate(0 ${f2(-op * 2.2 + (i === 1 ? 3 * tap : 0))})`);
+    });
+    // hoofd en lijf: ademen, meewiegen op de maat, neerkomen na het opstaan, opveren van verbazing
+    const groove = (1 - .6 * gericht) * (1 - verbaasd) * fase(lt, 3.1, 3.6);
+    F.hoofd.setAttribute('transform', `rotate(${f2(Math.sin(lt * 1.1) * 1.6 + puls * 1.4 * groove * (telN % 2 ? 1 : -1))} 0 -140) translate(0 ${f2(puls * 1.6 * groove - 2.5 * verbaasd)})`);
+    const land = fase(lt, 2.72, 3.08), sq = 1 - .045 * Math.sin(Math.PI * land) + .03 * verbaasd;
+    F.lijf.setAttribute('transform', `translate(0 ${f2(Math.sin(lt * 1.6) * 1.2 + puls * groove)}) translate(0 -36) scale(${(1 + (1 - sq) * .4).toFixed(4)} ${sq.toFixed(4)}) translate(0 36)`);
+    F.been.setAttribute('transform', `translate(0 ${f2(telN % 2 ? -3 * puls * groove : 0)})`);
   };
   // geluid: de regenboogveeg, de stapel die uiteenvalt, de tegeltjes, de kaarten, de tv, het tikken
   S.geluid = () => {
@@ -2047,8 +2167,14 @@ function maakKeuze(laag, dyn){
 
   // de eindkaart: een vette, zachte letter met een gestapelde schaduw, en het adres als knop
   S.eind = el('g', {}, g);
+  S.naam = el('g', {}, S.eind);
   S.naamLagen = [[K70.mosterd, 12], [ROOD, 6], [INKT, 0]].map(([kleur, d]) =>
-    ({ e: pasIn(tx(S.eind, 'As Gau Paust', { x: 960, y: 640, class: 'disp', 'font-size': 128, 'font-weight': 900, fill: kleur, 'text-anchor': 'middle' }), 1500), d }));
+    ({ e: pasIn(tx(S.naam, 'As Gau Paust', { x: 960, y: 640, class: 'disp', 'font-size': 128, 'font-weight': 900, fill: kleur, 'text-anchor': 'middle' }), 1500), d }));
+  // de slotzin komt groot in beeld: de naam zakt eronder, als afzender
+  const slotzin = V.scenes[4].vo.map(z => typeof z === 'string' ? { tekst: z } : z).find(z => z.inBeeld);
+  S.denk = el('g', { opacity: 0 }, S.eind);
+  S.denkLagen = slotzin ? [[K70.mosterd, 14], [ROOD, 7], [INKT, 0]].map(([kleur, d]) =>
+    ({ e: pasIn(tx(S.denk, slotzin.tekst.replace(/[*|]/g, ''), { x: 960, y: 650, class: 'disp', 'font-size': 176, 'font-weight': 900, fill: kleur, 'text-anchor': 'middle' }), 1500), d })) : [];
   S.eindSlogan = pasIn(tx(S.eind, V.beeld.slogan, { x: 960, y: 716, class: 'sans', 'font-size': 44, 'font-weight': 500, fill: K70.bruin, 'text-anchor': 'middle' }), 1500);
   S.eindUrl = el('g', {}, S.eind);
   const url = tx(S.eindUrl, V.beeld.url, { x: 960, y: 797, class: 'sans', 'font-size': 42, 'font-weight': 700, fill: K70.cremeLicht, 'text-anchor': 'middle', 'letter-spacing': .5 });
@@ -2117,15 +2243,23 @@ function maakKeuze(laag, dyn){
     zicht(S.zon, zonO > 0);
     zet(S.zon, { 'fill-opacity': f2(zonO), transform: `translate(${f2(1440 * k + ox)} ${f2(520 * k + oy)}) rotate(${f2(lt * 5)})` });
 
-    // de naam springt eruit en de schaduwlagen schuiven open; dan de ondertitel en de knop
+    // de naam springt eruit en de schaduwlagen schuiven open; dan de ondertitel en de knop. Bij de
+    // slotzin zakt de naam, kleiner, onder de oproep, en schuift de knop mee naar onder.
+    const slot = s5.cues.find(c => c.inBeeld), tD = slot ? slot.a - s5.start : Infinity;
+    const pD = E.inUit3(fase(lt, tD - .1, tD + .45));
+    S.naam.setAttribute('transform', `translate(0 ${f2(150 * pD)}) translate(960 600) scale(${(1 - .52 * pD).toFixed(4)}) translate(-960 -600)`);
+    const pK = fase(lt, tD + .05, tD + .6), sK = E.terug(pK);
+    dek(S.denk, fase(pK, 0, .3));
+    S.denkLagen.forEach(({ e, d }) => e.setAttribute('transform',
+      `translate(${f2(d * E.terug(fase(lt, tD + .2, tD + .8)))} ${f2(d * E.terug(fase(lt, tD + .2, tD + .8)))}) translate(960 600) scale(${Math.max(.001, .55 + .45 * sK).toFixed(3)}) translate(-960 -600)`));
     const pN = fase(lt, tE + .7, tE + 1.3), sN = E.terug(pN);
     S.naamLagen.forEach(({ e, d }) => zet(e, { opacity: f2(fase(pN, 0, .3)),
       transform: `translate(${f2(d * E.terug(fase(lt, tE + .9, tE + 1.5)))} ${f2(d * E.terug(fase(lt, tE + .9, tE + 1.5)))}) translate(960 600) scale(${Math.max(.001, .6 + .4 * sN).toFixed(3)}) translate(-960 -600)` }));
     const pS = E.uit3(fase(lt, tE + 1.05, tE + 1.6));
-    zet(S.eindSlogan, { opacity: f2(pS), transform: `translate(0 ${f2((1 - pS) * 26)})` });
+    zet(S.eindSlogan, { opacity: f2(pS * (1 - fase(pD, 0, .5))), transform: `translate(0 ${f2((1 - pS) * 26 + 40 * pD)})` });
     const pU = fase(lt, tE + 1.3, tE + 1.9);
     zet(S.eindUrl, { opacity: f2(fase(pU, 0, .3)),
-      transform: `translate(960 777) scale(${Math.max(.001, E.terug(pU)).toFixed(3)}) rotate(${f2(-4 * (1 - E.uit3(pU)))}) translate(-960 -777)` });
+      transform: `translate(0 ${f2(92 * pD)}) translate(960 777) scale(${Math.max(.001, E.terug(pU) * (1 - .12 * pD)).toFixed(3)}) rotate(${f2(-4 * (1 - E.uit3(pU)))}) translate(-960 -777)` });
     zicht(S.eind, lt > tE + .6);
   };
   // geluid: de strepen, de helften die openklappen, het oog, de veeg naar de eindkaart (de zon klinkt in de muziek)
@@ -3050,13 +3184,52 @@ function teken(){
   if (!OPNAME) balkBij();
 }
 
+// De woorden van een zin, met hun zinsdeel (0, 1, ...) en of ze nadruk krijgen (*zo*).
+function zinsdelen(tekst){
+  const uit = [];
+  let nadruk = false, deel = 0, volgende = false;
+  for (let w of tekst.split(' ')){
+    if (!w) continue;
+    if (volgende){ deel++; volgende = false; }
+    if (w.startsWith('*')){ nadruk = true; w = w.slice(1); }
+    const sluit = w.includes('*'), scheid = w.includes('|');
+    w = w.replace(/[*|]/g, '');
+    uit.push({ w, nadruk, deel });
+    if (sluit) nadruk = false;
+    if (scheid || /[.?!:]$/.test(w)) volgende = true;
+  }
+  return uit;
+}
 function toonOnderschrift(){
   let c = null;
-  if (OT_AAN) for (const x of TL.cues) if (T >= x.a - .12 && T < x.b + .12){ c = x; break; }
+  if (OT_AAN) for (const x of TL.cues) if (!x.inBeeld && T >= x.a - .12 && T < x.b + .12){ c = x; break; }
   if (!c){ ond.style.opacity = 0; return; }
   if (ond._c !== c){
-    ond._c = c;
-    ondRegel.textContent = breek(c.tekst, c.dialect ? 40 : 46).join('\n');
+    ond._c = c; ond._woorden = []; ond._op = [0];
+    ondRegel.textContent = '';
+    if (c.dialect) ondRegel.textContent = breek(c.plat, 40).join('\n');
+    else {
+      const ws = zinsdelen(c.tekst);
+      let i = 0;
+      breek(c.plat, 46).forEach((regel, j) => {
+        if (j) ondRegel.appendChild(document.createTextNode('\n'));
+        regel.split(' ').forEach((_, k) => {
+          if (k) ondRegel.appendChild(document.createTextNode(' '));
+          const sp = document.createElement('span');
+          sp.className = ws[i].nadruk ? 'w nadruk' : 'w';
+          sp.textContent = ws[i].w;
+          ondRegel.appendChild(sp);
+          ond._woorden.push([sp, ws[i].deel]);
+          i++;
+        });
+      });
+      // elk volgend zinsdeel komt als het vorige vlot gelezen is; ten laatste halfweg staat alles er
+      const lengte = [];
+      for (const x of ws) lengte[x.deel] = (lengte[x.deel] || 0) + x.w.length + 1;
+      const stap = lengte.slice(0, -1).map(l => .12 + l / 24), som = stap.reduce((x, y) => x + y, 0);
+      const schaal = som ? Math.min(1, (c.b - c.a) * .55 / som) : 1;
+      for (const x of stap) ond._op.push(ond._op[ond._op.length - 1] + x * schaal);
+    }
     ondVert.textContent = c.vertaling || '';
     ondVert.style.display = c.vertaling ? '' : 'none';
     ond.classList.toggle('dialect', !!c.dialect);
@@ -3065,13 +3238,20 @@ function toonOnderschrift(){
   const op = fase(T, c.a - .12, c.a + .08);
   ond.style.opacity = Math.min(op, 1 - fase(T, c.b - .02, c.b + .12)).toFixed(3);
   ond.style.transform = `translate(-50%, ${((1 - E.uit3(op)) * .5).toFixed(3)}cqw)`;
+  for (const [sp, d] of ond._woorden){
+    const p = RUSTIG ? 1 : E.uit3(fase(T, c.a + ond._op[d] - .06, c.a + ond._op[d] + .16));
+    sp.style.opacity = p.toFixed(3);
+    sp.style.transform = p < 1 ? `translateY(${((1 - p) * .3).toFixed(3)}em)` : '';
+  }
+  // bij het Mechels komt de vertaling pas als de kijker het spreekwoord even heeft kunnen lezen
+  if (c.vertaling) ondVert.style.opacity = (RUSTIG ? 1 : fase(T, c.a + 1.3, c.a + 1.7)).toFixed(3);
 }
 
 // Leesbaarheid: een ondertitel mag niet sneller gaan dan ongeveer 17 tekens per seconde.
 function controleerOndertitels(){
   for (const c of TL.cues){
-    const cps = c.tekst.length / (c.b - c.a);
-    if (cps > 17.05 && !c.dialect) console.warn(`Ondertitel te snel (${cps.toFixed(1)} tekens/s): ${c.tekst}`);
+    const cps = c.plat.length / (c.b - c.a);
+    if (cps > 17.05 && !c.dialect) console.warn(`Ondertitel te snel (${cps.toFixed(1)} tekens/s): ${c.plat}`);
   }
 }
 
@@ -3123,7 +3303,8 @@ function vulScript(){
       b.innerHTML = '<span class="tc"></span><span class="zin"></span>';
       b.querySelector('.tc').textContent = mmss(c.a);
       const zin = b.querySelector('.zin');
-      if (c.dialect){ const i2 = document.createElement('i'); i2.textContent = c.tekst; zin.appendChild(i2); } else zin.textContent = c.tekst;
+      if (c.dialect){ const i2 = document.createElement('i'); i2.textContent = c.plat; zin.appendChild(i2); } else zin.textContent = c.plat;
+      if (c.inBeeld){ const v2 = document.createElement('span'); v2.className = 'vert'; v2.textContent = 'Groot in beeld, op de eindkaart'; zin.appendChild(v2); }
       if (c.vertaling){ const v2 = document.createElement('span'); v2.className = 'vert'; v2.textContent = `In beeld: ${c.vertaling}`; zin.appendChild(v2); }
       b.addEventListener('click', () => { naar(c.a - .3); window.scrollTo({ top: 0, behavior: 'smooth' }); });
       li.appendChild(b); ol.appendChild(li);
@@ -3136,7 +3317,7 @@ function srt(){
   const f = s => { const ms = Math.round(s * 1000);
     return [ms / 3600000, ms / 60000 % 60, ms / 1000 % 60].map(x => String(Math.floor(x)).padStart(2, '0')).join(':') + ',' + String(ms % 1000).padStart(3, '0'); };
   return TL.cues.map((c, i) => {
-    const regels = c.dialect ? breek(c.tekst).map(r => `<i>${r}</i>`).concat(breek(c.vertaling)) : breek(c.tekst);
+    const regels = c.dialect ? breek(c.plat).map(r => `<i>${r}</i>`).concat(breek(c.vertaling)) : breek(c.plat);
     return `${i + 1}\n${f(c.a)} --> ${f(c.b)}\n${regels.join('\n')}\n`;
   }).join('\n');
 }
