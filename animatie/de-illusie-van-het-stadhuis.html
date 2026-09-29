@@ -250,16 +250,17 @@ const SCRIPT = {
   notities: [
     'De stad hangt een spandoek uit: #2800love, naar de postcode van Mechelen. "Zegt de stad." Het Mechelse spreekwoord waar As Gau Paust zijn naam aan dankt, zet het recht: "Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders." De film eindigt met de oproep "Denk mee."',
     'De tekst zegt alleen wat de site van As Gau Paust echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf. De site heet in de film niet "Denk mee": die woorden zijn de oproep op het einde.',
-    'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van college, vast bureau en burgemeester enkel de titel online. Dat mag volgens de wet, en het kan beter.',
-    'De knipoog naar het spandoek gaat over stadsmarketing, niet over het werk van de stad: de film zegt er meteen bij dat ze bijna altijd netjes op tijd publiceert. Het platform wil burgers, journalisten én gemeenten inspireren.',
+    'De film gaat over wat je zelf kunt doen: je straat opzoeken, lezen wat er beslist is, de stukken opvragen en een dossier volgen. Over hoe tijdig of volledig de stad publiceert, zegt ze niets.',
+    'De knipoog naar het spandoek gaat over stadsmarketing, niet over het werk van de stad. Het platform wil burgers, journalisten én gemeenten inspireren.',
     'De film zegt dat een taalmodel mee vertaalt, zoals de site dat ook zegt, en dat de bron erbij staat.',
-    'Van de 4.798 beslissingen (2 december 2024 tot 17 september 2026) hebben er 339 een officieel uittreksel online, met de volledige tekst van het besluit: dat zijn de 7 op 100. De site koppelde die uittreksels zelf aan hun beslissing (data.json van 27/09/2026).',
-    'Op de tv staan twee echte beslissingen over de Grote Markt, met de samenvatting van de site: de burgemeester op 17 september 2026 (All For More, enkel de titel online) en het college op 23 juni 2026 (Klokkenwerpen op 13 september). Van die laatste staat enkel de eerste zin er, zonder "van burgemeester en schepenen" en "in Mechelen".',
+    'Opvragen en volgen zoals op de site: bij een beslissing zet een formulier je aanvraag klaar in je eigen mailprogramma, en jij verstuurt ze zelf. Een dossier volgen bewaart je browser, zonder account of mail: het staat dan bij je gevolgde dossiers. De knoppen heten op de site ook zo: "Volg dit dossier" en "Ik volg dit dossier".',
+    'Op de besluitenlijst in het archief staat de echte titel van het besluit dat later op de tv staat, in de taal van de stad. Op de tv staat dat besluit in gewone taal: de burgemeester op 17 september 2026 (All For More). Daaronder het college op 23 juni 2026 (Klokkenwerpen op 13 september), met enkel de eerste zin, zonder "van burgemeester en schepenen" en "in Mechelen".',
+    'Het dossier op het bord is een echt dossier van de site: "Verkeer bij Bierfestival", met drie beslissingen over de Grote Markt, van het college (8 juli 2025), de gemeenteraad (16 september 2025) en de burgemeester (4 september 2026). Elke regel vat hun samenvatting kort samen.',
     'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op de site ook zegt.',
   ],
   beeld: {
     spandoek: '#2800love',
-    map: ['BESLUITEN', 'COLLEGE'],
+    map: ['BESLUITEN', 'DEZE WEEK'],
     stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
     slogan: 'Burgerjournalistiek van om de hoek',
     url: 'asgaupaust.be',
@@ -270,9 +271,9 @@ const SCRIPT = {
       { tekst: 'En *jij* scrolt verder.', wacht: .3, extra: .3 },
     ]},
     { titel: 'Wat je niet ziet', vo: [
-      { tekst: 'Elke week beslist ze over *jouw* straat,| *jouw* buurt,| *jouw* geld.', beats: { laden: .9 } },
-      { tekst: 'Ze zet het bijna altijd netjes op tijd online.', beats: { document: -.3 } },
-      { tekst: 'Alleen: van negen op de tien beslissingen zie je *enkel de titel*.', beats: { weg: .7 } },
+      { tekst: 'Ondertussen beslist de stad elke week over *jouw* straat,| *jouw* buurt,| *jouw* geld.', beats: { laden: .9 } },
+      { tekst: 'Dat staat online, in lange lijsten vol *ambtelijke taal*.', beats: { document: -.3 } },
+      { tekst: 'Wie leest dat? En wie vraagt *de stukken* op?', beats: { stof: .2 } },
     ]},
     { titel: 'Wakker geschud', vo: [
       { tekst: DIALECT, vertaling: VERTALING, dialect: true, extra: .5, beats: { stempel: -.45, titel: .25 } },
@@ -281,11 +282,11 @@ const SCRIPT = {
     { titel: 'Zelf kijken', vo: [
       { tekst: 'Tik je straat in. Lees wat er beslist is, in *gewone taal*.', beats: { typen: 1.4 } },
       { tekst: 'Een taalmodel vertaalt mee. De bron staat erbij. *Controleer ons maar.*', beats: { tv: 0 } },
-      { tekst: 'Enkel een titel? *Vraag de rest op.* Wij zetten je aanvraag klaar.', beats: { aanvraag: 1.3 } },
+      { tekst: 'Wil je het hele stuk? *Vraag het op.* Wij zetten je aanvraag klaar.', beats: { aanvraag: 1.3, volg: 4.1 } },
     ]},
     { titel: 'Jouw keuze', vo: [
       { tekst: 'Je hoeft niet alles te volgen.', beats: { links: 0 } },
-      { tekst: 'Kies *één* dossier dat jou raakt.', beats: { rechts: 0 } },
+      { tekst: 'Volg *één* dossier dat jou raakt.', beats: { rechts: 0 } },
       { tekst: 'Voor burgers, journalisten *én* gemeenten.', beats: { eindkaart: -.5 } },
       'Binnenkort ook in *jouw* stad.',
       { tekst: 'Denk mee.', inBeeld: true },
@@ -293,13 +294,18 @@ const SCRIPT = {
   ],
 };
 
-/* De cijfers in scène 4 komen uit data.json in deze repo, stand 27/09/2026:
-   - beslissingen: college_beslissingen (college 4.364, vast bureau 245, burgemeester 189),
-     van 02/12/2024 tot 17/09/2026; volledig = met een gekoppeld officieel uittreksel (uittreksel_url).
-   - publicaties: tijdigheid_per_orgaan, agenda's en besluitenlijsten van de vijf organen, getoetst
-     aan de termijnen van het Decreet Lokaal Bestuur; opTijd = status 'tijdig'.
-   Bij een nieuwe build van de site veranderen ze; pas ze hier dan mee aan. */
-const CIJFERS = { stand: '27/09/2026', beslissingen: 4798, volledig: 339, publicaties: 378, opTijd: 373 };
+/* Het dossier op het bord in scène 4 is een echt dossier van de site (dosTitle in dist/index.html),
+   met drie beslissingen uit data.json, stand 27/09/2026: college-20250708-12, gemeenteraad-20250916-3
+   en burgemeester-20260904-1. Elke regel vat de samenvatting van de site kort samen. */
+const DOSSIER = {
+  titel: 'Verkeer bij Bierfestival',
+  onder: '3 beslissingen, van juli 2025 tot september 2026',
+  stukken: [
+    ['8 JULI 2025 · COLLEGE', 'Legt de verordening voor aan de gemeenteraad'],
+    ['16 SEPTEMBER 2025 · GEMEENTERAAD', 'Keurt de verordening goed, voor het Bierfestival 2025'],
+    ['4 SEPTEMBER 2026 · BURGEMEESTER', 'Vaardigt met spoed een verordening uit, voor 2026'],
+  ],
+};
 
 /* ==========================================================================
    2. TIMING
@@ -315,7 +321,7 @@ const KADER = [
   { voor: 2.2, na: .6,  min: 8.4 },  // 1 sluimer: eerst het stadhuis en het spandoek, dan de clou
   { voor: 1.8, na: .6,  min: 11 },   // 2 archief: eerst door de gevel
   { voor: 2.2, na: .6,  min: 11 },   // 3 ingreep: de lampen uit en de schijnwerper, dan de stempel
-  { voor: 1.5, na: .7,  min: 12 },   // 4 grafieken en de site op tv
+  { voor: 1.5, na: 1.3, min: 12 },   // 4 het dossier en de site op tv; na de aanvraag nog het volgen
   { voor: 1.1, na: 1.7, min: 10 },   // 5 de ogen, en de eindkaart blijft staan
 ];
 
@@ -1675,7 +1681,7 @@ function maakArchief(laag, dyn){
   verloop(dyn, 'a2papier', [[0, '#f7ecd4'], [1, '#e9d9b6']]);
   const maakVel = (zaad, soort) => {
     const rr = toeval(zaad);
-    const V2 = { g: el('g', {}, cam), regels: [], weg: [] };
+    const V2 = { g: el('g', {}, cam), regels: [] };
     const vg = V2.g;
     el('rect', { x: 12, y: 14, width: 360, height: 480, rx: 6, fill: '#1c110a' }, vg);
     el('rect', { x: 0, y: 0, width: 360, height: 480, rx: 6, fill: 'url(#a2papier)', stroke: '#2a1b11', 'stroke-width': 3 }, vg);
@@ -1685,15 +1691,16 @@ function maakArchief(laag, dyn){
     }
     if (soort === 'lijst'){
       tx(vg, 'BESLUITENLIJST', { x: 30, y: 52, class: 'sans', 'font-size': 21, 'font-weight': 700, fill: INKT, 'letter-spacing': 1.5 });
-      const tag = el('g', {}, vg);
-      el('rect', { x: 244, y: 30, width: 90, height: 30, rx: 15, fill: 'none', stroke: INKT, 'stroke-width': 2 }, tag);
-      el('path', { d: 'M258 45l6 6l11-12', fill: 'none', stroke: INKT, 'stroke-width': 3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, tag);
-      tx(tag, 'OP TIJD', { x: 281, y: 51, class: 'sans', 'font-size': 14, 'font-weight': 700, fill: INKT });
+      // bovenaan de echte titel van het besluit dat later op de tv staat, in de taal van de stad
+      ['Besluit burgemeester van 17 september 2026', 'betreffende politieverordening, uitgevaardigd',
+       'bij hoogdringendheid, inzake onttrekking Grote', 'Markt aan openbaar domein naar aanleiding van',
+       'All For More op 1 oktober 2026.']
+        .forEach((t, i) => pasIn(tx(vg, t, { x: 30, y: 102 + i * 20, class: 'sans', 'font-size': 14.5, fill: INKT }), 300));
     } else {
       tx(vg, 'VOLLEDIG BESLUIT', { x: 30, y: 52, class: 'sans', 'font-size': 21, 'font-weight': 700, fill: INKT, 'letter-spacing': 1.5 });
     }
     el('rect', { x: 30, y: 64, width: 120, height: 8, rx: 4, fill: '#a58c68' }, vg);
-    for (let i = 0; i < 13; i++){
+    for (let i = soort === 'lijst' ? 5 : 0; i < 13; i++){
       const w = 200 + rr() * 100;
       V2.regels.push(el('rect', { x: 30, y: 94 + i * 28, width: soort === 'lijst' ? w - 40 : w, height: 9, rx: 4.5, fill: soort === 'lijst' ? '#a58c68' : '#cdb58f' }, vg));
       if (soort === 'lijst') el('rect', { x: 30 + w - 30, y: 94 + i * 28, width: 26, height: 9, rx: 4.5, fill: '#e2cfab' }, vg);
@@ -1702,13 +1709,9 @@ function maakArchief(laag, dyn){
   };
   S.velA = maakVel(31, 'lijst');
   S.velB = maakVel(37, 'besluit');
-  el('rect', { x: 30, y: 94, width: 250, height: 12, fill: INKT }, S.velB.g);      // enkel de titel
-  S.velB.regels.slice(1).forEach(e => S.velB.weg.push(e));
-  S.velB.leeg = el('g', { opacity: 0 }, S.velB.g);
-  el('rect', { x: 30, y: 128, width: 300, height: 318, rx: 10, fill: 'none', stroke: '#b39a74', 'stroke-width': 2.5, 'stroke-dasharray': '10 8' }, S.velB.leeg);
-  tx(S.velB.leeg, 'NIET ONLINE', { x: 180, y: 296, class: 'sans', 'font-size': 28, 'font-weight': 700, fill: '#a58c68', 'text-anchor': 'middle', 'letter-spacing': 2 });
+  el('rect', { x: 30, y: 94, width: 250, height: 12, fill: INKT }, S.velB.g);      // de titel, vet
   S.velB.g.parentNode.appendChild(S.velB.g);   // het document van de stempel ligt bovenop
-  // stof op het document; bij de klap waait het weg
+  // stof op het document: het valt er zacht op bij 'Wie leest dat?', en bij de klap van de stempel waait het weg
   S.stofVel = [];
   for (let i = 0; i < 60; i++){
     const x = 20 + r() * 320, y = 20 + r() * 440;
@@ -1757,7 +1760,7 @@ function maakArchief(laag, dyn){
     zicht(g, aan);
     if (!aan) return;
     const tDoc = s2.start + (s2.beats.document ?? s2.duur * .62);
-    const tWeg = s2.start + (s2.beats.weg ?? (s2.beats.document ?? s2.duur * .62) + .4);        // de tekst van het besluit verdwijnt
+    const tStof = s2.start + (s2.beats.stof ?? s2.duur * .8);                               // 'Wie leest dat?': er valt stof op
     const tStempel = s3.start + (s3.beats.stempel ?? 4);
     const tTitel = s3.start + (s3.beats.titel ?? 4.7);
     g.setAttribute('opacity', fase(T, s2.start + 1.5, s2.start + 2.1).toFixed(3));
@@ -1818,14 +1821,7 @@ function maakArchief(laag, dyn){
     const naarMidden = E.inUit3(fase(T, s3.start + .1, s3.start + 1.3));
     S.velB.g.setAttribute('transform', `translate(${f2(mix(1110, 780, naarMidden))} ${f2(mix(300, 316, naarMidden) + (1 - inSchuif(.28)) * 760)}) rotate(${f2(mix(2.5, -1, naarMidden))} 180 240)`);
 
-    // ...en in scène 2 verdwijnt de tekst van het besluit: enkel de titel blijft
     const tNa = T - tStempel;
-    S.velB.weg.forEach((e, i) => {
-      const wegP = fase(T, tWeg + i * .08, tWeg + .15 + i * .08);
-      const terugP = fase(tNa, .7 + i * .06, .9 + i * .06);
-      e.setAttribute('opacity', f2(1 - wegP + terugP));
-    });
-    S.velB.leeg.setAttribute('opacity', f2(fase(T, tWeg + 1.0, tWeg + 1.5) * (1 - fase(tNa, .5, .8))));
 
     // scène 3: schemer, schijnwerper, stof
     dek(S.dim, .55 * fase(T, s3.start, s3.start + 1.0));
@@ -1841,10 +1837,12 @@ function maakArchief(laag, dyn){
       zet(d.e, { cx: f2(d.x + Math.sin(lt * .6 + d.f) * 18), cy: f2(60 + ((d.y + lt * d.v) % 900)) });
     }
     dek(S.poel, fase(T, s3.start + 1.2, s3.start + 1.7));
-    const stofOp = fase(T, s3.start + .6, s3.start + 1.3);
+    // het stof valt op het besluit terwijl niemand het leest, en de stempel blaast het weg
+    const stofOp = E.uit2(fase(T, tStof, tStof + 1.6));
+    const w = E.uit2(fase(tNa, 0, .7));
     for (const d of S.stofVel){
-      const w = E.uit2(fase(tNa, 0, .7));
-      zet(d.e, { opacity: f2(stofOp * .6 * (1 - w)), cx: f2(d.x + Math.cos(d.a) * d.v * w), cy: f2(d.y + Math.sin(d.a) * d.v * w) });
+      const val = (1 - E.uit2(fase(T, tStof + d.v / 400, tStof + d.v / 400 + .9))) * 26;                // ze dwarrelen neer
+      zet(d.e, { opacity: f2(stofOp * .6 * (1 - w)), cx: f2(d.x + Math.cos(d.a) * d.v * w), cy: f2(d.y - val + Math.sin(d.a) * d.v * w) });
     }
 
     // de stempel: valt, raakt, blijft even, gaat weg; de afdruk blijft
@@ -1886,15 +1884,14 @@ function maakArchief(laag, dyn){
   S.geluid = () => {
     const s2 = TL.scenes[1], s3 = TL.scenes[2], s4 = TL.scenes[3];
     const tDoc = s2.start + (s2.beats.document ?? s2.duur * .62);
-    const tWeg = s2.start + (s2.beats.weg ?? (s2.beats.document ?? s2.duur * .62) + .4);        // de tekst van het besluit verdwijnt
+    const tStof = s2.start + (s2.beats.stof ?? s2.duur * .8);
     const tStempel = s3.start + (s3.beats.stempel ?? 4);
     const tTitel = s3.start + (s3.beats.titel ?? 4.7);
     const tDicht = s2.beats.laden ?? 3;
     const G = [{ soort: 'archief', t: s2.start + 1.5, tot: s4.start + .3 }];
     S.laden.forEach((l, i) => G.push({ soort: 'lade', t: s2.start + tDicht + l.na + .24, voor: .22, pan: -.5 + i * .25, zaad: i + 1 }));
     [[0, -.45], [.14, 0], [.28, .35]].forEach(([d, pan], i) => G.push({ soort: 'papier', t: tDoc - .5 + d, pan, zaad: 10 + i }));
-    G.push({ soort: 'veeg', t: tWeg, duur: 1.1, pan: .35 },                              // de tekst verdwijnt
-           { soort: 'veeg', t: tStempel + .7, duur: .9, f: 1500 });                       // en komt terug
+    G.push({ soort: 'veeg', t: tStof, duur: 1.4, pan: .35, f: 900, sterkte: .5 });     // het stof dwarrelt neer
     G.push({ soort: 'klik', t: s3.start + .1, f: 2600, sterkte: .55, pan: -.3 },          // de lampen gaan uit
            { soort: 'papier', t: s3.start + .02, pan: -.4, zaad: 21, sterkte: .7 },       // map en lijst schuiven weg
            { soort: 'papier', t: s3.start + .15, pan: .15, zaad: 22, sterkte: .8, duur: .6 },
@@ -1909,10 +1906,10 @@ function maakArchief(laag, dyn){
 /* ==========================================================================
    6. SCÈNE 4: NUDGING NAAR ACTIEF BURGERSCHAP
    Regenboogstrepen vegen het archief weg, en we zijn in een woonkamer uit de jaren zeventig:
-   behang met cirkels, een regenboog op de muur, een velours zetel, een tv op pootjes. De stoffige
-   dossiers vallen uiteen tot een heldere grafiek, een affiche met plakband, en op de tv staat de
-   site: de burger zit rechtop, kijkt ons aan en zoekt op een straat. Het script vroeg hier een livestream, maar As Gau Paust streamt
-   niet; dit toont wat de site echt doet.
+   behang met cirkels, een regenboog op de muur, een velours zetel, een tv op pootjes. Op de tv staat
+   de site: de burger zit rechtop, zoekt op een straat, leest wat er beslist is en vraagt de stukken
+   op. Op het bord ernaast wordt een stoffige stapel lijsten één dossier, en dat volgt ze. Het script
+   vroeg hier een livestream, maar As Gau Paust streamt niet; dit toont wat de site echt doet.
    ========================================================================== */
 function maakNudge(laag, dyn){
   const S = {};
@@ -2002,51 +1999,52 @@ function maakNudge(laag, dyn){
     el('path', { d: `M${960 - rad} 862A${rad} ${rad} 0 0 1 ${960 + rad} 862`, fill: 'none', stroke: kleur, 'stroke-width': 26 }, S.krans);
   });
 
-  // --- de grafiek, als een omlijnde kaart met een harde schaduw ---
+  // --- het dossier, als een omlijnde kaart met een harde schaduw. Eerst ligt er een stoffige stapel
+  //     lijsten op; als de zoekresultaten op de tv staan, vliegen er drie beslissingen uit en vormen
+  //     ze samen één dossier, van drie organen over hetzelfde onderwerp. Onderaan: 'Volg dit dossier'. ---
   S.paneel = el('g', { opacity: 0 }, M);
   el('rect', { x: 102, y: 92, width: 780, height: 624, rx: 28, fill: INKT }, S.paneel);
   el('rect', { x: 90, y: 80, width: 780, height: 624, rx: 28, fill: K70.cremeLicht, ...R }, S.paneel);
   for (const [x, y, a] of [[104, 92, -38], [856, 92, 38], [104, 692, 38], [856, 692, -38]])
     el('rect', { x: x - 38, y: y - 13, width: 76, height: 26, fill: '#f1dfb6', opacity: .88, stroke: '#d8bf8e', 'stroke-width': 1.5, transform: `rotate(${a} ${x} ${y})` }, S.paneel);
-  pasIn(tx(S.paneel, 'BESLISSINGEN VAN COLLEGE, VAST BUREAU EN BURGEMEESTER', { x: 130, y: 134, class: 'sans', 'font-size': 18, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2.5 }), 700);
-  const pct = Math.round(100 * CIJFERS.volledig / CIJFERS.beslissingen);
-  S.labels = el('g', { opacity: 0 }, M);
-  const L = S.labels;
-  const groot = tx(L, String(pct), { x: 548, y: 300, class: 'disp', 'font-size': 150, 'font-weight': 900, fill: ROOD });
-  tx(L, 'op 100', { x: 548 + groot.getComputedTextLength() + 12, y: 298, class: 'disp', 'font-size': 44, 'font-weight': 800, fill: ROOD });
-  tx(L, 'met volledige tekst', { x: 550, y: 346, class: 'sans', 'font-size': 30, 'font-weight': 500, fill: INKT });
-  tx(L, 'online', { x: 550, y: 382, class: 'sans', 'font-size': 30, 'font-weight': 500, fill: INKT });
-  el('rect', { x: 550, y: 412, width: 280, height: 3, rx: 1.5, fill: 'rgba(59,36,22,.2)' }, L);
-  tx(L, `${100 - pct} op 100`, { x: 548, y: 474, class: 'disp', 'font-size': 50, 'font-weight': 800, fill: INKT });
-  tx(L, 'enkel de titel', { x: 550, y: 514, class: 'sans', 'font-size': 30, 'font-weight': 500, fill: K70.bruin });
-  // tweede rij: hoe vaak de stad op tijd publiceert
-  const nl = n => n.toLocaleString('nl-BE');
-  S.balk = el('g', { opacity: 0 }, M);
-  tx(S.balk, 'OP TIJD GEPUBLICEERD', { x: 130, y: 584, class: 'sans', 'font-size': 17, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2.5 });
-  tx(S.balk, `${nl(CIJFERS.opTijd)} van ${nl(CIJFERS.publicaties)}`, { x: 830, y: 584, class: 'sans', 'font-size': 19, 'font-weight': 600, fill: INKT, 'text-anchor': 'end' });
-  el('rect', { x: 130, y: 598, width: 700, height: 26, rx: 13, fill: ROOD, ...R, 'stroke-width': 2.5 }, S.balk);
-  S.balkVul = el('rect', { x: 130, y: 598, width: 0, height: 26, rx: 13, fill: INKT }, S.balk);
-  S.balkDeel = CIJFERS.opTijd / CIJFERS.publicaties;
-  ['Bron: besluitenlijsten Stad Mechelen, dec. 2024 – sep. 2026 (4.798 beslissingen); op tijd: agenda’s',
-   'en besluitenlijsten van de vijf organen, getoetst aan het Decreet Lokaal Bestuur. As Gau Paust, ' + CIJFERS.stand + '.']
-    .forEach((t, i) => pasIn(tx(S.balk, t, { x: 130, y: 658 + i * 22, class: 'sans', 'font-size': 17, fill: K70.bruin }), 700));
-
-  // de stoffige stapel die uiteenvalt in honderd vakjes
-  S.stapel = el('g', {}, M);
+  // de stoffige stapel lijsten, op het bord
+  S.stapel = el('g', {}, S.paneel);
   for (let i = 0; i < 5; i++){
-    const vg = el('g', { transform: `translate(${f2(170 + r() * 30)} ${f2(170 + r() * 20)}) rotate(${f2((r() - .5) * 22)} 150 190)` }, S.stapel);
+    const vg = el('g', { transform: `translate(${f2(300 + r() * 30)} ${f2(170 + r() * 20)}) rotate(${f2((r() - .5) * 22)} 150 190)` }, S.stapel);
     el('rect', { x: 0, y: 0, width: 300, height: 380, rx: 6, fill: '#e3cc9c', stroke: '#b39a74', 'stroke-width': 2.5 }, vg);
     for (let j = 0; j < 9; j++) el('rect', { x: 24, y: 40 + j * 32, width: 180 + r() * 70, height: 8, rx: 4, fill: '#c2a57a' }, vg);
     for (let j = 0; j < 30; j++) el('circle', { cx: r() * 300, cy: r() * 380, r: .8 + r() * 2, fill: '#8a6b4f', opacity: .5 }, vg);
   }
-  S.vakjes = [];
-  const cel = 31, tus = 8;
-  for (let i = 0; i < 100; i++){
-    const rij = Math.floor(i / 10), kol = i % 10;
-    const e = el('rect', { width: cel, height: cel, rx: 7 }, M);
-    S.vakjes.push({ e, rood: i < pct, x0: 180 + r() * 300, y0: 180 + r() * 360, a0: (r() - .5) * 90,
-                    x1: 130 + kol * (cel + tus), y1: 168 + rij * (cel + tus), d: r() * .35 + i * .004 });
-  }
+  // de kop van het dossier en de tijdlijn
+  S.kop = el('g', { opacity: 0 }, M);
+  tx(S.kop, 'DOSSIER', { x: 130, y: 134, class: 'sans', 'font-size': 18, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2.5 });
+  pasIn(tx(S.kop, DOSSIER.titel, { x: 128, y: 194, class: 'disp', 'font-size': 50, 'font-weight': 900, fill: INKT }), 700);
+  tx(S.kop, DOSSIER.onder, { x: 130, y: 232, class: 'sans', 'font-size': 22, 'font-weight': 500, fill: K70.bruin });
+  el('path', { d: 'M150 300V528', stroke: '#d8bf8e', 'stroke-width': 4, 'stroke-linecap': 'round' }, S.kop);
+  // de drie beslissingen: elk een kaartje dat uit de stapel komt en op de tijdlijn landt
+  S.kaarten = DOSSIER.stukken.map(([kop, zin], i) => {
+    const y = 262 + i * 100, g2 = el('g', { opacity: 0 }, M);
+    el('circle', { cx: 150, cy: y + 42, r: 9, fill: i === DOSSIER.stukken.length - 1 ? ROOD : K70.mosterd, stroke: INKT, 'stroke-width': 2.5 }, g2);
+    el('rect', { x: 186, y: y + 6, width: 662, height: 80, rx: 14, fill: INKT }, g2);
+    el('rect', { x: 180, y, width: 662, height: 80, rx: 14, fill: '#fffaf0', ...R, 'stroke-width': 2.5 }, g2);
+    tx(g2, kop, { x: 204, y: y + 30, class: 'sans', 'font-size': 15, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2 });
+    pasIn(tx(g2, zin, { x: 204, y: y + 62, class: 'sans', 'font-size': 22, fill: INKT }), 620);
+    return { g: g2, cx: 511, cy: y + 40, a0: (r() - .5) * 40, dx: (r() - .5) * 60 };
+  });
+  // de knop om het dossier te volgen, met de woorden van de site: 'Volg dit dossier', daarna 'Ik volg dit dossier'
+  const ster = (cx, cy, rr) => Array.from({ length: 10 }, (_, k) => {
+    const a = -Math.PI / 2 + k * Math.PI / 5, q = k % 2 ? rr * .45 : rr;
+    return `${k ? 'L' : 'M'}${f2(cx + Math.cos(a) * q)} ${f2(cy + Math.sin(a) * q)}`;
+  }).join('') + 'Z';
+  S.volg = el('g', { opacity: 0 }, M);
+  S.volgUit = el('g', {}, S.volg);
+  el('rect', { x: 130, y: 590, width: 300, height: 54, rx: 27, fill: '#fffaf0', ...R, 'stroke-width': 2.5 }, S.volgUit);
+  el('path', { d: ster(164, 617, 13), fill: 'none', stroke: INKT, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, S.volgUit);
+  tx(S.volgUit, 'Volg dit dossier', { x: 190, y: 625, class: 'sans', 'font-size': 22, 'font-weight': 600, fill: INKT });
+  S.volgAan = el('g', { opacity: 0 }, S.volg);
+  el('rect', { x: 130, y: 590, width: 300, height: 54, rx: 27, fill: K70.mosterd, ...R, 'stroke-width': 2.5 }, S.volgAan);
+  el('path', { d: ster(164, 617, 13), fill: INKT, stroke: INKT, 'stroke-width': 2, 'stroke-linejoin': 'round' }, S.volgAan);
+  tx(S.volgAan, 'Ik volg dit dossier', { x: 190, y: 625, class: 'sans', 'font-size': 22, 'font-weight': 600, fill: INKT });
 
   // --- de televisie, met de site op het scherm. Iemand zoekt op een straat en krijgt een echte
   //     beslissing te zien, in gewone taal en met de bron erbij. De kaart toont een besluit van de
@@ -2190,25 +2188,9 @@ function maakNudge(laag, dyn){
     for (const [laag, p] of S.dieptes)
       laag.setAttribute('transform', `translate(960 600) scale(${(1 / (1 - p + p / duw)).toFixed(4)}) translate(-960 -600)`);
 
-    zicht(S.stapel, lt < 1.4);
-    S.stapel.setAttribute('opacity', f2(1 - fase(lt, 1.0, 1.35)));
-    for (const v2 of S.vakjes){
-      const p = E.inUit3(fase(lt, 1.0 + v2.d, 1.9 + v2.d));
-      const kleur = v2.rood ? kleurMix(K70.zand, ROOD, p) : kleurMix(K70.zand, K70.cremeLicht, p);
-      const sp = 1 + .25 * Math.sin(Math.PI * p);                                                          // even opzwellen onderweg
-      const x = mix(v2.x0, v2.x1, p), y = mix(v2.y0, v2.y1, p);
-      zet(v2.e, { x: f2(x), y: f2(y), fill: kleur, stroke: INKT, 'stroke-width': 2.5,
-                  transform: `rotate(${f2(v2.a0 * (1 - p))} ${f2(x + 15)} ${f2(y + 15)}) translate(${f2(x + 15)} ${f2(y + 15)}) scale(${sp.toFixed(3)}) translate(${f2(-x - 15)} ${f2(-y - 15)})`,
-                  opacity: lt < 1.0 + v2.d ? 0 : 1 });
-    }
     const pIn = E.terug(fase(lt, .45, 1.15));
     zicht(S.paneel, lt > .45);
     zet(S.paneel, { opacity: f2(fase(lt, .45, .8)), transform: `translate(0 ${f2((1 - pIn) * 60)})` });
-    const lIn = E.terug(fase(lt, 2.0, 2.6));
-    zicht(S.labels, lt > 2.0);
-    zet(S.labels, { opacity: f2(fase(lt, 2.0, 2.3)), transform: `translate(${f2((1 - lIn) * 40)} 0)` });
-    dek(S.balk, fase(lt, 2.5, 3.0));
-    S.balkVul.setAttribute('width', f2(700 * S.balkDeel * E.uit3(fase(lt, 2.7, 3.9))));
     const krans = E.terug(fase(lt, 1.8, 2.6));
     S.krans.setAttribute('transform', `translate(960 862) scale(${Math.max(.001, krans).toFixed(3)}) translate(-960 -862)`);
 
@@ -2245,9 +2227,36 @@ function maakNudge(laag, dyn){
     zet(S.melding, { opacity: f2(fase(druk, .25, .55)), transform: `translate(0 ${f2((1 - E.terug(fase(druk, .25, .7))) * 20)})` });
     S.draaiknoppen.forEach((d, i) => d.k.setAttribute('transform',
       `rotate(${f2(Math.sin(lt * .8 + i) * 12 + (lt > klaar ? 90 * E.terug(fase(lt, klaar, klaar + .6)) : 0))} ${d.x} 684)`));
+
+    // Het dossier: staan de resultaten op de tv, dan vliegen er drie beslissingen uit de stapel en
+    // vormen ze één dossier. Na de aanvraag tikt ze 'Volg dit dossier' aan.
+    const tBundel = klaar + .3, tVolg = s4.beats.volg ?? (s4.beats.aanvraag ?? klaar + 2.6) + 2.8;
+    const stapelWeg = fase(lt, tBundel, tBundel + .35);
+    zicht(S.stapel, stapelWeg < 1);
+    S.stapel.setAttribute('opacity', f2(1 - stapelWeg));
+    S.kaarten.forEach((k, i) => {
+      const p = E.inUit3(fase(lt, tBundel + i * .12, tBundel + .75 + i * .12));
+      zicht(k.g, p > 0);
+      if (p <= 0) return;
+      const sp = mix(.5, 1, p) * (1 + .06 * Math.sin(Math.PI * p));                          // even opzwellen onderweg
+      const x = mix(465 + k.dx, k.cx, p), y = mix(370, k.cy, p);                              // van de stapel naar de tijdlijn
+      zet(k.g, { opacity: 1, transform: `translate(${f2(x)} ${f2(y)}) rotate(${f2(k.a0 * (1 - p))}) scale(${sp.toFixed(3)}) translate(${-k.cx} ${-k.cy})` });
+    });
+    const kIn = E.terug(fase(lt, tBundel + .55, tBundel + 1.05));
+    zicht(S.kop, lt > tBundel + .55);
+    zet(S.kop, { opacity: f2(fase(lt, tBundel + .55, tBundel + .8)), transform: `translate(0 ${f2((1 - kIn) * 16)})` });
+    const vIn = E.terug(fase(lt, tBundel + .9, tBundel + 1.3));
+    const volgDruk = lt > tVolg && lt < tVolg + .14 ? .93 : 1, volgPop = 1 + .07 * Math.sin(Math.PI * fase(lt, tVolg + .14, tVolg + .45));
+    zicht(S.volg, lt > tBundel + .9);
+    zet(S.volg, { opacity: f2(fase(lt, tBundel + .9, tBundel + 1.1)),
+                  transform: `translate(280 617) scale(${Math.max(.001, vIn * volgDruk * volgPop).toFixed(3)}) translate(-280 -617)` });
+    const aanV = fase(lt, tVolg + .1, tVolg + .22);
+    dek(S.volgUit, 1 - aanV);
+    dek(S.volgAan, aanV);
     // De burger acteert. Ze komt met de zetel omhoog, kijkt naar de tv die aanspringt, tikt de straat
     // in, schrikt blij van het antwoord, leest mee op de tv, trekt een wenkbrauw op bij 'Controleer ons
-    // maar', en knipoogt als de aanvraag klaarstaat. Tussendoor wiegt ze mee op de maat van de muziek.
+    // maar', knipoogt als de aanvraag klaarstaat, en tikt dan 'Volg dit dossier' aan. Tussendoor wiegt
+    // ze mee op de maat van de muziek.
     const F = S.burger.F;
     const tTv = s4.beats.tv ?? klaar + 1, tVraag = s4.beats.aanvraag ?? klaar + 2.6;
     const tikt = lt > tTyp && lt < klaar;
@@ -2259,6 +2268,7 @@ function maakNudge(laag, dyn){
       [klaar + .3, 0, 1.5, 0, 2.2], [klaar + .45, 0, -.6, 0, -.8],                                   // het antwoord: ze kijkt op
       [tTv + .5, 0, -.6, 0, -.8], [tTv + .8, 5.5, 0, 2.5, -.3], [tTv + 2.9, 5.5, 0, 2.5, -.3], [tTv + 3.2, 0, 0, 0, 0],
       [tVraag - .45, 0, 0, 0, 0], [tVraag - .25, 0, 1.5, 0, 2.2], [tVraag + .35, 0, 1.5, 0, 2.2], [tVraag + .6, 0, 0, 0, 0],
+      [tVolg - .45, 0, 0, 0, 0], [tVolg - .25, 0, 1.5, 0, 2.2], [tVolg + .3, 0, 1.5, 0, 2.2], [tVolg + .55, 0, 0, 0, 0],    // en 'volg'
     ], lt);
     F.gezicht.setAttribute('transform', `translate(${f2(gx)} ${f2(gy)})`);
     F.pony.setAttribute('transform', `translate(${f2(gx * .55)} ${f2(gy * .3)})`);                 // het haar draait mee
@@ -2287,8 +2297,9 @@ function maakNudge(laag, dyn){
     });
     F.brauw.forEach((b, j) => b.setAttribute('transform',
       `translate(0 ${f2(-5 * verbaasd - 1.5 * blij + 1.2 * gericht - (j === 1 ? 4 * zeker - 1.5 * knipoog : 0))})`));
-    // de handen wippen mee met de duimen, en de rechter tikt 'vraag op' aan
-    const dr = lt - tVraag, tap = dr > -.08 && dr < .16 ? Math.sin(Math.PI * (dr + .08) / .24) : 0;
+    // de handen wippen mee met de duimen, en de rechter tikt 'vraag op' en 'volg' aan
+    const tikAan = t0 => { const d = lt - t0; return d > -.08 && d < .16 ? Math.sin(Math.PI * (d + .08) / .24) : 0; };
+    const tap = Math.max(tikAan(tVraag), tikAan(tVolg));
     F.handen.forEach((d, i) => {
       const op = tikt ? Math.max(0, Math.sin(lt * 26 + i * Math.PI)) : 0;
       d.hg.setAttribute('transform', `translate(0 ${f2(-op * 2.2 + (i === 1 ? 3 * tap : 0))})`);
@@ -2300,26 +2311,27 @@ function maakNudge(laag, dyn){
     F.lijf.setAttribute('transform', `translate(0 ${f2(Math.sin(lt * 1.6) * 1.2 + puls * groove)}) translate(0 -36) scale(${(1 + (1 - sq) * .4).toFixed(4)} ${sq.toFixed(4)}) translate(0 36)`);
     F.been.setAttribute('transform', `translate(0 ${f2(telN % 2 ? -3 * puls * groove : 0)})`);
   };
-  // geluid: de regenboogveeg, de stapel die uiteenvalt, de tegeltjes, de kaarten, de tv, het tikken
+  // geluid: de regenboogveeg, het bord, de tv, het tikken, de kaarten, de stapel die een dossier
+  // wordt, de aanvraag en het volgen
   S.geluid = () => {
-    const s4 = TL.scenes[3], s5 = TL.scenes[4], a = s4.start;
+    const s4 = TL.scenes[3], a = s4.start;
     const G = [{ soort: 'zoef', t: a - .35, duur: 1.25, f0: 250, f1: 3500, pan0: -.9, pan1: .9, zaad: 2 },
                { soort: 'kamer', t: a, tot: TL.duur },
-               { soort: 'papier', t: a + 1.0, duur: .5, zaad: 31, pan: -.5, sterkte: .8 },
                { soort: 'plop', t: a + .5, pan: -.45, toon: 0 },
-               { soort: 'plop', t: a + 2.05, pan: -.3, toon: 2 },
-               { soort: 'rits', t: a + 2.7, duur: 1.2, pan: -.4, sterkte: .8 },
                { soort: 'schuif', t: a + 1.3, duur: .9, pan: .6 },
                { soort: 'tv', t: a + 2.05, pan: .5 },
                { soort: 'zoef', t: a + 2.0, duur: .7, f0: 200, f1: 900, sterkte: .45, zaad: 3 }];
-    S.vakjes.map(v => 1.9 + v.d).sort((x, y) => x - y).filter((_, i) => i % 4 === 0)
-      .forEach((tt, i) => G.push({ soort: 'tegel', t: a + tt, toon: i, pan: -.45 }));
     const tTyp = s4.beats.typen ?? 6, klaar = tTyp + 11 / 7;                               // 'Grote Markt': 11 tekens
-    const tVraag = s4.beats.aanvraag ?? klaar + 2.6;
+    const tVraag = s4.beats.aanvraag ?? klaar + 2.6, tVolg = s4.beats.volg ?? tVraag + 2.8, tBundel = klaar + .3;
     for (let k = 1; k <= 11; k++) G.push({ soort: 'tik', t: a + tTyp + k / 7, zaad: k, pan: .05 });
     G.push({ soort: 'plop', t: a + klaar + .32, pan: .5, toon: 1 }, { soort: 'plop', t: a + klaar + .57, pan: .5, toon: 3 },
-           { soort: 'ratel', t: a + klaar, pan: .75 }, { soort: 'klik', t: a + tVraag, f: 2600, pan: .55, sterkte: .6 },
-           { soort: 'belletje', t: a + tVraag + .25, pan: .5 });
+           { soort: 'ratel', t: a + klaar, pan: .75 },
+           { soort: 'papier', t: a + tBundel, duur: .5, zaad: 31, pan: -.5, sterkte: .8 },           // de stapel valt uiteen
+           { soort: 'klik', t: a + tVraag, f: 2600, pan: .55, sterkte: .6 },
+           { soort: 'belletje', t: a + tVraag + .25, pan: .5 },
+           { soort: 'klik', t: a + tVolg, f: 2200, pan: .1, sterkte: .6 },                           // 'Volg dit dossier'
+           { soort: 'plop', t: a + tVolg + .12, pan: -.45, toon: 5 });
+    DOSSIER.stukken.forEach((_, i) => G.push({ soort: 'tegel', t: a + tBundel + .7 + i * .12, toon: i, pan: -.45 }));   // ze landen op de tijdlijn
     return G;
   };
   return S;
