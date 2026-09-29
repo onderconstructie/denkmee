@@ -250,10 +250,11 @@ const SCRIPT = {
   notities: [
     'De stad hangt een spandoek uit: #2800love, naar de postcode van Mechelen. "Zegt de stad." Het Mechelse spreekwoord waar As Gau Paust zijn naam aan dankt, zet het recht: "Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders." De film eindigt met de oproep "Denk mee."',
     'De tekst zegt alleen wat de site van As Gau Paust echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf. De site heet in de film niet "Denk mee": die woorden zijn de oproep op het einde.',
-    'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van het college enkel de titel online. Dat mag volgens de wet, en het kan beter.',
+    'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van college, vast bureau en burgemeester enkel de titel online. Dat mag volgens de wet, en het kan beter.',
     'De knipoog naar het spandoek gaat over stadsmarketing, niet over het werk van de stad: de film zegt er meteen bij dat ze bijna altijd netjes op tijd publiceert. Het platform wil burgers, journalisten én gemeenten inspireren.',
     'De film zegt dat een taalmodel mee vertaalt, zoals de site dat ook zegt, en dat de bron erbij staat.',
-    '339 is het aantal officiële uittreksels dat de site aan een beslissing koppelde. Controleer dat getal voor je de film publiceert.',
+    'Van de 4.798 beslissingen (2 december 2024 tot 17 september 2026) hebben er 339 een officieel uittreksel online, met de volledige tekst van het besluit: dat zijn de 7 op 100. De site koppelde die uittreksels zelf aan hun beslissing (data.json van 27/09/2026).',
+    'Op de tv staan twee echte beslissingen over de Grote Markt, met de samenvatting van de site: de burgemeester op 17 september 2026 (All For More, enkel de titel online) en het college op 23 juni 2026 (Klokkenwerpen op 13 september). Van die laatste staat enkel de eerste zin er, zonder "van burgemeester en schepenen" en "in Mechelen".',
     'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op de site ook zegt.',
   ],
   beeld: {
@@ -2122,11 +2123,16 @@ function maakNudge(laag, dyn){
   S.knop = el('g', {}, S.kaart);
   el('rect', { x: 1540, y: 464, width: 224, height: 38, rx: 19, fill: ROOD, ...R, 'stroke-width': 2.5 }, S.knop);
   pasIn(tx(S.knop, 'Vraag de documenten op', { x: 1652, y: 489, class: 'sans', 'font-size': 17, 'font-weight': 600, fill: K70.cremeLicht, 'text-anchor': 'middle' }), 200);
+  // de tweede kaart: het collegebesluit van 23/06/2026 over de Grote Markt (college-20260623-3A in
+  // data.json), met de eerste zin van zijn samenvatting, ingekort maar heel: 'van burgemeester en
+  // schepenen' en 'in Mechelen' vallen weg, de zin zelf blijft staan. Ze loopt onderaan uit beeld,
+  // zoals een lijst die verdergaat.
   S.kaart2 = el('g', { opacity: 0 }, sb);
-  el('rect', { x: 1110, y: 530, width: 670, height: 120, rx: 18, fill: '#fffaf0', ...R, 'stroke-width': 2.5 }, S.kaart2);
-  tx(S.kaart2, 'COLLEGE · 23 JUNI 2026', { x: 1132, y: 561, class: 'sans', 'font-size': 15, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2 });
-  pasIn(tx(S.kaart2, 'Het college van burgemeester en schepenen stelt een tijdelijke politieverordening…',
-           { x: 1132, y: 596, class: 'sans', 'font-size': 21, fill: INKT }), 628);
+  el('rect', { x: 1110, y: 524, width: 670, height: 126, rx: 18, fill: '#fffaf0', ...R, 'stroke-width': 2.5 }, S.kaart2);
+  tx(S.kaart2, 'COLLEGE · 23 JUNI 2026', { x: 1132, y: 554, class: 'sans', 'font-size': 15, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2 });
+  ['Het college stelt een tijdelijke politieverordening op het',
+   'wegverkeer vast voor Klokkenwerpen op 13 september 2026.']
+    .forEach((t, i) => pasIn(tx(S.kaart2, t, { x: 1132, y: 586 + i * 28, class: 'sans', 'font-size': 21, fill: INKT }), 628));
   S.melding = el('g', { opacity: 0 }, sb);
   el('rect', { x: 1110, y: 566, width: 670, height: 46, rx: 23, fill: INKT }, S.melding);
   pasIn(tx(S.melding, 'Je eigen mailclient opent met een ingevulde aanvraag. Jij verstuurt zelf.',
@@ -2230,9 +2236,10 @@ function maakNudge(laag, dyn){
     const k1 = E.terug(fase(lt, klaar + .3, klaar + .85)), k2 = E.terug(fase(lt, klaar + .55, klaar + 1.1));
     zicht(S.kaart, lt > klaar + .3);
     zet(S.kaart, { opacity: f2(fase(lt, klaar + .3, klaar + .5)), transform: `translate(0 ${f2((1 - k1) * 24)})` });
-    zicht(S.kaart2, lt > klaar + .55);
-    zet(S.kaart2, { opacity: f2(fase(lt, klaar + .55, klaar + .75)), transform: `translate(0 ${f2((1 - k2) * 24)})` });
     const druk = lt - (s4.beats.aanvraag ?? klaar + 2.6);                                  // de knop 'vraag op'
+    const kaart2 = fase(lt, klaar + .55, klaar + .75) * (1 - fase(druk, .12, .34));        // de melding neemt haar plaats in
+    zicht(S.kaart2, kaart2 > 0);
+    zet(S.kaart2, { opacity: f2(kaart2), transform: `translate(0 ${f2((1 - k2) * 24)})` });
     S.knop.setAttribute('transform', `translate(1652 483) scale(${druk > 0 && druk < .16 ? .92 : 1}) translate(-1652 -483)`);
     zicht(S.melding, druk > .25);
     zet(S.melding, { opacity: f2(fase(druk, .25, .55)), transform: `translate(0 ${f2((1 - E.terug(fase(druk, .25, .7))) * 20)})` });
