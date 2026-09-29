@@ -18,7 +18,7 @@
   volledig scherm.
   Onder de speler staat het script met tijdcodes: klik op een zin en de film springt ernaartoe.
 
-  HET SCRIPT. Een herwerking van het aangeleverde script: de tekst zegt alleen wat Denk mee echt
+  HET SCRIPT. Een herwerking van het aangeleverde script: de tekst zegt alleen wat de site echt
   doet en meet, in vlotte spreektaal. De redenen staan in de notities onder de speler. Het
   oorspronkelijke script speelde tot en met commit c705ffe als tweede versie mee en staat nog in de
   geschiedenis van deze repo.
@@ -109,8 +109,8 @@ button,select{font:inherit;color:inherit}
 #bediening button:hover,#bediening button:focus-visible{border-color:var(--rood);outline:none}
 #bediening button[aria-pressed="false"]{opacity:.5}
 #bediening button[hidden]{display:none}
-#geluidMelding{font-size:.8rem;color:var(--mosterd);flex-basis:100%;order:9}
-#geluidMelding[hidden]{display:none}
+#geluidMelding,#downloadMelding{font-size:.8rem;color:var(--mosterd);flex-basis:100%;order:9}
+#geluidMelding[hidden],#downloadMelding[hidden]{display:none}
 #bediening svg{width:15px;height:15px;fill:currentColor}
 #tijd{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.78rem;color:var(--balk-dim);
   min-width:7.6em;font-variant-numeric:tabular-nums}
@@ -204,7 +204,11 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
     <button id="knopGeluid" aria-pressed="true" aria-label="Geluid" title="Geluid aan of uit (M)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path id="icoonGeluid" d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
     </button>
+    <button id="knopDownload" hidden title="De film bewaren als MP4">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2v8.2l3.1-3.1 1.4 1.4L12 16l-5.5-5.5 1.4-1.4 3.1 3.1zM5 18h14v2H5z"/></svg>MP4
+    </button>
     <span id="geluidMelding" role="status" hidden></span>
+    <span id="downloadMelding" role="status" hidden></span>
     <button id="knopVol" aria-label="Volledig scherm" title="Volledig scherm (F)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM6 15v3h3v2H4v-5zm12 0h2v5h-5v-2h3z"/></svg>
     </button>
@@ -237,18 +241,18 @@ const VERTALING = 'Denk je dat de paus aan jou denkt? Denk dan maar gauw iets an
 
 const SCRIPT = {
   notities: [
-    'De tekst zegt alleen wat Denk mee echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf.',
+    'De tekst zegt alleen wat de site van As Gau Paust echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf. De site heet in de film niet "Denk mee": die woorden zijn de oproep op het einde.',
     'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van het college enkel de titel online. Dat mag volgens de wet, en het kan beter.',
     'De toon past bij een platform dat burgers, journalisten en gemeentebesturen wil inspireren. De stad krijgt geen verwijt; de film toont wat er kan.',
     'De film zegt dat een taalmodel helpt bij het vertalen, zoals de site dat ook zegt.',
-    '339 is het aantal officiële uittreksels dat Denk mee aan een beslissing koppelde. Controleer dat getal voor je de film publiceert.',
-    'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op Denk mee ook zegt.',
+    '339 is het aantal officiële uittreksels dat de site aan een beslissing koppelde. Controleer dat getal voor je de film publiceert.',
+    'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op de site ook zegt.',
   ],
   beeld: {
     map: ['BESLUITEN', 'COLLEGE'],
     stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
     slogan: 'Burgerjournalistiek van om de hoek',
-    url: 'denkmee.asgaupaust.be',
+    url: 'asgaupaust.be',
   },
   scenes: [
     { titel: 'In slaap gesust', vo: [
@@ -267,13 +271,12 @@ const SCRIPT = {
       { tekst: DIALECT, vertaling: VERTALING, dialect: true, extra: .8, beats: { stempel: -.45, titel: .25 } },
       'As Gau Paust is een experiment: burgerjournalistiek van om de hoek.',
       'We maken de stukken van de stad makkelijk te vinden en te lezen.',
-      'Staat iets niet online? Vraag het op. Denk mee zet je aanvraag klaar.',
+      'Staat iets niet online? Vraag het op. Wij zetten je aanvraag klaar.',
     ]},
     { titel: 'Zelf kijken', vo: [
-      'Op Denk mee lees je wat de stad beslist, in gewone taal.',
+      'Bij ons lees je wat de stad beslist, in gewone taal.',
       { tekst: 'Tik je straat in en je ziet wat er beslist is.', beats: { typen: .2 } },
-      'Een taalmodel helpt mee vertalen.',
-      'Daarom staat de officiële bron er altijd bij. Zo kun je ook ons controleren.',
+      'Een taalmodel helpt vertalen. De bron staat erbij: controleer ons gerust.',
     ]},
     { titel: 'Jouw keuze', vo: [
       { tekst: 'Je hoeft niet alles te volgen.', beats: { links: 0 } },
@@ -285,29 +288,29 @@ const SCRIPT = {
   ],
 };
 
-/* De cijfers in scène 4 komen uit data.json van Denk mee, stand 27/09/2026:
+/* De cijfers in scène 4 komen uit data.json in deze repo, stand 27/09/2026:
    - beslissingen: college_beslissingen (college 4.364, vast bureau 245, burgemeester 189),
      van 02/12/2024 tot 17/09/2026; volledig = met een gekoppeld officieel uittreksel (uittreksel_url).
    - publicaties: tijdigheid_per_orgaan, agenda's en besluitenlijsten van de vijf organen, getoetst
      aan de termijnen van het Decreet Lokaal Bestuur; opTijd = status 'tijdig'.
-   Bij een nieuwe build van Denk mee veranderen ze; pas ze hier dan mee aan. */
+   Bij een nieuwe build van de site veranderen ze; pas ze hier dan mee aan. */
 const CIJFERS = { stand: '27/09/2026', beslissingen: 4798, volledig: 339, publicaties: 378, opTijd: 373 };
 
 /* ==========================================================================
    2. TIMING
    ========================================================================== */
-const TEMPO = 15;            // tekens per seconde: een kalme stem die toch doorloopt
+const TEMPO = 16;            // tekens per seconde: een stem die vlot doorloopt, en nog ruim leesbaar
 const TEMPO_DIALECT = 9.5;   // het Mechels krijgt meer tijd, en de kijker leest er een vertaling bij
 const PAUZE = .3;            // adem tussen twee zinnen
 const MIN_ONDERTITEL = 1.3;  // korter leest niemand
 
 // Per scène: hoe lang het beeld loopt vóór de eerste zin, hoe lang na de laatste, en de minimumduur.
 const KADER = [
-  { voor: 1.6, na: 1.0, min: 14 },   // 1 sluimer: eerst het stadhuis laten zien
-  { voor: 2.4, na: .8,  min: 14 },   // 2 archief: eerst door de gevel
-  { voor: 1.4, na: 1.2, min: 16 },   // 3 ingreep
-  { voor: 2.0, na: 1.0, min: 13 },   // 4 grafieken en Denk mee
-  { voor: 1.3, na: 3.4, min: 13 },   // 5 de ogen, en de eindkaart blijft staan
+  { voor: 1.6, na: .9,  min: 12.5 }, // 1 sluimer: eerst het stadhuis laten zien
+  { voor: 2.2, na: .8,  min: 14 },   // 2 archief: eerst door de gevel
+  { voor: 1.4, na: 1.0, min: 16 },   // 3 ingreep
+  { voor: 2.0, na: .9,  min: 13 },   // 4 grafieken en de site op tv
+  { voor: 1.3, na: 2.4, min: 13 },   // 5 de ogen, en de eindkaart blijft staan
 ];
 
 function bouwTijdlijn(script){
@@ -385,14 +388,14 @@ function pasIn(t, max){
   if (w > max) t.setAttribute('font-size', (parseFloat(t.getAttribute('font-size')) * max / w).toFixed(1));
   return t;
 }
-// Het silhouet van de Sint-Romboutstoren uit het merkteken van Denk mee (104 x 242, de spleten als gaten).
+// Het silhouet van de Sint-Romboutstoren uit het merkteken van de site (104 x 242, de spleten als gaten).
 const TOREN = 'M0 20H6V0H22V20H30V0H46V20H54V0H70V20H78V0H94V20H104V242H68V208L52 188L36 208V242H0Z' +
               'M30 65h8v85h-8zM48 52h8v110h-8zM66 65h8v85h-8z';
 function ster(ouder, x, y, r){
   return el('path', { d: `M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z`, fill: '#fff' }, ouder);
 }
 // Een ondertitel over twee regels: zo evenwichtig mogelijk, maar liefst na een punt of komma, waar
-// ook een stem even stopt ('Vraag het op. / Denk mee...' in plaats van 'Vraag het / op. Denk mee...'),
+// ook een stem even stopt ('Vraag het op. / Wij zetten...' in plaats van 'Vraag het / op. Wij zetten...'),
 // en nooit na een lidwoord of voorzetsel ('wat de stad / er zelf...' in plaats van 'wat de / stad...').
 const LOSSE_WOORDJES = /\s(de|het|een|en|of|van|op|in|te|ter|je|u|uw|aan|met|om|voor|over|bij|naar|zo|dat)$/i;
 function breek(t, max = 42){
@@ -408,7 +411,7 @@ function breek(t, max = 42){
   return best.r;
 }
 // Het palet van de jaren zeventig: warm, aards, niet schreeuwerig. Espresso in plaats van zwart,
-// crème in plaats van wit, een oranjerode vermiljoen als accent. Teal knipoogt naar het petrol van Denk mee.
+// crème in plaats van wit, een oranjerode vermiljoen als accent. Teal knipoogt naar het petrol van de site.
 const K70 = {
   creme: '#f4e6cc', cremeLicht: '#fbf2e0', zand: '#e9d3ae', espresso: '#3b2416', bruin: '#6b4226',
   hout: '#8a5a35', roest: '#a5432a', vermiljoen: '#d94b2b', mosterd: '#e2a33b', goud: '#f0c35c',
@@ -1131,7 +1134,7 @@ function maakArchief(laag, dyn){
 /* ==========================================================================
    6. SCÈNE 4: NUDGING NAAR ACTIEF BURGERSCHAP
    Regenboogstrepen vegen het archief weg. De stoffige dossiers vallen uiteen tot een heldere
-   grafiek, en op een televisie uit de jaren zeventig staat Denk mee: de burger zit rechtop, kijkt
+   grafiek, en op een televisie uit de jaren zeventig staat de site: de burger zit rechtop, kijkt
    ons aan en zoekt op een straat. Het script vroeg hier een livestream, maar As Gau Paust streamt
    niet; dit toont wat de site echt doet.
    ========================================================================== */
@@ -1178,7 +1181,7 @@ function maakNudge(laag, dyn){
   S.balkVul = el('rect', { x: 130, y: 598, width: 0, height: 26, rx: 13, fill: INKT }, S.balk);
   S.balkDeel = CIJFERS.opTijd / CIJFERS.publicaties;
   ['Bron: besluitenlijsten Stad Mechelen, dec. 2024 – sep. 2026 (4.798 beslissingen); op tijd: agenda’s',
-   'en besluitenlijsten van de vijf organen, getoetst aan het Decreet Lokaal Bestuur. Denk mee, ' + CIJFERS.stand + '.']
+   'en besluitenlijsten van de vijf organen, getoetst aan het Decreet Lokaal Bestuur. As Gau Paust, ' + CIJFERS.stand + '.']
     .forEach((t, i) => pasIn(tx(S.balk, t, { x: 130, y: 658 + i * 22, class: 'sans', 'font-size': 17, fill: K70.bruin }), 700));
 
   // de stoffige stapel die uiteenvalt in honderd vakjes
@@ -1198,7 +1201,7 @@ function maakNudge(laag, dyn){
                     x1: 130 + kol * (cel + tus), y1: 168 + rij * (cel + tus), d: r() * .35 + i * .004 });
   }
 
-  // --- de televisie, met Denk mee op het scherm. Iemand zoekt op een straat en krijgt een echte
+  // --- de televisie, met de site op het scherm. Iemand zoekt op een straat en krijgt een echte
   //     beslissing te zien, in gewone taal en met de bron erbij. De kaart toont een besluit van de
   //     burgemeester van 17/09/2026 met de samenvatting zoals ze in data.json staat. ---
   S.scherm = el('g', {}, g);
@@ -1220,7 +1223,7 @@ function maakNudge(laag, dyn){
   const sb = S.beeldbuis;
   el('rect', { x: 1080, y: 100, width: 730, height: 528, fill: K70.cremeLicht }, sb);
   el('rect', { x: 1110, y: 118, width: 670, height: 36, rx: 18, fill: K70.zand }, sb);
-  tx(sb, 'denkmee.asgaupaust.be', { x: 1134, y: 142, class: 'sans', 'font-size': 18, 'font-weight': 500, fill: K70.bruin });
+  tx(sb, 'asgaupaust.be', { x: 1134, y: 142, class: 'sans', 'font-size': 18, 'font-weight': 500, fill: K70.bruin });
   tx(sb, 'DOSSIERS', { x: 1110, y: 190, class: 'sans', 'font-size': 15, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2.5 });
   tx(sb, 'Eén onderwerp, alle beslissingen', { x: 1110, y: 222, class: 'disp', 'font-size': 28, 'font-weight': 800, fill: INKT });
   el('rect', { x: 1110, y: 240, width: 670, height: 52, rx: 26, fill: '#fffaf0', ...R, 'stroke-width': 2.5 }, sb);
@@ -2086,7 +2089,7 @@ function componeer(){
     }
   }
 
-  // 4. Denk mee: vrolijke disco-funk in F, met het thema op de synthesizer zodra de tv aanspringt.
+  // 4. De site: vrolijke disco-funk in F, met het thema op de synthesizer zodra de tv aanspringt.
   {
     const R = raster(s4.start, s5.start, 112), eind = s5.start;
     zet('mCrash', s4.start, { v: .75 }, 0);
@@ -2590,6 +2593,37 @@ async function laadLetters(){
   }));
 }
 
+// De film als MP4 bewaren. Dat kan enkel op de privépagina: daar staat het bestand naast de speler,
+// en de pagina mag het aanbieden via 'downloads' (de kijker bevestigt zelf). Elders, zoals in dit
+// bestand op je eigen computer, is er geen MP4 om aan te bieden en blijft de knop weg.
+const FILMBESTAND = 'de-illusie-van-het-stadhuis.mp4';
+function koppelDownload(){
+  if (OPNAME || !window.claude || typeof window.claude.use !== 'function') return;
+  const knop = $('knopDownload'), melding = $('downloadMelding');
+  const zeg = tekst => { melding.textContent = tekst; melding.hidden = !tekst; };
+  window.claude.use('downloads').then(downloads => {
+    if (!downloads) return;
+    knop.hidden = false;
+    knop.addEventListener('click', async () => {
+      if (knop.disabled) return;
+      knop.disabled = true;
+      zeg('De film wordt klaargezet…');
+      try {
+        const r = await fetch(FILMBESTAND);
+        if (!r.ok) throw { code: 'unavailable' };
+        await downloads.save({ filename: FILMBESTAND, data: await r.blob() });
+        zeg('');
+      } catch (fout){
+        const code = fout && fout.code;
+        if (code === 'declined') zeg('');
+        else if (code === 'rate_limited') zeg('Er staat al een vraag open. Probeer het zo meteen opnieuw.');
+        else { zeg('Downloaden lukt hier niet.'); knop.hidden = true; }
+      }
+      knop.disabled = false;
+    });
+  }, () => {});
+}
+
 window.ILLUSIE = {
   klaar: false,
   get duur(){ return TL.duur; },
@@ -2605,7 +2639,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   await laadLetters();
   T = parseFloat(Q.get('t')) || 0;
   bouw();
-  if (!OPNAME){ koppelBediening(); if (T > 0) $('grootSpelen').hidden = true; }
+  if (!OPNAME){ koppelBediening(); koppelDownload(); if (T > 0) $('grootSpelen').hidden = true; }
   window.ILLUSIE.klaar = true;
 });
 </script>
