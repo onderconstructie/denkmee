@@ -13,8 +13,7 @@ Eenmalig nodig:
   python -m playwright install chromium
 
 Gebruik:
-  python animatie/exporteer.py                        origineel script, 1920x1080, 30 beelden/s
-  python animatie/exporteer.py --versie herwerkt      het herwerkte voorstel
+  python animatie/exporteer.py                        de film, 1920x1080, 30 beelden/s
   python animatie/exporteer.py --zonder-ondertitels   schoon beeld; de tekst staat enkel in de .srt
   python animatie/exporteer.py --hoogte 720           kleiner en sneller, om na te kijken
   python animatie/exporteer.py --van 40 --tot 62      enkel een stuk, in seconden
@@ -111,7 +110,6 @@ def maak_stuk(t):
 
 def main():
     ap = argparse.ArgumentParser(description="Exporteer De Illusie van het Stadhuis naar MP4 + SRT.")
-    ap.add_argument("--versie", choices=("origineel", "herwerkt"), default="origineel")
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--hoogte", type=int, default=1080, help="beeldhoogte in pixels (breedte volgt uit 16:9)")
     ap.add_argument("--zonder-ondertitels", action="store_true", help="geen ondertitels in beeld (wel in de .srt)")
@@ -138,10 +136,10 @@ def main():
 
     hoogte = a.hoogte - a.hoogte % 2
     breedte = round(hoogte * 16 / 9 / 2) * 2
-    naam = f"de-illusie-van-het-stadhuis-{a.versie}{'-zonder-ot' if a.zonder_ondertitels else ''}.mp4"
+    naam = f"de-illusie-van-het-stadhuis{'-zonder-ot' if a.zonder_ondertitels else ''}.mp4"
     uit = (a.uit or HIER / naam).resolve()
     uit.parent.mkdir(parents=True, exist_ok=True)
-    adres = (FILM.as_uri() + f"?opname=1&versie={a.versie}" + ("&ondertitels=0" if a.zonder_ondertitels else "")
+    adres = (FILM.as_uri() + "?opname=1" + ("&ondertitels=0" if a.zonder_ondertitels else "")
              + ("&korrel=1" if a.met_korrel else "") + ("&muziek=0" if a.zonder_muziek else ""))
     ffmpeg = ffmpeg_pad()
 
@@ -161,7 +159,7 @@ def main():
         uit.with_suffix(".srt").write_text(srt, encoding="utf-8")
     beelden = math.ceil((tot - van) * a.fps)
     werkers = max(1, min(a.werkers, beelden // a.fps or 1))
-    print(f"{a.versie}: {tot - van:.1f} s, {beelden} beelden van {breedte}x{hoogte}, "
+    print(f"{tot - van:.1f} s, {beelden} beelden van {breedte}x{hoogte}, "
           f"{werkers} werker(s) -> {uit.name}", flush=True)
 
     begin = time.time()

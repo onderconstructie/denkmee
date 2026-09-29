@@ -18,25 +18,19 @@
   volledig scherm.
   Onder de speler staat het script met tijdcodes: klik op een zin en de film springt ernaartoe.
 
-  TWEE VERSIES (kiezen onder de speler, of met ?versie=herwerkt in het adres):
-    origineel  het aangeleverde script. Wat niet klopte, is aangepast: de stempel zegt
-               'openbaarheidsverzoek' in plaats van 'WOB-verzoek' (de WOB is een Nederlandse wet), 'een
-               journalistiek breekijzer' in plaats van 'een journalistieke', scène 4 zegt niet langer dat
-               As Gau Paust de gemeenteraad streamt, en de eindkaart zegt 'Een hyperlokaal
-               burgerjournalistiek experiment' in plaats van 'Magazine voor de meedenkende Mechelaar'.
-    herwerkt   een voorstel met dezelfde beelden, waarin de tekst alleen zegt wat Denk mee echt doet
-               en meet, in vlotte spreektaal. De redenen staan in de notities onder de speler.
+  HET SCRIPT. Een herwerking van het aangeleverde script: de tekst zegt alleen wat Denk mee echt
+  doet en meet, in vlotte spreektaal. De redenen staan in de notities onder de speler. Het
+  oorspronkelijke script speelde tot en met commit c705ffe als tweede versie mee en staat nog in de
+  geschiedenis van deze repo.
 
-  TEKST AANPASSEN. Alle tekst staat in VERSIES, bovenaan het script hieronder. De timing volgt
+  TEKST AANPASSEN. Alle tekst staat in SCRIPT, bovenaan het script hieronder. De timing volgt
   vanzelf: elke ondertitel krijgt de tijd die een rustige stem nodig heeft (TEMPO), elke scène duurt
   zo lang als haar tekst, en de beelden die op een zin wachten (de stempel, het typen, de eindkaart)
   schuiven mee. Is de voice-over ingesproken, geef dan een zin 'extra' seconden tot beeld en stem
   gelijk lopen.
 
-  ADRESOPTIES. ?versie=origineel|herwerkt   ?t=12.5 (begintijd in seconden)   ?ondertitels=0   ?korrel=0|1   ?muziek=0
+  ADRESOPTIES. ?t=12.5 (begintijd in seconden)   ?ondertitels=0   ?korrel=0|1   ?muziek=0
                ?opname=1 (enkel het beeld, zonder bediening; zo leest exporteer.py de film uit)
-               #herwerkt opent ook de herwerkte versie. Dat werkt ook waar een adres geen ?-opties
-               doorgeeft, zoals een privépagina op claude.ai.
 
   GELUID. Papier, laden, de stempel, de tv, duimen op een scherm, wind en een tikkende klok: de
   browser maakt alle geluiden zelf, uit ruis en tonen. Er zitten geen geluidsbestanden in. Elke scène
@@ -206,12 +200,6 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
     <span id="tijd">0:00 / 0:00</span>
     <input id="schuif" type="range" min="0" max="1000" step="1" value="0" aria-label="Tijdlijn">
     <span id="sceneNaam"></span>
-    <label>Versie
-      <select id="kiesVersie">
-        <option value="origineel">Origineel script</option>
-        <option value="herwerkt">Herwerkt voorstel</option>
-      </select>
-    </label>
     <button id="knopOT" aria-pressed="true" title="Ondertitels aan of uit (C)">OT</button>
     <button id="knopGeluid" aria-pressed="true" aria-label="Geluid" title="Geluid aan of uit (M)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path id="icoonGeluid" d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
@@ -247,111 +235,54 @@ body.opname #doek{width:100vw;height:100vh;aspect-ratio:auto}
 const DIALECT = 'As gau paust dat de paus oep au paust, paust dan ma gau eet anders.';
 const VERTALING = 'Denk je dat de paus aan jou denkt? Denk dan maar gauw iets anders.';
 
-const VERSIES = {
-  origineel: {
-    naam: 'Origineel script',
-    notities: [
-      'Het script zoals aangeleverd, met deze aanpassingen.',
-      'Het script vraagt zwart, wit en rood. De film kreeg een stijl uit de jaren zeventig: warme aardetinten, dikke omlijning, regenboogstrepen en filmkorrel.',
-      'Op de stempel staat "openbaarheidsverzoek" in plaats van "WOB-verzoek". De WOB is een Nederlandse wet. In Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op Denk mee ook zegt.',
-      '"Een journalistieke breekijzer" werd "een journalistiek breekijzer": het is het breekijzer.',
-      'Scène 4 zei dat As Gau Paust de gemeenteraad streamt. Dat klopt niet. De zin zegt nu wat Denk mee doet: de beslissingen in mensentaal tonen en u helpen om documenten op te vragen. Zo werkt het formulier op de site: de lezer verstuurt de aanvraag zelf. Het scherm toont Denk mee in plaats van een livestream.',
-      'Op de eindkaart staat "Een hyperlokaal burgerjournalistiek experiment" in plaats van "Magazine voor de meedenkende Mechelaar".',
-      'De film eindigt op "Denk mee." in plaats van "Vraag door.".',
-      'De vertaling van het Mechelse zinnetje staat in beeld. De stem zegt enkel het Mechels.',
-    ],
-    beeld: {
-      map: ['VERBORGEN', 'AGENDAPUNTEN'],
-      documenten: 'censuur',
-      stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
-      tweedeBalk: 'aantallen',
-      slogan: 'Een hyperlokaal burgerjournalistiek experiment',
-      url: 'asgaupaust.be',
-    },
-    scenes: [
-      { titel: 'De cognitieve sluimer', vo: [
-        'Waarom geloven we zo makkelijk wat ons wordt voorgekauwd?',
-        'Gedragswetenschappers noemen het rationele onwetendheid.',
-        'Zelf nadenken en de macht controleren kost energie.',
-        'Het is comfortabeler om te vertrouwen op de gepolijste marketing van een stadsbestuur.',
-      ]},
-      { titel: 'De realiteit van asymmetrische informatie', vo: [
-        'Maar een lokale democratie overleeft niet op blind vertrouwen.',
-        'Terwijl u scrolt, beslist men over uw straten, uw middelen, uw stad.',
-        { tekst: 'Informatie-asymmetrie is geen toeval; het is een instrument van macht.', beats: { document: -1.1 } },
-      ]},
-      { titel: 'De psychologische interventie', vo: [
-        'Zoals de Mechelse volksmond zegt:',
-        { tekst: DIALECT, vertaling: VERTALING, dialect: true, extra: .8, beats: { stempel: -.45, titel: .25 } },
-        'As Gau Paust is geen stads-PR.',
-        'Het is een journalistiek breekijzer.',
-        'Wij verlagen de drempel voor uw waakzaamheid.',
-      ]},
-      { titel: 'Nudging naar actief burgerschap', vo: [
-        'Wij doorploegen de rauwe data, helpen u de ontbrekende documenten op te vragen,',
-        { tekst: 'en brengen de beslissingen van de stad in mensentaal naar uw scherm.', beats: { typen: .2 } },
-        'Niet vanuit cynisme, maar om macht weer controleerbaar te maken.',
-      ]},
-      { titel: 'De confrontatie', vo: [
-        { tekst: 'U kunt kiezen voor de illusie van comfortabele onwetendheid.', beats: { links: 0 } },
-        { tekst: 'Of u besluit de macht ter verantwoording te roepen.', beats: { rechts: 0 } },
-        { tekst: 'Word een meedenkende Mechelaar.', beats: { eindkaart: -.5 } },
-        'Denk mee.',
-      ]},
-    ],
+const SCRIPT = {
+  notities: [
+    'De tekst zegt alleen wat Denk mee echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf.',
+    'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van het college enkel de titel online. Dat mag volgens de wet, en het kan beter.',
+    'De toon past bij een platform dat burgers, journalisten en gemeentebesturen wil inspireren. De stad krijgt geen verwijt; de film toont wat er kan.',
+    'De film zegt dat een taalmodel helpt bij het vertalen, zoals de site dat ook zegt.',
+    '339 is het aantal officiële uittreksels dat Denk mee aan een beslissing koppelde. Controleer dat getal voor je de film publiceert.',
+    'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op Denk mee ook zegt.',
+  ],
+  beeld: {
+    map: ['BESLUITEN', 'COLLEGE'],
+    stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
+    slogan: 'Burgerjournalistiek van om de hoek',
+    url: 'denkmee.asgaupaust.be',
   },
-
-  herwerkt: {
-    naam: 'Herwerkt voorstel',
-    notities: [
-      'Dezelfde beelden als het origineel. De tekst zegt alleen wat Denk mee echt doet en meet, in vlotte spreektaal en in de je-vorm, zoals op de site zelf.',
-      'Geen verborgen agendapunten of censuur. De stad publiceert bijna altijd op tijd: 373 van de 378 keer. Wel staat van ruim 9 op de 10 beslissingen van het college enkel de titel online. Dat mag volgens de wet, en het kan beter.',
-      'De toon past bij een platform dat burgers, journalisten en gemeentebesturen wil inspireren. De stad krijgt geen verwijt; de film toont wat er kan.',
-      'De film zegt dat een taalmodel helpt bij het vertalen, zoals de site dat ook zegt.',
-      '339 is het aantal officiële uittreksels dat Denk mee aan een beslissing koppelde. Controleer dat getal voor je de film publiceert.',
-    ],
-    beeld: {
-      map: ['BESLUITEN', 'COLLEGE'],
-      documenten: 'titel',
-      stempel: ['OPENBAARHEIDSVERZOEK', 'OPENBAAR'],
-      tweedeBalk: 'optijd',
-      slogan: 'Burgerjournalistiek van om de hoek',
-      url: 'denkmee.asgaupaust.be',
-    },
-    scenes: [
-      { titel: 'In slaap gesust', vo: [
-        'Wie leest er nu echt wat de stad beslist?',
-        'Die stukken zijn lang en droog. Wie heeft daar tijd voor?',
-        'Dus geloven we maar wat de stad er zelf over vertelt.',
-      ]},
-      { titel: 'Wat je niet ziet', vo: [
-        'Toch beslist de stad elke week over je straat, je geld en je buurt.',
-        'Het college vergadert achter gesloten deuren. Dat zegt de wet.',
-        'De beslissingen komen wel bijna altijd op tijd online.',
-        { tekst: 'Alleen: van negen op de tien beslissingen zie je enkel de titel.', beats: { document: -1.1 } },
-      ]},
-      { titel: 'Wakker geschud', vo: [
-        'Of zoals ze in Mechelen zeggen:',
-        { tekst: DIALECT, vertaling: VERTALING, dialect: true, extra: .8, beats: { stempel: -.45, titel: .25 } },
-        'As Gau Paust is een experiment: burgerjournalistiek van om de hoek.',
-        'We maken de stukken van de stad makkelijk te vinden en te lezen.',
-        'Staat iets niet online? Vraag het op. Denk mee zet je aanvraag klaar.',
-      ]},
-      { titel: 'Zelf kijken', vo: [
-        'Op Denk mee lees je wat de stad beslist, in gewone taal.',
-        { tekst: 'Tik je straat in en je ziet wat er beslist is.', beats: { typen: .2 } },
-        'Een taalmodel helpt mee vertalen.',
-        'Daarom staat de officiële bron er altijd bij. Zo kun je ook ons controleren.',
-      ]},
-      { titel: 'Jouw keuze', vo: [
-        { tekst: 'Je hoeft niet alles te volgen.', beats: { links: 0 } },
-        { tekst: 'Kies één dossier dat jou raakt.', beats: { rechts: 0 } },
-        { tekst: 'We willen burgers, journalisten en gemeenten op ideeën brengen.', beats: { eindkaart: -.5 } },
-        'Binnenkort ook in andere steden.',
-        'Denk mee.',
-      ]},
-    ],
-  },
+  scenes: [
+    { titel: 'In slaap gesust', vo: [
+      'Wie leest er nu echt wat de stad beslist?',
+      'Die stukken zijn lang en droog. Wie heeft daar tijd voor?',
+      'Dus geloven we maar wat de stad er zelf over vertelt.',
+    ]},
+    { titel: 'Wat je niet ziet', vo: [
+      'Toch beslist de stad elke week over je straat, je geld en je buurt.',
+      'Het college vergadert achter gesloten deuren. Dat zegt de wet.',
+      'De beslissingen komen wel bijna altijd op tijd online.',
+      { tekst: 'Alleen: van negen op de tien beslissingen zie je enkel de titel.', beats: { document: -1.1 } },
+    ]},
+    { titel: 'Wakker geschud', vo: [
+      'Of zoals ze in Mechelen zeggen:',
+      { tekst: DIALECT, vertaling: VERTALING, dialect: true, extra: .8, beats: { stempel: -.45, titel: .25 } },
+      'As Gau Paust is een experiment: burgerjournalistiek van om de hoek.',
+      'We maken de stukken van de stad makkelijk te vinden en te lezen.',
+      'Staat iets niet online? Vraag het op. Denk mee zet je aanvraag klaar.',
+    ]},
+    { titel: 'Zelf kijken', vo: [
+      'Op Denk mee lees je wat de stad beslist, in gewone taal.',
+      { tekst: 'Tik je straat in en je ziet wat er beslist is.', beats: { typen: .2 } },
+      'Een taalmodel helpt mee vertalen.',
+      'Daarom staat de officiële bron er altijd bij. Zo kun je ook ons controleren.',
+    ]},
+    { titel: 'Jouw keuze', vo: [
+      { tekst: 'Je hoeft niet alles te volgen.', beats: { links: 0 } },
+      { tekst: 'Kies één dossier dat jou raakt.', beats: { rechts: 0 } },
+      { tekst: 'We willen burgers, journalisten en gemeenten op ideeën brengen.', beats: { eindkaart: -.5 } },
+      'Binnenkort ook in andere steden.',
+      'Denk mee.',
+    ]},
+  ],
 };
 
 /* De cijfers in scène 4 komen uit data.json van Denk mee, stand 27/09/2026:
@@ -379,10 +310,10 @@ const KADER = [
   { voor: 1.3, na: 3.4, min: 13 },   // 5 de ogen, en de eindkaart blijft staan
 ];
 
-function bouwTijdlijn(versie){
+function bouwTijdlijn(script){
   let begin = 0;
   const scenes = [], cues = [];
-  versie.scenes.forEach((sv, i) => {
+  script.scenes.forEach((sv, i) => {
     const k = KADER[i];
     let t = k.voor;
     const beats = {}, eigen = [];
@@ -988,7 +919,7 @@ function maakArchief(laag, dyn){
 
   const maakVel = (zaad, soort) => {
     const rr = toeval(zaad);
-    const V2 = { g: el('g', {}, cam), regels: [], balken: [], weg: [] };
+    const V2 = { g: el('g', {}, cam), regels: [], weg: [] };
     const vg = V2.g;
     el('rect', { x: 12, y: 14, width: 360, height: 480, rx: 6, fill: '#1c110a' }, vg);
     el('rect', { x: 0, y: 0, width: 360, height: 480, rx: 6, fill: '#f1e2c4', stroke: '#2a1b11', 'stroke-width': 3 }, vg);
@@ -998,10 +929,8 @@ function maakArchief(laag, dyn){
       el('rect', { x: 244, y: 30, width: 90, height: 30, rx: 15, fill: 'none', stroke: INKT, 'stroke-width': 2 }, tag);
       el('path', { d: 'M258 45l6 6l11-12', fill: 'none', stroke: INKT, 'stroke-width': 3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, tag);
       tx(tag, 'OP TIJD', { x: 281, y: 51, class: 'sans', 'font-size': 14, 'font-weight': 700, fill: INKT });
-    } else if (soort === 'besluit'){
-      tx(vg, 'VOLLEDIG BESLUIT', { x: 30, y: 52, class: 'sans', 'font-size': 21, 'font-weight': 700, fill: INKT, 'letter-spacing': 1.5 });
     } else {
-      el('rect', { x: 30, y: 34, width: 190, height: 18, fill: INKT }, vg);
+      tx(vg, 'VOLLEDIG BESLUIT', { x: 30, y: 52, class: 'sans', 'font-size': 21, 'font-weight': 700, fill: INKT, 'letter-spacing': 1.5 });
     }
     el('rect', { x: 30, y: 64, width: 120, height: 8, rx: 4, fill: '#a58c68' }, vg);
     for (let i = 0; i < 13; i++){
@@ -1011,24 +940,13 @@ function maakArchief(laag, dyn){
     }
     return V2;
   };
-  if (B.documenten === 'censuur'){
-    S.velA = maakVel(31, 'gewoon');
-    S.velB = maakVel(37, 'gewoon');
-    const zwart = (vel, rijen) => rijen.forEach(i => {
-      const rg = vel.regels[i];
-      vel.balken.push({ e: el('rect', { x: 26, y: 94 + i * 28 - 6, width: 0, height: 22, rx: 3, fill: '#1c110a' }, vel.g), w: +rg.getAttribute('width') + 10 });
-    });
-    zwart(S.velA, [1, 2, 4, 5, 6, 8, 9, 11]);
-    zwart(S.velB, [0, 1, 2, 3, 5, 6, 7, 9, 10, 12]);
-  } else {
-    S.velA = maakVel(31, 'lijst');
-    S.velB = maakVel(37, 'besluit');
-    el('rect', { x: 30, y: 94, width: 250, height: 12, fill: INKT }, S.velB.g);      // enkel de titel
-    S.velB.regels.slice(1).forEach(e => S.velB.weg.push(e));
-    S.velB.leeg = el('g', { opacity: 0 }, S.velB.g);
-    el('rect', { x: 30, y: 128, width: 300, height: 318, rx: 10, fill: 'none', stroke: '#b39a74', 'stroke-width': 2.5, 'stroke-dasharray': '10 8' }, S.velB.leeg);
-    tx(S.velB.leeg, 'NIET ONLINE', { x: 180, y: 296, class: 'sans', 'font-size': 28, 'font-weight': 700, fill: '#a58c68', 'text-anchor': 'middle', 'letter-spacing': 2 });
-  }
+  S.velA = maakVel(31, 'lijst');
+  S.velB = maakVel(37, 'besluit');
+  el('rect', { x: 30, y: 94, width: 250, height: 12, fill: INKT }, S.velB.g);      // enkel de titel
+  S.velB.regels.slice(1).forEach(e => S.velB.weg.push(e));
+  S.velB.leeg = el('g', { opacity: 0 }, S.velB.g);
+  el('rect', { x: 30, y: 128, width: 300, height: 318, rx: 10, fill: 'none', stroke: '#b39a74', 'stroke-width': 2.5, 'stroke-dasharray': '10 8' }, S.velB.leeg);
+  tx(S.velB.leeg, 'NIET ONLINE', { x: 180, y: 296, class: 'sans', 'font-size': 28, 'font-weight': 700, fill: '#a58c68', 'text-anchor': 'middle', 'letter-spacing': 2 });
   S.velB.g.parentNode.appendChild(S.velB.g);   // het document van de stempel ligt bovenop
   // stof op het document; bij de klap waait het weg
   S.stofVel = [];
@@ -1125,22 +1043,14 @@ function maakArchief(laag, dyn){
     const naarMidden = E.inUit3(fase(T, s3.start + .1, s3.start + 1.3));
     S.velB.g.setAttribute('transform', `translate(${f2(mix(1110, 780, naarMidden))} ${f2(mix(300, 316, naarMidden) + (1 - inSchuif(.28)) * 760)}) rotate(${f2(mix(2.5, -1, naarMidden))} 180 240)`);
 
-    // ...en in scène 2 wordt er zwart gemaakt, of verdwijnt de tekst
+    // ...en in scène 2 verdwijnt de tekst van het besluit: enkel de titel blijft
     const tNa = T - tStempel;
-    if (B.documenten === 'censuur'){
-      [S.velA, S.velB].forEach((vel, vi) => vel.balken.forEach((b, i) => {
-        const aanP = E.uit2(fase(T, tDoc + .35 + vi * .5 + i * .11, tDoc + .52 + vi * .5 + i * .11));
-        const terugP = vel === S.velB ? E.inUit2(fase(tNa, .7 + i * .07, .95 + i * .07)) : 0;
-        b.e.setAttribute('width', f2(b.w * aanP * (1 - terugP)));
-      }));
-    } else {
-      S.velB.weg.forEach((e, i) => {
-        const wegP = fase(T, tDoc + .4 + i * .08, tDoc + .55 + i * .08);
-        const terugP = fase(tNa, .7 + i * .06, .9 + i * .06);
-        e.setAttribute('opacity', f2(1 - wegP + terugP));
-      });
-      S.velB.leeg.setAttribute('opacity', f2(fase(T, tDoc + 1.4, tDoc + 1.9) * (1 - fase(tNa, .5, .8))));
-    }
+    S.velB.weg.forEach((e, i) => {
+      const wegP = fase(T, tDoc + .4 + i * .08, tDoc + .55 + i * .08);
+      const terugP = fase(tNa, .7 + i * .06, .9 + i * .06);
+      e.setAttribute('opacity', f2(1 - wegP + terugP));
+    });
+    S.velB.leeg.setAttribute('opacity', f2(fase(T, tDoc + 1.4, tDoc + 1.9) * (1 - fase(tNa, .5, .8))));
 
     // scène 3: schemer, schijnwerper, stof
     S.dim.setAttribute('opacity', f2(.55 * fase(T, s3.start, s3.start + 1.0)));
@@ -1194,8 +1104,8 @@ function maakArchief(laag, dyn){
     zet(S.titel, { opacity: f2(to),
       transform: `translate(960 ${f2(200 + Math.sin(tt * 1.6) * 4)}) scale(${pop.toFixed(3)}) translate(-960 -200)` });
   };
-  // geluid: de kamer, de laden, het papier, de stift of de veeg, de lampen, de schijnwerper,
-  // de stempel en de knipperende titel
+  // geluid: de kamer, de laden, het papier, de veeg, de lampen, de schijnwerper, de stempel en
+  // de knipperende titel
   S.geluid = () => {
     const s2 = TL.scenes[1], s3 = TL.scenes[2], s4 = TL.scenes[3];
     const tDoc = s2.start + (s2.beats.document ?? s2.duur * .62);
@@ -1205,14 +1115,8 @@ function maakArchief(laag, dyn){
     const G = [{ soort: 'archief', t: s2.start + 1.5, tot: s4.start + .3 }];
     S.laden.forEach((l, i) => G.push({ soort: 'lade', t: s2.start + tDicht + l.na + .24, voor: .22, pan: -.5 + i * .25, zaad: i + 1 }));
     [[0, -.45], [.14, 0], [.28, .35]].forEach(([d, pan], i) => G.push({ soort: 'papier', t: tDoc - .5 + d, pan, zaad: 10 + i }));
-    if (B.documenten === 'censuur'){
-      [S.velA, S.velB].forEach((vel, vi) => vel.balken.forEach((b, i) =>
-        G.push({ soort: 'stift', t: tDoc + .35 + vi * .5 + i * .11, pan: vi ? .3 : -.15, zaad: 40 + vi * 20 + i })));
-      G.push({ soort: 'veeg', t: tStempel + .7, duur: .8, f: 1400 });                     // de balken gaan weg
-    } else {
-      G.push({ soort: 'veeg', t: tDoc + .4, duur: 1.1, pan: .35 });                        // de tekst verdwijnt
-      G.push({ soort: 'veeg', t: tStempel + .7, duur: .9, f: 1500 });                      // en komt terug
-    }
+    G.push({ soort: 'veeg', t: tDoc + .4, duur: 1.1, pan: .35 },                         // de tekst verdwijnt
+           { soort: 'veeg', t: tStempel + .7, duur: .9, f: 1500 });                       // en komt terug
     G.push({ soort: 'klik', t: s3.start + .1, f: 2600, sterkte: .55, pan: -.3 },          // de lampen gaan uit
            { soort: 'papier', t: s3.start + .02, pan: -.4, zaad: 21, sterkte: .7 },       // map en lijst schuiven weg
            { soort: 'papier', t: s3.start + .15, pan: .15, zaad: 22, sterkte: .8, duur: .6 },
@@ -1265,21 +1169,17 @@ function maakNudge(laag, dyn){
   el('rect', { x: 550, y: 412, width: 280, height: 3, rx: 1.5, fill: 'rgba(59,36,22,.2)' }, L);
   tx(L, `${100 - pct} op 100`, { x: 548, y: 474, class: 'disp', 'font-size': 50, 'font-weight': 800, fill: INKT });
   tx(L, 'enkel de titel', { x: 550, y: 514, class: 'sans', 'font-size': 30, 'font-weight': 500, fill: K70.bruin });
-  // tweede rij: de aantallen (origineel) of de tijdigheid (herwerkt)
+  // tweede rij: hoe vaak de stad op tijd publiceert
   const nl = n => n.toLocaleString('nl-BE');
   S.balk = el('g', { opacity: 0 }, g);
-  const tb = B.tweedeBalk === 'optijd'
-    ? { label: 'OP TIJD GEPUBLICEERD', rechts: `${nl(CIJFERS.opTijd)} van ${nl(CIJFERS.publicaties)}`, deel: CIJFERS.opTijd / CIJFERS.publicaties, roodRechts: true }
-    : { label: 'IN AANTALLEN', rechts: `${nl(CIJFERS.volledig)} volledig · ${nl(CIJFERS.beslissingen - CIJFERS.volledig)} enkel titel`, deel: CIJFERS.volledig / CIJFERS.beslissingen, roodRechts: false };
-  tx(S.balk, tb.label, { x: 130, y: 584, class: 'sans', 'font-size': 17, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2.5 });
-  tx(S.balk, tb.rechts, { x: 830, y: 584, class: 'sans', 'font-size': 19, 'font-weight': 600, fill: INKT, 'text-anchor': 'end' });
-  el('rect', { x: 130, y: 598, width: 700, height: 26, rx: 13, fill: tb.roodRechts ? ROOD : K70.zand, ...R, 'stroke-width': 2.5 }, S.balk);
-  S.balkVul = el('rect', { x: 130, y: 598, width: 0, height: 26, rx: 13, fill: tb.roodRechts ? INKT : ROOD }, S.balk);
-  S.balkDeel = tb.deel;
-  const bron = B.tweedeBalk === 'optijd'
-    ? ['Bron: besluitenlijsten Stad Mechelen, dec. 2024 – sep. 2026 (4.798 beslissingen); op tijd: agenda’s', 'en besluitenlijsten van de vijf organen, getoetst aan het Decreet Lokaal Bestuur. Denk mee, ' + CIJFERS.stand + '.']
-    : ['Bron: besluitenlijsten Stad Mechelen, dec. 2024 – sep. 2026 (4.798 beslissingen),', 'verwerkt door Denk mee met Mechelen, stand ' + CIJFERS.stand + '.'];
-  bron.forEach((t, i) => pasIn(tx(S.balk, t, { x: 130, y: 658 + i * 22, class: 'sans', 'font-size': 17, fill: K70.bruin }), 700));
+  tx(S.balk, 'OP TIJD GEPUBLICEERD', { x: 130, y: 584, class: 'sans', 'font-size': 17, 'font-weight': 600, fill: K70.bruin, 'letter-spacing': 2.5 });
+  tx(S.balk, `${nl(CIJFERS.opTijd)} van ${nl(CIJFERS.publicaties)}`, { x: 830, y: 584, class: 'sans', 'font-size': 19, 'font-weight': 600, fill: INKT, 'text-anchor': 'end' });
+  el('rect', { x: 130, y: 598, width: 700, height: 26, rx: 13, fill: ROOD, ...R, 'stroke-width': 2.5 }, S.balk);
+  S.balkVul = el('rect', { x: 130, y: 598, width: 0, height: 26, rx: 13, fill: INKT }, S.balk);
+  S.balkDeel = CIJFERS.opTijd / CIJFERS.publicaties;
+  ['Bron: besluitenlijsten Stad Mechelen, dec. 2024 – sep. 2026 (4.798 beslissingen); op tijd: agenda’s',
+   'en besluitenlijsten van de vijf organen, getoetst aan het Decreet Lokaal Bestuur. Denk mee, ' + CIJFERS.stand + '.']
+    .forEach((t, i) => pasIn(tx(S.balk, t, { x: 130, y: 658 + i * 22, class: 'sans', 'font-size': 17, fill: K70.bruin }), 700));
 
   // de stoffige stapel die uiteenvalt in honderd vakjes
   S.stapel = el('g', {}, g);
@@ -1680,7 +1580,7 @@ const VOLUME = 1.75, MUZIEK_VOLUME = .1;
 // met de stempel als luidste klap. Kleine geluiden (tikken, tegeltjes) zijn kort; daar telt de piek.
 const NIVEAU = {
   stempel: 1, dreun: .67, lade: .8, papier: 1.3, tv: 1.3, zoef: 3.2, schuif: 1.2, plop: 1.8, klik: 2.4,
-  belletje: 1.3, glans: 1.1, tik: 2.5, tegel: 2.2, bloop: 1.3, pling: 1.3, neon: 3, stift: 3, veeg: 1.7,
+  belletje: 1.3, glans: 1.1, tik: 2.5, tegel: 2.2, bloop: 1.3, pling: 1.3, neon: 3, veeg: 1.7,
   rits: 2.6, ratel: 4.3, buiten: 1.1, archief: 1, schijnwerper: 1, kamer: 1.6,
   // de muziek, op dezelfde manier afgesteld: de snaredrum even stevig als de basdrum, de bas iets
   // terug, en clavinet, hihat en houtblok hoorbaar
@@ -1828,13 +1728,6 @@ const KLANK = {
     KL.ruis(K, t, .1, KL.filt(K, 'bandpass', 760, 5, KL.env(K, t, .001, 0, .07, .9, uit)), 'wit', .8);
     KL.ruis(K, t, .2, KL.filt(K, 'lowpass', 1100, .7, KL.env(K, t, .001, 0, .16, .45, uit)), 'bruin', 1.1);
     KL.ruis(K, t + .38, .1, KL.filt(K, 'bandpass', 380, 3, KL.env(K, t + .38, .006, 0, .07, .2, uit)), 'wit', 1.5);
-  },
-  // een stift die een regel zwart maakt
-  stift(K, e, t){
-    const uit = KL.pan(K, e.pan), r = toeval(e.zaad || 5);
-    const bp = KL.filt(K, 'bandpass', 1600, 1.6, KL.env(K, t, .01, .06, .06, .12, uit));
-    bp.frequency.setValueAtTime(1400 + r() * 300, t); bp.frequency.linearRampToValueAtTime(2300 + r() * 400, t + .12);
-    KL.ruis(K, t, .16, bp, 'wit', r() * 2);
   },
   // tekst die van het papier verdwijnt (of terugkomt): een zachte veeg
   veeg(K, e, t){
@@ -2421,9 +2314,6 @@ const RUSTIG = !OPNAME && matchMedia('(prefers-reduced-motion: reduce)').matches
 const KORREL = OPNAME ? Q.get('korrel') === '1' : Q.get('korrel') !== '0';
 // Achtergrondmuziek: standaard aan, ?muziek=0 laat enkel de geluiden over.
 const MUZIEK = Q.get('muziek') !== '0';
-// De versie komt uit ?versie=, of uit #herwerkt: een kaal anker komt ook door waar ?-opties wegvallen.
-const ANKER = location.hash.slice(1);
-let VKEY = VERSIES[Q.get('versie')] ? Q.get('versie') : VERSIES[ANKER] ? ANKER : 'origineel';
 let V, TL, MODULES = [];
 let T = 0, SPEELT = false, VORIGE = null, OT_AAN = Q.get('ondertitels') !== '0';
 
@@ -2523,15 +2413,14 @@ const ICOON_STIL = 'M3 9v6h4l5 4V5L7 9zm12.1-.5l2.4 2.4 2.4-2.4 1.1 1.1-2.4 2.4 
 const $ = id => document.getElementById(id);
 const ond = $('onderschrift'), ondRegel = ond.querySelector('.regel'), ondVert = ond.querySelector('.vertaling');
 
-function bouw(sleutel){
-  VKEY = sleutel; V = VERSIES[sleutel]; TL = bouwTijdlijn(V);
+function bouw(){
+  V = SCRIPT; TL = bouwTijdlijn(V);
   const lagen = $('lagen'), dyn = $('dyn');
   lagen.textContent = ''; dyn.textContent = '';
   MODULES = [maakSluimer, maakArchief, maakNudge, maakKeuze, maakKorrel, maakMuziek].map(f => f(el('g', {}, lagen), dyn));
   GELUID.lijst = geluidLijst();
   if (SPEELT) GELUID.start(T);
   T = klem(T, 0, TL.duur);
-  $('kiesVersie').value = sleutel;
   controleerOndertitels();
   vulScript();
   teken();
@@ -2601,7 +2490,7 @@ function vulScript(){
   lijst.textContent = '';
   const n = document.createElement('div');
   n.className = 'notities';
-  n.innerHTML = `<p>${V.naam}</p><ul></ul>`;
+  n.innerHTML = '<p>Notities</p><ul></ul>';
   for (const t of V.notities){ const li = document.createElement('li'); li.textContent = t; n.querySelector('ul').appendChild(li); }
   lijst.appendChild(n);
   TL.scenes.forEach((s, i) => {
@@ -2641,16 +2530,6 @@ function koppelBediening(){
   const schuif = $('schuif');
   schuif.addEventListener('input', () => { balkBij.sleept = true; naar(TL.duur * schuif.value / 1000); });
   schuif.addEventListener('change', () => { balkBij.sleept = false; });
-  $('kiesVersie').addEventListener('change', e => {
-    bouw(e.target.value);
-    // Het adres volgt de keuze, zodat een gekopieerde link dezelfde versie opent. In een afgeschermd
-    // venster kan dat geweigerd worden; de speler werkt dan gewoon verder.
-    try {
-      const u = new URL(location.href);
-      if (u.searchParams.has('versie')) u.searchParams.set('versie', VKEY); else u.hash = VKEY;
-      history.replaceState(null, '', u);
-    } catch (fout) {}
-  });
   const ot = $('knopOT');
   const zetOT = aan => { OT_AAN = aan; ot.setAttribute('aria-pressed', String(aan)); teken(); };
   ot.addEventListener('click', () => zetOT(!OT_AAN));
@@ -2717,7 +2596,6 @@ window.ILLUSIE = {
   toon(t){ naar(t); },
   srt,
   geluidWav,
-  get versie(){ return VKEY; },
   get tijdlijn(){ return TL; },
 };
 
@@ -2726,7 +2604,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (OPNAME) document.body.classList.add('opname');
   await laadLetters();
   T = parseFloat(Q.get('t')) || 0;
-  bouw(VKEY);
+  bouw();
   if (!OPNAME){ koppelBediening(); if (T > 0) $('grootSpelen').hidden = true; }
   window.ILLUSIE.klaar = true;
 });
