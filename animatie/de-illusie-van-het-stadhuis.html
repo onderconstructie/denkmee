@@ -402,6 +402,16 @@ function verloop(dyn, id, stops, at = {}){
   for (const [o, c, op = 1] of stops) el('stop', { offset: o, 'stop-color': c, 'stop-opacity': op }, v);
   return `url(#${id})`;
 }
+// Elk coördinatenpaar van een pad (absoluut, enkel M, L, C en Z) door f sturen: zo buigt een vorm.
+function vervorm(d, f){
+  let o = '', n = [];
+  for (const t of d.match(/[MLCZ]|-?(?:\d+\.?\d*|\.\d+)/g)){
+    if (t >= 'A'){ o += t; continue; }
+    n.push(+t);
+    if (n.length === 2){ const [x, y] = f(n[0], n[1]); o += (/\d$/.test(o) ? ' ' : '') + f2(x) + ' ' + f2(y); n = []; }
+  }
+  return o;
+}
 // Een spitsboog (gotisch venster of deur): (x, y) is de linkerbovenhoek van het vak.
 function spits(x, y, w, h){
   const s = w * .62;
@@ -519,9 +529,9 @@ function tekenBurgerZij(ouder, dyn, id){
   // --- het hoofd, diep voorover. Kopcoördinaten: midden (0,0); de hals hangt aan (8,30). ---
   F.hoofd = el('g', { transform: 'translate(-34 -110) rotate(-38)' }, r);
   const h = el('g', { transform: 'translate(-8 -30)' }, F.hoofd);
-  // de haren achter het gezicht: veel volume op de kruin, een krul in de nek
-  el('path', { d: 'M-30 -12C-38 -24-34 -42-18 -50C0 -58 26 -54 39 -38C48 -26 48 -8 44 8C42 16 42 22 45 27C37 31 29 27 25 21C21 17 18 15 14 14Z',
-               fill: P.haar, ...LIJN }, h);
+  // Hetzelfde kapsel als van voren: een shag met een middenscheiding, volume op de kruin, en lagen
+  // tot net onder de kin die naar buiten krullen. Van opzij: de haarlijn laat het voorhoofd vrij, een
+  // vleugel valt vanuit de scheiding over de slaap, een lok bedekt het oor.
   el('path', { d: 'M2 -36C-16 -36-28 -26-29 -12C-29.5 -8-29 -6-31 -3C-34 1-39 6-40 9C-41 12-38 14-33 14C-32 16-32.5 18-31 19.5C-32 21-32 23-30 24.5C-30.5 27-29 30-24 32C-18 34.5-8 33 0 29C10 24 22 18 28 6C33 -8 26 -30 2 -36Z',
                fill: P.huid, ...LIJN }, h);
   el('path', { d: 'M-2 28C8 23 18 16 24 6C20 18 12 26 0 30Z', fill: P.huidS }, h);
@@ -544,16 +554,42 @@ function tekenBurgerZij(ouder, dyn, id){
     F.brauw.setAttribute('transform', `translate(0 ${f2(-brauw * 3)})`);
   };
   F.zetGezicht(0, 0, 0, 0);
-  // de lok over het oor, en de pony
-  el('path', { d: 'M5 -31C11 -23 14 -11 13 -1C12 7 13 13 17 19C11 20 7 16 5 10C3 4 2 -5 1 -13C0 -21 1 -27 5 -31Z', fill: P.haar, ...LIJN, 'stroke-width': 2.6 }, h);
-  el('path', { d: 'M-33 -12C-38 -24-31 -38-16 -41C-6 -43 2 -38 4 -30C-2 -32-9 -30-14 -24C-19 -18-25 -13-33 -12Z', fill: P.haar, ...LIJN, 'stroke-width': 3 }, h);
-  el('path', { d: 'M-22 -46C-8 -54 12 -54 26 -44M33 -30C38 -18 38 -4 36 8M22 -40C28 -30 30 -18 29 -6M-24 -32C-18 -38-8 -40 0 -36',
-               ...DUN, stroke: P.haarL, 'stroke-width': 2.6 }, h);
-  // de bril: een groot glas van opzij, waarin het scherm oplicht
+  // de bril: een groot glas van opzij, waarin het scherm oplicht; het pootje verdwijnt onder het haar
   el('path', { d: 'M-24 -9L4 -7', ...DUN, stroke: P.bril, 'stroke-width': 3 }, h);
   el('rect', { x: -33, y: -15, width: 11, height: 22, rx: 5.5, fill: P.glas, 'fill-opacity': .3, stroke: P.bril, 'stroke-width': 3 }, h);
   F.glasGloed = el('rect', { x: -31.5, y: -13.5, width: 8, height: 19, rx: 4, fill: '#ffe29a', opacity: .75 }, h);
   el('path', { d: 'M-30 -11L-30 -6', stroke: '#fffaf0', 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .8 }, h);
+  // Het haar ligt óver de huid: van de haarlijn over de kruin tot in de nek, en langs de lok over het
+  // oor tot onder de kaak, even lang als van voren; enkel het gezicht vooraan blijft vrij. Daarop de
+  // vleugel over de slaap. De kruin zit vast aan de schedel, maar de lok en de nek hangen: F.zetHaar
+  // buigt ze rond het oor naar beneden, hoe lager hoe meer, zodat ze bij een knik blijven vallen.
+  const HAAR = {
+    massa: 'M-26 -24C-30 -37-20 -48-4 -51C15 -54 34 -47 42 -32C49 -18 49 2 47 16C45 27 46 35 53 41C45 46 35 44 31 38' +
+           'C29 41 26 43 22 44C15 45 9 42 6 36C2 28 1 14-1 2C-2 -6-4 -13-8 -16C-14 -18-21 -20-26 -24Z',
+    lagen: 'M4 20C10 24 16 27 23 31M29 24C33 29 38 31 44 31M-1 2C4 -2 10 -4 16 -2',
+    strengen: 'M-18 -46C-4 -52 14 -51 28 -43M35 -30C41 -17 42 4 40 24M24 -41C30 -30 31 -16 29 -3M-22 -32C-14 -39-3 -40 7 -36M4 -18C8 -6 8 12 12 26M13 33C15 37 18 40 22 41',
+  };
+  const massa = el('path', { fill: P.haar, ...LIJN }, h);
+  const lagen = el('path', { ...DUN, stroke: '#1c110a', 'stroke-width': 1.8, opacity: .6 }, h);
+  el('path', { d: 'M-27 -23C-31 -34-23 -45-9 -46C3 -47 13 -41 17 -32C11 -34 4 -33-1 -29C-5 -26-7 -21-8 -16C-14 -18-21 -20-27 -23Z', fill: P.haar, ...LIJN, 'stroke-width': 2.8 }, h);
+  const strengen = el('path', { ...DUN, stroke: P.haarL, 'stroke-width': 2.4 }, h);
+  let vorige = null;
+  F.zetHaar = hoek => {                                                                            // hoek in graden, positief: naar het gezicht toe
+    hoek = Math.round(hoek * 5) / 5;                                                               // per vijfde graad: kleiner valt niet op
+    if (hoek === vorige) return;
+    vorige = hoek;
+    const a = hoek * Math.PI / 180;
+    const buig = (x, y) => {
+      const w = klem((y - 8) / 34), b = a * w * w * (3 - 2 * w);
+      if (!b) return [x, y];
+      const c = Math.cos(b), s = Math.sin(b), dx = x - 18, dy = y - 4;
+      return [18 + dx * c - dy * s, 4 + dx * s + dy * c];
+    };
+    massa.setAttribute('d', vervorm(HAAR.massa, buig));
+    lagen.setAttribute('d', vervorm(HAAR.lagen, buig));
+    strengen.setAttribute('d', vervorm(HAAR.strengen, buig));
+  };
+  F.zetHaar(0);
 
   // --- de verre arm, de telefoon, en de nabije arm met de elleboog op de dij ---
   F.telefoon = el('g', { transform: 'translate(-103 -72) rotate(-24)' }, r);
@@ -646,14 +682,21 @@ function tekenBurgerVoor(ouder){
   el('path', { d: 'M0 -230C20 -230 34 -216 34 -194C34 -170 22 -150 0 -146C-22 -150-34 -170-34 -194C-34 -216-20 -230 0 -230Z', fill: P.huid, ...LIJN }, h);
   el('path', { d: 'M-32 -190C-32 -168-22 -153-4 -148C-18 -156-26 -170-27 -190Z', fill: P.huidS, opacity: .75 }, h);
   for (const s of [-1, 1]) el('ellipse', { cx: s * 21, cy: -168, rx: 7, ry: 4.5, fill: P.blos, opacity: .55 }, h);
-  for (const s of [-1, 1])                                                                          // de lokken langs het gezicht, met een krul naar buiten
+  // de lokken langs het gezicht, met een krul naar buiten, en de twee vleugels vanuit de scheiding:
+  // ze schuiven mee als het gezicht draait (F.lok, F.pony), zodat de scheiding boven de neus blijft
+  F.lok = [-1, 1].map(s => {
+    const l = el('g', {}, h);
     el('path', { d: `M${s * 28} -222C${s * 42} -212 ${s * 47} -190 ${s * 47} -172C${s * 47} -156 ${s * 53} -146 ${s * 62} -142C${s * 52} -134 ${s * 40} -140 ${s * 37} -154C${s * 34} -168 ${s * 34} -186 ${s * 29} -204Z`,
-                 fill: P.haar, ...LIJN, 'stroke-width': 3 }, h);
-  for (const s of [-1, 1])                                                                          // de pony, in twee vleugels vanuit de scheiding
+                 fill: P.haar, ...LIJN, 'stroke-width': 3 }, l);
+    el('path', { d: s > 0 ? 'M44 -212C51 -194 51 -174 48 -160M40 -198C43 -186 43 -172 42 -162' : 'M-48 -178C-50 -168-48 -158-44 -150M-40 -198C-43 -186-43 -172-42 -162',
+                 ...DUN, stroke: P.haarL, 'stroke-width': 2.5 }, l);
+    return l;
+  });
+  F.pony = el('g', {}, h);
+  for (const s of [-1, 1])
     el('path', { d: `M${s * 2} -240C${s * 18} -240 ${s * 34} -230 ${s * 40} -212C${s * 42} -204 ${s * 40} -198 ${s * 36} -194C${s * 30} -206 ${s * 18} -214 ${s * 2} -216Z`,
-                 fill: P.haar, ...LIJN, 'stroke-width': 3 }, h);
-  el('path', { d: 'M8 -236C22 -234 32 -226 36 -214M-8 -236C-18 -234-26 -228-30 -220M44 -212C51 -194 51 -174 48 -160M40 -198C43 -186 43 -172 42 -162M-48 -178C-50 -168-48 -158-44 -150',
-               ...DUN, stroke: P.haarL, 'stroke-width': 2.5 }, h);
+                 fill: P.haar, ...LIJN, 'stroke-width': 3 }, F.pony);
+  el('path', { d: 'M8 -236C22 -234 32 -226 36 -214M-8 -236C-18 -234-26 -228-30 -220', ...DUN, stroke: P.haarL, 'stroke-width': 2.5 }, F.pony);
   // Het gezicht is één groep: schuift ze opzij, dan lijkt het hoofd te draaien. De iris kijkt rond
   // binnen het oogwit, de wenkbrauwen bewegen elk apart, en de mond wordt elk beeld opnieuw getekend.
   F.gezicht = el('g', {}, h);
@@ -1280,19 +1323,28 @@ function maakSluimer(laag, dyn){
     // 'Zegt de stad.', tikt loom met de voet, en knikt vlak voor de duik in slaap: het hoofd zakt,
     // schiet even op, en zakt weer.
     const F = S.burger.F;
-    let binnen = 0;
-    for (const b of S.bubbels){ const ta = b.start + b.reis * .97; binnen = Math.max(binnen, Math.exp(-Math.pow((lt - ta - .12) / .24, 2))); }
-    const tg = lt - (s1.beats.gaap ?? 2.4);
-    const gaap = tg > 0 && tg < 1.6 ? (tg < .45 ? E.inUit2(tg / .45) : tg < 1.05 ? 1 : 1 - E.inUit2((tg - 1.05) / .55)) : 0;
-    const sl = lt - (s1.duur - 2.1);
-    const knik = sl <= 0 ? 0 : sl < 1.3 ? E.inUit2(sl / 1.3) : sl < 1.42 ? 1 - .85 * E.uit2((sl - 1.3) / .12) : .15 + .85 * E.inUit2(klem((sl - 1.42) / 1.2));
-    const wakker = (1 - gaap) * (1 - klem(knik * 1.5));
+    // de houding, als functie van de tijd: het haar volgt die van een fractie eerder, en valt zo na
+    const houding = lt => {
+      let binnen = 0;
+      for (const b of S.bubbels){ const ta = b.start + b.reis * .97; binnen = Math.max(binnen, Math.exp(-Math.pow((lt - ta - .12) / .24, 2))); }
+      const tg = lt - (s1.beats.gaap ?? 2.4);
+      const gaap = tg > 0 && tg < 1.6 ? (tg < .45 ? E.inUit2(tg / .45) : tg < 1.05 ? 1 : 1 - E.inUit2((tg - 1.05) / .55)) : 0;
+      const sl = lt - (s1.duur - 2.1);
+      const knik = sl <= 0 ? 0 : sl < 1.3 ? E.inUit2(sl / 1.3) : sl < 1.42 ? 1 - .85 * E.uit2((sl - 1.3) / .12) : .15 + .85 * E.inUit2(klem((sl - 1.42) / 1.2));
+      const wakker = (1 - gaap) * (1 - klem(knik * 1.5));
+      const zak = 4 * E.inUit2(klem(lt / s1.duur));
+      return { binnen, gaap, knik, wakker,
+               kop: -38 - zak + Math.sin(lt * 1.3) * 1.4 * wakker + 27 * gaap - 16 * knik - 3 * binnen,
+               romp: -zak * .4 + 6 * gaap - 2 * knik };
+    };
+    const { binnen, gaap, knik, wakker, kop, romp } = houding(lt);
     const veeg = (lt % .95) / .95, duimOp = veeg < .32 ? E.inUit2(veeg / .32) : 1 - E.inUit2(klem((veeg - .32) / .25));
     if (wakker > .5) F.scroll.setAttribute('transform', `translate(0 ${f2(-((Math.floor(lt / .95) * 24 + 24 * E.uit3(klem(veeg / .32))) % 24))})`);
     F.duim.setAttribute('transform', `translate(${f2(-2 * duimOp * wakker)} ${f2((3 - 6 * duimOp) * wakker)}) rotate(-60 -103 -70)`);
-    const zak = 4 * E.inUit2(klem(lt / s1.duur));
-    F.hoofd.setAttribute('transform', `translate(-34 -110) rotate(${f2(-38 - zak + Math.sin(lt * 1.3) * 1.4 * wakker + 27 * gaap - 16 * knik - 3 * binnen)})`);
-    F.romp.setAttribute('transform', `translate(10 -16) scale(1 ${(1 + .014 * Math.sin(lt * 1.5) + .035 * gaap).toFixed(4)}) rotate(${f2(-zak * .4 + 6 * gaap - 2 * knik)}) translate(-10 16)`);
+    F.hoofd.setAttribute('transform', `translate(-34 -110) rotate(${f2(kop)})`);
+    F.romp.setAttribute('transform', `translate(10 -16) scale(1 ${(1 + .014 * Math.sin(lt * 1.5) + .035 * gaap).toFixed(4)}) rotate(${f2(romp)}) translate(-10 16)`);
+    const na = houding(lt - .1);
+    F.zetHaar(-.5 * (na.kop + na.romp));                                                           // de helft van de kanteling: het haar heeft volume
     const knipper = (lt % 2.7) > 2.56 ? 1 : 0;
     F.zetGezicht(binnen * wakker, gaap, Math.max(gaap, klem(knik * 1.4), knipper), gaap - .6 * knik);
     F.telefoon.setAttribute('transform', `translate(-103 -72) rotate(${f2(-24 + 12 * knik)})`);
@@ -2040,6 +2092,9 @@ function maakNudge(laag, dyn){
       [tVraag - .45, 0, 0, 0, 0], [tVraag - .25, 0, 1.5, 0, 2.2], [tVraag + .35, 0, 1.5, 0, 2.2], [tVraag + .6, 0, 0, 0, 0],
     ], lt);
     F.gezicht.setAttribute('transform', `translate(${f2(gx)} ${f2(gy)})`);
+    F.pony.setAttribute('transform', `translate(${f2(gx * .55)} ${f2(gy * .3)})`);                 // het haar draait mee
+    F.lok[0].setAttribute('transform', `translate(${f2(gx * .45)} 0)`);
+    F.lok[1].setAttribute('transform', `translate(${f2(gx * .2)} 0)`);
     // de uitdrukkingen, elk een curve van 0 tot 1
     const vk = lt - (klaar + .35);
     const verbaasd = vk > 0 && vk < 1 ? (vk < .12 ? vk / .12 : vk < .5 ? 1 : 1 - (vk - .5) / .5) : 0;
