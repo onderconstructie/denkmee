@@ -254,7 +254,7 @@ const SCRIPT = {
     'De knipoog naar het spandoek gaat over stadsmarketing, niet over het werk van de stad. Het platform wil burgers, journalisten én gemeenten inspireren.',
     'De film zegt dat een taalmodel mee vertaalt, zoals de site dat ook zegt, en dat de bron erbij staat.',
     'Opvragen en volgen zoals op de site: bij een beslissing zet een formulier je aanvraag klaar in je eigen mailprogramma, en jij verstuurt ze zelf. Een dossier volgen bewaart je browser, zonder account of mail: het staat dan bij je gevolgde dossiers. De knoppen heten op de site ook zo: "Volg dit dossier" en "Ik volg dit dossier".',
-    'Op de besluitenlijst in het archief staat de echte titel van het besluit dat later op de tv staat, in de taal van de stad. Op de tv staat dat besluit in gewone taal: de burgemeester op 17 september 2026 (All For More). Daaronder het college op 23 juni 2026 (Klokkenwerpen op 13 september), met enkel de eerste zin, zonder "van burgemeester en schepenen" en "in Mechelen".',
+    'Op de besluitenlijst in het archief staat de echte titel van het besluit dat later op de tv staat, in de taal van de stad. Op de tv staat dat besluit in gewone taal: de burgemeester op 17 september 2026 (All For More), met de bronlink zoals op de site ("Bekijk de besluitenlijst") en de knop om de stukken op te vragen. Daaronder het college op 23 juni 2026 (Klokkenwerpen op 13 september), met enkel de eerste zin, zonder "van burgemeester en schepenen" en "in Mechelen".',
     'Het dossier op het bord is een echt dossier van de site: "Verkeer bij Bierfestival", met drie beslissingen over de Grote Markt, van het college (8 juli 2025), de gemeenteraad (16 september 2025) en de burgemeester (4 september 2026). Elke regel vat hun samenvatting kort samen.',
     'Op de stempel staat "openbaarheidsverzoek": in Vlaanderen vraag je stukken op via het Bestuursdecreet, zoals het formulier op de site ook zegt.',
   ],
@@ -2117,7 +2117,12 @@ function maakNudge(laag, dyn){
    'De verordening onttrekt de Grote Markt aan het openbaar domein.',
    'Dit gebeurt voor het evenement All For More op 1 oktober 2026.']
     .forEach((t, i) => pasIn(tx(S.kaart, t, { x: 1132, y: 372 + i * 29, class: 'sans', 'font-size': 21, fill: INKT }), 628));
-  tx(S.kaart, 'Officieel stuk: enkel de titel online', { x: 1132, y: 490, class: 'sans', 'font-size': 17, fill: K70.bruin });
+  // de bronlink zoals op de site (bronDocs: 'Bekijk de besluitenlijst', met pijl en onderlijnd);
+  // pijl en lijn zijn getekend, zodat ze niet van de letter afhangen
+  const bron = tx(S.kaart, 'Bekijk de besluitenlijst', { x: 1132, y: 490, class: 'sans', 'font-size': 17, 'font-weight': 500, fill: K70.bruin });
+  const bw = bron.getComputedTextLength();
+  el('path', { d: `M1132 496H${f2(1132 + bw)}M${f2(1140 + bw)} 484h15m-5.5-5.5 5.5 5.5-5.5 5.5`, fill: 'none', stroke: K70.bruin,
+               'stroke-width': 1.8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, S.kaart);
   S.knop = el('g', {}, S.kaart);
   el('rect', { x: 1540, y: 464, width: 224, height: 38, rx: 19, fill: ROOD, ...R, 'stroke-width': 2.5 }, S.knop);
   pasIn(tx(S.knop, 'Vraag de documenten op', { x: 1652, y: 489, class: 'sans', 'font-size': 17, 'font-weight': 600, fill: K70.cremeLicht, 'text-anchor': 'middle' }), 200);
