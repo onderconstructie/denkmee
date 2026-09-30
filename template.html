@@ -4053,6 +4053,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .badge-actua{ display:inline-block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; padding:.1rem .45rem; border:1px solid var(--pink); border-radius:999px; color:var(--pink-text); background:var(--pink-soft); margin-right:.4rem; vertical-align:.1em; white-space:nowrap; }
 /* Besloten-zitting-badge: het punt is achter gesloten deuren behandeld; de stad publiceert
    enkel de titel (geen stukken, geen stemming). Inkt-stijl, geen roze: dit is een status. */
+.badge-voorlopig{ display:inline-block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; padding:.1rem .45rem; border:1px dashed var(--line-strong); border-radius:999px; color:var(--ink-dim); background:var(--paper-3); margin-right:.4rem; vertical-align:.1em; white-space:nowrap; }
 .badge-besloten{ display:inline-block; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; padding:.1rem .45rem; border:1px solid var(--line-strong); border-radius:999px; color:var(--ink-dim); background:var(--paper-3); margin-right:.4rem; vertical-align:.1em; white-space:nowrap; }
 
 /* =====================================================================
@@ -5385,6 +5386,8 @@ function bronLinksHTML(item, cls, arrow, chip){
   }
   // Bij een mondelinge vraag komt de brontekst uit de notulen: is ze er, dan zijn de notulen er ook.
   const notulenEr = c.hasNotulen || (item.type === 'vraag' && !!item.brontekst);
+  // Een voorlopig besluit (uittreksel online, besluitenlijst nog niet) linkt enkel naar zijn uittreksel.
+  if(item.voorlopig) return links.join('');
   bronDocs(c.org, c.decided, notulenEr, item.type).forEach(d => {
     const direct = bronDirectUrl(c.org, c.date, d.kort);   // rechtstreeks PDF, anders zoekpagina
     const href = direct ? escape(direct) : bronUrl(c.org, c.date, d.id);
@@ -5836,7 +5839,7 @@ function itemCardHTML(item, opts={}){
         ${item.categorie ? `<span class="cat">${escape(item.categorie)}</span>` : ''}
         ${(item.themes||[]).map(t => `<span class="cat">${escape(t)}</span>`).join('')}
       </div>
-      <h4>${item.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${escape(item.titel || '')}</h4>
+      <h4>${item.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${item.voorlopig?'<span class="badge-voorlopig" title="Het uittreksel van dit besluit staat al online; de besluitenlijst van die zitting volgt nog.">Besluitenlijst volgt</span>':''}${escape(item.titel || '')}</h4>
       ${(!agenda && item.decoded) ? `<div class="decoded">${formatDecoded(item.decoded)}</div>` : ''}
       <div class="meta-row">
         ${item.schepen ? `<span>Bevoegd: <strong>${escape(item.schepen)}</strong></span>` : ''}
@@ -6083,7 +6086,7 @@ function personalRecentCardHTML(p){
         <span class="prc-date">${formatShort(date)}</span>
         <span class="prc-status status-${besluitKlasse(decision)}">${escape(decisionLabel)}</span>
       </header>
-      <h5 class="prc-titel">${p.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${p.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(p.titel)}</h5>
+      <h5 class="prc-titel">${p.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${p.voorlopig?'<span class="badge-voorlopig" title="Het uittreksel van dit besluit staat al online; de besluitenlijst van die zitting volgt nog.">Besluitenlijst volgt</span>':''}${p.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${p.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(p.titel)}</h5>
       ${decoded}
       ${toezHTML(p.toezeggingen)}
       <footer class="prc-foot">
@@ -8142,7 +8145,7 @@ function dosAllItems(){
       src: org === 'Vast bureau' ? 'vastbureau' : org === 'Burgemeester' ? 'burgemeester' : 'college', org,
       id:c.id, date:c.date, titel:c.titel||'', zitting:c.zitting||null,
       decoded:c.decoded||'', themes:c.themes||[], streets:[],
-      hood:null, schepen:null, url:c.url||null, uittreksel_url:c.uittreksel_url||null, collegeIdx:i, kernbegrippen:c.kernbegrippen||[],
+      hood:null, schepen:null, url:c.url||null, uittreksel_url:c.uittreksel_url||null, voorlopig:!!c.voorlopig, collegeIdx:i, kernbegrippen:c.kernbegrippen||[],
       result:null, status:null, brontekst:'', categorie:c.categorie||null
     });
   });
@@ -10482,7 +10485,7 @@ function openDossier(id){
           <span class="dosm-ev-org ${oc}">${escape(it.org)}</span>
           ${resultPill}
         </div>
-        <div class="dosm-ev-titel">${it.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${it.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${it.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(it.titel)}</div>
+        <div class="dosm-ev-titel">${it.zitting==='besloten'?'<span class="badge-besloten">Besloten zitting</span>':''}${it.voorlopig?'<span class="badge-voorlopig" title="Het uittreksel van dit besluit staat al online; de besluitenlijst van die zitting volgt nog.">Besluitenlijst volgt</span>':''}${it.type==='actuadebat'?'<span class="badge-actua">Actuadebat</span>':''}${it.type==='vraag'?'<span class="badge-vraag">Mondelinge vraag</span>':''}${escape(it.titel)}</div>
         ${ftSet && ftSet.has(it.id) ? `<div class="dosm-ev-ft"><span>zoekterm gevonden in het volledige stuk${(() => {
           const w = FT_WOORD && FT_WOORD.get(it.id);
           return w && w.size ? ', als <b>' + [...w].sort((a,b)=>a.length-b.length||a.localeCompare(b)).slice(0,2).map(escape).join('</b> en <b>') + '</b>' : '';

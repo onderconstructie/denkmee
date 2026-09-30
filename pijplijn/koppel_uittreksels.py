@@ -157,12 +157,91 @@ def pdf_tekst(pad):
     c.write_text(tekst, encoding="utf-8")
     return sleutel, tekst
 
+# Voorlopige besluiten (sinds 30/09/2026). De stad publiceert de uittreksels van het college soms
+# dagen vóór de besluitenlijst: van de zitting van 29/09/2026 stonden drie tijdelijke
+# politieverordeningen online (onder meer voor de Open Bedrijvendag van 4 oktober), terwijl de
+# besluitenlijst pas tien dagen na de zitting moet volgen. Voor een verkeersmaatregel komt dat te
+# laat. Heeft een zitting van het college, het vast bureau of de burgemeester nog geen enkel besluit
+# in data.json, dan maken we uit elk van haar uittreksels een voorlopig besluit: nummer, dienst en
+# titel uit de eigen kopregel, en 'voorlopig': true. Het id is dat van het latere besluit uit de
+# besluitenlijst; die neemt het dus gewoon over zodra ze er is (run_all bouwt de lijst elke run
+# opnieuw op), en gedeelde links blijven werken.
+UITVOEREND = {"College van burgemeester en schepenen": ("College", "college"),
+              "Vast bureau": ("Vast bureau", "vastbureau"),
+              "Burgemeester": ("Burgemeester", "burgemeester")}
+KOP_SECTIE = re.compile(r"^\s*(Voorgeschiedenis|Feiten|Motivering|Juridische grond|Argumentatie|"
+                        r"Adviezen|Besluit|Regelgeving|Aanleiding|Context|Financi)")
+KOP_DELEN = re.compile(r"^\s*(\d{1,3})\s*([A-Z]?)\s*\.?\s+([^.]{3,80}?)\.\s+(.+)$")
+
+
+def kop_van(tekst):
+    """(nummer, letter, dienst, titel) uit de kopregel van een uittreksel, bv. '21A. Bestuurlijk
+    Beheer. Vaststelling tijdelijke politieverordening ... op 4 oktober 2026.' De titel loopt vaak
+    over enkele regels door, tot hij op een punt eindigt."""
+    regels = (tekst or "").splitlines()
+    for i, regel in enumerate(regels[:KOP_REGELS]):
+        if not KOP_NR.match(regel):
+            continue
+        delen = [regel.strip()]
+        for r in regels[i + 1:i + 5]:
+            if delen[-1].endswith(".") or not r.strip() or KOP_SECTIE.match(r):
+                break
+            delen.append(r.strip())
+        m = KOP_DELEN.match(" ".join(delen))
+        if m:
+            return int(m.group(1)), m.group(2), m.group(3).strip(), m.group(4).strip()
+        return None
+    return None
+
+
+def voorlopige_besluiten(docs, data):
+    from assembleer_college import thema
+    bestaand = {(b.get("orgaan", "College"), b.get("date")) for b in data.get("college_beslissingen", [])}
+    nieuw, gezien = [], set()
+    for d in docs:
+        if d["klasse"] != "uittreksel" or d["orgaan"] not in UITVOEREND:
+            continue
+        orgaan, prefix = UITVOEREND[d["orgaan"]]
+        if (orgaan, d["zitting"]) in bestaand:
+            continue
+        pad = pdf_pad(d)
+        if not pad.exists():
+            continue
+        try:
+            _s, tekst = pdf_tekst(pad)
+        except Exception as e:
+            print(f"  (tekst mislukt {d['id']}: {e})")
+            continue
+        kop = kop_van(tekst)
+        if not kop:
+            print(f"  (geen kopregel in uittreksel {d['id']} van {d['zitting']}: geen voorlopig besluit)")
+            continue
+        nr, lt, dienst, titel = kop
+        stuk_id = f"{prefix}-{d['zitting'].replace('-', '')}-{nr}{lt}"
+        if stuk_id in gezien:
+            continue
+        gezien.add(stuk_id)
+        nieuw.append({"id": stuk_id, "date": d["zitting"], "orgaan": orgaan,
+                      "categorie": thema(dienst), "titel": titel, "voorlopig": True})
+    if nieuw:
+        data["college_beslissingen"] = sorted(data.get("college_beslissingen", []) + nieuw,
+                                              key=lambda b: b["date"], reverse=True)
+        per = defaultdict(int)
+        for b in nieuw:
+            per[(b["orgaan"], b["date"])] += 1
+        print("voorlopige besluiten uit uittreksels: " + "; ".join(f"{o} {z}: {n}" for (o, z), n in sorted(per.items())))
+    return len(nieuw)
+
+
 def main():
     meetlat = "--meetlat" in sys.argv
     if not INDEX.exists():
         sys.exit("data/uittreksels_index.json ontbreekt — draai eerst fetch_uittreksels.py --download")
     docs = json.loads(INDEX.read_text(encoding="utf-8"))
     data = json.loads(DATA.read_text(encoding="utf-8"))
+    # PAS 0: voorlopige besluiten voor zittingen zonder besluitenlijst (zie voorlopige_besluiten).
+    if not meetlat:
+        voorlopige_besluiten(docs, data)
 
     # besluiten per (slug, zitting) → [(genorm.titel, id)]
     idx = defaultdict(list)
