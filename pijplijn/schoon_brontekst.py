@@ -318,8 +318,11 @@ LEDENBLOK = re.compile(
 PERSOON_PAAR = re.compile(
     r"\b[A-ZÀ-Þ][a-zà-ÿ'’\-]{1,}(?:\s+(?:van|de|den|der|het|'t|Van|De|Den|Der|Vande|Vanden))?"
     r"\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,}\b")
-# Woorden die verraden dat het om een orgaan, vakgebied, plaats of datum gaat, niet om een persoon.
-GEEN_PERSOON = re.compile(
+# Woorden die verraden dat het om een orgaan, vakgebied, plaats of datum gaat, niet om een persoon. Deze lijst
+# stopt enkel een reeks naamwoorden na een gemaskeerde naam (_maskeer_paren). Of een naampaar zelf blijft
+# staan, toetst GEEN_PERSOON verderop (die van de waakhond): met "mechelen" of een maandnaam in die toets
+# zou een burger als "Voornaam Van Mechelen" leesbaar blijven.
+GEEN_NAAMREEKS = re.compile(
     r"(?i)\b(?:stad|gemeente|provincie|vlaams|vlaamse|agentschap|departement|dienst|vzw|bv|nv|cvba|"
     r"ocmw|politie|zone|school|hogeschool|academie|universiteit|kabinet|college|raad|bureau|comite|"
     r"comité|commissie|gecoro|fractie|maatschappij|groep|bedrijf|centrum|vereniging|verenigingen|"
@@ -384,21 +387,146 @@ def _publieke_namen():
 
 
 _PUBLIEK = None
+_PUBLIEK_RE = None
+
+
+_TUSSENVOEGSEL = re.compile(r"^(?:van|de|den|der|het|'t|vande|vanden|vander|ter|ten)$", re.I)
+
+
+def _publieke_spans(tekst):
+    """Waar in de tekst een naam van de witte lijst voluit staat, met al haar tussenvoegsels en
+    over een regeleinde heen. Het naampatroon PERSOON_PAAR pakt telkens twee woorden met hooguit
+    één tussenvoegsel, en van "Voornaam Van de Achternaam" of "Voornaam Tweede Achternaam" werd dat
+    "Voornaam Van" en "Voornaam Tweede": die staan niet op de lijst, dus maskeerde de opkuis een
+    raadslid, tot in de stemlijsten (gemeten op 01/10/2026). Zo'n volledige publieke naam blijft dus
+    staan.
+
+    Enkel namen van drie woorden of meer, voluit geschreven: een naam van twee woorden pakt
+    PERSOON_PAAR in één keer en toetst ze exact aan de lijst. Een span van twee woorden (zeker de
+    omgekeerde vorm "Achternaam Voornaam") kan in een lijst toevallig over twee burgers heen lopen.
+    Geen vorm met een initiaal ("V. De Achternaam") en geen losse familienaam, want die zouden een
+    naamgenoot sparen."""
+    global _PUBLIEK, _PUBLIEK_RE
+    if _PUBLIEK is None:
+        _PUBLIEK = _publieke_namen()
+    if _PUBLIEK_RE is None:
+        namen = sorted((n for n in _PUBLIEK if len(n.split()) >= 3 and not re.search(r"(?:^|\s)\S*\.", n)
+                        and not _TUSSENVOEGSEL.match(n.split()[0])), key=len, reverse=True)
+        _PUBLIEK_RE = re.compile(r"(?<![\w'’-])(?:%s)(?![\w'’-])" % "|".join(
+            r"\s+".join(re.escape(d) for d in n.split()) for n in namen)) if namen else False
+    return [m.span() for m in _PUBLIEK_RE.finditer(tekst)] if _PUBLIEK_RE else []
+
+
+def _publiek_vanaf(spans, start, eind):
+    """Begint op 'start' een publieke naam die voluit in de tekst staat en minstens tot 'eind' loopt?
+    Geeft dan het einde van die naam, anders None. Enkel vanaf het begin van de naam: een stuk dat
+    midden in een publieke naam begint, kan in een lijst met de familienaam eerst net de familienaam
+    van iemand anders zijn."""
+    return next((e for s, e in spans if s == start and eind <= e), None)
+
+
+# Een staart met tussenvoegsels die PERSOON_PAAR liet liggen: van "Voornaam Van de Achternaam" pakt het
+# paar "Voornaam Van", en dan bleef "[naam] de Achternaam" leesbaar, ook als zoekterm (gemeten op
+# 01/10/2026 in een ledenlijst van de GECORO). Die staart hoort bij dezelfde persoon en gaat mee.
+_NAAM_STAART = re.compile(r"(?:\s+(?:van|de|den|der|het|'t)){1,2}\s+[A-ZÀ-Þ][a-zà-ÿ'’\-]{2,}\b")
+# Een reeks namen zonder scheidingsteken ("Voornaam Achternaam Voornaam Voornaam Achternaam") werd per paar
+# gemaskeerd, en dan bleef het laatste woord over als het geen paar meer vormde; met de staart erbij of na een
+# publieke naam verschuift die paarvorming nog. Daarom gaan na een gemaskeerde naam ook de volgende naamwoorden
+# op dezelfde regel mee, tot een leesteken, een woord zonder hoofdletter, een publieke naam, een straatnaam of
+# een woord dat een orgaan, plaats of datum noemt (GEEN_NAAMREEKS).
+_NAAM_WOORD = re.compile(r"[^\S\n]+(?:[A-ZÀ-Þ][a-zà-ÿ'’\-]+|van|de|den|der|het|'t)(?![\w'’-])")
+_LOS_TUSSENVOEGSEL = re.compile(r"[^\S\n]+(?:van|de|den|der|het|'t)$")
 
 
 def _maskeer_paren(blok):
-    """Vervangt de persoonsnamen in één ledenblok. Geeft (blok, aantal)."""
+    """Vervangt de persoonsnamen in één ledenblok. Geeft (blok, aantal).
+
+    Twee lezingen, en wat een van beide maskeert, gaat weg. De eerste neemt elk naampaar zoals het
+    patroon het na elkaar vindt (zo werkte de opkuis tot 01/10/2026). De tweede neemt per persoon het
+    paar, een staart met tussenvoegsels en de naamwoorden die erop volgen. Elk van beide alleen laat in
+    een lijst soms een stuk naam staan waar de paarvorming verschuift (een regeleinde, een woord als
+    "Bestuur" tussen twee namen); samen niet, en de nieuwe lezing toont nooit iets dat de oude
+    maskeerde. Daarna komt enkel een volledige publieke naam van drie woorden of meer terug."""
     global _PUBLIEK
     if _PUBLIEK is None:
         _PUBLIEK = _publieke_namen()
-    uit, laatst, aantal = [], 0, 0
-    for m in PERSOON_PAAR.finditer(blok):
-        naam = m.group(0)
-        # Witruimte gelijktrekken: in de pdf breekt een naam soms over twee regels ("Kristof
-        # Calvo"), en dan vond de witte lijst de mandataris niet en maskeerde de code hem.
-        if " ".join(naam.split()) in _PUBLIEK or GEEN_PERSOON.search(naam):
+    spans = _publieke_spans(blok)
+
+    def privaat(m):
+        # Witruimte gelijktrekken: in de pdf breekt een naam soms over twee regels ("Voornaam
+        # Achternaam"), en dan vond de witte lijst de mandataris niet en maskeerde de code hem.
+        return not (" ".join(m.group(0).split()) in _PUBLIEK or GEEN_PERSOON.search(m.group(0)))
+
+    def publiek_paar(i):
+        p = PERSOON_PAAR.match(blok, i)
+        return p is not None and not privaat(p)
+
+    def geen_naam(stuk):
+        return (GEEN_PERSOON.search(stuk) or GEEN_NAAMREEKS.search(stuk)
+                or any(STRAATNAAM.search(w) for w in re.findall(r"[\w'’-]+", stuk)))
+
+    stukken = [m.span() for m in PERSOON_PAAR.finditer(blok) if privaat(m)]
+    # De naamwoorden na een naam gaan enkel mee in de ledentabel zelf: daar staan namen zonder
+    # scheidingsteken na elkaar. Daarbuiten (een reglement, een adressenlijst) nam die reeks gewone
+    # woorden mee, zoals "Bestuur" na "Decreet Lokaal".
+    tabellen = [t.span() for t in LEDENBLOK.finditer(blok)]
+    pos = 0
+    while (m := PERSOON_PAAR.search(blok, pos)):
+        # Een volledige publieke naam blijft heel staan, en het zoeken gaat verder na die naam: zo
+        # vormt haar staart geen paar met het woord dat erop volgt.
+        einde_publiek = _publiek_vanaf(spans, m.start(), m.end())
+        if einde_publiek:
+            pos = einde_publiek
             continue
-        uit.append(blok[laatst:m.start()]); uit.append(NAAM_MASKER); laatst = m.end(); aantal += 1
+        # Een paar dat een orgaan, plaats, datum of straat noemt, laat deze lezing aan de eerste.
+        if not privaat(m) or geen_naam(m.group(0)):
+            pos = m.end()
+            continue
+        eind = m.end()
+        staart = _NAAM_STAART.match(blok, eind)
+        if staart and not geen_naam(staart.group(0)):
+            eind = staart.end()
+        naam_eind = eind
+        in_tabel = any(s <= m.start() < e for s, e in tabellen)
+        while in_tabel and (w := _NAAM_WOORD.match(blok, eind)):
+            woord = w.group(0).strip()
+            woord_start = w.end() - len(woord)
+            if geen_naam(woord) or any(s == woord_start for s, _ in spans) or publiek_paar(woord_start):
+                break
+            eind = w.end()
+        # een los tussenvoegsel achteraan hoort bij wat volgt, niet bij deze namen
+        while (los := _LOS_TUSSENVOEGSEL.search(blok, naam_eind, eind)):
+            eind = los.start()
+        stukken.append((m.start(), eind))
+        pos = eind
+
+    # Samenvoegen, de volledige publieke namen eruit, en witruimte aan de randen terug.
+    stukken.sort()
+    samen = []
+    for s, e in stukken:
+        if samen and s <= samen[-1][1]:
+            samen[-1][1] = max(samen[-1][1], e)
+        else:
+            samen.append([s, e])
+    maskers = []
+    for s, e in samen:
+        for ps, pe in spans:
+            if pe <= s or ps >= e:
+                continue
+            if ps > s:
+                maskers.append((s, ps))
+            s = max(s, pe)
+        if s < e:
+            maskers.append((s, e))
+    uit, laatst, aantal = [], 0, 0
+    for s, e in maskers:
+        while s < e and blok[s].isspace():
+            s += 1
+        while e > s and blok[e - 1].isspace():
+            e -= 1
+        if not re.search(r"\w", blok[s:e]):
+            continue
+        uit.append(blok[laatst:s]); uit.append(NAAM_MASKER); laatst = e; aantal += 1
     uit.append(blok[laatst:])
     return "".join(uit), aantal
 
@@ -427,27 +555,37 @@ def maskeer_ledenlijst(tekst):
         tekst, aantal = _maskeer_paren(tekst)
     # subn() telt élke treffer, ook wanneer we de tekst bewust ongemoeid laten (een organisatienaam
     # naast een rol). Zelf tellen dus, anders meldt de klep in build.py een lek dat er niet is.
-    geteld = [0]
+    # Elke regel krijgt de publieke namen van de tekst zoals die er op dat moment uitziet: een
+    # vorige regel kan er al een masker in gezet hebben, en dan schuiven de posities op.
+    geteld, spans = [0], []
+
+    def _publiek(m, groep):
+        return (" ".join(m.group(groep).split()) in (_PUBLIEK or set()) or GEEN_PERSOON.search(m.group(groep))
+                or _publiek_vanaf(spans, m.start(groep), m.end(groep)) is not None)
 
     def _rol(m):
-        naam = m.group(2)
-        if " ".join(naam.split()) in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
+        if _publiek(m, 2):
             return m.group(0)
         geteld[0] += 1
         return m.group(1) + NAAM_MASKER
-    tekst = ONDERSTEUNENDE_ROL.sub(_rol, tekst)
-    tekst = ROL_AANSPREKING_NAAM.sub(_rol, tekst)
-    tekst = ROL_AANSPREKING_ACHTERNAAM.sub(_rol, tekst)
 
     def _naam_voor_rol(m):
-        naam = m.group(1)
-        if " ".join(naam.split()) in (_PUBLIEK or set()) or GEEN_PERSOON.search(naam):
+        if _publiek(m, 1):
             return m.group(0)
         geteld[0] += 1
         return NAAM_MASKER + m.group(2)
-    tekst = NAAM_IS_ROL.sub(_naam_voor_rol, tekst)
+
+    def _pas_toe(regel, functie, tekst):
+        if not regel.search(tekst):        # niets te toetsen: de publieke namen niet opzoeken
+            return tekst
+        spans[:] = _publieke_spans(tekst)
+        return regel.sub(functie, tekst)
+    tekst = _pas_toe(ONDERSTEUNENDE_ROL, _rol, tekst)
+    tekst = _pas_toe(ROL_AANSPREKING_NAAM, _rol, tekst)
+    tekst = _pas_toe(ROL_AANSPREKING_ACHTERNAAM, _rol, tekst)
+    tekst = _pas_toe(NAAM_IS_ROL, _naam_voor_rol, tekst)
     if PRIVAAT_CONTEXT.search(tekst):
-        tekst = PARTIJ_NAAM.sub(_rol, tekst)
+        tekst = _pas_toe(PARTIJ_NAAM, _rol, tekst)
     return tekst, aantal + geteld[0]
 
 
