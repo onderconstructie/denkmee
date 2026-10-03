@@ -20,9 +20,19 @@ corpus echt voorkomen (nu enkele honderden van de ruim twaalfduizend). De volled
 blijft lokaal in de cache. Zo publiceren we geen kopie van het document, enkel de lijnen
 waar een concreet besluit naar verwijst.
 
-Nieuwste plan wint: de stukken staan op de pagina van nieuw naar oud, en die volgorde
-volgen we. Een code die in het meerjarenplan 2026-2031 staat, krijgt dus dat bedrag, niet
-het bedrag uit een aanpassing van het vorige plan.
+Welk plan hoort bij welk besluit (sinds 03/10/2026). Een code kan in twee plannen staan, met een
+andere actie en andere bedragen: MJP004084 is in het plan 2020-2025 "Mechelen zorgt voor een
+efficiënte brandweer- en politiezone", in het plan 2026-2031 een actie over integraal
+veiligheidsbeleid. Tot 03/10/2026 won altijd het nieuwste plan, ook voor een besluit uit 2025:
+112 koppelingen kregen zo de actie en het bedrag uit een plan dat toen nog niet gold (gevonden
+door de sessie van Aalst.ontcijferd.be). Nu houdt elke code al haar versies bij ('versies', per
+bron), en kiest 'per_punt' voor elk besluit het plan dat gold op de dag van dat besluit. Een plan
+geldt vanaf de dag dat de gemeenteraad het vaststelde, uit de data zelf gehaald ("Vaststelling
+meerjarenplan 2026-2031 - deel Stad", 16/12/2025): zo hoort een besluit van die raad bij het nieuwe
+plan, een besluit van november 2025 bij het oude. Staat de code niet in het plan dat toen gold, dan
+neemt per_punt het andere plan en zet het besluit in 'per_punt_ander_plan', zodat een lezer dat ziet.
+De velden bovenaan een actie (doelstelling, actie, bedragen, ...) blijven die van het nieuwste plan,
+zodat bestaande lezers van dit bestand niet breken; wie per besluit wil tonen, leest per_punt.
 
 Uitvoer: mjp_acties.json          (klein, wordt meegecommit)
          data/mjp_cache/*.json    (volledige tabel per document, git-genegeerd)
@@ -201,6 +211,38 @@ def kandidaten(diep: bool) -> list[dict]:
     return kort
 
 
+def plan_geldig_vanaf(bronnen) -> list[str]:
+    """Per bron de dag vanaf wanneer dat plan geldt: de dag dat de gemeenteraad het vaststelde
+    ("Vaststelling meerjarenplan 2026-2031 - deel Stad"), uit data.json. Staat die er niet in
+    (een plan van vóór het corpus), dan 1 januari van het eerste planjaar."""
+    data = json.loads((BASE / "data.json").read_text(encoding="utf-8-sig"))
+    uit = []
+    for b in bronnen:
+        jaren = b.get("jaren") or []
+        start, eind = (jaren[0], jaren[-1]) if jaren else (None, None)
+        dag = f"{start}-01-01" if start else "0000-01-01"
+        if start:
+            patroon = re.compile(r"^\s*(?:vaststelling|goedkeuring)\s+(?:van\s+het\s+)?meerjarenplan\s+%s\W%s\b" % (start, eind), re.I)
+            dagen = sorted(a["sessie_date"] for a in data.get("agendapunten", [])
+                           if str(a.get("sessie_id", "")).startswith("gemeenteraad") and patroon.match(a.get("titel") or ""))
+            if dagen:
+                dag = dagen[0]
+        uit.append(dag)
+    return uit
+
+
+def plan_op(dag: str, geldig: list[str]) -> int:
+    """Index van het plan dat gold op 'dag': het jongste plan dat al vastgesteld was."""
+    kandidaten = [i for i, vanaf in enumerate(geldig) if dag and dag >= vanaf]
+    return max(kandidaten, key=lambda i: geldig[i]) if kandidaten else min(range(len(geldig)), key=lambda i: geldig[i])
+
+
+def punt_datums() -> dict:
+    data = json.loads((BASE / "data.json").read_text(encoding="utf-8-sig"))
+    return {x["id"]: (x.get("sessie_date") or x.get("date") or "")
+            for k in ("agendapunten", "college_beslissingen", "schriftelijke_vragen") for x in data.get(k, [])}
+
+
 def corpus_codes() -> dict:
     """MJP-code -> lijst van punt-id's die ernaar verwijzen (via delf_verwijzingen, zodat
     beide stappen exact dezelfde oogst gebruiken en de caches gedeeld blijven)."""
@@ -225,7 +267,7 @@ def main():
         print("  (geen budgetstukken gevonden — draai eerst fetch_budgetten.py)")
         return
 
-    bronnen, alles = [], {}
+    bronnen, alles, per_bron = [], {}, []
     for d in docs:
         pdf = BUDGET / d["bestand"]
         if not pdf.exists():
@@ -237,6 +279,7 @@ def main():
         bron = len(bronnen)
         bronnen.append({"entiteit": d["entiteit"], "set": d["set"], "titel": d["titel"],
                         "url": d["url"], "jaren": gelezen["jaren"]})
+        per_bron.append(gelezen["lijnen"])
         nieuw = 0
         for code, lijn in gelezen["lijnen"].items():
             if code not in alles:          # nieuwste plan wint (paginavolgorde)
@@ -252,7 +295,23 @@ def main():
         return
 
     gebruikt = corpus_codes()
-    acties = {c: {**alles[c], "punten": ids} for c, ids in sorted(gebruikt.items()) if c in alles}
+    geldig = plan_geldig_vanaf(bronnen)
+    datum = punt_datums()
+    acties = {}
+    ander_plan = 0
+    for c, ids in sorted(gebruikt.items()):
+        if c not in alles:
+            continue
+        versies = {str(b): lijnen[c] for b, lijnen in enumerate(per_bron) if c in lijnen}
+        per_punt, anders = {}, []
+        for pid in ids:
+            b = plan_op(datum.get(pid, ""), geldig)
+            if str(b) not in versies:                       # code staat niet in het plan dat toen gold
+                b = int(next(iter(versies))); anders.append(pid)
+            per_punt[pid] = b
+        ander_plan += len(anders)
+        acties[c] = {**alles[c], "punten": ids, "versies": versies, "per_punt": per_punt,
+                     **({"per_punt_ander_plan": anders} if anders else {})}
     UIT.write_text(json.dumps({"gen": "", "bronnen": bronnen, "acties": acties},
                               ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
@@ -261,6 +320,9 @@ def main():
     print(f"MJP-acties gekoppeld: {len(acties)} van de {len(gebruikt)} codes in het corpus "
           f"({zonder} niet teruggevonden) uit {len(alles):,} begrotingslijnen "
           f"-> mjp_acties.json ({kb:,.0f} kB)")
+    print("  plan per besluit: " + "; ".join(f"{b['set'] or b['entiteit']} geldt vanaf {geldig[i]}"
+                                            for i, b in enumerate(bronnen))
+          + f" | {ander_plan} koppeling(en) uit een plan dat op die dag nog niet of niet meer gold")
 
 
 if __name__ == "__main__":
