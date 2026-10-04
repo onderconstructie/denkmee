@@ -20,12 +20,12 @@ corpus echt voorkomen (nu enkele honderden van de ruim twaalfduizend). De volled
 blijft lokaal in de cache. Zo publiceren we geen kopie van het document, enkel de lijnen
 waar een concreet besluit naar verwijst.
 
-Welk plan hoort bij welk besluit (sinds 03/10/2026). Een code kan in twee plannen staan, met een
+Welk plan hoort bij welk besluit. Een code kan in twee plannen staan, met een
 andere actie en andere bedragen: MJP004084 is in het plan 2020-2025 "Mechelen zorgt voor een
 efficiënte brandweer- en politiezone", in het plan 2026-2031 een actie over integraal
-veiligheidsbeleid. Tot 03/10/2026 won altijd het nieuwste plan, ook voor een besluit uit 2025:
-112 koppelingen kregen zo de actie en het bedrag uit een plan dat toen nog niet gold (gevonden
-door de sessie van Aalst.ontcijferd.be). Nu houdt elke code al haar versies bij ('versies', per
+veiligheidsbeleid. Een besluit hoort dus bij het plan dat gold op zijn datum, niet bij het
+nieuwste plan: anders krijgt een besluit uit 2025 de actie en het bedrag uit een plan dat toen
+nog niet bestond. Daarom houdt elke code al haar versies bij ('versies', per
 bron), en kiest 'per_punt' voor elk besluit het plan dat gold op de dag van dat besluit. Een plan
 geldt vanaf de dag dat de gemeenteraad het vaststelde, uit de data zelf gehaald ("Vaststelling
 meerjarenplan 2026-2031 - deel Stad", 16/12/2025): zo hoort een besluit van die raad bij het nieuwe
