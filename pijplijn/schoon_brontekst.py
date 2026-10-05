@@ -258,9 +258,10 @@ PRIVE_ACHTERNAAM = _ACHTERNAAM_UIT_BESTAND
 
 # Achternaam met het beroep ervoor. Die combinatie is wél eenduidig, ook zonder voornaam:
 # "het opmetingsplan van landmeter <achternaam>", "akkoord met aangepast plan landmeter <achternaam>".
+# Hoofdletterongevoelig: aan het begin van een zin staat "Landmeter <achternaam>", en die vorm glipte erdoor.
 BEROEP_NAAM = re.compile(
     r"\b(landmeter(?:-expert)?)\s+(?:%s)\b"
-    % "|".join(re.escape(n) for n in _BEROEP_UIT_BESTAND)) if _BEROEP_UIT_BESTAND else None
+    % "|".join(re.escape(n) for n in _BEROEP_UIT_BESTAND), re.I) if _BEROEP_UIT_BESTAND else None
 # Velden die op de site terechtkomen (zoekindex of zichtbaar): brontekst wordt doorzocht;
 # vraag/antwoord staan in de dossier-uitklap; decoded is de samenvatting; titel de kop.
 VELDEN = ("brontekst", "decoded", "vraag", "antwoord", "titel")
