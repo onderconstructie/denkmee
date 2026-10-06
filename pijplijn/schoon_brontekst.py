@@ -201,6 +201,51 @@ PRIVE_ACHTERNAAM = _ACHTERNAAM_UIT_BESTAND
 BEROEP_NAAM = re.compile(
     r"\b(landmeter(?:-expert)?)\s+(?:%s)\b"
     % "|".join(re.escape(n) for n in _BEROEP_UIT_BESTAND), re.I) if _BEROEP_UIT_BESTAND else None
+
+# Advocaten en landmeters, ook zonder lijst (sinds 06/10/2026). Wie als advocaat of landmeter in een
+# stuk optreedt ("meester Voornaam Achternaam, voor X Advocaten, heeft bezwaar ingediend", "het plan
+# van landmeter-expert Voornaam Achternaam"), staat er niet als bestuurder maar als burger in een
+# beroep: de naam gaat weg. Het kantoor of de vennootschap blijft (X Advocaten, Terra Metris), en een
+# mandataris blijft altijd staan, ook wie zelf advocaat is. Notarissen en architecten vallen erbuiten.
+# "advocaten" telt bewust niet als aanhef: daarna volgt een kantoornaam of een stad, geen persoon. "Me"
+# evenmin: dat is ook het woord "me". Een "landmeter-expert" breekt in een pdf soms over twee regels.
+_BEROEP_AANHEF = (r"(?:(?i:landmeter(?:[-\s]*expert)?|landmeterskantoor|landmetersbureau|landmetingsbureau|"
+                  r"advocaat|advocate|meester|mr\.|raadsman|raadsvrouw)|Mr\b|Adv\.)")
+# Tussen aanhef en naam mag een aanspreking, een dubbelpunt of een haakje staan.
+_BEROEP_TUSSEN = r"[^\S\n]*[:(]?[^\S\n]*\n?[^\S\n]*(?:(?i:de\s+heer|mevrouw|mevr\.|dhr\.)\s+)?"
+# Een naamdeel: een woord met een hoofdletter (ook dubbel, over een afbreekstreepje heen, of met een
+# apostrof zoals D'Achternaam), een tussenvoegsel als "Van de", initialen ("J." of "J.P.") of een
+# familienaam in hoofdletters. Een woord zonder hoofdletter of een leesteken sluit de naam af.
+_BEROEP_DEEL = (r"(?:(?:Van|Op|Ten|Ter)\s+(?:de|den|der|het)(?![\w'’-])"
+                r"|[A-ZÀ-Þ]\.(?:\s?-?\s?[A-ZÀ-Þ]\.)*"
+                r"|[A-ZÀ-Þ](?:['’][A-ZÀ-Þ])?[a-zà-ÿ'’]+(?:-\s*[A-ZÀ-Þ][a-zà-ÿ'’]+)?"
+                r"|[A-ZÀ-Þ]['’]?[A-ZÀ-Þ]{2,}(?:-[A-ZÀ-Þ]{2,})?)")
+BEROEP_PERSOON = re.compile(r"(\b" + _BEROEP_AANHEF + _BEROEP_TUSSEN + r")("
+                            + _BEROEP_DEEL + r"(?:\s+" + _BEROEP_DEEL + r"){0,3})(?![\w'’-])")
+# Dezelfde personen met de naam vóór het beroep, in één regel en met een komma: "opgemaakt door
+# Voornaam Achternaam, beëdigd landmeter-expert", "Voornaam Achternaam, advocaat". Minstens twee
+# naamdelen, want één woord voor een komma is te vaak iets anders.
+BEROEP_PERSOON_VOOR = re.compile(
+    r"(?<![\w'’-])(" + _BEROEP_DEEL + r"(?:[^\S\n]+" + _BEROEP_DEEL + r"){1,3}),[^\S\n]+"
+    r"((?i:(?:beëdigde?[^\S\n]+)?(?:landmeter(?:[-\s]*expert)?|advocaat|advocate))\b)")
+# Bureaus en vennootschappen die na zo'n aanhef staan en geen persoon zijn.
+BEROEP_FIRMA = re.compile(r"^(?:terr?a metris|orison|topo)\b")
+# Een bedrijfsvorm vlak na de naam ("landmeter Kantoornaam bv"): dan is het een vennootschap.
+_NA_FIRMA = re.compile(r"[^\S\n]*(?:NV|BV|BVBA|CVBA|CV|VZW|VOF|SRL|SA|VVZRL|Comm\.?\s?V)\b", re.I)
+_FIRMAVORM = re.compile(r"(?:NV|BV|BVBA|CVBA|CV|VZW|VOF|SRL|SA|VVZRL)")
+# Na "meester" of "advocaat" volgt soms een gewoon woord ("Meester In de rechten"), en na een naam
+# aan het eind van een regel soms de kop van wat volgt ("landmeter Voornaam Achternaam" en dan
+# "Besluit" op de volgende regel). In een kandidatenlijst staat het beroep in de laatste kolom, en dan
+# begint de volgende regel met "Effectief" of "Opvolger". Zo'n woord is geen naamdeel.
+_GEEN_NAAMWOORD = {"In", "Het", "Een", "En", "Als", "Bij", "Voor", "Met", "Uit", "Aan", "Te", "Of", "Die", "Dat",
+                   "Dit", "Deze", "Er", "Zij", "Hij", "Wij", "We", "Besluit", "Artikel", "Motivering", "Feiten",
+                   "Context", "Argumentatie", "Gelet", "Overwegende", "Bijlage", "Bijlagen", "Advies", "Adviezen",
+                   "Juridische", "Financiële", "Stemming", "Publieke", "Openbare", "Besloten", "Effectief",
+                   "Opvolger", "Plaatsvervanger", "Plaatsvervangend", "Kandidaat", "Lid", "Voorzitter",
+                   "Secretaris", "Schepen", "Burgemeester", "Raadslid", "Ambtenaar", "Gepensioneerd", "Naam",
+                   "Ook", "Hierbij", "Zie", "Wordt", "Werd", "Stelt", "Heeft", "Is", "Zal", "Kan", "Moet",
+                   "Volgens", "Vervolgens", "Studiebureau", "Opmeting", "Opmetingsplan", "Vastgoedmanagement",
+                   "Landmeter", "Advocaat", "Notaris", "Architect"}
 # Velden die op de site terechtkomen (zoekindex of zichtbaar): brontekst wordt doorzocht;
 # vraag/antwoord staan in de dossier-uitklap; decoded is de samenvatting; titel de kop.
 VELDEN = ("brontekst", "decoded", "vraag", "antwoord", "titel")
@@ -531,6 +576,104 @@ def maskeer_ledenlijst(tekst):
     return tekst, aantal + geteld[0]
 
 
+def _publieke_familienamen():
+    """Familienamen van de mandatarissen, uit bronnen die de naam in de gewone volgorde schrijven
+    (Voornaam Achternaam): de raadsleden en het college. Niet uit _publieke_namen(), want die voegt ook de
+    omgekeerde vorm toe, en dan stonden er vooral voornamen in deze lijst (gemeten op 06/10/2026: 214 van
+    de 245), waardoor "meester Voornaam" bleef staan."""
+    namen = set()
+    try:
+        ruw = json.loads((BASE / "data" / "raadsleden.json").read_text(encoding="utf-8"))
+        if isinstance(ruw, dict):
+            namen |= {k.strip() for k in ruw}
+    except Exception:
+        pass
+    try:
+        d = json.loads(DATA.read_text(encoding="utf-8"))
+        namen |= {lid["name"].strip() for lid in d.get("college", []) if isinstance(lid, dict) and lid.get("name")}
+    except Exception:
+        pass
+    return {" ".join(n.split()[1:]) for n in namen if len(n.split()) >= 2}
+
+
+_FAMILIENAMEN = None
+
+
+def maskeer_beroep_persoon(tekst):
+    """Maskeert de persoonsnaam bij een beroep als advocaat, meester, raadsman of landmeter(-expert),
+    na de aanhef (BEROEP_PERSOON) of ervoor met een komma (BEROEP_PERSOON_VOOR). Geeft (nieuwe tekst,
+    aantal).
+
+    De naam stopt bij het eerste woord dat een orgaan, plaats, datum of bedrijfsvorm noemt; staat er een
+    straatnaam in ("Meester Voornaam Achternaamstraat"), dan is het een adres en blijft alles staan. Een
+    kantoor of vennootschap (BEROEP_FIRMA, of een bedrijfsvorm vlak na de naam) en een mandataris (de
+    witte lijst, ook op familienaam) blijven staan."""
+    if not tekst or not (BEROEP_PERSOON.search(tekst) or BEROEP_PERSOON_VOOR.search(tekst)):
+        return tekst, 0
+    global _PUBLIEK, _FAMILIENAMEN
+    if _PUBLIEK is None:
+        _PUBLIEK = _publieke_namen()
+    if _FAMILIENAMEN is None:
+        _FAMILIENAMEN = _publieke_familienamen()
+    geteld = [0]
+
+    def _geen_naamdeel(woord):
+        return (GEEN_PERSOON.search(woord) or GEEN_NAAMREEKS.search(woord) or woord in _GEEN_NAAMWOORD
+                or _FIRMAVORM.fullmatch(woord))
+
+    def _publiek(kern):
+        return kern in _PUBLIEK or kern in _FAMILIENAMEN
+
+    def _vervang(m):
+        naam = m.group(2)
+        woorden = list(re.finditer(r"\S+", naam))
+        if any(STRAATNAAM.search(w.group(0)) for w in woorden):
+            return m.group(0)
+        behouden = []
+        for w in woorden:
+            if _geen_naamdeel(w.group(0)):
+                break
+            behouden.append(w)
+        # een los tussenvoegsel achteraan hoort bij wat volgt, niet bij de naam
+        while behouden and _TUSSENVOEGSEL.match(behouden[-1].group(0)):
+            behouden.pop()
+        if not behouden:
+            return m.group(0)
+        eind = behouden[-1].end()
+        kern = " ".join(naam[:eind].split())
+        if BEROEP_FIRMA.match(re.sub(r"[\s\-]+", " ", kern.lower())):
+            return m.group(0)
+        if _NA_FIRMA.match(m.string, m.start(2) + eind):
+            return m.group(0)
+        if _publiek(kern):
+            return m.group(0)
+        geteld[0] += 1
+        return m.group(1) + NAAM_MASKER + naam[eind:]
+
+    def _vervang_voor(m):
+        naam = m.group(1)
+        woorden = list(re.finditer(r"\S+", naam))
+        if any(STRAATNAAM.search(w.group(0)) for w in woorden):
+            return m.group(0)
+        # van achteren naar voren: de naam staat vlak voor de komma, wat ervoor staat kan een zinsbegin zijn
+        behouden = []
+        for w in reversed(woorden):
+            if _geen_naamdeel(w.group(0)):
+                break
+            behouden.insert(0, w)
+        if len(behouden) < 2 or _TUSSENVOEGSEL.match(behouden[0].group(0)) and len(behouden) < 3:
+            return m.group(0)
+        begin = behouden[0].start()
+        kern = " ".join(naam[begin:].split())
+        if BEROEP_FIRMA.match(re.sub(r"[\s\-]+", " ", kern.lower())) or _publiek(kern):
+            return m.group(0)
+        geteld[0] += 1
+        return naam[:begin] + NAAM_MASKER + m.group(0)[len(naam):]
+    tekst = BEROEP_PERSOON.sub(_vervang, tekst)
+    tekst = BEROEP_PERSOON_VOOR.sub(_vervang_voor, tekst)
+    return tekst, geteld[0]
+
+
 def maskeer_namen(tekst, met_achternamen=None):
     """Maskeert de gecureerde namen in één tekst. Geeft (nieuwe tekst, aantal) terug.
 
@@ -567,6 +710,8 @@ def maskeer_namen(tekst, met_achternamen=None):
         tekst, n = re.subn(r"\b%s\b" % patroon, NAAM_MASKER, tekst)
         aantal += n
     tekst, n = BEROEP_NAAM.subn(r"\1 " + NAAM_MASKER, tekst) if BEROEP_NAAM else (tekst, 0)
+    tekst, beroep = maskeer_beroep_persoon(tekst)
+    n += beroep
     tekst, leden = maskeer_ledenlijst(tekst)
     # Een naamdeel tussen haakjes vlak achter een masker ("[naam](jamin)", een voornaam die de bron
     # zo schrijft) is een rest van dezelfde naam, en anders een zoekterm.
@@ -603,6 +748,10 @@ ROLZINNEN = [re.compile(p) for p in (
     rf"(?i:(?:aanvraag\s+)?(?:ingediend|aangevraagd|ingevuld|opgemaakt)\s+door)\s+(?:{_AANHEF})?({_NAAM})",
     rf"(?i:(?:eigendom|eigenaar|eigenaars)\s+(?:van\s+)?)(?:{_AANHEF})?({_NAAM})",
     rf"(?i:(?:verkocht|verkoop|verhuurd|toegewezen|overgedragen)\s+aan)\s+(?:{_AANHEF})?({_NAAM})",
+    # Een overheidsopdracht voor een eenmanszaak of zelfstandige: die persoon blijft gemaskeerd, de
+    # naam van een vennootschap niet (06/10/2026). Op 06/10 stond er geen enkele zo'n gunning in de data.
+    # Ook met een datum of een omschrijving ertussen: "gunde de ontwerpopdracht op 26 september 2022 aan".
+    rf"(?i:(?:gegund|gunnen|gunt|gunde)\b[^.\n]{{0,70}}?\baan)\s+(?:{_AANHEF})?({_NAAM})",
     rf"(?i:(?:koper|kopers|huurder|huurders|pachter|erfpachtnemer)\s*(?:is|zijn|:)?)\s+(?:{_AANHEF})?({_NAAM})",
     rf"({_NAAM}),?\s+(?i:(?:wonend|woonachtig))",
     rf"(?i:bezwaar\s+(?:van|door|ingediend\s+door))\s+(?:{_AANHEF})?({_NAAM})",
