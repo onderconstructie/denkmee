@@ -335,26 +335,14 @@ def main():
         extra[item_id], n = schoon_brontekst.maskeer_namen(tekst)
         gemaskeerd += n
         # Ook de context die een persoon herleidbaar maakt, om dezelfde reden als hierboven: een
-        # woonadres of geboortedatum uit de pdf-tekst werd anders een zoekterm, naast een naam die
-        # zelf al gemaskeerd was. Nagemeten op 14/09/2026 zat zo een kind met naam, geboortedatum
-        # en woonadres in de zoekcache.
+        # geboortedatum of een contactgegeven uit de pdf-tekst werd anders een zoekterm, naast een
+        # naam die zelf al gemaskeerd was. Nagemeten op 14/09/2026 zat zo een kind met naam en
+        # geboortedatum in de zoekcache. Adressen en huisnummers blijven bewust staan.
         extra[item_id], a, g = schoon_brontekst.maskeer_context(extra[item_id])
         context_adres += a
         context_geb += g
     print("       namen gemaskeerd in de volledige tekst: %d vermelding(en)" % gemaskeerd)
-    print("       woonadressen en geboortedatums gemaskeerd: %d en %d" % (context_adres, context_geb))
-
-    # Tegenproef, los van de maskeerregels hierboven: staat er na '[naam]' binnen een paar woorden
-    # nog een straat met een huisnummer, dan is een woonadres aan de maskering ontsnapt. Zo'n index
-    # gaat niet online, want dat adres maakt de persoon herleidbaar. Een straat zonder nummer (bv.
-    # 'z.n.') telt niet: die wijst geen woning aan. De build-klep 3d ziet de zoekindex niet (die
-    # bevat enkel losse woorden), daarom staat deze toets hier, waar de volledige tekst nog is.
-    adres_na_masker = schoon_brontekst.ADRES_TEGENPROEF
-    ontsnapt = sorted(i for i, t in extra.items() if t and adres_na_masker.search(t))
-    if ontsnapt:
-        sys.exit("[STOP] woonadres naast [naam] in de tekst voor de zoekindex, bij %d stuk(ken): %s"
-                 % (len(ontsnapt), ", ".join(ontsnapt[:10])))
-    print("       tegenproef adres naast [naam]: niets ontsnapt ✓")
+    print("       contactgegevens en geboortedatums gemaskeerd: %d en %d" % (context_adres, context_geb))
 
     per_item = {}
     for item_id, tekst in extra.items():

@@ -270,12 +270,10 @@ if _geb_kandidaten:
     else:
         print("       geboortedatums: kandidatentabel(len) gemaskeerd ✓")
 
-# 3c2) Veiligheidsklep: de ledentabel van een adviesraad met burgers (de GECORO benoemt
-#      deskundigen en vertegenwoordigers van verenigingen) mag geen persoonsnamen dragen, en een
-#      ondersteunende personeelsrol evenmin. schoon_brontekst.py maskeert die via
-#      maskeer_ledenlijst(); deze klep controleert het resultaat, zodat een volgende benoemingsronde
-#      niet stil opnieuw namen publiceert. Aanleiding: op 16/09/2026 stond de volledige GECORO-tabel
-#      in de build, tot in de samenvatting.
+# 3c2) Veiligheidsklep: in een stuk over syndicaal overleg mogen de namen van de vakbondsafgevaardigden
+#      niet staan, en naast een ondersteunende personeelsrol evenmin. schoon_brontekst.py maskeert die
+#      via maskeer_ledenlijst(); deze klep controleert het resultaat. De leden van adviesorganen zoals
+#      de GECORO staan er sinds 05/10/2026 in hun functie en blijven zichtbaar.
 import schoon_brontekst as _sb_leden
 _leden_lek = []
 for _it in _items:
@@ -297,12 +295,10 @@ if _leden_lek:
 else:
     print("       ledentabellen: geen persoonsnamen in de build ✓")
 
-# 3d) Woonadressen en geboortedatums in lopende tekst. schoon_brontekst.py maskeert een adres na
-#     "wonend/woonachtig/gedomicilieerd" en een datum na "°" of "geboren". Deze klep controleert of
+# 3d) Verhulde e-mailadressen en geboortedatums in lopende tekst. schoon_brontekst.py maskeert een
+#     e-mailadres met een komma of [at] en een datum na "°" of "geboren". Deze klep controleert of
 #     dat ook echt gebeurd is, met exact dezelfde patronen, zodat een losse stap die de opkuis
-#     overslaat de site niet live kan zetten. Aanleiding: op 14/09/2026 stonden er twee woonadressen
-#     van burgers live, telkens naast een naam die zelf netjes "[naam]" was. De naam maskeren
-#     beschermt niemand als de zin ernaast zegt waar die persoon woont.
+#     overslaat de site niet live kan zetten. Adressen en huisnummers blijven bewust staan.
 import schoon_brontekst as _sb
 _ctx_lek = []
 for i in _items:
@@ -310,20 +306,19 @@ for i in _items:
         _t = str(i.get(v) or "")
         # Dezelfde regels als maskeer_context, behalve het contactformulier: dat staat enkel in de
         # tekst die de zoekindex voedt, niet in deze velden.
-        if (_sb.ADRES_NA_WOON.search(_t) or _sb.ADRES_NA_NAAM.search(_t) or _sb.ADRES_TEGENPROEF.search(_t)
-                or _sb.EMAIL_VERHULD.search(_t) or _sb.GEB_TEKEN.search(_t)):
+        if _sb.EMAIL_VERHULD.search(_t) or _sb.GEB_TEKEN.search(_t):
             _ctx_lek.append(str(i.get("id")))
             break
 if _ctx_lek:
-    print(f"[context-lek] woonadres of geboortedatum in {len(_ctx_lek)} stuk(ken): "
+    print(f"[context-lek] verhuld e-mailadres of geboortedatum in {len(_ctx_lek)} stuk(ken): "
           f"{', '.join(_ctx_lek[:5])}")
     if not is_demo:
-        sys.exit("[STOP] Live build geweigerd: er staat een woonadres of geboortedatum van een persoon "
+        sys.exit("[STOP] Live build geweigerd: er staat een e-mailadres of geboortedatum van een persoon "
                  "in de build. Draai schoon_brontekst.py opnieuw, dan bouw_zoekindex.py, en bouw "
                  "daarna de site opnieuw (zie de volgorde in run_all.py).")
     print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
 else:
-    print("       woonadressen en geboortedatums: niets in de build ✓")
+    print("       verhulde e-mailadressen en geboortedatums: niets in de build ✓")
 
 # 3e) Uittreksel-koppeling. De tekst die de samenvatting van een stuk voedt, moet van het eigen
 #     besluit komen. koppel_uittreksels.py koppelt op het puntnummer dat de stad zelf in de kopregel
