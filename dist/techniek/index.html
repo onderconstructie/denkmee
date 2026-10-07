@@ -3455,6 +3455,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dos-meta .dos-kraal{ position:static; transform:none; flex:none; box-shadow:none; }
 .dos-via{ color:var(--app-text); }
 .dos-besloten{ color:var(--ink-2); }
+.dos-terug{ color:var(--ink-2); font-style:normal; letter-spacing:.02em; }
 .dos-meta > .dos-besloten{ gap:5px; }
 .dos-besloten svg{ width:11px; height:11px; flex:none; }
 /* Enkel voor schermlezers: "raakt je profiel" vóór "via Mobiliteit". */
@@ -4642,31 +4643,28 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
             haalt er de kernwoorden uit. Voor de meeste punten van de gemeenteraad en de raad voor
             maatschappelijk welzijn is dat de tekst van het punt zelf. Van de meeste besluiten van het
             college, het vast bureau en de burgemeester is er enkel de titel uit de besluitenlijst; waar
-            de stad ook het volledige besluit publiceert, leest de AI dat mee. Daarop bundelen we stukken over dezelfde concrete zaak:
-            een besteknummer of adres, een eigennaam zoals een kerk, een buurt of een project, of een
-            zeldzaam kernwoord uit de titel. Heeft een titel geen zeldzaam woord, dan kijken we naar
-            een zeldzame <strong>combinatie</strong> van twee woorden: "jaarverslag" en "klachten" zijn elk gewoon,
-            maar samen wijzen ze precies één jaarlijkse zaak aan. Een breed thema bindt nooit op zichzelf.
-            Zeldzaam is wel niet altijd specifiek: "uitrol" of "vervolgvraag" staan in weinig titels en
-            zeggen toch niets over de zaak. Daarom beoordeelt een taalmodel elk titelwoord als onderwerp
-            of als algemeen woord. Een algemeen woord bundelt enkel als de stukken nog iets anders delen:
-            een onderwerp, een kernwoord, een straat of de verwijzing van het college naar de raad.
+            de stad ook het volledige besluit publiceert, leest de AI dat mee. Daarna beoordeelt een
+            taalmodel stukken die op elkaar lijken, twee aan twee: gaat het over dezelfde concrete zaak, of
+            enkel over hetzelfde thema? Stukken over dezelfde zaak komen samen in één dossier, ook als de
+            gemeenteraad en de raad voor maatschappelijk welzijn op dezelfde avond hetzelfde beslissen. Wat
+            het taalmodel uit elkaar houdt, brengen onze eigen regels nooit samen. Een breed thema bindt
+            nooit op zichzelf.
           </p>
           <p>
-            Blijft een stuk zo alleen, dan zoeken we verder. Draagt de titel een
-            volledige <strong>eigennaam</strong> (Depot Rato, Earth Hour, Nv Eigen Woning) die
-            elders in precies één dossier terugkomt, dan sluit het stuk daarbij aan. Heeft
-            het een tweelingtitel die enkel in cijfers of datums verschilt (het jaarlijkse
-            advies over dezelfde jaarrekening, hetzelfde evenement een jaar later), dan horen
-            die twee samen. Stuurt het college of het vast bureau een stuk door naar de
-            gemeenteraad of de raad voor maatschappelijk welzijn, dan sluit het aan bij het
-            besluit van die raad, als dat binnen drie maanden volgt en beide stukken minstens
-            twee zeldzame kenmerken delen. Stelt een raadslid een schriftelijke vraag opnieuw,
-            dan komt de vervolgvraag bij de eerste. Vindt een stuk ook zo geen maatje, dan staat
-            het voorlopig alleen in zijn dossier, tot er een volgend stuk over dezelfde zaak bijkomt.
+            Een schriftelijke vraag, een nieuw stuk of een stuk dat op geen ander leek, kreeg zo'n oordeel
+            niet. Zo'n stuk bundelen we met eigen regels: een besteknummer of adres, een eigennaam zoals een
+            kerk, een buurt of een project, een zeldzaam kernwoord uit de titel, of de verwijzing van het
+            college naar de raad. Stelt een raadslid een schriftelijke vraag opnieuw, dan komt de
+            vervolgvraag bij de eerste. Zo'n stuk sluit aan bij hooguit één beoordeeld dossier.
           </p>
           <p>
-            Dit blijft een vuistregel, geen absolute waarheid: soms koppelt ze twee losse zaken,
+            Sommige stukken komen elke week of maand terug, zoals vastleggingen, kohieren of de notulen
+            van een directiecomité. Dat is geen dossier over één zaak maar een terugkerende reeks, en
+            zo'n reeks draagt op de kaart het label "terugkerend". Vindt een stuk geen
+            maatje, dan staat het voorlopig alleen, tot er een volgend stuk over dezelfde zaak bijkomt.
+          </p>
+          <p>
+            De bundeling blijft een vuistregel, geen absolute waarheid: soms koppelt ze twee losse zaken,
             soms knipt ze één verhaal in twee. Waar dat scheef loopt, passen we de bundeling aan,
             op eigen nazicht en op meldingen van lezers. Test dus gerust mee: de meldknop zit in
             elk dossier, en hoe die werkt lees je verderop op deze pagina.
@@ -4688,15 +4686,16 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
             een zaaknummer, een omgevingsvergunning. Die codes staan in de stukken zelf, dus we
             gebruiken ze om verwante dossiers te tonen, met de reden erbij. Meestal blijft dat
             een tip en geen oordeel: we zetten twee dossiers naast elkaar zonder ze samen te
-            voegen. Alleen een verwijzing die naar precies één zaak wijst, zoals een besteknummer,
-            een vergunningsnummer of een adres met huisnummer, brengt stukken wel samen in
-            hetzelfde dossier. De jaarrekening en het meerjarenplan volgen het budget zelf: elk
+            voegen. Bij een stuk zonder oordeel van het taalmodel telt een verwijzing die naar precies
+            één zaak wijst wel: een besteknummer, een vergunningsnummer of een adres met huisnummer
+            brengt het in hetzelfde dossier. De jaarrekening en het meerjarenplan volgen het budget zelf: elk
             deel, dat van de stad en dat van het OCMW, krijgt per jaarrekening of plan een eigen dossier.
           </p>
           <p>
             Stad en OCMW behandelen soms op dezelfde dag een punt met een gelijkaardige titel, elk
-            in hun eigen orgaan. Die stukken blijven in hun eigen dossier, maar een knop wijst naar
-            het andere: "Gelijkaardig punt bij het vast bureau". Meer beweren we niet, want soms
+            in hun eigen orgaan. Gaat het volgens het taalmodel over dezelfde zaak, dan staan beide
+            in één dossier. Anders blijven ze elk in hun eigen dossier, en wijst een knop naar het
+            andere: "Gelijkaardig punt bij het vast bureau". Meer beweren we niet, want soms
             beslist elk bestuur onder dezelfde titel over iets van zichzelf.
           </p>
           <p>
@@ -4715,7 +4714,7 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
         <ol class="flow-line">
           <li><b>Ophalen.</b> We halen de officiële stukken rustig op bij de bron, stuk voor stuk en met een pauze tussendoor: van agenda's en notulen tot budgetstukken.</li>
           <li><b>Uitlezen.</b> We lezen de pdf's uit tot losse agendapunten en besluiten.</li>
-          <li><b>Samenvatten.</b> Een taalmodel zet de ambtelijke taal om naar mensentaal en haalt de kernwoorden eruit waarop we bundelen.</li>
+          <li><b>Samenvatten.</b> Een taalmodel zet de ambtelijke taal om naar mensentaal, haalt de kernwoorden eruit en beoordeelt welke stukken over dezelfde zaak gaan.</li>
           <li><b>Opschonen.</b> Vóór het bouwen maskeren we namen van gewone burgers en andere gevoelige gegevens, tot in de zoekindex.</li>
           <li class="key"><b>Bouwen.</b> Alle data gaat mee in kant-en-klare bestanden, zonder server of databank. De zoekindex en de lettertypes staan er als losse bestanden naast.</li>
         </ol>

@@ -81,6 +81,27 @@ if valse_pad.exists():
     data["valse_samenstellingen"] = json.loads(valse_pad.read_text(encoding="utf-8")).get("woorden", [])
     print(f"Valse samenstellingen geladen: {len(data['valse_samenstellingen'])}.")
 
+# 1c4) Dossierindeling als basis (dossier_oordelen.json): per stuk het dossier (kern-id) waarin een
+#      zelfde-zaak-oordeel het plaatste, de stukken die tot een terugkerende reeks horen, en de beoordeelde
+#      stukken die alleen bleven. De pagina bouwt er een hybride mee: de beoordeelde dossiers als kern, de
+#      eigen regels voor de rest (zie buildDossiers). Ontbreekt het bestand of is het leeg, dan bundelt de site
+#      zoals voorheen. Het bevat enkel stuk-id's: build.py stopt als er iets anders in staat.
+basis_pad = BASE / "dossier_oordelen.json"
+_basis = json.loads(basis_pad.read_text(encoding="utf-8")) if basis_pad.exists() else {}
+if _basis.get("dossiers"):
+    _id = re.compile(r"(?:gemeenteraad|rmw|college|vastbureau|burgemeester)-\d{8}-[0-9A-Za-z]+(?:-[0-9A-Za-z]+)*"
+                     r"|sv-\d{4}-\d{2}(?:-\d{4})?-\d{1,3}(?:-[0-9a-f]{6})?")
+    _waarden = [x for paar in [*_basis.get("reeksen", {}).items(), *_basis.get("dossiers", {}).items()] for x in paar]
+    _vreemd = [w for w in _waarden + list(_basis.get("alleen", [])) if not _id.fullmatch(str(w))]
+    _vreemd += [f"veld {k}" for k in _basis if k not in ("versie", "reeksen", "dossiers", "alleen")]
+    if _vreemd:
+        sys.exit(f"STOP: dossier_oordelen.json bevat iets anders dan stuk-id's (bv. {str(_vreemd[0])[:40]!r}).")
+    data["dos_basis"] = {"reeksen": _basis.get("reeksen", {}), "dossiers": _basis.get("dossiers", {}),
+                         "alleen": _basis.get("alleen", [])}
+    print(f"Dossierbasis geladen: {len(set(data['dos_basis']['dossiers'].values()))} dossiers over "
+          f"{len(data['dos_basis']['dossiers'])} stukken, {len(data['dos_basis']['reeksen'])} stukken in reeksen, "
+          f"{len(data['dos_basis']['alleen'])} beoordeelde stukken alleen.")
+
 # 1d) Handmatige correcties op de dossiervorming (correcties.json, door de redactie
 #     onderhouden — NOOIT automatisch). Losmaken/samenvoegen ankeren op stabiele stuk-id's;
 #     de frontend past ze toe in buildDossiers. Ontbreekt het bestand, dan bouwt de site

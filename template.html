@@ -3455,6 +3455,7 @@ section.inverted .subscribe-foot strong{ color:var(--ink); }
 .dos-meta .dos-kraal{ position:static; transform:none; flex:none; box-shadow:none; }
 .dos-via{ color:var(--app-text); }
 .dos-besloten{ color:var(--ink-2); }
+.dos-terug{ color:var(--ink-2); font-style:normal; letter-spacing:.02em; }
 .dos-meta > .dos-besloten{ gap:5px; }
 .dos-besloten svg{ width:11px; height:11px; flex:none; }
 /* Enkel voor schermlezers: "raakt je profiel" vóór "via Mobiliteit". */
@@ -5487,7 +5488,9 @@ function renderHeroCockpit(){
       + `<div class="hc-stats hct-3">`
       +   statAl(agendaAl, 'op de agenda', '#agenda')
       +   statAl(recentAl, 'recent beslist', '#recent')
-      +   statAl(alKlaar ? DOSSIERS.length : 0, 'dossiers', '#dossiers')
+      // Enkel echte dossiers tellen: minstens twee stukken over één zaak, geen eenlingen en geen
+      // terugkerende reeksen: tel enkel wat het label zegt.
+      +   statAl(alKlaar ? DOSSIERS.filter(d => d.items.length > 1 && !d.terugkerend).length : 0, 'dossiers', '#dossiers')
       + `</div>`;
     el.hidden = false;
     if(acties) acties.style.display = '';
@@ -7355,8 +7358,9 @@ function curatorToggleSelect(dossierId, btn){
 }
 // De gekozen dossiers vastleggen als één samenvoeging. We ankeren op het VROEGSTE stuk van elk
 // dossier (stabiel stuk-id), niet op het dossier-id. Meteen rekenen we het toekomstige
-// samengevoegde dossier-id uit (kleinste _key over alle stukken) en laten de oude id's daar
-// via een alias naartoe wijzen, zodat bestaande deellinks na de samenvoeging blijven werken.
+// samengevoegde dossier-id uit (kleinste eigen sleutel _ck over alle stukken, met dezelfde botsingsregel als
+// de build) en laten de oude id's daar via een alias naartoe wijzen, zodat bestaande deellinks na de
+// samenvoeging blijven werken.
 function curatorVoegSamen(){
   const dossiers = curatorSelectie.map(id => DOSSIERS.find(d => d.id === id)).filter(Boolean);
   if(dossiers.length < 2) return;
@@ -7367,9 +7371,17 @@ function curatorVoegSamen(){
   // is. (Losgemaakte of verplaatste stukken rekent de build anders, vóór het losmaken; dat verschil
   // bestond al.)
   const alleStukken = dossiers.flatMap(d => d.items), eigen = alleStukken.filter(it => !it._adoptie);
-  (eigen.length ? eigen : alleStukken).forEach(it => { if(canon === null || it._key < canon) canon = it._key; });
+  (eigen.length ? eigen : alleStukken).forEach(it => { if(canon === null || it._ck < canon) canon = it._ck; });
   if(canon !== null){
-    const nieuwId = 'dossier-' + dosHash(canon);
+    // Botsing zoals in de build: heeft een ander dossier dezelfde canon en het kleinste stuk-id op die sleutel,
+    // dan houdt dat het id en krijgt de samenvoeging haar kleinste stuk-id erbij.
+    const op = l => l.filter(it => it._ck === canon).reduce((m, it) => (m === null || it.id < m ? it.id : m), null) || '\uffff';
+    const klein = l => l.reduce((m, it) => (it.id < m ? it.id : m), l[0].id);
+    const los = new Set(((D.correcties || {}).losmaken || []).map(e => e && e.item));
+    const canonVanDos = d => { if(d.items.length === 1 && los.has(d.items[0].id)) return 'los:' + d.items[0].id;
+      const b = d.items.filter(it => !it._adoptie), l = b.length ? b : d.items; return l.reduce((m, it) => (it._ck < m ? it._ck : m), l[0]._ck); };
+    const wint = DOSSIERS.some(d => !dossiers.includes(d) && canonVanDos(d) === canon && (d._canonOp || op(d.items)) < op(alleStukken));
+    const nieuwId = 'dossier-' + dosHash(wint ? canon + '##' + klein(alleStukken) : canon);
     dossiers.forEach(d => { if(d.id !== nieuwId) data.alias[d.id] = nieuwId; });
   }
   curatorBewaar(data);
@@ -8994,10 +9006,95 @@ function buildDossiers(){
   // T0 BUDGETCYCLUS: de cyclus IS de sleutel (de kant zit erin, dus nooit Stad met OCMW). Geen anker,
   // geen reeks, geen adoptie: zo valt een budgetstuk nooit door naar een andere cyclus.
   items.forEach(it => { if(it._bbc) it._key = it._track + '::bbc:' + it._bbc; });
+  // Terugkerende reeksen voor regel 4 (zie daar): de groepen stukken die samen een reeks vormen.
+  // Poort 2 (reeksen v2): een reeks is pas een reeks als EEN orgaan er op minstens drie
+  // verschillende zittingsdata in staat; de echo college -> raad telt niet als editie. Anders valt de
+  // groep terug op exact de oude regel (deelklassen op de oude sleutel van minstens drie stukken),
+  // zodat een afgewezen stuk nooit doorvalt naar een ander doel.
+  const serieGroepen = [];
+  {
+    const serie = {};
+    items.forEach(it => {
+      const k = it._bbc ? null : dosSerieKey(it.titel);
+      if(k) (serie[it._track + '::' + k] = serie[it._track + '::' + k] || []).push(it);
+    });
+    Object.keys(serie).forEach(S => {
+      const g = serie[S];
+      if(g.length < 3) return;
+      const zit = {};
+      g.forEach(it => { (zit[it.org] = zit[it.org] || new Set()).add(it.date); });
+      if(Object.values(zit).some(z => z.size >= 3)){ serieGroepen.push({ naam: S, g }); return; }
+      const oud = {};
+      g.forEach(it => { const k = dosSerieKeyOud(it.titel); if(k) (oud[k] = oud[k] || []).push(it); });
+      Object.keys(oud).forEach(k => { if(oud[k].length >= 3) serieGroepen.push({ naam: S + '::' + k, g: oud[k] }); });
+    });
+  }
+  // HYBRIDE BASIS (07/10/2026): de dossierindeling uit dossier_oordelen.json (D.dos_basis) is de kern, de
+  // eigen regels vullen aan. Een beoordeeld stuk krijgt het dossier waarin een zelfde-zaak-oordeel het
+  // plaatste, ook als Stad en OCMW dezelfde zaak beslissen (gekozen 06/10/2026: één dossier met beide raden,
+  // geen tweeling); een stuk uit een beoordeelde terugkerende reeks krijgt de reeks (eigen kant, dus nooit Stad
+  // met OCMW); een beoordeeld stuk dat in geen van beide zit (twijfel of nee bij al zijn kandidaten) blijft
+  // alleen; een budgetstuk houdt zijn cyclus. Een stuk zonder oordeel (schriftelijke vragen, nieuwe stukken,
+  // stukken waarover niets gevraagd werd) volgt de eigen regels hieronder, met drie grenzen: nooit twee
+  // beoordeelde dossiers samen, nooit iets bij een reeks en nooit iets bij een stuk dat alleen bleef. Zo blijft
+  // elk oordeel staan, ook een nee. _ck bewaart de eigen sleutel: daaruit komt het dossier-id, zodat een
+  // dossier zijn adres houdt. Een leeg basisbestand telt als geen basis.
+  items.forEach(it => { it._ck = it._key; });
+  const BASIS = (D.dos_basis && Object.keys(D.dos_basis.dossiers || {}).length) ? D.dos_basis : null;
+  if(BASIS){
+    const alleen = new Set(BASIS.alleen || []), REEKS = BASIS.reeksen || {};
+    items.forEach(it => {
+      if(it._bbc) return;
+      const r = REEKS[it.id], d = BASIS.dossiers[it.id];
+      if(r){ it._reeks = r; it._key = it._track + '::reeks:' + r; }
+      else if(d) it._key = 'basis::' + d;
+      else if(alleen.has(it.id)) it._key = 'alleen::' + it.id;
+    });
+    // Een eigen terugkerende reeks (regel 4) is voor een stuk zonder oordeel ook een reeks, met dezelfde
+    // grens: het gaat naar de beoordeelde reeks waarin de meeste stukken van die reeks zitten, of anders naar
+    // een eigen reeks. Zo telt een reeks die nooit beoordeeld werd (notulen van een directiecomité, verslagen
+    // van een plangroep) evenmin als dossier. Twee uitzonderingen: kreeg een stuk van de reeks een oordeel als
+    // zaak (in een dossier of alleen), dan is het geen reeks en volgen de andere stukken de gewone regels; en
+    // een schriftelijke vraag is nooit een reeks (een vervolgvraag heeft dezelfde titel).
+    serieGroepen.forEach(({ naam, g }) => {
+      if(g.some(it => BASIS.dossiers[it.id] || alleen.has(it.id))) return;
+      const tel = {}; g.forEach(it => { const r = REEKS[it.id]; if(r) tel[r] = (tel[r] || 0) + 1; });
+      const r = Object.keys(tel).sort((a, b) => tel[b] - tel[a] || (a < b ? -1 : 1))[0];
+      g.forEach(it => {
+        if(REEKS[it.id] || it.src === 'vraag') return;
+        it._reeks = r || naam;
+        it._key = r ? it._track + '::reeks:' + r : 'eigen::reeks:' + naam;
+      });
+    });
+  }
   const keys = [...new Set(items.map(it=>it._key))];
   const par = {}; keys.forEach(k=>par[k]=k);
   const find = x => par[x]===x ? x : (par[x]=find(par[x]));
-  const uni = (a,b) => { par[find(a)] = find(b); };
+  // Per wortel: bevat ze een beoordeeld dossier, en is ze dicht (een reeks of een stuk dat alleen bleef)?
+  const kern = {};
+  let vrij = !BASIS;              // vrij = zonder grenzen samenvoegen (geen basis, of een handmatige correctie)
+  if(BASIS) keys.forEach(k => { const los = k.startsWith('alleen::'); kern[k] = { basis: los || k.startsWith('basis::'), dicht: los || k.includes('::reeks:') }; });
+  // Geeft true als a en b (nu) samen zitten, false als een grens het weigert.
+  const uni = (a,b) => {
+    const ra = find(a), rb = find(b);
+    if(ra === rb) return true;
+    if(BASIS){
+      const ka = kern[ra], kb = kern[rb];
+      if(!vrij && (ka.dicht || kb.dicht || (ka.basis && kb.basis))) return false;
+      kern[rb] = { basis: ka.basis || kb.basis, dicht: ka.dicht || kb.dicht };
+    }
+    par[ra] = rb; return true;
+  };
+  // Deelt een stuk zonder oordeel zijn eigen sleutel met beoordeelde stukken, dan hoorde het er vroeger
+  // vanzelf bij: het gaat mee met het dossier dat de meeste van die stukken heeft (de grenzen gelden).
+  if(BASIS){
+    const deelt = {};
+    items.forEach(it => { if(it._key !== it._ck && it._ck in par) (deelt[it._ck] = deelt[it._ck] || []).push(it._key); });
+    Object.keys(deelt).sort().forEach(K => {
+      const tel = {}; deelt[K].forEach(k => tel[k] = (tel[k] || 0) + 1);
+      Object.keys(tel).sort((a, b) => tel[b] - tel[a] || (a < b ? -1 : 1)).forEach(k => uni(K, k));
+    });
+  }
 
   // 1) Harde ankers (bestek-/projectcode, adres) — GLOBAAL, mogen Stad en OCMW overbruggen.
   //    Hoge precisie: wie eenzelfde anker deelt, hoort in hetzelfde dossier.
@@ -9045,30 +9142,8 @@ function buildDossiers(){
   //    in cijfers of datums verschilt (wekelijkse kohieren, weekoverzichten, plechtigheden)
   //    zijn hetzelfde terugkerende punt: één reeks-dossier i.p.v. tientallen identieke
   //    losse kaartjes. Exacte kale-titel-gelijkheid, dus geen kettingen.
-  const serie = {};
-  items.forEach(it => {
-    const k = it._bbc ? null : dosSerieKey(it.titel);
-    if(k) (serie[it._track + '::' + k] = serie[it._track + '::' + k] || []).push(it);
-  });
-  // Poort 2 (reeksen v2): een reeks is pas een reeks als EEN orgaan er op minstens drie
-  // verschillende zittingsdata in staat; de echo college -> raad telt niet als editie. Anders valt de
-  // groep terug op exact de oude regel (deelklassen op de oude sleutel van minstens drie stukken),
-  // zodat een afgewezen stuk nooit doorvalt naar een ander doel.
-  Object.values(serie).forEach(g => {
-    if(g.length < 3) return;
-    const zit = {};
-    g.forEach(it => { (zit[it.org] = zit[it.org] || new Set()).add(it.date); });
-    if(Object.values(zit).some(z => z.size >= 3)){
-      for(let i = 1; i < g.length; i++) uni(g[0]._key, g[i]._key);
-      return;
-    }
-    const oud = {};
-    g.forEach(it => { const k = dosSerieKeyOud(it.titel); if(k) (oud[k] = oud[k] || []).push(it); });
-    Object.values(oud).forEach(z => {
-      if(z.length < 3) return;
-      for(let i = 1; i < z.length; i++) uni(z[0]._key, z[i]._key);
-    });
-  });
+  //    De reeksen zelf berekent serieGroepen() (boven de hybride basis, die ze ook gebruikt).
+  serieGroepen.forEach(({ g }) => { for(let i = 1; i < g.length; i++) uni(g[0]._key, g[i]._key); });
 
   // 5) Stad ↔ OCMW koppelen we BEWUST alleen via de harde ankers hierboven, niet via
   //    begrotingswoorden. "meerjarenplan", "budget" en "jaarrekening" gebruikt élke
@@ -9227,8 +9302,7 @@ function buildDossiers(){
       const doelGroep = voorlopig4[b.doel];
       if(doelGroep.length === 1 && ketDoelVan.has(doelGroep[0].id) && ketDoelVan.get(doelGroep[0].id) !== b.dRoot) return;
       if(ketBesluit.some(o => o.doel === b.dRoot && o.dRoot !== b.doel)) return;
-      b.d._adoptie = true;
-      uni(b.dRoot, b.doel);
+      if(uni(b.dRoot, b.doel)) b.d._adoptie = true;     // een grens van de basis kan weigeren
     });
   }
 
@@ -9269,9 +9343,9 @@ function buildDossiers(){
       const a = find(d._key), b = find(voorlopig6e[doel][0]._key);
       if(a === b) return;
       if(items.filter(i => find(i._key) === a).length > 1 && items.filter(i => find(i._key) === b).length > 1) return;
+      if(!uni(d._key, voorlopig6e[doel][0]._key)) return;
       door6e.add(d.id);
       d._adoptie = true;
-      uni(d._key, voorlopig6e[doel][0]._key);
     });
   }
 
@@ -9338,7 +9412,7 @@ function buildDossiers(){
     const anker = {};
     toepassen.forEach(([i, d]) => {
       if(d.startsWith('nieuw:') && tel[d] < 2) return;
-      if(d.startsWith('groep:')){ byId.get(i)._adoptie = true; uni(root[i], d.slice(6)); }
+      if(d.startsWith('groep:')){ if(uni(root[i], d.slice(6))) byId.get(i)._adoptie = true; }
       else if(!anker[d]) anker[d] = root[i];
       else uni(root[i], anker[d]);
     });
@@ -9348,6 +9422,7 @@ function buildDossiers(){
   //    samen. Union op _key voegt de héle clusters samen (elk stuk deelt find(_key) met zijn
   //    dossier). Ontbrekende (verouderde) id's worden stil overgeslagen.
   const idMap = new Map(items.map(it => [it.id, it]));
+  vrij = true;                    // de handmatige samenvoeging geldt altijd, ook bovenop de basis
   (corr.samenvoegen || []).forEach(entry => {
     const leden = (entry.items || []).map(id => idMap.get(id)).filter(Boolean);
     for(let i = 1; i < leden.length; i++) uni(leden[0]._key, leden[i]._key);
@@ -9366,10 +9441,17 @@ function buildDossiers(){
   // ('solo:' sorteert voor 'tok:') en breekt elke volger. Bestaat de groep enkel uit adopties, dan
   // telt iedereen mee, zodat de canon volgorde-onafhankelijk blijft.
   const canonBron = g => { const b = g.filter(i => !i._adoptie); return b.length ? b : g; };
-  const canonVan = {};
+  const canonVan = {}, canonOp = {}, canonKlein = {};
+  // Met de canon bevriezen we ook het kleinste stuk-id op die sleutel en het kleinste stuk-id van de groep:
+  // die beslissen straks een botsing (enkel met de basis), en ook dat mag niet verschuiven door het losmaken.
+  const bevries = r => {
+    canonOp[r] = map[r].filter(i => i._ck === canonVan[r]).reduce((m, i) => (m === null || i.id < m ? i.id : m), null) || '\uffff';
+    canonKlein[r] = map[r].reduce((m, i) => (i.id < m ? i.id : m), map[r][0].id);
+  };
   Object.keys(map).forEach(r => {
     const bron = canonBron(map[r]);
-    canonVan[r] = bron.reduce((m, i) => (i._key < m ? i._key : m), bron[0]._key);
+    canonVan[r] = bron.reduce((m, i) => (i._ck < m ? i._ck : m), bron[0]._ck);
+    bevries(r);
   });
 
   // ── Handmatig losgemaakte stukken (correcties.json): een lezer of de redactie oordeelde dat
@@ -9421,9 +9503,27 @@ function buildDossiers(){
     if(r.slice(0,4) === 'los:') return;
     if(!map[r].some(it => origLeden[r] && origLeden[r].has(it.id))){
       const bron = canonBron(map[r]);
-      canonVan[r] = bron.reduce((m, i) => (i._key < m ? i._key : m), bron[0]._key);
+      canonVan[r] = bron.reduce((m, i) => (i._ck < m ? i._ck : m), bron[0]._ck);
+      bevries(r);
     }
   });
+
+  // Twee groepen met dezelfde canon kan enkel met de basis: die haalt stukken met dezelfde eigen sleutel uit
+  // elkaar. De groep met het kleinste stuk-id op die sleutel houdt het id (zo kan een handmatige samenvoeging
+  // van twee andere groepen het nooit afpakken), een andere krijgt haar kleinste stuk-id erbij.
+  if(BASIS){
+    const perCanon = {};
+    Object.keys(map).forEach(r => (perCanon[canonVan[r]] = perCanon[canonVan[r]] || []).push(r));
+    Object.values(perCanon).forEach(rs => {
+      if(rs.length < 2) return;
+      const op = r => canonOp[r] || '\uffff';
+      rs.sort((a, b) => (op(a) < op(b) ? -1 : op(a) > op(b) ? 1 : 0));
+      rs.slice(1).forEach(r => { canonVan[r] = canonVan[r] + '##' + (canonKlein[r] || r); });
+    });
+    // Vangnet: na een handmatige verplaatsing kunnen twee groepen theoretisch op hetzelfde id uitkomen.
+    const gezien = new Set();
+    Object.keys(map).forEach(r => { while(gezien.has(canonVan[r])) canonVan[r] += '#'; gezien.add(canonVan[r]); });
+  }
 
   // Eenlingen BLIJVEN een dossier (afgesproken 04/09/2026: "een eenling in uiterste nood
   // behouden; koppel slimmer"). Een stuk zonder maatje is geen fout maar een stuk dat er
@@ -9522,11 +9622,14 @@ function buildDossiers(){
       latestStatus = 'lopend';
     }
     return {
-      id:'dossier-'+dosHash(canon), name, title: dosTitle({name, items:g}), themes, places, schepenen, orgs, items:g,
+      id:'dossier-'+dosHash(canon), _canonOp: canonOp[__root], name, title: dosTitle({name, items:g}), themes, places, schepenen, orgs, items:g,
       firstDate:g[0].date, lastDate:g[g.length-1].date,
       nAgenda:g.filter(i=>i.src==='agenda').length,
       nCollege:g.filter(i=>i.src==='college').length,
       latestStatus,
+      // Een terugkerende reeks (wekelijkse vastleggingen, kohieren, notulen van een directiecomité ...)
+      // is geen dossier: één concrete zaak per dossier. De groep blijft bestaan voor de tijdlijn.
+      terugkerend: g.length > 1 && g.filter(i => i._reeks).length * 2 >= g.length,
       // Vooraf berekende zoek-index op PURE INHOUD: naast naam/thema's/plaatsen/schepen
       // ook de titel én de samenvatting (decoded) van élk afzonderlijk besluit. Zo
       // doorzoekt de zoekbalk de eigenlijke inhoud van de beslissingen, niet enkel labels.
@@ -9544,7 +9647,7 @@ function buildDossiers(){
   DOSSIERS.sort((a,b)=> b.items.length - a.items.length);
 
   // Runtime-alias voor een door 6e geadopteerde vraag: haar vroegere eigen id volgt mee.
-  door6e.forEach(id => { const it = idMap.get(id), oud = 'dossier-' + dosHash(it._key), nu = ITEM2DOS.get(id).id;
+  door6e.forEach(id => { const it = idMap.get(id), oud = 'dossier-' + dosHash(it._ck), nu = ITEM2DOS.get(id).id;
     if(oud !== nu && !DOS_ALIAS[oud] && !DOSSIERS.some(x => x.id === oud)) DOS_ALIAS[oud] = nu; });
 
   // Snoei dode aliassen: een alias die (na resolutie) niet op een bestaand dossier uitkomt,
@@ -10070,6 +10173,8 @@ function dossierCardHTML(d){
     d.orgs.map(o => ({ cls:'dos-orgaan', inh:`<span class="dos-kraal ${dosSoort(o)}" aria-hidden="true"></span>${escape(DOS_ORGAAN_KORT[o] || String(o).toLowerCase())}` })),
   ];
   if(d.items.some(it => it.zitting === 'besloten')) groepen.push([{ cls:'dos-besloten', inh:`${DOS_SLOT}besloten zitting` }]);
+  // Een terugkerende reeks is geen dossier over één zaak: zeg dat op de kaart zelf.
+  if(d.terugkerend) groepen.unshift([{ cls:'dos-terug', inh:'terugkerend' }]);
   if(via) groepen.push([{ cls:'dos-via', inh:`<span class="dos-sr">raakt je profiel </span>via ${escape(via)}` }]);
   const meta = groepen.flatMap((g, gi) => g.map((x, xi) => {
     const cls = [x.cls, gi < groepen.length-1 && xi === g.length-1 ? 'sep' : ''].filter(Boolean).join(' ');
