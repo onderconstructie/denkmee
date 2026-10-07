@@ -160,9 +160,29 @@ VRAAG_PDF_MAX = 50_000
 MAX_PUNTEN_PER_WOORD = 120
 
 
+_PUBLIEK = None
+
+
+def _aanspreking(m):
+    """Knipt 'de heer X' / 'mevrouw Y' uit de zoektermen, behalve als een mens die naam al als publiek
+    beoordeelde: een mandataris, of iemand op de lijst beoordeeld_publiek, zoals wie een vennootschap
+    vertegenwoordigt (familieregel van 07/10/2026: "X bv, vertegenwoordigd door de heer Y" is zichtbaar,
+    dus ook vindbaar). Bewust geen herkenning op de zinsbouw: of iemand een vennootschap of een burger
+    vertegenwoordigt, kan een patroon op ambtelijke zinnen niet betrouwbaar zeggen (pdf-regelbreuken,
+    afkortingen met een punt, een haakje rond een burger). Een nieuwe vertegenwoordiger meldt de waakhond;
+    wie hem publiek beoordeelt, maakt hem zo ook vindbaar. Zoals in _publieke_spans() telt een vorm met
+    een initiaal of een losse familienaam met een tussenvoegsel niet mee: die zou een naamgenoot sparen."""
+    global _PUBLIEK
+    if _PUBLIEK is None:
+        _PUBLIEK = {n for n in schoon_brontekst._publieke_namen()
+                    if not re.search(r"(?:^|\s)\S*\.", n) and not schoon_brontekst._TUSSENVOEGSEL.match(n.split()[0])}
+    naam = re.sub(r"^(?i:de\s+heer|mevrouw|mevr\.|dhr\.|mr\.|mw\.)\s+", "", m.group(0))
+    return m.group(0) if " ".join(naam.split()) in _PUBLIEK else " "
+
+
 def tokens(tekst):
     tekst = EMAIL_RX.sub(" ", tekst)
-    tekst = AANSPREEK_RX.sub(" ", tekst)   # 'de heer X' / 'mevrouw Y' → geen zoekterm
+    tekst = AANSPREEK_RX.sub(_aanspreking, tekst)   # 'de heer X' / 'mevrouw Y' → geen zoekterm, tenzij publiek
     tekst = ROL_RX.sub(" ", tekst)         # 'OGV X' / 'Meester Y'     → geen zoekterm
     tekst = BESTUURSLIJST_RX.sub(r"\1\2", tekst)   # 'Contactpersoon: Naam Voornaam Adres'
     tekst = AANVRAGER_RX.sub(r"\1\2", tekst)       # 'Aanvrager 2 Naam Voornaam'

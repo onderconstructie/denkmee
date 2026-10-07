@@ -35714,6 +35714,28 @@
   ],
   "college_beslissingen": [
     {
+      "id": "burgemeester-20261006-1",
+      "date": "2026-10-06",
+      "orgaan": "Burgemeester",
+      "categorie": "Wonen",
+      "titel": "Besluit burgemeester van 6 oktober 2026 betreffende woning niet ongeschikt en niet onbewoonbaar.",
+      "decoded": "De burgemeester beslist dat een woning niet ongeschikt en niet onbewoonbaar is.",
+      "themes": [
+        "Wonen"
+      ]
+    },
+    {
+      "id": "burgemeester-20261006-2",
+      "date": "2026-10-06",
+      "orgaan": "Burgemeester",
+      "categorie": "Wonen",
+      "titel": "Besluit burgemeester van 6 oktober 2026 betreffende ongeschiktheid en onbewoonbaarheid woning.",
+      "decoded": "De burgemeester beslist op 6 oktober 2026 over de ongeschiktheid en onbewoonbaarheid van een woning.",
+      "themes": [
+        "Wonen"
+      ]
+    },
+    {
       "id": "college-20260929-5A",
       "date": "2026-09-29",
       "orgaan": "College",
@@ -111128,6 +111150,12 @@
           "published": "2026-09-18",
           "status": "tijdig",
           "late_days": 0
+        },
+        {
+          "date": "2026-10-06",
+          "published": "2026-10-07",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 10,
@@ -116937,6 +116965,7 @@
     "Burgemeester|2026-09-04|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_04-09-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-09-11|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_11-09-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-09-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_17-09-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-10-06|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_06-10-2026_Beslissingenlijst.pdf",
     "College|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_10-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_17-12-2024_Beslissingenlijst.pdf",
