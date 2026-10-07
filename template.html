@@ -5508,9 +5508,10 @@ function renderHeroCockpit(){
   chips.push({label:(notifAan ? '◉' : '◌') + ' browserseintje ' + (notifAan ? 'aan' : 'uit'), step:3, cls:'hc-chip-notif'});
   const chip = c => `<button type="button" class="hc-chip${c.cls ? ' ' + c.cls : ''}" onclick="openWizard(${c.step})" title="Aanpassen in Mijn Mechelen">${c.icon || ''}${escape(c.label)}</button>`;
   const chipsHTML = chips.map(chip).join('');
-  // Tellingen: alles wat mijn profiel raakt, elk met een link naar de sectie waar het staat.
+  // Tellingen: alles wat mijn profiel raakt, elk met een link naar de sectie waar het staat. 'Dossiers voor
+  // mij' telt zoals de algemene teller enkel echte dossiers: minstens twee stukken en geen terugkerende reeks.
   const klaar = typeof DOSSIERS !== 'undefined' && DOSSIERS.length;
-  const voorJou = klaar ? DOSSIERS.filter(dossierMatchesProfile).length : 0;
+  const voorJou = klaar ? DOSSIERS.filter(d => d.items.length > 1 && !d.terugkerend && dossierMatchesProfile(d)).length : 0;
   const gevolgd = klaar ? DOSSIERS.filter(d => dosIsFollowed(d.id)).length : (PROFILE.dossiers || []).length;
   const agendaMatch = upcomingRaadSessies().reduce((n, [, b]) => n + b.items.filter(p => matchItem(p).length > 0).length, 0);
   const { gr, rmw, col, vb, bm } = recentBeslistData();
