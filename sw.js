@@ -1,4 +1,4 @@
-/* Service worker van Denk mee met Mechelen. Maakt de site installeerbaar (op je beginscherm)
+/* Service worker van Denk mee van As Gau Paust. Maakt de site installeerbaar (op je beginscherm)
    en laat ze ook zonder verbinding werken. GEEN cookies, GEEN trackers: enkel een lokale cache
    op je eigen toestel, die niets naar buiten stuurt. Netwerk-eerst, dus online zie je altijd de
    verse versie; offline valt hij terug op wat je al bezocht. Zelfde patroon als asgaupaust.be. */

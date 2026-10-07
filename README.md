@@ -1,4 +1,4 @@
-# Denk mee met Mechelen
+# Denk mee van As Gau Paust
 
 Wat de Mechelse politiek beslist, in mensentaal en altijd met de bron erbij.
 

@@ -5,8 +5,8 @@
 <!-- Geen viewport-fit=cover: op iOS blijft elke env(safe-area-inset-*) 0, dus de app-balk houdt
      zijn hoogte en het hero-paneel past op het scherm. -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Technische pagina, Denk mee met Mechelen</title>
-<meta name="description" content="De technische pagina van Denk mee met Mechelen: de architectuur, waarom het lokaal draait, en wat we mogelijk over het hoofd zien.">
+<title>Technische pagina, Denk mee van As Gau Paust</title>
+<meta name="description" content="De technische pagina van Denk mee van As Gau Paust: de architectuur, waarom het lokaal draait, en wat we mogelijk over het hoofd zien.">
 <link rel="canonical" href="https://denkmee.asgaupaust.be/techniek/">
 
 <!-- Deelkaart. Zonder deze tags toont een gedeelde link (WhatsApp, Signal, LinkedIn, een
@@ -16,8 +16,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="As Gau Paust">
 <meta property="og:locale" content="nl_BE">
-<meta property="og:title" content="Technische pagina, Denk mee met Mechelen">
-<meta property="og:description" content="De technische pagina van Denk mee met Mechelen: de architectuur, waarom het lokaal draait, en wat we mogelijk over het hoofd zien.">
+<meta property="og:title" content="Technische pagina, Denk mee van As Gau Paust">
+<meta property="og:description" content="De technische pagina van Denk mee van As Gau Paust: de architectuur, waarom het lokaal draait, en wat we mogelijk over het hoofd zien.">
 <meta property="og:url" content="https://denkmee.asgaupaust.be/techniek/">
 <meta property="og:image" content="https://denkmee.asgaupaust.be/beelden/og.png">
 <meta property="og:image:width" content="1200">
@@ -55,7 +55,7 @@
 
 <style>
 /* =================================================================
-   DENK MEE MET MECHELEN, Editorial Brutalism / Civic Data Edition
+   DENK MEE VAN AS GAU PAUST, Editorial Brutalism / Civic Data Edition
    ================================================================= */
 
 :root{
@@ -416,7 +416,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 
 /* De menukop spiegelt de bovenbalk EXACT (zelfde padding, zelfde .brand-typografie en
    -logo-maat): wie het menu opent ziet het merk op precies dezelfde plek staan, niets
-   verspringt. Alleen het zwarte kader rond 'met Mechelen' komt erbij. */
+   verspringt. */
 .menu-head{
   display:flex; justify-content:space-between; align-items:center;
   padding:.9rem var(--pad-x);
@@ -607,7 +607,10 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   white-space:nowrap;
   box-decoration-break:clone; -webkit-box-decoration-break:clone;
 }
-.hero-title .nm{ white-space:nowrap; }   /* "met Mechelen" breekt als geheel af, geen los 'met' */
+/* "van As Gau Paust" staat als ondertitel op een eigen regel, op driekwart van de maat: zo past ze op
+   desktop naast het paneel rechts, dat anders weggedrukt werd. Ze mag afbreken op een smal scherm, want
+   een regel die niet mag breken, maakt de kolom breder in plaats van zichzelf korter. */
+.hero-title .nm{ display:block; font-size:.74em; }
 
 /* Korte tagline onder de titel: de belofte in één regel, boven de uitgebreide lede. */
 .hero-tagline{
@@ -718,9 +721,8 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
     display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;
   }
   .hero-meta{ margin-bottom:.85rem; }
-  /* Titel op smartphone op ÉÉN regel: de <br> valt weg en de maat schaalt mee met de breedte,
-     zodat "Denk mee met Mechelen" ook op smallere toestellen (vanaf 320px) op één regel past.
-     De em-marge (die het roze blok op desktop stapelt) gaat op nul, zodat het mooi inline aansluit. */
+  /* Titel op smartphone: "Denk mee" in het kader en daaronder de kleinere ondertitel "van As Gau Paust";
+     de maat schaalt mee met de breedte, zodat beide regels ook vanaf 320px elk op één regel passen. */
   .hero-title{ font-size:clamp(1.35rem, 7.3vw, 1.85rem); }
   /* Zelfde kleur als 'Laat je inspireren.' op Lees mee: overal var(--pink-text), ook mobiel. */
   .hero-tagline{ margin-top:.55rem; font-size:1.1rem; }
@@ -4574,7 +4576,7 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
   if(!knop) return;
   var zet = function(){
     knop.href = 'mailto:' + atob(CONTACT_TO)
-      + '?subject=' + encodeURIComponent('Reactie op Denk mee met Mechelen (BETA)')
+      + '?subject=' + encodeURIComponent('Reactie op Denk mee van As Gau Paust (BETA)')
       + '&body=' + encodeURIComponent('Pagina: ' + location.href + '\n\n');
   };
   zet();
@@ -4586,7 +4588,7 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
 
   <section class="tech-hero">
     <div class="tech-hero-bg" aria-hidden="true"><span class="bh-shape bh-circle tech-circle"></span></div>
-    <p class="eyebrow">Over Denk mee met Mechelen</p>
+    <p class="eyebrow">Over Denk mee van As Gau Paust</p>
     <h1 class="tech-h1">Technische pagina</h1>
     <p class="sec-lede tech-lede">
       Hier lees je hoe een officieel document een leesbaar dossier wordt, hoe we het
@@ -4854,9 +4856,9 @@ var CONTACT_TO = 'YXNnYXVwYXVzdEBnbWFpbC5jb20=';
 
 <footer class="colofon">
   <div class="co-shell">
-    <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee met Mechelen, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
+    <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee van As Gau Paust, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
     <div class="co-body">
-      <p class="co-zin"><strong class="co-naam">Denk mee <em>met Mechelen</em></strong>, een experiment van <strong>As Gau Paust</strong>. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
+      <p class="co-zin"><strong class="co-naam">Denk mee <em>van As Gau Paust</em></strong>, een burgerjournalistiek experiment. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
       <!-- Geen "naar de hoofdpagina" meer: die weg terug staat al meermaals op deze pagina
            (de knop "terug" in de nav, het merkteken hiernaast, en de vier onderdeel-toetsen
            in de app-balk wijzen elk naar de hoofdpagina). Het colofon zegt nu enkel nog waar

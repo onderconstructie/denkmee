@@ -485,7 +485,7 @@ PAGINA_404 = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f5f1e8">
-<title>Pagina niet gevonden, Denk mee met Mechelen</title>
+<title>Pagina niet gevonden, Denk mee van As Gau Paust</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="/beelden/mug.png">
 <link rel="preload" href="/fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -584,10 +584,10 @@ if tech_template_pad.exists():
     gedeelde_head = head_match.group(0) if head_match else ""
     gedeelde_head = re.sub(
         r"<title>.*?</title>",
-        "<title>Technische pagina, Denk mee met Mechelen</title>",
+        "<title>Technische pagina, Denk mee van As Gau Paust</title>",
         gedeelde_head, count=1, flags=re.DOTALL)
-    _tech_titel = "Technische pagina, Denk mee met Mechelen"
-    _tech_oms = ("De technische pagina van Denk mee met Mechelen: de architectuur, waarom het "
+    _tech_titel = "Technische pagina, Denk mee van As Gau Paust"
+    _tech_oms = ("De technische pagina van Denk mee van As Gau Paust: de architectuur, waarom het "
                  "lokaal draait, en wat we mogelijk over het hoofd zien.")
     _tech_url = "https://denkmee.asgaupaust.be/techniek/"
     # Ook de deelkaart-tags meenemen: anders deelt /techniek/ zich als de startpagina.

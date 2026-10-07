@@ -1,4 +1,4 @@
-# --- Denk mee met Mechelen ---
+# --- Denk mee van As Gau Paust ---
 # De gepubliceerde site is dist/index.html (zelfstandig bestand, mét de data erin).
 # data.json wordt WEL meegecommit: zo kan build.py op een verse kloon herbouwen
 # zonder opnieuw op te halen of te taggen (geen API-kosten).

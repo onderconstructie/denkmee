@@ -5,7 +5,7 @@
 <!-- Geen viewport-fit=cover: op iOS blijft elke env(safe-area-inset-*) 0, dus de app-balk houdt
      zijn hoogte en het hero-paneel past op het scherm. -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Denk mee met Mechelen</title>
+<title>Denk mee van As Gau Paust</title>
 <meta name="description" content="Volg de Mechelse gemeenteraad. Lees de agenda in mensentaal. Zie wat er beslist is. Een burgerjournalistiek experiment van As Gau Paust.">
 <link rel="canonical" href="https://denkmee.asgaupaust.be/">
 
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="As Gau Paust">
 <meta property="og:locale" content="nl_BE">
-<meta property="og:title" content="Denk mee met Mechelen">
+<meta property="og:title" content="Denk mee van As Gau Paust">
 <meta property="og:description" content="Volg de Mechelse gemeenteraad. Lees de agenda in mensentaal. Zie wat er beslist is. Een burgerjournalistiek experiment van As Gau Paust.">
 <meta property="og:url" content="https://denkmee.asgaupaust.be/">
 <meta property="og:image" content="https://denkmee.asgaupaust.be/beelden/og.png">
@@ -55,7 +55,7 @@
 
 <style>
 /* =================================================================
-   DENK MEE MET MECHELEN, Editorial Brutalism / Civic Data Edition
+   DENK MEE VAN AS GAU PAUST, Editorial Brutalism / Civic Data Edition
    ================================================================= */
 
 :root{
@@ -416,7 +416,7 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
 
 /* De menukop spiegelt de bovenbalk EXACT (zelfde padding, zelfde .brand-typografie en
    -logo-maat): wie het menu opent ziet het merk op precies dezelfde plek staan, niets
-   verspringt. Alleen het zwarte kader rond 'met Mechelen' komt erbij. */
+   verspringt. */
 .menu-head{
   display:flex; justify-content:space-between; align-items:center;
   padding:.9rem var(--pad-x);
@@ -607,7 +607,10 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
   white-space:nowrap;
   box-decoration-break:clone; -webkit-box-decoration-break:clone;
 }
-.hero-title .nm{ white-space:nowrap; }   /* "met Mechelen" breekt als geheel af, geen los 'met' */
+/* "van As Gau Paust" staat als ondertitel op een eigen regel, op driekwart van de maat: zo past ze op
+   desktop naast het paneel rechts, dat anders weggedrukt werd. Ze mag afbreken op een smal scherm, want
+   een regel die niet mag breken, maakt de kolom breder in plaats van zichzelf korter. */
+.hero-title .nm{ display:block; font-size:.74em; }
 
 /* Korte tagline onder de titel: de belofte in één regel, boven de uitgebreide lede. */
 .hero-tagline{
@@ -718,9 +721,8 @@ a.brand:hover .brand-mark{ filter:brightness(1.05); }
     display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;
   }
   .hero-meta{ margin-bottom:.85rem; }
-  /* Titel op smartphone op ÉÉN regel: de <br> valt weg en de maat schaalt mee met de breedte,
-     zodat "Denk mee met Mechelen" ook op smallere toestellen (vanaf 320px) op één regel past.
-     De em-marge (die het roze blok op desktop stapelt) gaat op nul, zodat het mooi inline aansluit. */
+  /* Titel op smartphone: "Denk mee" in het kader en daaronder de kleinere ondertitel "van As Gau Paust";
+     de maat schaalt mee met de breedte, zodat beide regels ook vanaf 320px elk op één regel passen. */
   .hero-title{ font-size:clamp(1.35rem, 7.3vw, 1.85rem); }
   /* Zelfde kleur als 'Laat je inspireren.' op Lees mee: overal var(--pink-text), ook mobiel. */
   .hero-tagline{ margin-top:.55rem; font-size:1.1rem; }
@@ -4551,7 +4553,7 @@ document.addEventListener('DOMContentLoaded', function(){
   if(!knop) return;
   var zet = function(){
     try {
-      knop.href = mailtoUrl(atob(CONTACT_TO), 'Reactie op Denk mee met Mechelen (BETA)',
+      knop.href = mailtoUrl(atob(CONTACT_TO), 'Reactie op Denk mee van As Gau Paust (BETA)',
                             'Pagina: ' + location.href + '\n\n');
     } catch(e) {}
   };
@@ -4623,7 +4625,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <span class="pulse"></span>
       <span>Experiment</span>
     </div>
-    <h1 class="hero-title"><span class="box">Denk mee</span> <span class="nm">met Mechelen</span></h1>
+    <h1 class="hero-title"><span class="box">Denk mee</span> <span class="nm">van As Gau Paust</span></h1>
     <p class="hero-tagline">Volg wat Mechelen beslist</p>
     <p class="hero-lede">
       Elke maand beslissen de gemeenteraad, het college, de burgemeester, de raad voor
@@ -4854,7 +4856,7 @@ document.addEventListener('DOMContentLoaded', function(){
     <div class="sec-titles">
       <h2>Wat je hier <em>leest</em></h2>
       <p class="sec-lede">
-        Denk mee met Mechelen is een burgerjournalistiek experiment, geen officieel kanaal van de stad.
+        Denk mee van As Gau Paust is een burgerjournalistiek experiment, geen officieel kanaal van de stad.
         Wat hieronder staat zijn geen <strong>kleine lettertjes</strong>, maar dingen die je echt moet weten
         voor je iets gebruikt dat hier geschreven staat.
       </p>
@@ -4914,9 +4916,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <footer class="colofon">
   <div class="co-shell">
-    <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee met Mechelen, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
+    <a class="co-mark" href="https://denkmee.asgaupaust.be/" aria-label="Denk mee van As Gau Paust, naar de startpagina"><span class="brand-mark-bg" aria-hidden="true"></span></a>
     <div class="co-body">
-      <p class="co-zin"><strong class="co-naam">Denk mee <em>met Mechelen</em></strong>, een experiment van <strong>As Gau Paust</strong>. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
+      <p class="co-zin"><strong class="co-naam">Denk mee <em>van As Gau Paust</em></strong>, een burgerjournalistiek experiment. Zo volg je in mensentaal wat de Mechelse politiek in jouw naam beslist.</p>
       <p class="co-fam">Onderdeel van <a href="https://asgaupaust.be">asgaupaust.be</a> &middot; <a href="https://asgaupaust.be/privacy/">Privacy</a></p>
     </div>
   </div>
@@ -7064,7 +7066,7 @@ async function requestNotifPermission(){
     const result = await Notification.requestPermission();
     updateNotifDesc();
     if(result === 'granted'){
-      try{ new Notification('Denk mee met Mechelen', { body: 'Open je Denk mee, dan krijg je nu ook een seintje bij nieuws over je thema\u2019s.' }); }catch(e){}
+      try{ new Notification('Denk mee van As Gau Paust', { body: 'Open je Denk mee, dan krijg je nu ook een seintje bij nieuws over je thema\u2019s.' }); }catch(e){}
     }
   }catch(e){}
 }
@@ -7587,7 +7589,7 @@ function checkNieuwSindsVorigBezoek(){
   toonNieuwBanner(nAgenda, nBesluit, nVraag);
   const bd = $('burgerDot'); if(bd) bd.hidden = false;     // ook de bol op de hamburger als blijvend signaal
   if(PROFILE.notify && PROFILE.notify.enabled && ('Notification' in window) && Notification.permission === 'granted'){
-    try { new Notification('Denk mee met Mechelen', { body: nieuwSamenvatting(nAgenda, nBesluit, nVraag) }); } catch(e){}
+    try { new Notification('Denk mee van As Gau Paust', { body: nieuwSamenvatting(nAgenda, nBesluit, nVraag) }); } catch(e){}
   }
 }
 
@@ -7896,7 +7898,7 @@ function contactVerstuur(){
   if(!onderwerp) return fout('Vul een onderwerp in.', 'ctOnderwerp');
   const naar = atob(CONTACT_TO);
   const body = `Naam: ${naam}\nE-mail: ${email}\n\n${bericht}`;
-  window.location.href = mailtoUrl(naar, '[Denk mee met Mechelen] ' + onderwerp, body);
+  window.location.href = mailtoUrl(naar, '[Denk mee van As Gau Paust] ' + onderwerp, body);
   closeContactModal();
 }
 function openOvModal(idx){
@@ -10588,7 +10590,7 @@ function meldFout(dossierId, itemId){
     `Dossier: ${d.title || d.name}\n` +
     `Link: ${dossierLink(d.id)}\n\n` +
     'Waarom denk ik dat (mag je hier aanvullen):\n';
-  window.location.href = mailtoUrl(atob(CONTACT_TO), '[Denk mee met Mechelen] Melding: stuk hoort niet in dossier', body);
+  window.location.href = mailtoUrl(atob(CONTACT_TO), '[Denk mee van As Gau Paust] Melding: stuk hoort niet in dossier', body);
 }
 async function kopieerDossierLink(id, knop){
   const url = dossierLink(id);
@@ -10623,7 +10625,7 @@ async function deelDossier(id, knop){
   if(navigator.share){
     const d = (DOSSIERS || []).find(x => x.id === id);
     try {
-      await navigator.share({ title: d ? (d.title || d.name) : 'Denk mee met Mechelen', url: dossierLink(id) });
+      await navigator.share({ title: d ? (d.title || d.name) : 'Denk mee van As Gau Paust', url: dossierLink(id) });
       return;
     } catch(e) {
       // Annuleren van het deelmenu is geen fout; alleen bij een echte weigering kopiëren we.
