@@ -99,12 +99,15 @@ ROL_RX = re.compile(r"\b(?:OGV|Meester)\s+(?:[A-Z][\w'’-]*\.?\s+){0,2}[A-Z][\w
 
 # Twee lijstvormen waarin een burger met naam én huisadres in de stukken staat. De audit
 # (audit_namen.py) wees ze aan als de grootste bron van namen die overbleef:
-#   'penningmeester: Van Voorbeeld Karel Proefstraat 3'   het bestuur van een kerkfabriek,
-#                                        met adres, telefoon en privé-mailadres erachter
+#   'Contactpersoon: Jan Voorbeeld'      wie een bezwaar of aanvraag indient
 #   'Aanvrager 2 Jan Voorbeeld' / 'Exploitant: Els Proefsma'  in de vergunningentabellen
 # We houden het functiewoord en het adres, en knippen alleen de naam: zonder naam is de
-# combinatie niet meer herleidbaar, en 'penningmeester' of een straatnaam blijft een zinvolle
-# zoekterm. Ook een organisatie op die plek verdwijnt; dat is de prijs, en die is klein.
+# combinatie niet meer herleidbaar, en een straatnaam blijft een zinvolle zoekterm. Ook een
+# organisatie op die plek verdwijnt; dat is de prijs, en die is klein.
+# Tot 07/10/2026 knipte de eerste vorm ook de naam na voorzitter, penningmeester en secretaris
+# (het bestuur van een kerkfabriek). Sinds 06/10/2026 is een verenigingsbestuur zichtbaar: dat is
+# een functie, geen burger zonder functie. Hun telefoonnummer wordt geen zoekterm, want losse
+# getallen indexeren we niet (tokens() hieronder).
 #
 # Een naamdeel is één hoofdletterwoord dat geen veldnaam is en geen straat. Zonder die twee
 # uitsluitingen leest de regel 'Adres' als een naam, of eet ze de straatnaam op die er meteen
@@ -116,7 +119,7 @@ _NAAMDEEL = (r"(?!Adres|Aanvrager|Exploitant|Onderneming|Bus|Afdeling|Sectie)"
              r"(?![\w'’-]*(?:straat|laan|weg|kaai|dreef|plein|baan|lei|vest|markt)\b)"
              r"[A-Z][\w'’-]+")
 BESTUURSLIJST_RX = re.compile(
-    r"\b((?i:(?:onder)?voorzitter|penningmeester|secretaris|contactpersoon))(\s*:\s*)"
+    r"\b((?i:contactpersoon))(\s*:\s*)"
     r"(?:" + _NAAMDEEL + r"\s+){1,3}")
 # De lookbehind houdt 'Adres aanvrager: <straat>' buiten schot: daar volgt geen naam maar het
 # adres, en dat is een zinvolle zoekterm die mag blijven.
@@ -161,7 +164,7 @@ def tokens(tekst):
     tekst = EMAIL_RX.sub(" ", tekst)
     tekst = AANSPREEK_RX.sub(" ", tekst)   # 'de heer X' / 'mevrouw Y' → geen zoekterm
     tekst = ROL_RX.sub(" ", tekst)         # 'OGV X' / 'Meester Y'     → geen zoekterm
-    tekst = BESTUURSLIJST_RX.sub(r"\1\2", tekst)   # 'penningmeester: Naam Voornaam Adres'
+    tekst = BESTUURSLIJST_RX.sub(r"\1\2", tekst)   # 'Contactpersoon: Naam Voornaam Adres'
     tekst = AANVRAGER_RX.sub(r"\1\2", tekst)       # 'Aanvrager 2 Naam Voornaam'
     uit = set()
     for t in TOKEN_RX.findall(norm(tekst)):

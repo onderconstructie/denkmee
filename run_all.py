@@ -16,7 +16,7 @@ Volgorde (dit is de volledige lijst; de volgorde is niet vrijblijvend, zie hiero
   3b)  straten_mechelen.py — volledige stratenlijst (optioneel, eenmalig)
   3b2) koppel_uittreksels.py — uittreksels aan de besluiten koppelen + tekst cachen
   3c)  tag_items.py       — AI-samenvattingen (optioneel, enkel met ANTHROPIC_API_KEY)
-  3d)  schoon_brontekst.py — e-mailadressen uit de gepubliceerde velden redacteren
+  3d)  schoon_brontekst.py — namen van burgers, e-mailadressen en geboortedatums maskeren
   3e)  bouw_zoekindex.py  — volledige-tekstindex voor de zoekbalk
   3e2) controles: naamaudit (audit_namen.py) en meetlat (meetlat_zoek.py); melden, stoppen niet
   3f)  delf_verwijzingen.py — harde codes (MJP, zaaknummer, OMV) voor verwante dossiers
@@ -346,8 +346,8 @@ def main():
     # 3c) AI-verrijking (optioneel): samenvattingen + thema's. Alleen met een sleutel.
     verrijk_optioneel()
 
-    # 3d) E-mailadressen uit de tekstvelden redacteren. Bewust ná de tagging: de tagging-cache
-    #     blijft zo gesleuteld op de ruwe brontekst, enkel het gepubliceerde data.json schoont op.
+    # 3d) Namen van burgers, e-mailadressen en geboortedatums maskeren in het gepubliceerde data.json.
+    #     Na de tagging: die leest de tekst al gemaskeerd, dit schoont ook de samenvattingen nog op.
     run("schoon_brontekst.py")
 
     # 3e) Volledige-tekstindex voor de zoekbalk (woord → punt-id's, zonder documentkopieën).

@@ -1,14 +1,15 @@
 """
-schoon_brontekst.py — redacteert e-mailadressen en geboortedatums uit de gepubliceerde tekstvelden.
+schoon_brontekst.py — maskeert namen van burgers, e-mailadressen en geboortedatums in de gepubliceerde
+tekstvelden. Adressen en huisnummers blijven bewust staan (afspraak van 05/10/2026).
 
 Officiële diensten- en kabinetsadressen duiken soms op in de brontekst van besluiten en in
 de vraag/het antwoord van schriftelijke vragen. Ze horen niet op de publieke site (of in de
 meegecommite data.json) thuis, dus we vervangen elk adres door de tekst '[e-mailadres]'.
 
-Draait als LAATSTE databewerking, ná de AI-tagging. Zo blijft de tagging-cache gesleuteld op
-de RUWE brontekst (die elke run identiek uit de pdf's komt), terwijl enkel het gepubliceerde
-data.json geschoond wordt. De getoonde samenvatting (decoded) bevat normaal geen adressen,
-maar we schonen ze voor de zekerheid mee.
+Draait als LAATSTE databewerking, ná de AI-tagging. De tagging zelf leest de brontekst al
+gemaskeerd (tag_items.py roept dezelfde maskeer_namen() aan, en de cache sleutelt op die gemaskeerde
+tekst); deze stap schoont daarna het gepubliceerde data.json. De getoonde samenvatting (decoded)
+schonen we voor de zekerheid mee.
 
 Draai:  python pijplijn/schoon_brontekst.py
 """
@@ -132,8 +133,13 @@ def maskeer_context(tekst):
 # Idem voor de landmeter-experts die een schattingsverslag tekenen: hun kantoor blijft staan,
 # hun naam hoeft er niet bij.
 #
-# Wie NIET gemaskeerd wordt, en dat is bewust: politieke mandatarissen (nooit), ambtenaren in
-# functie, bedrijven, en wie namens een organisatie optreedt. Die staan er in hun publieke rol.
+# Wie NIET gemaskeerd wordt, en dat is bewust (de grens van 05 en 06/10/2026): politieke mandatarissen
+# (nooit), de algemeen en de financieel directeur, de directeurs, de afdelingshoofden en de verslaggever
+# van het college, leden van adviesorganen (GECORO, LOP), besturen van verenigingen, notarissen en
+# architecten, ambtenaren van een andere overheid, bedrijven, en wie namens een organisatie optreedt. Die
+# staan er in hun functie. Ander stadspersoneel, vakbondsafgevaardigden, landmeters en advocaten worden
+# wel gemaskeerd (de laatste twee ook zonder lijst, zie BEROEP_PERSOON). Enkel burgers zonder functie
+# blijven altijd weg.
 #
 # Dit kan niet met een patroon: geen enkele regex ziet het verschil tussen een raadslid en een
 # buurtbewoner. Het is dus een gecureerde lijst, en onderaan staat een waakhond die nieuwe
@@ -275,11 +281,11 @@ PERSONEELSGIDS_TEKST = (
     "en de bedrijfshulpverleners: weggelaten.] ")
 
 
-# --- Ledentabel van een adviesraad met burgers, en ondersteunende personeelsrollen -----------
-# Een raadsbesluit dat de GECORO benoemt, zet elf deskundigen en zeven vertegenwoordigers van
-# verenigingen bij naam in de tekst, elk met een plaatsvervanger. Dat zijn burgers: hun naam hoorde
-# nooit op de site, en stond er op 16/09/2026 wel, tot in de samenvatting. De organisaties zelf
-# (Natuurpunt, VOKA, UNIZO, Fietsersbond) blijven staan; die horen bij het besluit.
+# --- Ledentabel van het syndicaal overleg, en ondersteunende personeelsrollen ----------------
+# Een stuk over het syndicaal overleg zet de vakbondsafgevaardigden bij naam in een ledentabel. Die
+# namen blijven weg. Van 16/09 tot 05/10/2026 gold deze regel ook voor de ledenlijst van de GECORO;
+# sinds 05/10/2026 staan de leden van adviesorganen er in hun functie en blijven ze zichtbaar
+# (PRIVAAT_CONTEXT hieronder). De organisaties zelf blijven altijd staan.
 #
 # Twee smalle regels, in de vorm van de personeelsgids-knip hierboven:
 #  1. LEDENBLOK: binnen een ledenopsomming van zo'n commissie maskeren we de persoonsnamen. Het
@@ -519,12 +525,12 @@ def _maskeer_paren(blok):
 
 
 def maskeer_ledenlijst(tekst):
-    """Maskeert namen in de ledenlijst van een adviesraad en naast een ondersteunende rol.
+    """Maskeert namen in een ledenlijst van het syndicaal overleg en naast een ondersteunende rol.
 
-    Een benoemingsbesluit van zo'n raad IS een personenlijst: de namen staan in de tabel, maar ook
-    bij de kandidaten, de voorgedragen voorzitter en de politieke waarnemers. Daarom maskeren we in
-    zo'n stuk ELK persoonsnaampaar, behalve de mandatarissen uit de witte lijst en de woordparen die
-    een orgaan, vakgebied of plaats benoemen. Buiten zo'n stuk raakt de regel niets aan."""
+    Zo'n stuk IS een personenlijst: de vakbondsafgevaardigden staan in de tabel, maar ook in de
+    opsomming errond. Daarom maskeren we in zo'n stuk ELK persoonsnaampaar, behalve de mandatarissen
+    uit de witte lijst en de woordparen die een orgaan, vakgebied of plaats benoemen. Buiten zo'n stuk
+    raakt de regel niets aan (sinds 05/10/2026 ook niet meer bij adviesorganen zoals de GECORO)."""
     if not tekst:
         return tekst, 0
     # De witte lijst meteen laden. Vroeger kwam ze pas bij de eerste ledenlijsttreffer, en tot dan

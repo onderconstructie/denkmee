@@ -289,11 +289,34 @@ if _leden_lek:
     print(f"[ledenlijst] persoonsnamen in een ledentabel of naast een personeelsrol in "
           f"{len(_leden_lek)} stuk(ken): " + ", ".join(_leden_lek[:5]))
     if not is_demo:
-        sys.exit("[STOP] Live build geweigerd: er staan namen van burgers in een ledentabel. Draai "
-                 "schoon_brontekst.py opnieuw, dan bouw_zoekindex.py, en bouw daarna de site opnieuw.")
+        sys.exit("[STOP] Live build geweigerd: er staan namen van vakbondsafgevaardigden of van personeel "
+                 "in een ondersteunende rol in de build. Draai schoon_brontekst.py opnieuw, dan "
+                 "bouw_zoekindex.py, en bouw daarna de site opnieuw.")
     print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
 else:
     print("       ledentabellen: geen persoonsnamen in de build ✓")
+
+# 3c3) Beroepsklep (sinds 07/10/2026): de naam van een advocaat of landmeter. schoon_brontekst.py maskeert
+#      die met maskeer_beroep_persoon(), ook zonder lijst; deze klep controleert met exact dezelfde regel
+#      of dat ook echt gebeurd is, zodat een losse stap die de opkuis overslaat zo'n naam niet live zet.
+#      Een kantoor, een vennootschap en een mandataris laat de regel zelf staan.
+_beroep_lek = []
+for _it in _items:
+    for _v in GEB_VELDEN + ("kernbegrippen", "toezeggingen"):
+        _w = _it.get(_v)
+        _ts = [x for x in _w if isinstance(x, str)] if isinstance(_w, list) else [str(_w or "")]
+        if any(_t and _sb_leden.maskeer_beroep_persoon(_t)[1] for _t in _ts):   # elk element apart
+            _beroep_lek.append(str(_it.get("id")))
+            break
+if _beroep_lek:
+    print(f"[beroep] naam van een advocaat of landmeter in {len(_beroep_lek)} stuk(ken): "
+          + ", ".join(_beroep_lek[:5]))
+    if not is_demo:
+        sys.exit("[STOP] Live build geweigerd: er staat een naam van een advocaat of landmeter in de build. "
+                 "Draai schoon_brontekst.py opnieuw, dan bouw_zoekindex.py, en bouw daarna de site opnieuw.")
+    print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
+else:
+    print("       advocaten en landmeters: geen naam in de build ✓")
 
 # 3d) Verhulde e-mailadressen en geboortedatums in lopende tekst. schoon_brontekst.py maskeert een
 #     e-mailadres met een komma of [at] en een datum na "°" of "geboren". Deze klep controleert of
