@@ -75,8 +75,8 @@ STEMLIJST_RX = re.compile(
 # document leidt, en dat maakt van de zoekbalk een personenregister. Zelfde redenering en
 # zelfde beperking als bij de stemlijst hierboven: we knippen enkel DEZE context weg. Draagt
 # een naam elders betekenis (in de titel, als indiener van een schriftelijke vraag, in de
-# lopende tekst), dan blijft ze gewoon vindbaar. Zo hoeven we niemand in te delen in
-# 'mandataris' of 'particulier', wat we op basis van de brontekst toch niet betrouwbaar kunnen.
+# lopende tekst), dan blijft ze gewoon vindbaar. Een naam die een mens al als publiek beoordeelde
+# (de witte lijst), knippen we hier niet: zie _aanspreking() verderop (sinds 07/10/2026).
 # De aanspreekvorm zelf is hoofdletter-ongevoelig ("De heer" aan het zinsbegin telt mee), maar
 # wat erachter komt moet met een HOOFDLETTER beginnen. Dat onderscheid doet het echte werk:
 # "mevrouw de Gouverneur" blijft staan (een functie, en een zinvolle zoekterm), "de heer Janssens"
