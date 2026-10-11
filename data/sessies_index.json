@@ -1422,6 +1422,17 @@
     "uittreksels": []
   },
   {
+    "organ": "Burgemeester",
+    "date": "2026-10-08",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-09",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_08-10-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "College van burgemeester en schepenen",
     "date": "2024-12-03",
     "documenten": {
@@ -4314,7 +4325,12 @@
   {
     "organ": "College van burgemeester en schepenen",
     "date": "2026-09-29",
-    "documenten": {},
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-08",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_29-09-2026_Beslissingenlijst.pdf"
+      }
+    },
     "uittreksels": [
       {
         "titel": "Uittreksels",
@@ -7643,6 +7659,17 @@
       "besluiten": {
         "published": "2026-10-01",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_22-09-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "Vast bureau",
+    "date": "2026-09-29",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-08",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_29-09-2026_Beslissingenlijst.pdf"
       }
     },
     "uittreksels": []
