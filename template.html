@@ -8180,8 +8180,11 @@ const DOS_STOP = new Set('goedkeuring goedkeuren aanvraag aanvragen gemeenteraad
 // Etiketwoorden (24/09/2026): ze benoemen het document of de herhaling, niet de zaak. Twee
 // vervolgvragen van hetzelfde raadslid, over de Brusselsesteenweg en over het zwembad, deelden
 // zo het woord 'vervolgvraag' en belandden in hetzelfde dossier; via 'behoud' kwam er een voorstel
-// over het straathoekwerk bij.
-'vervolg vervolgvraag vervolgvragen opvolging bijkomende versie finaal update behoud'.split(' ').forEach(w => DOS_STOP.add(w));
+// over het straathoekwerk bij. Zo ook 'aangevraagd' (12/10/2026): actualiteitsdebatten dragen "(aangevraagd
+// door ...)" in hun titel, en twee debatten over diftar en de dienstencentra kregen zo dezelfde sleutel.
+// En 'belang': uit de partijnaam Vlaams Belang (twee debatten over geweld en over de politiezone) en uit
+// de procedurezin "voor algemeen belang".
+'vervolg vervolgvraag vervolgvragen opvolging bijkomende versie finaal update behoud aangevraagd belang'.split(' ').forEach(w => DOS_STOP.add(w));
 function dosTokens(s){
   return [...new Set((s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/\b[a-z][a-z\-]{4,}\b/g)||[])].filter(w=>!DOS_STOP.has(w));
 }

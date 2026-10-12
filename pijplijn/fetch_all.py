@@ -6,12 +6,14 @@ fetch_all.py — ophaler voor de raden (gemeenteraad + raad voor maatschappelijk
      (agenda / aanvullende agenda / besluitenlijst / notulen) → tijdigheid;
   3) catalogiseert ook de uittreksels (titel + link), zonder ze standaard te downloaden;
   4) schrijft data/sessies_index.json;
-  5) downloadt de vier hoofd-PDF's naar data/raw/ (bestaande overgeslagen).
+  5) downloadt de vier hoofd-PDF's naar data/raw/ (bestaande overgeslagen), en kijkt om de
+     CONTROLE_NA_DAGEN dagen na of de stad een bestaande pdf verving.
 
 Tijdigheidsregels (artikel 22 en artikel 287 van het Decreet Lokaal Bestuur) worden
 in stap 9 (maak_data.py) toegepast; dit script verzamelt enkel de feiten.
 
 Draai:  python pijplijn/fetch_all.py     (eenmalig: python -m pip install requests)
+        python pijplijn/fetch_all.py --grondig   (de controleronde nu, ook als ze niet aan de beurt is)
 Alle vijf de organen staan in ORGANEN; een orgaan erbij = één regel daar.
 """
 
@@ -43,6 +45,15 @@ LEGISLATUUR_START = date(2024, 12, 1)
 JAREN = tuple(range(2024, date.today().year + 1))
 DOWNLOAD_PDFS = True
 DOWNLOAD_UITTREKSELS = False
+# Een pdf die al lokaal staat, werd vroeger nooit opnieuw opgehaald. Maar de stad vervangt soms een
+# document onder dezelfde naam: gemeten op 12/10/2026 bij 2 van de 429 hoofddocumenten, twee
+# collegebesluitenlijsten met aangepaste titels en een achteraf ingevuld "Goedgekeurd". Daarom vergelijkt
+# een ronde om de zoveel dagen de grootte bij de stad (een HEAD-verzoek, geen download) met de lokale
+# kopie, en haalt ze een gewijzigd document opnieuw op. De vorige versie gaat naar data/raw/_vervangen/
+# (plat, zodat run_all er geen zitting in ziet), en data/raw/_controle.json houdt de datum van de laatste
+# ronde bij en wat er vervangen werd. --grondig forceert de ronde. Duur: ongeveer 3 minuten. Uittreksels
+# vallen erbuiten.
+CONTROLE_NA_DAGEN = 7
 
 # Per orgaan: (orgaan-id, stroom-id). De volledige naam is meteen de sleutel in de data.
 ORGANEN = {
@@ -204,11 +215,64 @@ def main():
 
     if DOWNLOAD_PDFS:
         raw = data_dir / "raw"; n = 0
+        controle_pad = raw / "_controle.json"
+        try:
+            controle = json.loads(controle_pad.read_text(encoding="utf-8")) if controle_pad.exists() else {}
+        except Exception:
+            controle = {}
+        laatste = controle.get("laatste_ronde")
+        try:
+            ronde = ("--grondig" in sys.argv or not laatste
+                     or (date.today() - date.fromisoformat(laatste)).days >= CONTROLE_NA_DAGEN)
+        except ValueError:
+            ronde = True
+        nagekeken, vervangen, mislukt, zonder_grootte, afgebroken = 0, 0, 0, 0, False
+        ronde_start = time.time()
+        if ronde:
+            print(f"\nControleronde: vervangt de stad een bestaande pdf? (vorige ronde: {laatste or 'nooit'})")
         for z in geordend:
             map_ = raw / z["organ"].lower().replace(" ", "_") / z["date"]
             for typ, doc in z["documenten"].items():
                 f = map_ / f"{typ}.pdf"
-                if f.exists(): continue
+                if f.exists():
+                    if not ronde or afgebroken: continue
+                    if time.time() - ronde_start > 900:   # een haperende bron mag de run niet ophouden
+                        afgebroken = True; print("  ! controleronde afgebroken na 15 minuten"); continue
+                    try:
+                        h = requests.head(doc["url"], headers={"User-Agent": USER_AGENT}, timeout=30,
+                                          allow_redirects=True)
+                        h.raise_for_status()
+                        grootte = int(h.headers.get("Content-Length", -1))
+                    except Exception as e:
+                        mislukt += 1; print(f"  ! controle mislukt: {doc['url']} — {e}"); continue
+                    nagekeken += 1; time.sleep(0.25)
+                    if grootte < 0:
+                        zonder_grootte += 1; continue
+                    if grootte == f.stat().st_size: continue   # een wijziging met dezelfde grootte ziet deze ronde niet
+                    try:
+                        r = requests.get(doc["url"], headers={"User-Agent": USER_AGENT}, timeout=60)
+                        r.raise_for_status()
+                        if not r.content.startswith(b"%PDF-"):
+                            raise ValueError("geen pdf in het antwoord")
+                    except Exception as e:
+                        mislukt += 1; print(f"  ! mislukt: {doc['url']} — {e}"); continue
+                    oud = f.read_bytes()
+                    if r.content == oud: continue
+                    stam = f"{map_.parent.name}_{z['date']}_{typ}_{date.today():%Y%m%d}"
+                    archief = raw / "_vervangen" / f"{stam}.pdf"
+                    volgnr = 1
+                    while archief.exists():
+                        volgnr += 1; archief = raw / "_vervangen" / f"{stam}_{volgnr}.pdf"
+                    archief.parent.mkdir(parents=True, exist_ok=True)
+                    archief.write_bytes(oud)
+                    tijdelijk = f.with_suffix(".pdf.nieuw")
+                    tijdelijk.write_bytes(r.content); tijdelijk.replace(f); vervangen += 1
+                    controle.setdefault("vervangen", []).append({
+                        "orgaan": z["organ"], "zitting": z["date"], "type": typ, "gezien": date.today().isoformat(),
+                        "oud_bytes": len(oud), "nieuw_bytes": len(r.content), "archief": archief.name})
+                    print(f"  ⟳ {f.relative_to(base_dir)} door de stad vervangen ({len(oud)} → {len(r.content)} bytes)")
+                    time.sleep(1)
+                    continue
                 f.parent.mkdir(parents=True, exist_ok=True)
                 try:
                     r = requests.get(doc["url"], headers={"User-Agent": USER_AGENT}, timeout=60)
@@ -227,6 +291,14 @@ def main():
                     except Exception as e:
                         print(f"  ! mislukt: {u['url']} — {e}")
         print(f"\n{n} nieuwe PDF's gedownload.")
+        if ronde:
+            # Een ronde met veel mislukte verzoeken (een storing bij de bron) telt niet: dan komt ze bij de
+            # volgende run opnieuw aan de beurt.
+            if mislukt <= max(5, nagekeken // 10) and not afgebroken:
+                controle["laatste_ronde"] = date.today().isoformat()
+            controle_pad.write_text(json.dumps(controle, ensure_ascii=False, indent=1), encoding="utf-8")
+            print(f"Controleronde: {nagekeken} nagekeken, {vervangen} door de stad vervangen, {mislukt} mislukt, "
+                  f"{zonder_grootte} zonder grootte bij de stad (niet te vergelijken).")
 
 
 if __name__ == "__main__":

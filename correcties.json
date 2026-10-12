@@ -51,6 +51,12 @@
       "reden": "DIFTAR-stuk (afval), verkeerd geclusterd in een fiets- en voetgangersbrugdossier",
       "bron": "curator",
       "datum": "2026-07-18"
+    },
+    {
+      "item": "gemeenteraad-20260126-ACT1",
+      "reden": "debat over de sluiting van de lokale dienstencentra, niet dezelfde zaak als de samenwerkingsovereenkomst van 2025",
+      "bron": "curator",
+      "datum": "2026-10-12"
     }
   ],
   "samenvoegen": [
@@ -670,6 +676,13 @@
     "dossier-nwvzh744al": "dossier-1b51jm44wfj",
     "dossier-o4gcgteff8": "dossier-10ghswpg2wn",
     "dossier-qgfe5k3lg6": "dossier-4g1ygfwais",
-    "dossier-ucznxdpjgb": "dossier-1gk4wx00vsx"
+    "dossier-ucznxdpjgb": "dossier-1gk4wx00vsx",
+    "dossier-2dhjhvch3je": "dossier-142affv30ec",
+    "dossier-28r2rhkuxku": "dossier-2fxrn8xlwel",
+    "dossier-22tfj7lm9ht": "dossier-267fznsconn",
+    "dossier-1oz79n2x3pv": "dossier-y8jjr2qedt",
+    "dossier-oiaseolq5m": "dossier-1mmyq4cbmb",
+    "dossier-1vvxevnegdr": "dossier-7wobswl6cc",
+    "dossier-wf6ruvaoja": "dossier-25i14tlz99z"
   }
 }

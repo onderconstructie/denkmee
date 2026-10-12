@@ -5,14 +5,15 @@ maatschappelijk welzijn om naar de punten van de KOMENDE zitting.
 Verschil met parse_besluiten.py: een agenda heeft nog geen uitkomst. Er is dus
 geen resultaat-regel; het hele blok ná de domein-kop is de titel/omschrijving
 (inclusief sub-puntjes "1)/2)"). Daarnaast herkent dit de mondelinge Vragen
-(V1, V2, …) en de toegevoegde punten (TP01, …). De uitnodigingsbrief vooraan
+(V1, V2, …), de toegevoegde punten (TP01, …) en de actualiteitsdebatten (ACT1, …).
+De uitnodigingsbrief vooraan
 wordt overgeslagen door pas bij "Openbare zitting" te beginnen.
 
 Wat het per punt geeft:
-  - nummer    (1, 2, … / 13A / TP01 / V1)
-  - categorie (domein in HOOFDLETTERS: MOBILITEIT, CULTUUR, … ; leeg bij vraag/TP)
+  - nummer    (1, 2, … / 13A / TP01 / V1 / ACT1)
+  - categorie (domein in HOOFDLETTERS: MOBILITEIT, CULTUUR, … ; leeg bij vraag/TP/ACT)
   - titel     (de volledige omschrijving, sub-puntjes inbegrepen)
-  - type      (gewoon / toegevoegd / vraag)
+  - type      (gewoon / toegevoegd / vraag / actuadebat)
   - indiener  (enkel bij vraag of toegevoegd punt, bv. 'K. Lauwers')
   - zitting   ('openbaar' of 'besloten')
 
@@ -36,7 +37,9 @@ from pathlib import Path
 
 import pdfplumber
 
-ITEM = re.compile(r'^(\d+[A-Za-z]?|TP\d+|V\d+)\.\s+(.*)$')    # "1. " / "13A. " / "TP01. " / "V1. "
+# Tot 12/10/2026 ontbrak ACT: de kop van een actualiteitsdebat ("ACT1. ACTUALITEITSDEBAT. ...") liep dan
+# mee in de titel van het punt ervoor, en het debat zelf viel weg.
+ITEM = re.compile(r'^(\d+[A-Za-z]?|TP\d+|V\d+|ACT\d*)\.\s+(.*)$')    # "1. " / "13A. " / "TP01. " / "V1. " / "ACT1. "
 KOP = re.compile(r'^([^.]+?)\.\s+(.*)$')                      # "DOMEIN. titel..."
 NOISE = re.compile(
     r'^(Agenda(?:\s+volledig)?\s+\d+$'          # paginakop "Agenda 2" / "Agenda volledig 2"
@@ -47,7 +50,7 @@ NOISE = re.compile(
 
 
 def _is_echt_punt(nummer: str) -> bool:
-    if nummer[0] in ("T", "V"):                 # TP.. of V.. zijn altijd echt
+    if nummer[0] in ("T", "V", "A"):            # TP.., V.. of ACT.. zijn altijd echt
         return True
     return int(re.match(r'\d+', nummer).group(0)) < 1000   # geen afgebroken jaartal
 
@@ -78,6 +81,7 @@ def parse(pdf_path):
         blok, meta = [], None
 
     for l in lines:
+        l = re.sub(r'^(ACT\d*)\.(?=\S)', r'\1. ', l)   # "ACT01.ACTUALITEITSDEBAT." (27/01/2025) zonder spatie
         low = l.lower()
         if low.startswith("openbare zitting"):
             sluit(); zitting = "openbaar"; continue
@@ -98,6 +102,8 @@ def parse(pdf_path):
                 soort, categorie = "vraag", ""
             elif nummer.startswith("TP") or categorie.upper() == "TOEGEVOEGD PUNT":
                 soort, categorie = "toegevoegd", ""
+            elif nummer.startswith("ACT") or categorie.upper() == "ACTUALITEITSDEBAT":
+                soort, categorie = "actuadebat", ""         # zoals in parse_besluiten.py; geen domein
             else:
                 soort = "gewoon"
             if soort in ("vraag", "toegevoegd") and re.search(r"\s[-\u2013]\s", titel_start):   # "Naam - onderwerp"
@@ -121,7 +127,8 @@ def main():
     gewoon = sum(1 for i in items if i["type"] == "gewoon")
     tp = sum(1 for i in items if i["type"] == "toegevoegd")
     vr = sum(1 for i in items if i["type"] == "vraag")
-    print(f"{len(items)} agendapunten ({gewoon} gewoon, {tp} toegevoegd, {vr} vragen) → {out.name}\n")
+    act = sum(1 for i in items if i["type"] == "actuadebat")
+    print(f"{len(items)} agendapunten ({gewoon} gewoon, {tp} toegevoegd, {vr} vragen, {act} actualiteitsdebat) → {out.name}\n")
     for i in items:
         ind = f"  ({i['indiener']})" if i["indiener"] else ""
         print(f"{i['nummer']:>5}  {(i['categorie'] or i['type'])[:24]:<24} {i['titel'][:54]}{ind}")

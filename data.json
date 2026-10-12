@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11",
+  "generated_at": "2026-10-12",
   "next_meeting": {
     "id": "gemeenteraad-20261020",
     "type": "Gemeenteraad",
@@ -23934,6 +23934,41 @@
       ]
     },
     {
+      "id": "gemeenteraad-20260224-ACT1",
+      "sessie_id": "gemeenteraad-20260224",
+      "sessie_date": "2026-02-24",
+      "nummer": "ACT1",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "bespreking ter zitting",
+        "text": "Bespreking ter zitting",
+        "published": "2026-02-24"
+      },
+      "impact": 2,
+      "type": "actuadebat",
+      "aanvullend": false,
+      "titel": "Evaluatie uitrol diftar. (aangevraagd door N-VA en cd&v Mechelen)",
+      "decoded": "De gemeenteraad houdt een actualiteitsdebat over de uitrol van diftar. N-VA en cd&v Mechelen vragen dit debat aan. Hun voorstel is bezorgd aan de raadsleden.",
+      "themes": [
+        "Leefmilieu"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": {
+        "modus": "geen"
+      },
+      "brontekst": "ACT1. ACTUALITEITSDEBAT. Evaluatie uitrol diftar. (aangevraagd door N-VA en cd&v\nMechelen)\nHet voorstel van de N-VA en de cd&v Mechelen-fractie werd aan de raadsleden bezorgd.",
+      "kernbegrippen": [
+        "diftar",
+        "N-VA",
+        "cd&v Mechelen"
+      ]
+    },
+    {
       "id": "gemeenteraad-20260331-1",
       "sessie_id": "gemeenteraad-20260331",
       "sessie_date": "2026-03-31",
@@ -26697,6 +26732,42 @@
         "Mobitwin",
         "Klimavelo",
         "M-shuttle"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20260428-ACT1",
+      "sessie_id": "gemeenteraad-20260428",
+      "sessie_date": "2026-04-28",
+      "nummer": "ACT1",
+      "url": null,
+      "status": "beslist",
+      "result": {
+        "decision": "bespreking ter zitting",
+        "text": "Bespreking ter zitting",
+        "published": "2026-04-28"
+      },
+      "impact": 2,
+      "type": "actuadebat",
+      "aanvullend": false,
+      "titel": "cd&v en N-VA - Kantvelde als watergevoelig open ruimtegebied?",
+      "decoded": "De gemeenteraad houdt een actualiteitsdebat over Kantvelde als watergevoelig open ruimtegebied. cd&v en N-VA dienen dit voorstel in. De raadsleden ontvangen het voorstel van beide fracties vooraf.",
+      "themes": [
+        "Natuur",
+        "Klimaat & energie"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": {
+        "modus": "geen"
+      },
+      "brontekst": "ACT1. ACTUALITEITSDEBAT. cd&v en N-VA - Kantvelde als watergevoelig open\nruimtegebied?\nHet voorstel van de cd&v- en de N-VA-fractie werd aan de raadsleden bezorgd.",
+      "kernbegrippen": [
+        "Kantvelde",
+        "cd&v",
+        "N-VA"
       ]
     },
     {
@@ -31987,6 +32058,36 @@
       "brontekst": null,
       "kernbegrippen": [
         "Mobiele zwembaden"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20260915-ACT1",
+      "sessie_id": "gemeenteraad-20260915",
+      "sessie_date": "2026-09-15",
+      "nummer": "ACT1",
+      "url": null,
+      "status": "agenda",
+      "result": null,
+      "impact": 2,
+      "type": "actuadebat",
+      "aanvullend": false,
+      "titel": "cd&v - N-VA - Vlaams Belang - Politiezone Rivierenland en rol burgemeester.",
+      "decoded": "De gemeenteraad houdt een actualiteitsdebat over Politiezone Rivierenland en de rol van de burgemeester. cd&v, N-VA en Vlaams Belang vragen dit debat aan.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "ACT1. ACTUALITEITSDEBAT. cd&v - N-VA - Vlaams Belang - Politiezone Rivierenland en rol burgemeester.",
+      "kernbegrippen": [
+        "Politiezone Rivierenland",
+        "cd&v",
+        "N-VA",
+        "Vlaams Belang"
       ]
     },
     {
@@ -40152,9 +40253,9 @@
       "date": "2026-08-18",
       "orgaan": "College",
       "categorie": "Bestuur",
-      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van Steragas Vlaams-Brabant Classic op 13 september 2026.",
       "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_18-08-2026_115935.pdf",
-      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor de wielerwedstrijd Steragas Vlaams-Brabant Classic op 13 september 2026 in Mechelen. In de Expoelstraat, Bosstraat, Dukestraat, Boomkensstraat, Walestraat en op de Humbeekseweg tussen de kruising met de Kleine Parijsstraat en de kruising met de Vennestraat geldt op 13 september 2026 van 12u00 tot 18u00 een parkeerverbod aan beide zijden van de rijbaan. Dit wordt aangeduid met verkeersborden E1, aangevuld met pijlen van het type Xa en Xd. In diezelfde straten en op datzelfde tijdstip is het verkeer verboden voor alle bestuurders in beide richtingen. Dit wordt aangeduid met verbodsborden C3. Het college maakt de verordening bekend volgens artikel 286 van het Decreet Lokaal Bestuur. Inbreuken worden bestraft volgens de verkeerswet. Het college stuurt een afschrift naar de Bestendige Deputatie van de Provincieraad van Antwerpen en naar de griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor de wielerwedstrijd Steragas Vlaams-Brabant Classic op 13 september 2026 in Mechelen. In de Expoelstraat, Bosstraat, Dukestraat, Boomkensstraat, Walestraat en op de Humbeekseweg (tussen de kruising met de Kleine Parijsstraat en de kruising met de Vennestraat) geldt op 13 september 2026 van 12u00 tot 18u00 een parkeerverbod aan beide zijden van de rijbaan. Dit wordt aangeduid met verkeersborden E1, aangevuld met pijlen van het type Xa en Xd. In diezelfde straten en op datzelfde tijdstip is het verkeer er ook verboden voor alle bestuurders in beide richtingen, aangeduid met verbodsborden C3. Overtredingen van deze verordening worden bestraft volgens de verkeerswet. Het college bezorgt een afschrift van de verordening aan de Bestendige Deputatie van de Provincieraad van Antwerpen en aan de griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
       "themes": [
         "Mobiliteit",
         "Veiligheid"
@@ -40184,11 +40285,12 @@
       "date": "2026-08-18",
       "orgaan": "College",
       "categorie": "Bestuur",
-      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van Crossweekend op 10 oktober 2026.",
       "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_18-08-2026_115936.pdf",
-      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor Crossweekend, dat doorgaat op 10 oktober 2026 in Mechelen. Op de Kerkenblokweg geldt op 10 oktober 2026 een parkeerverbod van 12u00 tot 18u00 aan beide zijden van de rijbaan. Op dezelfde dag is het verkeer er verboden voor alle bestuurders in beide richtingen van 11u00 tot 19u00. Het college kondigt deze maatregelen aan met verkeersborden E1 met pijlen van het type Xa en Xd voor het parkeerverbod, en met verbodsborden C3 voor het verkeersverbod. Het college maakt de verordening bekend volgens artikel 286 van het Decreet Lokaal Bestuur. Inbreuken worden bestraft volgens de verkeerswet. Het college stuurt een afschrift van de verordening naar de Bestendige Deputatie van de Provincieraad van Antwerpen en naar de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor Crossweekend op 10 oktober 2026 in Mechelen. Op de Kerkenblokweg geldt op 10 oktober 2026 van 12u00 tot 18u00 een parkeerverbod aan beide zijden van de rijbaan. Op dezelfde dag geldt van 11u00 tot 19u00 een verbod voor alle bestuurders in beide richtingen op de Kerkenblokweg. Borden E1 met pijlen type Xa en Xd kondigen het parkeerverbod aan. Verbodsborden C3 kondigen het rijverbod aan. Het college maakt de verordening bekend volgens artikel 286 van het Decreet Lokaal Bestuur. Overtredingen worden bestraft volgens de verkeerswet. Het college stuurt een afschrift van de verordening naar de Bestendige Deputatie van de Provincieraad van Antwerpen en naar de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
       "themes": [
-        "Mobiliteit"
+        "Mobiliteit",
+        "Veiligheid"
       ],
       "streets": [
         "Kerkenblokweg"
@@ -48849,7 +48951,7 @@
       "id": "college-20260528-1",
       "date": "2026-05-28",
       "orgaan": "College",
-      "categorie": "Algemeen directeur",
+      "categorie": "Overig",
       "titel": "Ontslagname directeur.",
       "decoded": "Het college van burgemeester en schepenen neemt kennis van het ontslag van een directeur."
     },
@@ -48857,7 +48959,7 @@
       "id": "college-20260528-2",
       "date": "2026-05-28",
       "orgaan": "College",
-      "categorie": "Algemeen directeur",
+      "categorie": "Overig",
       "titel": "Beslissing tot afsluiten dading.",
       "decoded": "Het college van burgemeester en schepenen beslist om een dading af te sluiten.",
       "themes": [

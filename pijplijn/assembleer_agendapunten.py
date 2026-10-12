@@ -182,6 +182,59 @@ def main():
             "stemming": None,
             "brontekst": tekst,
         })
+    # Actualiteitsdebatten (ACT1., ...) staan meestal op de besluitenlijst, maar niet altijd: gemeten op
+    # 12/10/2026 stonden er drie niet op (24/02, 28/04 en 15/09/2026), enkel in de aanvullende agenda en,
+    # voor 24/02 en 28/04, in de notulen.
+    # Er wordt niet over gestemd. Zo'n debat komt er dan bij zoals een mondelinge vraag: met de titel van
+    # de agenda (die van de notulen breekt af op het einde van de regel), de tekst uit de notulen, en
+    # zonder notulen nog als agendapunt. "ACT", "ACT01" en "ACT1" zijn hetzelfde debat.
+    def debatnr(nr):
+        m = re.match(r"^ACT0*(\d*)$", nr)
+        return "ACT" + (m.group(1) or "1") if m else nr
+    debatten = {}
+    for pad in agenda_paden:
+        if Path(pad).exists():
+            ruw = json.loads(Path(pad).read_text(encoding="utf-8"))
+            for p in (ruw if isinstance(ruw, list) else ruw.get("punten", [])):
+                if p.get("type") == "actuadebat":
+                    debatten.setdefault(debatnr(p["nummer"]), {"nummer": p["nummer"], "titel": p["titel"]})
+    for nr, note in notulen.items():
+        if note.get("type") == "actualiteitsdebat":
+            d = debatten.setdefault(debatnr(nr), {"nummer": nr, "titel": note.get("titel") or ""})
+            d["notulen"] = note
+    al_op_lijst = {debatnr(n["nummer"]) for n in nieuwe}
+    for nr in sorted(debatten):
+        if nr in al_op_lijst:
+            continue
+        d = debatten[nr]
+        note = d.get("notulen")
+        titel = d["titel"].strip()
+        nieuwe.append({
+            "id": f"{sessie_id}-{d['nummer']}",
+            "sessie_id": sessie_id,
+            "sessie_date": datum,
+            "nummer": d["nummer"],
+            "url": None,
+            "status": "beslist" if note else "agenda",
+            "result": ({"decision": "bespreking ter zitting", "text": "Bespreking ter zitting", "published": datum}
+                       if note else None),
+            "impact": 2,
+            "type": "actuadebat",
+            "aanvullend": False,
+            "titel": titel,                 # zoals de stad hem schrijft: geen hoofdletter, want vaak begint
+            "decoded": titel,               # hij met een partijnaam als "cd&v"
+            "themes": [],
+            "schepen": None,
+            "streets": [],
+            "neighborhood": None,
+            "financial_impact": None,
+            "indiener": None,
+            "stemming": note.get("stemming") if note else None,
+            # Zonder notulen de letterlijke agendaregel: met enkel de titel hield het taalmodel het
+            # debat voor een vraag (gezien op 12/10/2026).
+            "brontekst": note.get("tekst") if note else f"{d['nummer']}. ACTUALITEITSDEBAT. {titel}",
+        })
+
     # Vaste klep: elke vraag op de agenda moet op de site staan.
     ontbreekt = sorted(set(agenda) - {vraagnr(n["nummer"]) for n in nieuwe})
     if ontbreekt:
