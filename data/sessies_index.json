@@ -6345,6 +6345,17 @@
     ]
   },
   {
+    "organ": "Gemeenteraad",
+    "date": "2026-10-20",
+    "documenten": {
+      "agenda": {
+        "published": "2026-10-12",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_20-10-2026_Agenda.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "Raad voor maatschappelijk welzijn",
     "date": "2024-12-02",
     "documenten": {
@@ -6741,6 +6752,17 @@
       "besluiten": {
         "published": "2026-09-16",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=BesluitenLijstUitspraak_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Beslissingslijst_toezicht.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "Raad voor maatschappelijk welzijn",
+    "date": "2026-10-20",
+    "documenten": {
+      "agenda": {
+        "published": "2026-10-12",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_20-10-2026_Agenda.pdf"
       }
     },
     "uittreksels": []

@@ -1,16 +1,17 @@
 {
-  "generated_at": "2026-10-12",
+  "generated_at": "2026-10-13",
   "next_meeting": {
     "id": "gemeenteraad-20261020",
     "type": "Gemeenteraad",
-    "date": "2026-10-20",
     "datetime": "2026-10-20T20:00:00",
+    "date": "2026-10-20",
     "agenda_url": null,
-    "agenda_published": null,
-    "agenda_deadline": null,
-    "status": "gepland",
+    "agenda_published": "2026-10-12",
+    "agenda_deadline": "2026-10-12T23:59:59",
+    "status": "tijdig",
     "late_days": 0,
-    "agenda_status": "gepland"
+    "notulen_published": null,
+    "agenda_status": "tijdig"
   },
   "sessies": [
     {
@@ -448,24 +449,26 @@
     {
       "id": "gemeenteraad-20261020",
       "type": "Gemeenteraad",
-      "date": "2026-10-20",
       "datetime": "2026-10-20T20:00:00",
+      "date": "2026-10-20",
       "agenda_url": null,
-      "agenda_published": null,
-      "agenda_deadline": null,
-      "status": "gepland",
-      "late_days": 0
+      "agenda_published": "2026-10-12",
+      "agenda_deadline": "2026-10-12T23:59:59",
+      "status": "tijdig",
+      "late_days": 0,
+      "notulen_published": null
     },
     {
       "id": "rmw-20261020",
       "type": "RMW",
-      "date": "2026-10-20",
       "datetime": "2026-10-20T20:00:00",
+      "date": "2026-10-20",
       "agenda_url": null,
-      "agenda_published": null,
-      "agenda_deadline": null,
-      "status": "gepland",
-      "late_days": 0
+      "agenda_published": "2026-10-12",
+      "agenda_deadline": "2026-10-12T23:59:59",
+      "status": "tijdig",
+      "late_days": 0,
+      "notulen_published": null
     },
     {
       "id": "gemeenteraad-20261124",
@@ -32091,6 +32094,1029 @@
       ]
     },
     {
+      "id": "gemeenteraad-20261020-1",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "1",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Onderzoek geloofsbrieven, aanstelling en beëdiging van nieuw gemeenteraadslid, in opvolging van Ariane Van Craen.",
+      "decoded": "De gemeenteraad onderzoekt de geloofsbrieven van een nieuw gemeenteraadslid. Dit lid volgt Ariane Van Craen op. De gemeenteraad stelt het nieuwe lid aan en laat het de eed afleggen.",
+      "themes": [
+        "Burgerzaken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Onderzoek geloofsbrieven, aanstelling en beëdiging van nieuw gemeenteraadslid, in opvolging van Ariane Van Craen.",
+      "kernbegrippen": [
+        "Ariane Van Craen"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-ACT1",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "ACT1",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "actuadebat",
+      "aanvullend": false,
+      "titel": "N-VA en cd&v Mechelen - Windturbines in Mechelen: Normalisering nabij woonkernen en natuurgebieden of luisteren naar de buurtbewoners?",
+      "decoded": "N-VA en cd&v Mechelen brengen windturbines in Mechelen ter sprake op de gemeenteraad. Het punt gaat over de vraag of windturbines nabij woonkernen en natuurgebieden normaal worden of dat er geluisterd wordt naar de buurtbewoners.",
+      "themes": [
+        "Klimaat & energie",
+        "Leefmilieu",
+        "Participatie"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "N-VA en cd&v Mechelen - Windturbines in Mechelen: Normalisering nabij woonkernen en natuurgebieden of luisteren naar de buurtbewoners?",
+      "kernbegrippen": [
+        "Windturbines",
+        "N-VA",
+        "cd&v"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-2",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "2",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Bekrachtiging politieverordening, uitgevaardigd bij hoogdringendheid door de burgemeester op 17 september 2026, tot onttrekking van Grote Markt aan het openbaar domein naar aanleiding van All For More op 1 oktober 2026.",
+      "decoded": "De gemeenteraad bekrachtigt een politieverordening. De burgemeester vaardigde deze verordening bij hoogdringendheid uit op 17 september 2026. De verordening onttrekt Grote Markt aan het openbaar domein. Dit gebeurt voor All For More op 1 oktober 2026.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "schepen": null,
+      "streets": [
+        "Grote Markt"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Bekrachtiging politieverordening, uitgevaardigd bij hoogdringendheid door de burgemeester op 17 september 2026, tot onttrekking van Grote Markt aan het openbaar domein naar aanleiding van All For More op 1 oktober 2026.",
+      "kernbegrippen": [
+        "All For More",
+        "Grote Markt"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-3",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "3",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Bekrachtiging politieverordening, uitgevaardigd bij hoogdringendheid door de burgemeester op 4 september 2026, tot onttrekking van Grote Markt aan het openbaar domein naar aanleiding van Bierfestival op 10 en 11 oktober 2026.",
+      "decoded": "De gemeenteraad bekrachtigt een politieverordening van de burgemeester. De burgemeester vaardigde die verordening bij hoogdringendheid uit op 4 september 2026. De verordening onttrekt de Grote Markt aan het openbaar domein. Dit gebeurt voor het Bierfestival op 10 en 11 oktober 2026.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "schepen": null,
+      "streets": [
+        "Grote Markt"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Bekrachtiging politieverordening, uitgevaardigd bij hoogdringendheid door de burgemeester op 4 september 2026, tot onttrekking van Grote Markt aan het openbaar domein naar aanleiding van Bierfestival op 10 en 11 oktober 2026.",
+      "kernbegrippen": [
+        "Grote Markt",
+        "Bierfestival"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-4",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "4",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Aktename jaarrekeningen 2025 in het kader van controle op aanwending stadstoelage.",
+      "decoded": "De gemeenteraad neemt akte van de jaarrekeningen 2025. Dit gebeurt in het kader van de controle op de aanwending van de stadstoelage.",
+      "themes": [
+        "Financiën"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Aktename jaarrekeningen 2025 in het kader van controle op aanwending stadstoelage.",
+      "kernbegrippen": [
+        "jaarrekeningen 2025",
+        "stadstoelage"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-5",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "5",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Aktename beslissing gouverneur op klacht bij Agentschap Binnenlands Bestuur (ABB) betreffende gemeenteraadsbesluit van 23 juni 2026 over afschaffing administratieve toeslag bij gemeentelijke administratieve sancties.",
+      "decoded": "De gemeenteraad neemt akte van de beslissing van de gouverneur op een klacht bij het Agentschap Binnenlands Bestuur (ABB). Die klacht ging over het gemeenteraadsbesluit van 23 juni 2026. Dat besluit schafte de administratieve toeslag bij gemeentelijke administratieve sancties af.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Aktename beslissing gouverneur op klacht bij Agentschap Binnenlands Bestuur (ABB) betreffende gemeenteraadsbesluit van 23 juni 2026 over afschaffing administratieve toeslag bij gemeentelijke administratieve sancties.",
+      "kernbegrippen": [
+        "Agentschap Binnenlands Bestuur",
+        "ABB",
+        "gemeentelijke administratieve sancties",
+        "administratieve toeslag"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-6",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "6",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "AUTONOME GEMEENTEBEDRIJVEN - SPORT ACTIEF MECHELEN (AGB SAM). Goedkeuring tariefstructuren en gewijzigde prijssubsidies voor het dienstjaar 2026 aan AGB SAM voor het verlenen van recht op toegang tot en gebruik maken van stedelijke sportinfrastructuur en machtiging aan het college van burgemeester en schepenen om de prijssubsidie betaalbaar te stellen.",
+      "decoded": "De gemeenteraad keurt de tariefstructuren voor 2026 goed voor AGB SAM. Deze tarieven gelden voor het recht op toegang tot en het gebruik van stedelijke sportinfrastructuur. De gemeenteraad keurt ook de gewijzigde prijssubsidies voor 2026 aan AGB SAM goed. De gemeenteraad machtigt het college van burgemeester en schepenen om deze prijssubsidie uit te betalen.",
+      "themes": [
+        "Sport",
+        "Financiën"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "AUTONOME GEMEENTEBEDRIJVEN - SPORT ACTIEF MECHELEN (AGB SAM). Goedkeuring tariefstructuren en gewijzigde prijssubsidies voor het dienstjaar 2026 aan AGB SAM voor het verlenen van recht op toegang tot en gebruik maken van stedelijke sportinfrastructuur en machtiging aan het college van burgemeester en schepenen om de prijssubsidie betaalbaar te stellen.",
+      "kernbegrippen": [
+        "AGB SAM",
+        "Sport Actief Mechelen"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-7",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "7",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Aanpassing mandaten namens de Stad in diverse organisaties en verenigingen. 1) Aanduiding leden algemene vergadering en voordracht lid raad van bestuur van Brouwgebouw Lamot vzw. 2) Aanduiding lid algemene vergadering en voordracht lid raad van bestuur van Mechelen Morgen cvba. 3) Aanduiding leden algemene vergadering van VVV Mechelen vzw. 4) Aktename wijziging samenstelling deontologische commissie. 5) Aanduiding volmachtdrager algemene vergadering Igemo.",
+      "decoded": "De gemeenteraad past mandaten aan die de Stad bekleedt in verschillende organisaties en verenigingen.\n• De gemeenteraad duidt leden aan voor de algemene vergadering en draagt een lid voor als bestuurder bij Brouwgebouw Lamot vzw.\n• De gemeenteraad duidt een lid aan voor de algemene vergadering en draagt een lid voor als bestuurder bij Mechelen Morgen cvba.\n• De gemeenteraad duidt leden aan voor de algemene vergadering van VVV Mechelen vzw.\n• De gemeenteraad neemt akte van een wijziging in de samenstelling van de deontologische commissie.\n• De gemeenteraad duidt een volmachtdrager aan voor de algemene vergadering van Igemo.",
+      "themes": [
+        "Cultuur",
+        "Toerisme"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Aanpassing mandaten namens de Stad in diverse organisaties en verenigingen. 1) Aanduiding leden algemene vergadering en voordracht lid raad van bestuur van Brouwgebouw Lamot vzw. 2) Aanduiding lid algemene vergadering en voordracht lid raad van bestuur van Mechelen Morgen cvba. 3) Aanduiding leden algemene vergadering van VVV Mechelen vzw. 4) Aktename wijziging samenstelling deontologische commissie. 5) Aanduiding volmachtdrager algemene vergadering Igemo.",
+      "kernbegrippen": [
+        "Brouwgebouw Lamot vzw",
+        "Mechelen Morgen cvba",
+        "VVV Mechelen vzw",
+        "deontologische commissie",
+        "Igemo"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-8",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "8",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring gewijzigde samenstelling auditcomité.",
+      "decoded": "De gemeenteraad keurt de gewijzigde samenstelling van het auditcomité goed.",
+      "themes": [
+        "Financiën"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring gewijzigde samenstelling auditcomité.",
+      "kernbegrippen": [
+        "auditcomité"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-9",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "9",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Vaststelling wijze van gunnen volgens de openbare procedure aan de voorwaarden en bepalingen van de selectieleidraad en het bestek inzake de opdracht ‘Raamovereenkomst aannemer binnen het project Buurtboost (2027-2028)’.",
+      "decoded": "De gemeenteraad beslist hoe ze de opdracht 'Raamovereenkomst aannemer binnen het project Buurtboost (2027-2028)' zal gunnen. De gunning gebeurt volgens de openbare procedure. Daarbij gelden de voorwaarden en bepalingen uit de selectieleidraad en het bestek.",
+      "themes": [
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Vaststelling wijze van gunnen volgens de openbare procedure aan de voorwaarden en bepalingen van de selectieleidraad en het bestek inzake de opdracht ‘Raamovereenkomst aannemer binnen het project Buurtboost (2027-2028)’.",
+      "kernbegrippen": [
+        "Buurtboost",
+        "Raamovereenkomst aannemer"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-10",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "10",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring convenant met Groep INTRO inzake toeleiding van jongeren met een nieuwkomersachtergrond naar het Mechelse jeugdwerk.",
+      "decoded": "De gemeenteraad keurt een convenant goed met Groep INTRO. Het convenant gaat over de toeleiding van jongeren met een nieuwkomersachtergrond naar het Mechelse jeugdwerk.",
+      "themes": [
+        "Jeugd"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring convenant met Groep INTRO inzake toeleiding van jongeren met een nieuwkomersachtergrond naar het Mechelse jeugdwerk.",
+      "kernbegrippen": [
+        "Groep INTRO",
+        "convenant",
+        "nieuwkomersachtergrond"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-11",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "11",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring handhavingskader buitenschoolse opvang en activiteiten (BO&A).",
+      "decoded": "De gemeenteraad keurt het handhavingskader buitenschoolse opvang en activiteiten (BO&A) goed.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring handhavingskader buitenschoolse opvang en activiteiten (BO&A)."
+    },
+    {
+      "id": "gemeenteraad-20261020-12",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "12",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Toekenning nominatieve toelage aan Enchanté vzw voor het project Brooddoosnodig in secundaire scholen.",
+      "decoded": "De gemeenteraad kent een nominatieve toelage toe aan Enchanté vzw. De toelage is voor het project Brooddoosnodig in secundaire scholen.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Toekenning nominatieve toelage aan Enchanté vzw voor het project Brooddoosnodig in secundaire scholen.",
+      "kernbegrippen": [
+        "Enchanté vzw",
+        "Brooddoosnodig"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-13",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "13",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring subsidiereglement zwembadvervoer.",
+      "decoded": "De gemeenteraad keurt het subsidiereglement voor zwembadvervoer goed.",
+      "themes": [
+        "Onderwijs"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring subsidiereglement zwembadvervoer.",
+      "kernbegrippen": [
+        "subsidiereglement zwembadvervoer"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-14",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "14",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Definitieve vaststelling onteigeningsbesluit en bijlagen van onroerende goederen in het kader van de realisatie van de aanleg van de sportsite Uilmolenweg.",
+      "decoded": "De gemeenteraad stelt het onteigeningsbesluit en de bijlagen definitief vast. Het besluit gaat over onroerende goederen die nodig zijn voor de aanleg van de sportsite Uilmolenweg.",
+      "themes": [
+        "Sport"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Definitieve vaststelling onteigeningsbesluit en bijlagen van onroerende goederen in het kader van de realisatie van de aanleg van de sportsite Uilmolenweg.",
+      "kernbegrippen": [
+        "sportsite Uilmolenweg",
+        "onteigeningsbesluit"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-15",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "15",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring samenwerkingsovereenkomst met Netwerk Lokaal Sportbeleid vzw met het oog op het Congres Lokaal Sportbeleid in 2027.",
+      "decoded": "De gemeenteraad keurt een samenwerkingsovereenkomst goed met Netwerk Lokaal Sportbeleid vzw. De overeenkomst dient voor het Congres Lokaal Sportbeleid in 2027.",
+      "themes": [
+        "Sport"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring samenwerkingsovereenkomst met Netwerk Lokaal Sportbeleid vzw met het oog op het Congres Lokaal Sportbeleid in 2027.",
+      "kernbegrippen": [
+        "Netwerk Lokaal Sportbeleid vzw",
+        "Congres Lokaal Sportbeleid"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-16",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "16",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring aangepast toelagereglement ‘Voordeeltarieven voor deelmobiliteit voor sociale woonwijken in het kader van piloten Interreg Noordzee SHARE-North Squared’.",
+      "decoded": "De gemeenteraad keurt een aangepast toelagereglement goed. Het reglement gaat over voordeeltarieven voor deelmobiliteit in sociale woonwijken. Dit kadert in het project Interreg Noordzee SHARE-North Squared.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring aangepast toelagereglement ‘Voordeeltarieven voor deelmobiliteit voor sociale woonwijken in het kader van piloten Interreg Noordzee SHARE-North Squared’.",
+      "kernbegrippen": [
+        "Interreg Noordzee SHARE-North Squared",
+        "Voordeeltarieven voor deelmobiliteit voor sociale woonwijken"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-17",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "17",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring wijziging rooilijn en gedeeltelijke opheffing gemeenteweg in het kader van rioleringswerken ter hoogte van de Baarbeekstraat.",
+      "decoded": "De gemeenteraad keurt een wijziging van de rooilijn goed en heft een gemeenteweg gedeeltelijk op. Dit gebeurt voor rioleringswerken ter hoogte van de Baarbeekstraat.",
+      "themes": [
+        "Openbare werken",
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Baarbeekstraat"
+      ],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring wijziging rooilijn en gedeeltelijke opheffing gemeenteweg in het kader van rioleringswerken ter hoogte van de Baarbeekstraat.",
+      "kernbegrippen": [
+        "Baarbeekstraat",
+        "rooilijn",
+        "gemeenteweg"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-18",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "18",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring aanleg gemeentewegenis en zaak der wegen in het kader van rioleringswerken ter hoogte van de Baarbeekstraat.",
+      "decoded": "De gemeenteraad keurt de aanleg van gemeentewegenis en de zaak der wegen goed. Dit gebeurt in het kader van rioleringswerken ter hoogte van de Baarbeekstraat.",
+      "themes": [
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [
+        "Baarbeekstraat"
+      ],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring aanleg gemeentewegenis en zaak der wegen in het kader van rioleringswerken ter hoogte van de Baarbeekstraat.",
+      "kernbegrippen": [
+        "Baarbeekstraat"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-19",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "19",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring wijzigingen gemeentewegenis (aanpassen en opnieuw vaststellen van de bestaande rooilijn) Hanswijkvaart in het kader van bouw en exploitatie van kantoorgebouw op de Ragheno-site.",
+      "decoded": "De gemeenteraad keurt wijzigingen aan de gemeentewegenis goed. Het gaat om het aanpassen en opnieuw vaststellen van de bestaande rooilijn aan de Hanswijkvaart. Deze wijziging kadert in de bouw en exploitatie van een kantoorgebouw op de Ragheno-site.",
+      "themes": [
+        "Stedenbouw",
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [
+        "Hanswijkvaart"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring wijzigingen gemeentewegenis (aanpassen en opnieuw vaststellen van de bestaande rooilijn) Hanswijkvaart in het kader van bouw en exploitatie van kantoorgebouw op de Ragheno-site.",
+      "kernbegrippen": [
+        "Hanswijkvaart",
+        "Ragheno-site",
+        "rooilijn"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-20",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "20",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring aanleg wegenis en vaststelling nieuwe rooilijn Hanswijkvaart in het kader van bouw en exploitatie van kantoorgebouw op de Ragheno- site.",
+      "decoded": "De gemeenteraad keurt de aanleg van wegenis goed en stelt een nieuwe rooilijn vast voor de Hanswijkvaart. Dit gebeurt voor de bouw en exploitatie van een kantoorgebouw op de Ragheno-site.",
+      "themes": [
+        "Openbare werken",
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Hanswijkvaart"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring aanleg wegenis en vaststelling nieuwe rooilijn Hanswijkvaart in het kader van bouw en exploitatie van kantoorgebouw op de Ragheno- site.",
+      "kernbegrippen": [
+        "Hanswijkvaart",
+        "Ragheno-site",
+        "rooilijn"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-21",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "21",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring wijziging gemeentewegenis (aanpassen en opnieuw vaststellen van een deel van het tracé van de bestaande rooilijn) Ridder Dessainlaan in het kader van aanvraag omvormen hotel tot meergezinswoning.",
+      "decoded": "De gemeenteraad keurt een wijziging van de gemeenteweg in de Ridder Dessainlaan goed. Het gaat om het aanpassen en opnieuw vaststellen van een deel van het tracé van de bestaande rooilijn. Deze wijziging hoort bij een aanvraag om een hotel om te vormen tot een meergezinswoning.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Ridder Dessainlaan"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring wijziging gemeentewegenis (aanpassen en opnieuw vaststellen van een deel van het tracé van de bestaande rooilijn) Ridder Dessainlaan in het kader van aanvraag omvormen hotel tot meergezinswoning.",
+      "kernbegrippen": [
+        "Ridder Dessainlaan",
+        "rooilijn"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-22",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "22",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring zaak der wegen met een wijziging van de gemeentewegenis en vaststelling van de gewijzigde rooilijn ter hoogte van het bouwproject Lange Schipstraat - Lekkernijstraatje.",
+      "decoded": "De gemeenteraad keurt de zaak der wegen goed voor het bouwproject Lange Schipstraat en Lekkernijstraatje. Daarbij wijzigt de gemeenteraad de gemeentewegenis en stelt ze de gewijzigde rooilijn vast ter hoogte van dat bouwproject.",
+      "themes": [
+        "Stedenbouw",
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [
+        "Lange Schipstraat",
+        "Lekkernijstraatje"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring zaak der wegen met een wijziging van de gemeentewegenis en vaststelling van de gewijzigde rooilijn ter hoogte van het bouwproject Lange Schipstraat - Lekkernijstraatje.",
+      "kernbegrippen": [
+        "Lange Schipstraat",
+        "Lekkernijstraatje",
+        "zaak der wegen",
+        "rooilijn"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-23",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "23",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring samenwerkingsovereenkomst met Pidpa inzake de weg- en rioleringswerken in de Kanunnik de Deckerstraat en aanleg van de vliet, buurtpark en parking op de voormalige OVAM-site.",
+      "decoded": "De gemeenteraad keurt een samenwerkingsovereenkomst met Pidpa goed. De overeenkomst gaat over weg- en rioleringswerken in de Kanunnik de Deckerstraat. Ze omvat ook de aanleg van een vliet, een buurtpark en een parking op de voormalige OVAM-site.",
+      "themes": [
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring samenwerkingsovereenkomst met Pidpa inzake de weg- en rioleringswerken in de Kanunnik de Deckerstraat en aanleg van de vliet, buurtpark en parking op de voormalige OVAM-site.",
+      "kernbegrippen": [
+        "Pidpa",
+        "Kanunnik de Deckerstraat",
+        "OVAM-site",
+        "vliet",
+        "buurtpark"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-24",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "24",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Vaststelling wijze van gunnen volgens de vereenvoudigde onderhandelingsprocedure met voorafgaande bekendmaking aan de voorwaarden en bepalingen van het bestek inzake de opdracht ‘Raamovereenkomst voor uitvoeren heraanleg en toegankelijk maken van bushaltes (4 jaar)’.",
+      "decoded": "De gemeenteraad beslist hoe de opdracht 'Raamovereenkomst voor uitvoeren heraanleg en toegankelijk maken van bushaltes (4 jaar)' gegund wordt. De gemeenteraad kiest voor de vereenvoudigde onderhandelingsprocedure met voorafgaande bekendmaking. De gemeenteraad keurt de voorwaarden en bepalingen van het bestek voor deze opdracht goed.",
+      "themes": [
+        "Mobiliteit",
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Vaststelling wijze van gunnen volgens de vereenvoudigde onderhandelingsprocedure met voorafgaande bekendmaking aan de voorwaarden en bepalingen van het bestek inzake de opdracht ‘Raamovereenkomst voor uitvoeren heraanleg en toegankelijk maken van bushaltes (4 jaar)’."
+    },
+    {
+      "id": "gemeenteraad-20261020-25",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "25",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Vaststelling wijze van gunnen volgens de mededingingsprocedure met onderhandeling aan de voorwaarden en bepalingen van de selectieleidraad inzake de opdracht ’Raamovereenkomst structurele onderhoudswerken openbaar domein’.",
+      "decoded": "De gemeenteraad beslist hoe de opdracht 'Raamovereenkomst structurele onderhoudswerken openbaar domein' gegund wordt. De raad kiest voor de mededingingsprocedure met onderhandeling, volgens de voorwaarden en bepalingen van de selectieleidraad.",
+      "themes": [
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Vaststelling wijze van gunnen volgens de mededingingsprocedure met onderhandeling aan de voorwaarden en bepalingen van de selectieleidraad inzake de opdracht ’Raamovereenkomst structurele onderhoudswerken openbaar domein’.",
+      "kernbegrippen": [
+        "selectieleidraad"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-26",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "26",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Vaststelling wijze van gunnen volgens de mededingingsprocedure met onderhandeling aan de voorwaarden en bepalingen van de selectieleidraad inzake de opdracht ‘Uitvoering van de infrastructuurwerken voor de aanleg van de permanente zweminfrastructuur en de herorganisatie van de jachthaven in het Keerdok’.",
+      "decoded": "De gemeenteraad beslist hoe de stad de opdracht 'Uitvoering van de infrastructuurwerken voor de aanleg van de permanente zweminfrastructuur en de herorganisatie van de jachthaven in het Keerdok' gunt. De gemeenteraad kiest voor de mededingingsprocedure met onderhandeling. De gemeenteraad legt daarbij de voorwaarden en bepalingen van de selectieleidraad vast.",
+      "themes": [
+        "Sport",
+        "Openbare werken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Vaststelling wijze van gunnen volgens de mededingingsprocedure met onderhandeling aan de voorwaarden en bepalingen van de selectieleidraad inzake de opdracht ‘Uitvoering van de infrastructuurwerken voor de aanleg van de permanente zweminfrastructuur en de herorganisatie van de jachthaven in het Keerdok’.",
+      "kernbegrippen": [
+        "Keerdok",
+        "permanente zweminfrastructuur",
+        "jachthaven",
+        "selectieleidraad"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-27",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "27",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring erfdienstbaarheid (recht van overbouw + recht van overgang) voor het plaatsen van een overkragende isolatie en crepi ter hoogte van de zijgevel Koningin Astridlaan 36.",
+      "decoded": "De gemeenteraad keurt een erfdienstbaarheid goed. Het gaat om een recht van overbouw en een recht van overgang. Deze erfdienstbaarheid maakt het mogelijk om een overkragende isolatie en crepi te plaatsen aan de zijgevel van Koningin Astridlaan 36.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Koningin Astridlaan"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring erfdienstbaarheid (recht van overbouw + recht van overgang) voor het plaatsen van een overkragende isolatie en crepi ter hoogte van de zijgevel Koningin Astridlaan 36.",
+      "kernbegrippen": [
+        "erfdienstbaarheid",
+        "recht van overbouw",
+        "recht van overgang",
+        "Koningin Astridlaan 36"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-28",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "28",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring beëindiging handelshuur Sint-Katelijnestraat 48.",
+      "decoded": "De gemeenteraad keurt de beëindiging goed van de handelshuur op Sint-Katelijnestraat 48.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Sint-Katelijnestraat"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring beëindiging handelshuur Sint-Katelijnestraat 48.",
+      "kernbegrippen": [
+        "Sint-Katelijnestraat 48"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-29",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "29",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring aktes in het kader van het project residentie Portier 51 op de voormalige bibliotheeksite Moensstraat.",
+      "decoded": "De gemeenteraad keurt aktes goed voor het project residentie Portier 51. Dat project komt op de voormalige bibliotheeksite in de Moensstraat.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Moensstraat"
+      ],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring aktes in het kader van het project residentie Portier 51 op de voormalige bibliotheeksite Moensstraat.",
+      "kernbegrippen": [
+        "residentie Portier 51",
+        "Moensstraat",
+        "voormalige bibliotheeksite"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-30",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "30",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Gronden Pasbrugplein. 1) Beslissing tot verkoop loten 1, 2, 3, 4, 5 en 8 van het rooilijnplan aan de aangelanden. 2) Aanvaarding kosteloze grondafstand aan Stad Mechelen van lot 18 van het rooilijnplan.",
+      "decoded": "De gemeenteraad beslist over gronden aan het Pasbrugplein.\n• De gemeenteraad verkoopt loten 1, 2, 3, 4, 5 en 8 van het rooilijnplan aan de aangelanden.\n• De gemeenteraad aanvaardt de kosteloze grondafstand aan Stad Mechelen van lot 18 van het rooilijnplan.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [
+        "Pasbrugplein"
+      ],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Gronden Pasbrugplein. 1) Beslissing tot verkoop loten 1, 2, 3, 4, 5 en 8 van het rooilijnplan aan de aangelanden. 2) Aanvaarding kosteloze grondafstand aan Stad Mechelen van lot 18 van het rooilijnplan.",
+      "kernbegrippen": [
+        "Pasbrugplein",
+        "rooilijnplan",
+        "lot 18",
+        "loten 1, 2, 3, 4, 5 en 8"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-31",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "31",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring aangepaste overeenkomst met Dierenbescherming Mechelen vzw inzake de aanpak van de zwerfkattenproblematiek.",
+      "decoded": "De gemeenteraad keurt een aangepaste overeenkomst goed met Dierenbescherming Mechelen vzw. De overeenkomst gaat over de aanpak van de zwerfkattenproblematiek.",
+      "themes": [
+        "Welzijn"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring aangepaste overeenkomst met Dierenbescherming Mechelen vzw inzake de aanpak van de zwerfkattenproblematiek.",
+      "kernbegrippen": [
+        "Dierenbescherming Mechelen vzw",
+        "zwerfkattenproblematiek"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-32",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "32",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Vaststelling wijze van gunnen volgens de mededingingsprocedure met onderhandeling aan de voorwaarden en bepalingen van de selectieleidraad en het bestek inzake de opdracht ‘Raamovereenkomst voor levering dranken tijdens festivals, culturele voorstellingen en vergaderingen Stad Mechelen’.",
+      "decoded": "De gemeenteraad beslist hoe de stad de opdracht 'Raamovereenkomst voor levering dranken tijdens festivals, culturele voorstellingen en vergaderingen Stad Mechelen' gunt. De gunning gebeurt volgens de mededingingsprocedure met onderhandeling. De gemeenteraad legt hiervoor de voorwaarden en bepalingen van de selectieleidraad en het bestek vast.",
+      "themes": [
+        "Cultuur",
+        "Financiën"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Vaststelling wijze van gunnen volgens de mededingingsprocedure met onderhandeling aan de voorwaarden en bepalingen van de selectieleidraad en het bestek inzake de opdracht ‘Raamovereenkomst voor levering dranken tijdens festivals, culturele voorstellingen en vergaderingen Stad Mechelen’."
+    },
+    {
+      "id": "gemeenteraad-20261020-33",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "33",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring bijstandsovereenkomst Stad Mechelen - IGEMO betreffende gegevensbescherming en informatieveiligheid.",
+      "decoded": "De gemeenteraad keurt een bijstandsovereenkomst goed tussen Stad Mechelen en IGEMO. De overeenkomst gaat over gegevensbescherming en informatieveiligheid.",
+      "themes": [
+        "Burgerzaken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring bijstandsovereenkomst Stad Mechelen - IGEMO betreffende gegevensbescherming en informatieveiligheid.",
+      "kernbegrippen": [
+        "IGEMO",
+        "bijstandsovereenkomst",
+        "gegevensbescherming",
+        "informatieveiligheid"
+      ]
+    },
+    {
+      "id": "gemeenteraad-20261020-34",
+      "sessie_id": "gemeenteraad-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "34",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring overdracht 2de pensioenpijler AGB SAM, beheerd door OFP Prolocus, naar Stad Mechelen.",
+      "decoded": "De gemeenteraad keurt de overdracht goed van de tweede pensioenpijler van AGB SAM naar Stad Mechelen. OFP Prolocus beheert deze tweede pensioenpijler.",
+      "themes": [
+        "Financiën"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": "Mechelen",
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring overdracht 2de pensioenpijler AGB SAM, beheerd door OFP Prolocus, naar Stad Mechelen.",
+      "kernbegrippen": [
+        "AGB SAM",
+        "OFP Prolocus",
+        "2de pensioenpijler"
+      ]
+    },
+    {
       "id": "rmw-20241202-1",
       "sessie_id": "rmw-20241202",
       "sessie_date": "2024-12-02",
@@ -35811,6 +36837,92 @@
       "brontekst": null,
       "kernbegrippen": [
         "pachtkohier"
+      ]
+    },
+    {
+      "id": "rmw-20261020-1",
+      "sessie_id": "rmw-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "1",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Aanpassing mandaten namens OCMW. 1) Aanduiding lid algemene vergadering en raad van bestuur van welzijnsvereniging Dodoens. 2) Aktename aanduiding plaatsvervangend lid bijzonder comité sociale dienst (BCSD). 3) Aanduiding plaatsvervangend lid algemene vergadering Zorgbedrijf Rivierenland.",
+      "decoded": "De raad voor maatschappelijk welzijn past een aantal mandaten namens het OCMW aan.\n• De raad duidt een lid aan voor de algemene vergadering en de raad van bestuur van welzijnsvereniging Dodoens.\n• De raad neemt akte van de aanduiding van een plaatsvervangend lid voor het bijzonder comité sociale dienst (BCSD).\n• De raad duidt een plaatsvervangend lid aan voor de algemene vergadering van Zorgbedrijf Rivierenland.",
+      "themes": [
+        "Welzijn",
+        "Sociale zaken"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Aanpassing mandaten namens OCMW. 1) Aanduiding lid algemene vergadering en raad van bestuur van welzijnsvereniging Dodoens. 2) Aktename aanduiding plaatsvervangend lid bijzonder comité sociale dienst (BCSD). 3) Aanduiding plaatsvervangend lid algemene vergadering Zorgbedrijf Rivierenland.",
+      "kernbegrippen": [
+        "Dodoens",
+        "bijzonder comité sociale dienst",
+        "BCSD",
+        "Zorgbedrijf Rivierenland"
+      ]
+    },
+    {
+      "id": "rmw-20261020-2",
+      "sessie_id": "rmw-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "2",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Goedkeuring gewijzigde samenstelling auditcomité.",
+      "decoded": "De raad voor maatschappelijk welzijn keurt de gewijzigde samenstelling van het auditcomité goed.",
+      "themes": [
+        "Financiën"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Goedkeuring gewijzigde samenstelling auditcomité.",
+      "kernbegrippen": [
+        "auditcomité"
+      ]
+    },
+    {
+      "id": "rmw-20261020-3",
+      "sessie_id": "rmw-20261020",
+      "sessie_date": "2026-10-20",
+      "nummer": "3",
+      "url": null,
+      "status": "op-agenda",
+      "result": null,
+      "impact": 2,
+      "type": "gewoon",
+      "aanvullend": false,
+      "titel": "Beslissing tot rechtstreekse verkoop van drie percelen ter hoogte van Hondsbossen aan gemeente Sint-Katelijne-Waver.",
+      "decoded": "De raad voor maatschappelijk welzijn beslist om drie percelen ter hoogte van Hondsbossen rechtstreeks te verkopen aan de gemeente Sint-Katelijne-Waver.",
+      "themes": [
+        "Stedenbouw"
+      ],
+      "schepen": null,
+      "streets": [],
+      "neighborhood": null,
+      "financial_impact": null,
+      "indiener": null,
+      "stemming": null,
+      "brontekst": "Beslissing tot rechtstreekse verkoop van drie percelen ter hoogte van Hondsbossen aan gemeente Sint-Katelijne-Waver.",
+      "kernbegrippen": [
+        "Hondsbossen",
+        "Sint-Katelijne-Waver"
       ]
     }
   ],
@@ -109808,6 +110920,12 @@
             "status": "tijdig",
             "late_days": 0
           }
+        },
+        {
+          "date": "2026-10-20",
+          "published": "2026-10-12",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 8,
@@ -110116,6 +111234,12 @@
             "status": "tijdig",
             "late_days": 0
           }
+        },
+        {
+          "date": "2026-10-20",
+          "published": "2026-10-12",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 8,
@@ -118021,6 +119145,7 @@
     "Gemeenteraad|2026-06-23|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_23-06-2026_Agenda.pdf",
     "Gemeenteraad|2026-09-15|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_15-09-2026_Beslissingslijst_toezicht.pdf",
     "Gemeenteraad|2026-09-15|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_15-09-2026_Agenda.pdf",
+    "Gemeenteraad|2026-10-20|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_20-10-2026_Agenda.pdf",
     "RMW|2024-12-02|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=BesluitenLijstUitspraak_Raad%20voor%20maatschappelijk%20welzijn_02-12-2024_Beslissingslijst%20toezicht.pdf",
     "RMW|2024-12-02|notulen": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Notulen_Raad%20voor%20maatschappelijk%20welzijn_02-12-2024_Notulen%20%20-%20openbare%20zitting.pdf",
     "RMW|2024-12-02|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_02-12-2024_Agenda.pdf",
@@ -118074,6 +119199,7 @@
     "RMW|2026-06-23|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_23-06-2026_Agenda.pdf",
     "RMW|2026-09-15|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=BesluitenLijstUitspraak_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Beslissingslijst_toezicht.pdf",
     "RMW|2026-09-15|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Agenda.pdf",
+    "RMW|2026-10-20|agenda": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_20-10-2026_Agenda.pdf",
     "Vast bureau|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_03-12-2024_Beslissingenlijst.pdf",
     "Vast bureau|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_10-12-2024_Beslissingenlijst.pdf",
     "Vast bureau|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_17-12-2024_Beslissingenlijst.pdf",
