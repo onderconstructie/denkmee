@@ -1455,6 +1455,17 @@
     "uittreksels": []
   },
   {
+    "organ": "Burgemeester",
+    "date": "2026-10-20",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-21",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_20-10-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "College van burgemeester en schepenen",
     "date": "2024-12-03",
     "documenten": {
@@ -4385,7 +4396,12 @@
   {
     "organ": "College van burgemeester en schepenen",
     "date": "2026-10-13",
-    "documenten": {},
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-22",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_13-10-2026_Beslissingenlijst.pdf"
+      }
+    },
     "uittreksels": [
       {
         "titel": "Uittreksels",
@@ -4401,6 +4417,18 @@
         "titel": "Uittreksels",
         "id": "116935",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_13-10-2026_116935.pdf"
+      }
+    ]
+  },
+  {
+    "organ": "College van burgemeester en schepenen",
+    "date": "2026-10-20",
+    "documenten": {},
+    "uittreksels": [
+      {
+        "titel": "Uittreksels",
+        "id": "117033",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_20-10-2026_117033.pdf"
       }
     ]
   },
@@ -6324,6 +6352,10 @@
       "besluiten": {
         "published": "2026-09-16",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_15-09-2026_Beslissingslijst_toezicht.pdf"
+      },
+      "notulen": {
+        "published": "2026-10-21",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Notulen_Gemeenteraad_15-09-2026_Notulen_-_openbare_zitting.pdf"
       }
     },
     "uittreksels": [
@@ -6406,9 +6438,43 @@
       "agenda": {
         "published": "2026-10-12",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Agenda_Gemeenteraad_20-10-2026_Agenda.pdf"
+      },
+      "aanvullend": {
+        "published": "2026-10-20",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=ToegevoegdeAgenda_Gemeenteraad_20-10-2026_Agenda_-_volledig.pdf"
+      },
+      "besluiten": {
+        "published": "2026-10-21",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=BesluitenLijstUitspraak_Gemeenteraad_20-10-2026_Beslissingslijst_toezicht.pdf"
       }
     },
-    "uittreksels": []
+    "uittreksels": [
+      {
+        "titel": "Uittreksels",
+        "id": "116722",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_20-10-2026_116722.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116729",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_20-10-2026_116729.pdf"
+      },
+      {
+        "titel": "Reglement zwembadvervoer",
+        "id": "116729",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Reglement_zwembadvervoer_20-10-2026_116729.pdf"
+      },
+      {
+        "titel": "Uittreksels",
+        "id": "116730",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Uittreksels_20-10-2026_116730.pdf"
+      },
+      {
+        "titel": "Herwerkt toelagereglement voordeeltarieven deelmobiliteit",
+        "id": "116730",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/06c2b56ed7b49d146337f6db044204f19c34c4242deb3b4e142dbf925d733eda/GetPublication?filename=Herwerkt_toelagereglement_voordeeltarieven_deelmobiliteit_20-10-2026_116730.pdf"
+      }
+    ]
   },
   {
     "organ": "Raad voor maatschappelijk welzijn",
@@ -6807,6 +6873,10 @@
       "besluiten": {
         "published": "2026-09-16",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=BesluitenLijstUitspraak_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Beslissingslijst_toezicht.pdf"
+      },
+      "notulen": {
+        "published": "2026-10-21",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Notulen_Raad%20voor%20maatschappelijk%20welzijn_15-09-2026_Notulen__-_openbare_zitting.pdf"
       }
     },
     "uittreksels": []
@@ -6818,6 +6888,10 @@
       "agenda": {
         "published": "2026-10-12",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=Agenda_Raad%20voor%20maatschappelijk%20welzijn_20-10-2026_Agenda.pdf"
+      },
+      "besluiten": {
+        "published": "2026-10-21",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/3ee5544b66963ad499afb4fe84f3de9995e6f0244f2fda120fa337e43d914f4c/GetPublication?filename=BesluitenLijstUitspraak_Raad%20voor%20maatschappelijk%20welzijn_20-10-2026_Beslissingslijst_toezicht.pdf"
       }
     },
     "uittreksels": []
@@ -7758,6 +7832,17 @@
       "besluiten": {
         "published": "2026-10-15",
         "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_06-10-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "Vast bureau",
+    "date": "2026-10-13",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-22",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/af18b761c4c27f366dee0446bdefdcbe54b292c26ae543c5671d6844d5df164d/GetPublication?filename=BesluitenLijstUitspraak_Vast%20bureau_13-10-2026_Beslissingenlijst.pdf"
       }
     },
     "uittreksels": []
