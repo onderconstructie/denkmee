@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-22",
+  "generated_at": "2026-10-23",
   "next_meeting": {
     "id": "gemeenteraad-20261124",
     "type": "Gemeenteraad",
@@ -37605,6 +37605,32 @@
     }
   ],
   "college_beslissingen": [
+    {
+      "id": "burgemeester-20261022-1",
+      "date": "2026-10-22",
+      "orgaan": "Burgemeester",
+      "categorie": "Economie",
+      "titel": "Besluit burgemeester van 22 oktober 2026 betreffende de goedkeuring van de wijziging van uitbatingsvergunning nachtwinkel.",
+      "decoded": "De burgemeester keurt de wijziging van de uitbatingsvergunning van een nachtwinkel goed.",
+      "themes": [
+        "Veiligheid",
+        "Economie"
+      ],
+      "kernbegrippen": [
+        "uitbatingsvergunning nachtwinkel"
+      ]
+    },
+    {
+      "id": "burgemeester-20261022-2",
+      "date": "2026-10-22",
+      "orgaan": "Burgemeester",
+      "categorie": "Natuur en Groenontwikkeling",
+      "titel": "Besluit burgemeester van 22 oktober 2026 betreffende beslissing kappen van een boom omwille van acuut gevaar.",
+      "decoded": "De burgemeester beslist om een boom te kappen. De reden is acuut gevaar.",
+      "themes": [
+        "Veiligheid"
+      ]
+    },
     {
       "id": "burgemeester-20261020-1",
       "date": "2026-10-20",
@@ -115310,6 +115336,12 @@
           "published": "2026-10-21",
           "status": "tijdig",
           "late_days": 0
+        },
+        {
+          "date": "2026-10-22",
+          "published": "2026-10-23",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 10,
@@ -121320,6 +121352,7 @@
     "Burgemeester|2026-10-13|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_13-10-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-10-14|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_14-10-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-10-20|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_20-10-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-10-22|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_22-10-2026_Beslissingenlijst.pdf",
     "College|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_10-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_17-12-2024_Beslissingenlijst.pdf",
