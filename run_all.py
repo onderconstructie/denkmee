@@ -22,6 +22,7 @@ Volgorde (dit is de volledige lijst; de volgorde is niet vrijblijvend, zie hiero
   3f)  delf_verwijzingen.py — harde codes (MJP, zaaknummer, OMV) voor verwante dossiers
   3g)  parse_mjp_acties.py — de begrotingslijn achter elke MJP-code (faalt zacht)
   3h)  klasseer_titelwoorden.py — onderwerp of algemeen woord, voor de dossierbundeling (faalt zacht)
+  3i)  oordeel_vragen.py — hoort een schriftelijke vraag bij hetzelfde dossier als een ander stuk (faalt zacht)
   4)   build.py          — template.html + data.json  ->  dist/
   5)   opkuis             — tussenbestanden in de root wissen
 
@@ -228,6 +229,16 @@ def klasseer_titelwoorden():
         print("  (overgeslagen: klasseer_titelwoorden.py faalde — nieuwe woorden tellen als onderwerp.)")
 
 
+def oordeel_vragen():
+    """Nieuwe paren van een schriftelijke vraag en een kandidaat laten beoordelen door het taalmodel (zelfde
+    zaak of niet), voor de dossierbundeling. Idempotent: enkel nieuwe paren, dus een gewone run kost bijna
+    niets. Faalt het of ontbreekt de sleutel, dan blijven de vorige oordelen gelden."""
+    try:
+        run("oordeel_vragen.py")
+    except subprocess.CalledProcessError:
+        print("  (overgeslagen: oordeel_vragen.py faalde; de vorige vraagoordelen blijven gelden.)")
+
+
 def haal_zittingen():
     """De geplande zittingen van mechelen.be. Faalt dit (de stad wijzigt de opbouw van haar
     pagina), dan stopt de bouw NIET: het is één kaart op de site, geen kerngegeven. Zonder deze
@@ -372,6 +383,10 @@ def main():
     # 3h) Nieuwe titelwoorden laten beoordelen: onderwerp of algemeen woord. De dossierbundeling
     #     op de pagina gebruikt dat oordeel (titelwoorden.json, via build.py). Vóór build.
     klasseer_titelwoorden()
+
+    # 3i) Schriftelijke vragen naast hun kandidaten leggen: zelfde zaak of niet (vraag_oordelen.json, via
+    #     build.py). Ná de opkuis (3d), want het model leest de samenvattingen. Vóór build.
+    oordeel_vragen()
 
     # 4) bouwen
     run("build.py")

@@ -16,6 +16,8 @@ bron/
 # Lokale cache en backups (worden opnieuw aangemaakt)
 data/tags_cache.json
 data/tags_cache.json.old
+data/vraag_oordelen_cache.json
+data/vraag_oordelen_cache.json.bak
 data/_sweep_cache.json
 data/_dg_cache.json
 data.json.bak

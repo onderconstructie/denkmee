@@ -30,7 +30,7 @@ WORTEL = subprocess.run(["git", "rev-parse", "--show-toplevel"],
                         capture_output=True).stdout.decode("utf-8", "replace").strip()
 
 VERBODEN_PAD = re.compile(
-    r"(^|/)(privacy_namen|tags_cache|_sweep_cache|_dg_cache)"
+    r"(^|/)(privacy_namen|tags_cache|_sweep_cache|_dg_cache|vraag_oordelen_cache)"
     r"|(^|/)(data/zoekcache|data/raw|data/uittreksel_cache|data/mjp_cache|export|bron)/"
     r"|\.(tmp|log|out|bak|wxr)$",
     re.I)

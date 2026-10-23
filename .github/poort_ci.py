@@ -26,7 +26,7 @@ import sys
 MERK = "%%OVER" + "_NAAM%%"
 WIE = re.compile(r'class="wie-init">([^<]*)<')
 MAIL = re.compile(r"\b[A-Za-z0-9._%+-]+@(?!voorbeeld\.|example\.|domein\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
-VERBODEN_NAAM = re.compile(r"\.(tmp|log|out|bak|wxr)$|^privacy_namen|tags_cache", re.I)
+VERBODEN_NAAM = re.compile(r"\.(tmp|log|out|bak|wxr)$|^privacy_namen|tags_cache|vraag_oordelen_cache", re.I)
 
 TEKST = (".html", ".py", ".json", ".md", ".js", ".css", ".yml", ".yaml", ".svg", ".bat")
 OVERSLAAN = {".git", "node_modules", "__pycache__", "fonts", "beelden"}

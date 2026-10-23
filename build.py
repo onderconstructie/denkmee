@@ -102,6 +102,29 @@ if _basis.get("dossiers"):
           f"{len(data['dos_basis']['dossiers'])} stukken, {len(data['dos_basis']['reeksen'])} stukken in reeksen, "
           f"{len(data['dos_basis']['alleen'])} beoordeelde stukken alleen.")
 
+# 1c5) Oordelen over de schriftelijke vragen (vraag_oordelen.json, oordeel_vragen.py): de paren vraag en
+#      stuk die over dezelfde zaak gaan (ja), de paren met een ander oordeel (nee), en de vragen die een oordeel
+#      kregen. Enkel stuk-id's, net als 1c4: build.py stopt als er iets anders in staat. Ontbreekt het bestand of
+#      bevat het geen beoordeelde vragen, dan bundelt de site de vragen zoals voorheen.
+vragen_pad = BASE / "vraag_oordelen.json"
+_vragen = json.loads(vragen_pad.read_text(encoding="utf-8")) if vragen_pad.exists() else {}
+if not isinstance(_vragen, dict):
+    sys.exit("STOP: vraag_oordelen.json is geen object.")
+if _vragen.get("beoordeeld"):
+    _vid = re.compile(r"(?:gemeenteraad|rmw|college|vastbureau|burgemeester)-\d{8}-[0-9A-Za-z]+(?:-[0-9A-Za-z]+)*"
+                      r"|sv-\d{4}-\d{2}(?:-\d{4})?-\d{1,3}(?:-[0-9a-f]{6})?")
+    _paren = list(_vragen.get("ja", [])) + list(_vragen.get("nee", []))
+    _vreemd = [f"paar {p}" for p in _paren if not (isinstance(p, list) and len(p) == 2 and all(isinstance(x, str) for x in p))]
+    _vreemd += [f"versie {_vragen.get('versie')!r}"] if _vragen.get("versie") != 1 else []
+    _vreemd += [w for w in [x for p in _paren if isinstance(p, list) for x in p] + list(_vragen["beoordeeld"]) if not _vid.fullmatch(str(w))]
+    _vreemd += [f"veld {k}" for k in _vragen if k not in ("versie", "ja", "nee", "beoordeeld")]
+    _vreemd += [f"geen vraag {v}" for v in _vragen["beoordeeld"] if not str(v).startswith("sv-")]
+    if _vreemd:
+        sys.exit(f"STOP: vraag_oordelen.json bevat iets anders dan stuk-id's van vragen (bv. {str(_vreemd[0])[:40]!r}).")
+    data["dos_vragen"] = {"ja": _vragen.get("ja", []), "nee": _vragen.get("nee", []), "beoordeeld": _vragen["beoordeeld"]}
+    print(f"Vraagoordelen geladen: {len(data['dos_vragen']['beoordeeld'])} vragen beoordeeld, "
+          f"{len(data['dos_vragen']['ja'])} paren zelfde zaak, {len(data['dos_vragen']['nee'])} niet.")
+
 # 1d) Handmatige correcties op de dossiervorming (correcties.json, door de redactie
 #     onderhouden — NOOIT automatisch). Losmaken/samenvoegen ankeren op stabiele stuk-id's;
 #     de frontend past ze toe in buildDossiers. Ontbreekt het bestand, dan bouwt de site

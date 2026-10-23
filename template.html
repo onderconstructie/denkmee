@@ -9069,21 +9069,38 @@ function buildDossiers(){
       });
     });
   }
+  // VRAAGOORDELEN (oordeel_vragen.py, 11/10/2026): een schriftelijke vraag met een oordeel doet niet mee in de
+  // eigen regels hieronder (die koppelden een vraag vaak op een gedeeld woord of een straatnaam aan iets anders).
+  // Na die regels sluit ze, samen met de vragen waarmee ze ja-paren heeft, aan bij hooguit een groep: die met de
+  // meeste ja-paren (twee oordelen van het taalmodel, allebei "zelfde zaak"), tenzij ze daar minstens evenveel andere
+  // oordelen heeft als ja-paren (zie de ja-stap). Sluit ze aan, dan bepaalt ze het id van dat dossier niet. Een vraag
+  // zonder oordeel volgt de eigen regels; zonder bestand verandert er niets.
+  const VRAGEN = (D.dos_vragen && (D.dos_vragen.beoordeeld || []).length) ? D.dos_vragen : null;
+  const vraagVast = new Set();
+  if(VRAGEN){
+    const beoordeeld = new Set(VRAGEN.beoordeeld);
+    items.forEach(it => { if(beoordeeld.has(it.id) && it.src === 'vraag' && !it._bbc){
+      it._key = 'vraag::' + it.id; it._ck = 'vraag::' + it.id; vraagVast.add(it._key); } });
+  }
   const keys = [...new Set(items.map(it=>it._key))];
   const par = {}; keys.forEach(k=>par[k]=k);
   const find = x => par[x]===x ? x : (par[x]=find(par[x]));
   // Per wortel: bevat ze een beoordeeld dossier, en is ze dicht (een reeks of een stuk dat alleen bleef)?
   const kern = {};
   let vrij = !BASIS;              // vrij = zonder grenzen samenvoegen (geen basis, of een handmatige correctie)
-  if(BASIS) keys.forEach(k => { const los = k.startsWith('alleen::'); kern[k] = { basis: los || k.startsWith('basis::'), dicht: los || k.includes('::reeks:') }; });
+  let correctie = false, jaFase = false;   // de handmatige samenvoeging; de ja-stap van de vraagoordelen
+  if(BASIS) keys.forEach(k => { const los = k.startsWith('alleen::'); kern[k] = { basis: los || k.startsWith('basis::'), dicht: los || k.includes('::reeks:'), reeks: k.includes('::reeks:') }; });
   // Geeft true als a en b (nu) samen zitten, false als een grens het weigert.
   const uni = (a,b) => {
     const ra = find(a), rb = find(b);
     if(ra === rb) return true;
+    if(!correctie && !jaFase && (vraagVast.has(a) || vraagVast.has(b) || vraagVast.has(ra) || vraagVast.has(rb))) return false;
     if(BASIS){
       const ka = kern[ra], kb = kern[rb];
-      if(!vrij && (ka.dicht || kb.dicht || (ka.basis && kb.basis))) return false;
-      kern[rb] = { basis: ka.basis || kb.basis, dicht: ka.dicht || kb.dicht };
+      // Een ja-paar mag een vraag ook bij een stuk zetten dat alleen bleef (dat is zelf een oordeel), nooit bij een reeks.
+      if(!vrij && (jaFase ? (ka.reeks || kb.reeks) : (ka.dicht || kb.dicht))) return false;
+      if(!vrij && ka.basis && kb.basis) return false;
+      kern[rb] = { basis: ka.basis || kb.basis, dicht: ka.dicht || kb.dicht, reeks: ka.reeks || kb.reeks };
     }
     par[ra] = rb; return true;
   };
@@ -9101,7 +9118,7 @@ function buildDossiers(){
   // 1) Harde ankers (bestek-/projectcode, adres) — GLOBAAL, mogen Stad en OCMW overbruggen.
   //    Hoge precisie: wie eenzelfde anker deelt, hoort in hetzelfde dossier.
   const abridge = {};
-  items.forEach(it => (it._anchors||[]).forEach(a => { (abridge[a]=abridge[a]||new Set()).add(it._key); }));
+  items.forEach(it => { if(vraagVast.has(it._key)) return; (it._anchors||[]).forEach(a => { (abridge[a]=abridge[a]||new Set()).add(it._key); }); });
   Object.values(abridge).forEach(set => { const ks=[...set]; for(let i=1;i<ks.length;i++) uni(ks[i-1],ks[i]); });
 
   // 2) Zelfde signaalwoord + gedeeld thema — BINNEN één kant. De zachte bewaker (@rubriek)
@@ -9145,7 +9162,7 @@ function buildDossiers(){
   //    zijn hetzelfde terugkerende punt: één reeks-dossier i.p.v. tientallen identieke
   //    losse kaartjes. Exacte kale-titel-gelijkheid, dus geen kettingen.
   //    De reeksen zelf berekent serieGroepen() (boven de hybride basis, die ze ook gebruikt).
-  serieGroepen.forEach(({ g }) => { for(let i = 1; i < g.length; i++) uni(g[0]._key, g[i]._key); });
+  serieGroepen.forEach(({ g }) => { const h = g.filter(it => !vraagVast.has(it._key)); for(let i = 1; i < h.length; i++) uni(h[0]._key, h[i]._key); });
 
   // 5) Stad ↔ OCMW koppelen we BEWUST alleen via de harde ankers hierboven, niet via
   //    begrotingswoorden. "meerjarenplan", "budget" en "jaarrekening" gebruikt élke
@@ -9171,7 +9188,7 @@ function buildDossiers(){
     items.forEach(it => { const r = find(it._key); (voorlopig[r] = voorlopig[r] || []).push(it); });
     const stamRoots = {};
     items.forEach(it => {
-      if(it._bbc) return;
+      if(it._bbc || vraagVast.has(it._key)) return;
       const r = find(it._key);
       it._tk.forEach(w => {
         if(w.length < 6) return;
@@ -9243,7 +9260,7 @@ function buildDossiers(){
         // Een stuk dat zelf vier of meer namen opsomt ("aanduiden vertegenwoordigers in
         // diverse organisaties") is een lijst, geen zaak: het mag geen drager zijn, anders
         // trekt het eenlingen over elke genoemde organisatie naar zich toe.
-        const dragers = (frDragers[d._track + '::' + f] || []).filter(x => x.id !== d.id && x._fr.size <= 3);
+        const dragers = (frDragers[d._track + '::' + f] || []).filter(x => x.id !== d.id && x._fr.size <= 3 && !vraagVast.has(x._key));
         if(!dragers.length || dragers.length + 1 > CAP) return;
         const roots = new Set(dragers.map(x => find(x._key)));
         roots.delete(eigen);
@@ -9267,7 +9284,7 @@ function buildDossiers(){
     Object.values(voorlopig3).forEach(g => {
       if(g.length !== 1 || !g[0]._kaal || g[0]._bbc) return;
       const d = g[0], eigen = find(d._key);
-      const tweeling = (kaalGroep[d._track + '::' + d._kaal] || []).filter(x => x.id !== d.id);
+      const tweeling = (kaalGroep[d._track + '::' + d._kaal] || []).filter(x => x.id !== d.id && !vraagVast.has(x._key));
       if(!tweeling.length) return;
       const roots = new Set(tweeling.map(x => find(x._key)));
       roots.delete(eigen);
@@ -9321,7 +9338,7 @@ function buildDossiers(){
       const g = voorlopig6e[eigen];
       if(g.length !== 1 || g[0].src !== 'vraag' || !g[0]._vk) return;
       const d = g[0];
-      const tw = (vrGroep[d._vk] || []).filter(x => x.id !== d.id && x._track === d._track);
+      const tw = (vrGroep[d._vk] || []).filter(x => x.id !== d.id && x._track === d._track && !vraagVast.has(x._key));
       const roots = new Set(tw.map(x => start.get(x.id))); roots.delete(eigen);
       if(roots.size !== 1) return;
       const doel = [...roots][0], doelgrp = voorlopig6e[doel];
@@ -9376,7 +9393,7 @@ function buildDossiers(){
     const groep = {}, root = {};
     items.forEach(it => { const r = find(it._key); root[it.id] = r; (groep[r] = groep[r] || []).push(it); });
     const codes = {}, dragers = {};
-    items.forEach(it => { codes[it.id] = it._bbc ? {} : dosCodes(it); Object.keys(codes[it.id]).forEach(c => (dragers[c] = dragers[c] || []).push(it)); });   // een budgetstuk brugt nooit
+    items.forEach(it => { codes[it.id] = (it._bbc || vraagVast.has(it._key)) ? {} : dosCodes(it); Object.keys(codes[it.id]).forEach(c => (dragers[c] = dragers[c] || []).push(it)); });   // een budgetstuk brugt nooit
     const zelfdeSoortAnders = (id, fam, c) => Object.entries(codes[id]).some(([c2, f2]) => f2 === fam && c2 !== c);
     const besluit = {};
     Object.keys(dragers).sort().forEach(c => {
@@ -9420,11 +9437,125 @@ function buildDossiers(){
     });
   }
 
+  // VRAAGOORDELEN, de ja-stap. Elke keuze gebeurt op een bevroren indeling, zodat de volgorde van verwerken niets
+  // uitmaakt.
+  // - Clusters: vragen met onderlinge ja-paren (bv. een vraag en haar vervolgvraag) kiezen samen. Gaan twee vragen in
+  //   zo'n cluster volgens het taalmodel niet over dezelfde zaak, dan gaat de vraag met de meeste zulke oordelen eruit
+  //   en kiest die apart, tot er geen meer overblijven; de rest blijft samen (in zoveel clusters als ze samenhangt).
+  // - Ronde 1: elk cluster naar de groep van andere stukken met de meeste ja-paren van zijn vragen samen. Een groep waar
+  //   het cluster minstens evenveel andere oordelen heeft als ja-paren, slaat het over. Vindt een cluster van meer dan
+  //   een vraag geen groep, dan vormen zijn vragen samen een dossier.
+  // - Ronde 2: een vraag die dan nog alleen staat, naar een groep van meer dan een stuk met een vraag waarmee ze een
+  //   ja-paar heeft; de andere oordelen tellen hier tegen alle stukken van die groep.
+  // - Bruggen: een stuk zonder eigen oordeel dat met zulke vragen een ja-paar heeft en na de eigen regels alleen
+  //   stond, volgt de groep met de meeste van die vragen; bij gelijke stand blijft het staan, en nooit naar een groep
+  //   met een reeks of een stuk dat de basis alleen liet (dezelfde grens als bij de eigen regels).
+  // Een vraag of cluster trekt zo nooit twee groepen samen. Sluit een vraag aan, dan telt ze als geadopteerd en bepaalt
+  // ze het id van het dossier niet; een dossier van enkel vragen draagt het id van de vraag met het kleinste id.
+  if(VRAGEN){
+    const stuk = new Map(items.map(it => [it.id, it])), nee = new Map(), partners = new Map();
+    (VRAGEN.nee || []).forEach(([a, b]) => { (nee.get(a) || nee.set(a, new Set()).get(a)).add(b); (nee.get(b) || nee.set(b, new Set()).get(b)).add(a); });
+    (VRAGEN.ja || []).forEach(([a, b]) => {
+      const x = stuk.get(a), y = stuk.get(b);
+      if(!x || !y) return;
+      [[x, y], [y, x]].forEach(([v, p]) => { if(vraagVast.has(v._key)) (partners.get(v.id) || partners.set(v.id, []).get(v.id)).push(p); });
+    });
+    const isVraag = x => vraagVast.has(x._key);
+    const telGroepen = w => { const g = new Map(); items.forEach(it => { const r = w.get(it.id); g.set(r, (g.get(r) || 0) + 1); }); return g; };
+    // Bij een gelijke stand beslist het kleinste stuk-id van de groep: dat hangt niet af van de volgorde van samenvoegen.
+    const kleinste = w => { const m = new Map(); items.forEach(it => { const r = w.get(it.id); if(!m.has(r) || it.id < m.get(r)) m.set(r, it.id); }); return m; };
+    const ids = [...partners.keys()].sort();
+    // Clusters: samenhangende vragen over hun onderlinge ja-paren; met een ander oordeel binnenin valt het cluster uiteen.
+    const cp = {}; const cf = x => cp[x] === x ? x : (cp[x] = cf(cp[x]));
+    ids.forEach(id => { cp[id] = id; });
+    ids.forEach(id => partners.get(id).forEach(p => {
+      if(!isVraag(p) || !(p.id in cp)) return;
+      const a = cf(id), b = cf(p.id);
+      if(a !== b){ if(a < b) cp[b] = a; else cp[a] = b; }
+    }));
+    const comp = new Map();
+    ids.forEach(id => { const r = cf(id); (comp.get(r) || comp.set(r, []).get(r)).push(id); });
+    const clusters = [];
+    const neeBinnen = (id, groep) => groep.filter(x => (nee.get(id) || new Set()).has(x)).length;
+    const samenhang = groep => {          // componenten over ja-paren binnen de groep, elk gesorteerd
+      const zet = new Set(groep), gezien = new Set(), uit = [];
+      groep.slice().sort().forEach(s => {
+        if(gezien.has(s)) return;
+        const deel = [], stapel = [s]; gezien.add(s);
+        while(stapel.length){ const x = stapel.pop(); deel.push(x);
+          partners.get(x).forEach(p => { if(zet.has(p.id) && !gezien.has(p.id)){ gezien.add(p.id); stapel.push(p.id); } }); }
+        uit.push(deel.sort());
+      });
+      return uit;
+    };
+    [...comp.keys()].sort().forEach(r => {
+      let rest = comp.get(r).slice().sort();
+      while(rest.some(a => neeBinnen(a, rest) > 0)){
+        // de vraag met de meeste andere oordelen binnenin gaat eruit (bij gelijke stand: het grootste id)
+        const eruit = rest.slice().sort((a, b) => neeBinnen(b, rest) - neeBinnen(a, rest) || (a < b ? 1 : -1))[0];
+        clusters.push([eruit]); rest = rest.filter(x => x !== eruit);
+      }
+      samenhang(rest).forEach(deel => clusters.push(deel));
+    });
+    // Telling voor een cluster op een bevroren indeling w: ja-paren en andere oordelen per groep.
+    const kies = (leden, w, telPartner, telNee, klein) => {
+      const tel = new Map(), neeIn = new Map(), eigen = new Set(leden.map(id => w.get(id)));
+      leden.forEach(id => {
+        partners.get(id).filter(telPartner).forEach(p => { const r = w.get(p.id); tel.set(r, (tel.get(r) || 0) + 1); });
+        (nee.get(id) || new Set()).forEach(x => { const it = stuk.get(x); if(it && telNee(it)){ const r = w.get(it.id); neeIn.set(r, (neeIn.get(r) || 0) + 1); } });
+      });
+      return [...tel.keys()].filter(r => !eigen.has(r) && (neeIn.get(r) || 0) < tel.get(r))
+        .sort((a, b) => tel.get(b) - tel.get(a) || (klein.get(a) < klein.get(b) ? -1 : 1));
+    };
+    const voeg = (leden, doelen) => {
+      for(const r of doelen){
+        jaFase = true; const ok = uni(stuk.get(leden[0])._key, r);
+        if(ok) leden.slice(1).forEach(id => uni(stuk.get(id)._key, r));
+        jaFase = false;
+        if(ok){ leden.forEach(id => { stuk.get(id)._adoptie = true; }); return true; }
+      }
+      return false;
+    };
+    // Ronde 1
+    const w1 = new Map(items.map(it => [it.id, find(it._key)])), groot1 = telGroepen(w1), klein1 = kleinste(w1);
+    clusters.map(leden => [leden, kies(leden, w1, p => !isVraag(p), x => !isVraag(x), klein1)]).forEach(([leden, doelen]) => {
+      if(voeg(leden, doelen) || leden.length < 2) return;
+      jaFase = true;
+      leden.slice(1).forEach(id => { if(uni(stuk.get(id)._key, stuk.get(leden[0])._key)) stuk.get(id)._adoptie = true; });
+      jaFase = false;
+    });
+    // Ronde 2
+    const w2 = new Map(items.map(it => [it.id, find(it._key)])), groot2 = telGroepen(w2), klein2 = kleinste(w2);
+    clusters.filter(l => l.length === 1 && groot2.get(w2.get(l[0])) === 1)
+      .map(l => [l, kies(l, w2, p => isVraag(p), () => true, klein2).filter(r => groot2.get(r) > 1)])
+      .forEach(([l, doelen]) => voeg(l, doelen));
+    // Bruggen
+    const zonderOordeel = it => !BASIS || !(kern[w1.get(it.id)] || {}).basis;
+    const w3 = new Map(items.map(it => [it.id, find(it._key)])), groot3 = telGroepen(w3);
+    const volg = new Map();
+    ids.forEach(id => {
+      const r = w3.get(id);
+      if(groot3.get(r) < 2 || (BASIS && (kern[r] || {}).dicht)) return;
+      partners.get(id).forEach(x => {
+        if(isVraag(x) || groot1.get(w1.get(x.id)) !== 1 || groot3.get(w3.get(x.id)) !== 1 || !zonderOordeel(x)) return;
+        const m = volg.get(x.id) || volg.set(x.id, new Map()).get(x.id);
+        m.set(r, (m.get(r) || 0) + 1);
+      });
+    });
+    [...volg.keys()].sort().forEach(xid => {
+      const tel = [...volg.get(xid)].sort((a, b) => b[1] - a[1]);
+      if(tel.length > 1 && tel[0][1] === tel[1][1]) return;
+      const x = stuk.get(xid);
+      jaFase = true; const ok = uni(x._key, tel[0][0]); jaFase = false;
+      if(ok) x._adoptie = true;
+    });
+  }
+
   // ── Handmatige samenvoeging (correcties.json): forceer de dossiers van de opgesomde stukken
   //    samen. Union op _key voegt de héle clusters samen (elk stuk deelt find(_key) met zijn
   //    dossier). Ontbrekende (verouderde) id's worden stil overgeslagen.
   const idMap = new Map(items.map(it => [it.id, it]));
-  vrij = true;                    // de handmatige samenvoeging geldt altijd, ook bovenop de basis
+  vrij = true; correctie = true;  // de handmatige samenvoeging geldt altijd, ook bovenop de basis en de vraagoordelen
   (corr.samenvoegen || []).forEach(entry => {
     const leden = (entry.items || []).map(id => idMap.get(id)).filter(Boolean);
     for(let i = 1; i < leden.length; i++) uni(leden[0]._key, leden[i]._key);
