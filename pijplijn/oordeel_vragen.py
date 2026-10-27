@@ -78,12 +78,15 @@ def lijst(v):
 
 
 def stopwoorden():
-    """De stoplijst van de pagina zelf (DOS_STOP in template.html), zodat er één bron is."""
+    """De stoplijst van de pagina zelf (DOS_STOP in template.html), zodat er één bron is: de begin-
+    lijst én de regels die er later woorden aan toevoegen ('...'.split(' ').forEach(w => DOS_STOP.add(w)),
+    zoals de etiketwoorden). Tot 27/10/2026 las dit enkel de beginlijst."""
     try:
         t = (BASE / "template.html").read_text(encoding="utf-8")
         m = re.search(r"const DOS_STOP = new Set\('([^']*)'", t)
         if m:
-            return set(m.group(1).split())
+            extra = re.findall(r"'([^']*)'\.split\(' '\)\.forEach\(w => DOS_STOP\.add\(w\)\)", t)
+            return set(m.group(1).split()).union(*(set(x.split()) for x in extra))
     except OSError:
         pass
     return set()
