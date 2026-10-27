@@ -37604,6 +37604,32 @@
   ],
   "college_beslissingen": [
     {
+      "id": "burgemeester-20261027-1",
+      "date": "2026-10-27",
+      "orgaan": "Burgemeester",
+      "categorie": "Bestuur",
+      "titel": "Delegatiebesluit burgemeester voor de periode van woensdag 11 november 2026 tot en met zondag 29 november 2026.",
+      "decoded": "De burgemeester keurt een delegatiebesluit goed. Dit besluit geldt van woensdag 11 november 2026 tot en met zondag 29 november 2026.",
+      "themes": [
+        "Veiligheid"
+      ]
+    },
+    {
+      "id": "burgemeester-20261023-1",
+      "date": "2026-10-23",
+      "orgaan": "Burgemeester",
+      "categorie": "Veiligheid",
+      "titel": "Besluit burgemeester van 23 oktober 2026 betreffende een tijdelijke sluiting van nachtwinkel gedurende negen weken.",
+      "decoded": "De burgemeester beslist op 23 oktober 2026 om een nachtwinkel negen weken tijdelijk te sluiten.",
+      "themes": [
+        "Veiligheid"
+      ],
+      "kernbegrippen": [
+        "nachtwinkel",
+        "tijdelijke sluiting"
+      ]
+    },
+    {
       "id": "burgemeester-20261022-1",
       "date": "2026-10-22",
       "orgaan": "Burgemeester",
@@ -115340,6 +115366,18 @@
           "published": "2026-10-23",
           "status": "tijdig",
           "late_days": 0
+        },
+        {
+          "date": "2026-10-23",
+          "published": "2026-10-27",
+          "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-10-27",
+          "published": "2026-10-27",
+          "status": "tijdig",
+          "late_days": 0
         }
       ],
       "deadline_days": 10,
@@ -121351,6 +121389,8 @@
     "Burgemeester|2026-10-14|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_14-10-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-10-20|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_20-10-2026_Beslissingenlijst.pdf",
     "Burgemeester|2026-10-22|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_22-10-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-10-23|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_23-10-2026_Beslissingenlijst.pdf",
+    "Burgemeester|2026-10-27|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_27-10-2026_Beslissingenlijst.pdf",
     "College|2024-12-03|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_03-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-10|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_10-12-2024_Beslissingenlijst.pdf",
     "College|2024-12-17|besluiten": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=BesluitenLijstUitspraak_College%20van%20burgemeester%20en%20schepenen_17-12-2024_Beslissingenlijst.pdf",

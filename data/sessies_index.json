@@ -1477,6 +1477,28 @@
     "uittreksels": []
   },
   {
+    "organ": "Burgemeester",
+    "date": "2026-10-23",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-27",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_23-10-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
+    "organ": "Burgemeester",
+    "date": "2026-10-27",
+    "documenten": {
+      "besluiten": {
+        "published": "2026-10-27",
+        "url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/61b5f831241a25e43c4acf4cdf620769f334514de906151dfa1ac01146ecd971/GetPublication?filename=BesluitenLijstUitspraak_Besluiten%20burgemeester_27-10-2026_Beslissingenlijst.pdf"
+      }
+    },
+    "uittreksels": []
+  },
+  {
     "organ": "College van burgemeester en schepenen",
     "date": "2024-12-03",
     "documenten": {
