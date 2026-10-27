@@ -1,6 +1,7 @@
 """
 schoon_brontekst.py — maskeert namen van burgers, e-mailadressen en geboortedatums in de gepubliceerde
-tekstvelden. Adressen en huisnummers blijven bewust staan (afspraak van 05/10/2026).
+tekstvelden, en het gezondheidsgegeven van een bewoner die je via het adres terugvindt. Adressen en
+huisnummers blijven bewust staan (afspraak van 05/10/2026).
 
 Officiële diensten- en kabinetsadressen duiken soms op in de brontekst van besluiten en in
 de vraag/het antwoord van schriftelijke vragen. Ze horen niet op de publieke site (of in de
@@ -195,6 +196,32 @@ def _omgekeerd(naam):
 
 # Beide schrijfwijzen, zonder dubbels en zonder handwerk.
 PRIVE_VORMEN = tuple(dict.fromkeys(list(PRIVE_VOLLEDIG) + [_omgekeerd(n) for n in PRIVE_VOLLEDIG]))
+
+# --- Gezondheid van een herkenbare bewoner ---------------------------------------------------
+# Een gezondheidsgegeven (ziekte, handicap, beperking) van een bewoner die je via het adres terugvindt,
+# blijft weg: sinds 06/10/2026 uit de samenvatting, sinds 27/10/2026 ook uit de brontekst en de
+# zoekindex. Het adres en de rest van de zin blijven staan. Ook dit is een lijst en geen patroon:
+# gemeten op 27/10/2026 droegen 16 stukken een gezondheidswoord naast een persoon, en 15 daarvan waren
+# algemene tekst (een parkeerreglement, de toewijzing van sociale woningen, het arbeidsreglement). De
+# zinsdelen staan in privacy_namen.json onder "gezondheid", om dezelfde reden als de namen: in deze
+# publieke repo zouden ze naast het adres precies het gegeven tonen dat weg moet. Wat zelf het publieke
+# besluit is (een straatnaam die een overleden kind eert, met de reden), komt niet op die lijst.
+# Een zinsdeel geldt in elk stuk ("stuk" in de lijst is ter info), is hoofdlettergevoelig en grijpt op de
+# tekst ná de naammaskering: staat er een naam van de lijst in, schrijf die dan als "[naam]".
+GEZONDHEID_MASKER = "[verwijderd]"
+GEZONDHEID = tuple(
+    (re.compile(r"\s+".join(re.escape(deel) for deel in r["zoek"].split())), r.get("vervang", GEZONDHEID_MASKER))
+    for r in _PRIVACY_RUW.get("gezondheid", []) if (r.get("zoek") or "").strip())
+
+
+def maskeer_gezondheid(tekst):
+    """Vervangt de zinsdelen onder "gezondheid" in de privacylijst. Geeft (nieuwe tekst, aantal) terug.
+    Een pdf breekt een zin soms over twee regels, dus tussen de woorden mag elke witruimte staan."""
+    aantal = 0
+    for patroon, vervang in GEZONDHEID:
+        tekst, n = patroon.subn(lambda m, v=vervang: v, tekst)
+        aantal += n
+    return tekst, aantal
 
 # Losse achternamen: ENKEL maskeren in een stuk dat ook de volledige naam draagt. Dat is nodig,
 # want sommige achternamen op de lijst zijn gewone Vlaamse namen, en er lopen naamgenoten door
@@ -696,6 +723,9 @@ def maskeer_namen(tekst, met_achternamen=None):
     alleen mee als de volledige naam in dezelfde tekst staat, zodat naamgenoten ongemoeid
     blijven: dezelfde achternaam hoort geregeld ook toe aan een mandataris of een
     organisatievertegenwoordiger, en die horen er gewoon te staan.
+
+    De zinsdelen met een gezondheidsgegeven (maskeer_gezondheid) gaan mee, want ze komen uit
+    dezelfde lijst en moeten langs dezelfde wegen: de opkuis, de zoekindex en de tagging.
     """
     if not tekst:
         return tekst, 0
@@ -722,7 +752,8 @@ def maskeer_namen(tekst, met_achternamen=None):
     # Een naamdeel tussen haakjes vlak achter een masker ("[naam](jamin)", een voornaam die de bron
     # zo schrijft) is een rest van dezelfde naam, en anders een zoekterm.
     tekst, rest = re.subn(r"\[naam\]\([a-zà-ÿ'’-]{2,}\)", NAAM_MASKER, tekst)
-    return tekst, aantal + n + gids + leden + rest
+    tekst, gezondheid = maskeer_gezondheid(tekst)
+    return tekst, aantal + n + gids + leden + rest + gezondheid
 
 
 def tekst_van(item):
@@ -765,6 +796,31 @@ ROLZINNEN = [re.compile(p) for p in (
     rf"(?i:contactpersoon\s*(?:is|:)?)\s+(?:{_AANHEF})?({_NAAM})",
     rf"{_AANHEF}({_NAAM})",
 )]
+# Een koppel bij de familienaam, ook een dubbele ("de heer en mevrouw Achternaam-Van Achternaam").
+# _NAAM vraagt een spatie tussen de delen en minstens twee delen, en zo glipte op 27/10/2026 een koppel
+# kopers erdoor dat al weken live stond. Hier telt ook één familienaam: een koppel is altijd een persoon.
+# Een naamdeel mag ook een apostrof dragen (D'Achternaam), in hoofdletters staan (ACHTERNAAM), met
+# initialen beginnen (J. Achternaam) of letters buiten het West-Europese alfabet hebben (Ş, ğ, ı, ś, ő, ș).
+# Tussen twee naamdelen loopt de naam niet over een regelbreuk: daarna volgt vaak een adres ("Straatnaam
+# 12"), en die vangst viel dan bij de straattoets stil weg. Na een tussenvoegsel of een initiaal wel, want
+# "Van" of "J." aan het eind van een pdf-regel wordt altijd gevolgd door de rest van de naam.
+_KOPPEL_HOOG = "A-ZÀ-ÞĀ-ſȘ-ț"
+_KOPPEL_LAAG = "a-zà-ÿĀ-ſȘ-ț"
+_KOPPELDEEL = (rf"(?:[{_KOPPEL_HOOG}](?:['’][{_KOPPEL_HOOG}])?[{_KOPPEL_LAAG}'’]+"
+               rf"|[{_KOPPEL_HOOG}]['’]?[{_KOPPEL_HOOG}]{{2,}})")
+_KOPPEL_TUSSENWOORDEN = ("van", "de", "den", "der", "het", "ter", "ten", "vander", "vanden", "vande")
+_KOPPELTUSSEN = r"(?i:%s)" % "|".join(_KOPPEL_TUSSENWOORDEN)
+_KOPPELNAAMDEEL = rf"(?:[{_KOPPEL_HOOG}]\.\s*){{0,3}}(?:{_KOPPELTUSSEN}\s+){{0,2}}{_KOPPELDEEL}"
+KOPPELZINNEN = [re.compile(
+    r"(?i:(?:de\s+heer|mijnheer)\s+en\s+mevrouw|mevrouw\s+en\s+(?:de\s+heer|mijnheer)|dhr\.?\s+en\s+mevr\.?|"
+    r"mevr\.?\s+en\s+dhr\.?|het\s+echtpaar|de\s+echtgenoten|echtgenoten)\s+"
+    rf"({_KOPPELNAAMDEEL}(?:(?:[^\S\n]+|[^\S\n]*[-–][^\S\n]*){_KOPPELNAAMDEEL}){{0,3}})(?![\w'’])")]
+
+
+def _koppel_naamwoord(woord):
+    """Een echt naamdeel: geen tussenvoegsel, geen initiaal en geen los streepje."""
+    return (woord.lower() not in _KOPPEL_TUSSENWOORDEN and woord not in ("-", "–")
+            and not re.fullmatch(r"(?:[^\W\d_]\.)+", woord))
 # Woorden die verraden dat het geen natuurlijke persoon is.
 GEEN_PERSOON = re.compile(
     r"\b(vzw|nv|bv|bvba|cvba|cv|vereniging|stad|gemeente|ocmw|agb|provincie|vlaamse|vlaams|"
@@ -802,11 +858,35 @@ def waakhond(data):
 
     gezien = {}
     for tekst in stukken:
-        for patroon in ROLZINNEN:
+        for patroon in ROLZINNEN + KOPPELZINNEN:
+            koppel = patroon in KOPPELZINNEN
             for m in patroon.finditer(tekst):
                 naam = " ".join(m.group(1).split()).strip(" ,.;:")
                 delen = naam.split()
-                if len(delen) < 2 or NAAM_MASKER in naam:
+                if (len(delen) < 2 and not koppel) or NAAM_MASKER in naam:
+                    continue
+                # Een koppel zwijgt enkel als precies die naam beoordeeld is. De toetsen hieronder
+                # vergelijken op een deel van de naam, en dan viel één familienaam stil weg zodra hij
+                # ook in een naam op de lijst stond: een losse familienaam wordt niet gemaskeerd.
+                if koppel:
+                    # Een straat of een orgaan achter de familienaam ("Achternaam Kerkstraat", "Achternaam
+                    # Bureau ...") kapt de naam af, zonder hem te laten vallen. Het eerste echte naamdeel
+                    # telt altijd: na "de heer en mevrouw" volgt een familienaam, ook als die op -hof
+                    # of -vest eindigt.
+                    kern = []
+                    for d in delen:
+                        if any(map(_koppel_naamwoord, kern)) and (STRAATNAAM.search(d) or GEEN_PERSOON.search(d)):
+                            break
+                        kern.append(d)
+                    while kern and not _koppel_naamwoord(kern[-1]):
+                        kern.pop()
+                    naam = " ".join(kern)
+                    if not kern:
+                        continue
+                    if naam in publiek or naam in BEOORDEELD_PUBLIEK or naam in PRIVE_VORMEN:
+                        continue
+                    i = m.start(1)
+                    gezien.setdefault(naam, " ".join(tekst[max(0, i - 120):i + 120].split()))
                     continue
                 # Een persoonsnaam begint hier nooit met een klein tussenvoegsel: 'van
                 # Bleukensstraat' en 'de Gouverneur' zijn geen mensen.
@@ -839,6 +919,52 @@ def waakhond(data):
     for naam, context in sorted(gezien.items()):
         print(f"   - {naam}")
         print(f"     …{context[:150]}…")
+
+
+# Dezelfde waakhond voor gezondheid: een gezondheidswoord vlak bij een huisnummer én een persoon ("Op
+# dit adres woont een persoon met ..."). Hij meldt enkel; hij maskeert niets en geeft niets vrij. Wie
+# een herkenbare bewoner blijkt, gaat met het zinsdeel onder "gezondheid" in privacy_namen.json. Gemeten
+# op 27/10/2026 meldde hij enkel het stuk dat er toen op kwam; een reglement over parkeerkaarten of
+# sociale woningen noemt geen huisnummer naast een persoon. "Beperking" telt enkel als "met een
+# beperking": de "beperking van het tuingebruik" bij een huurcontract is geen gezondheid. Een stuk dat
+# een mens nakeek en dat geen gezondheidsgegeven van een bewoner bevat, staat in privacy_namen.json
+# onder "gezondheid_beoordeeld" en wordt niet meer gemeld.
+GEZ_WOORD = re.compile(
+    r"\b(?i:handicap\w*|gehandicapt\w*|met\s+een\s+(?:\w+\s+)?beperking(?:en)?|rolstoel\w*|mindervalide\w*|"
+    r"invalid\w*|dementie|"
+    r"dement\w*|autis\w*|kanker\w*|psychisch\w*|psychiatri\w*|depressie\w*|verslav\w*|ziekte\w*|chronisch\w*|"
+    r"slechtzien\w*|slechthoren\w*|zorgbehoev\w*)\b")
+GEZ_HUISNUMMER = re.compile(
+    r"\b[A-ZÀ-Þ][\wà-ÿ'’-]*(?:straat|laan|steenweg|plein|weg|lei|vest|dijk|kaai|baan|hof|dreef|veld|singel|"
+    r"markt|berg|pad|wal)\s+(?:nr\.?\s*)?\d{1,4}\b|\b(?i:huisnummer)\s+\d+")
+GEZ_PERSOON = re.compile(
+    r"\b(?i:(?:een|de|deze|die)\s+(?:bewoner|bewoonster|persoon|man|vrouw|jongen|meisje|kind|zoon|dochter|"
+    r"patiënt|aanvrager|eigenaar|huurder|buurman|buurvrouw)|de\s+heer|mevrouw)\b|\[naam\]")
+GEZ_VENSTER = 250
+
+
+def waakhond_gezondheid(data):
+    """Meldt een gezondheidswoord naast een huisnummer en een persoon. Wijzigt niets."""
+    beoordeeld = set(_PRIVACY_RUW.get("gezondheid_beoordeeld", ()))
+    gezien = {}
+    for lijst in LIJSTEN:
+        for it in data.get(lijst, []):
+            if it.get("id") in beoordeeld:
+                continue
+            tekst = tekst_van(it)
+            for m in GEZ_WOORD.finditer(tekst):
+                stuk = tekst[max(0, m.start() - GEZ_VENSTER):m.end() + GEZ_VENSTER]
+                if GEZ_HUISNUMMER.search(stuk) and GEZ_PERSOON.search(stuk):
+                    i = m.start()
+                    gezien.setdefault(it.get("id"), " ".join(tekst[max(0, i - 120):i + 120].split()))
+    if not gezien:
+        print("Waakhond: geen gezondheidsgegevens naast een huisnummer om te beoordelen.")
+        return
+    print(f"Waakhond: {len(gezien)} gezondheidsgegeven(s) naast een huisnummer. Nakijken, en wat over een")
+    print("          herkenbare bewoner gaat onder \"gezondheid\" in privacy_namen.json zetten (en daarna run_all):")
+    for stuk, context in sorted(gezien.items()):
+        print(f"   - {stuk}")
+        print(f"     …{context[:200]}…")
 
 
 def main():
@@ -986,6 +1112,7 @@ def main():
     print(f"Namen van burgers/landmeters gemaskeerd: {namen} vermelding(en), "
           f"{len(PRIVE_VOLLEDIG)} personen op de lijst.")
     waakhond(data)
+    waakhond_gezondheid(data)
 
 
 if __name__ == "__main__":

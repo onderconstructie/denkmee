@@ -387,6 +387,30 @@ if _ctx_lek:
 else:
     print("       verhulde e-mailadressen en geboortedatums: niets in de build ✓")
 
+# 3d2) Gezondheid (sinds 27/10/2026). schoon_brontekst.py vervangt de zinsdelen onder "gezondheid" in
+#     privacy_namen.json: een gezondheidsgegeven van een bewoner die je via het adres terugvindt. Deze klep
+#     kijkt met dezelfde patronen of dat ook echt gebeurd is, zodat een losse stap die de opkuis overslaat
+#     zo'n zin niet live kan zetten.
+_gez_lek = []
+for i in _items:
+    for v in GEB_VELDEN + ("kernbegrippen", "toezeggingen"):
+        _w = i.get(v)
+        _ts = [x for x in _w if isinstance(x, str)] if isinstance(_w, list) else [str(_w or "")]
+        if any(_p.search(_t) for _t in _ts for _p, _ in _sb.GEZONDHEID):
+            _gez_lek.append(str(i.get("id")))
+            break
+if _gez_lek:
+    print(f"[gezondheid] een zinsdeel van de lijst staat nog in {len(_gez_lek)} stuk(ken): "
+          f"{', '.join(_gez_lek[:5])}")
+    if not is_demo:
+        sys.exit("[STOP] Live build geweigerd: er staat een gezondheidsgegeven van een bewoner in de build. "
+                 "Draai schoon_brontekst.py opnieuw, dan bouw_zoekindex.py, en bouw daarna de site opnieuw "
+                 "(zie de volgorde in run_all.py).")
+    print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
+else:
+    print(f"       gezondheidsgegevens van bewoners: niets in de build ✓ "
+          f"({len(_sb.GEZONDHEID)} zinsdeel/zinsdelen op de lijst)")
+
 # 3e) Uittreksel-koppeling. De tekst die de samenvatting van een stuk voedt, moet van het eigen
 #     besluit komen. koppel_uittreksels.py koppelt op het puntnummer dat de stad zelf in de kopregel
 #     zet; deze klep leest de koppeltabel na, zodat een latere wijziging aan de koppeling niet stil een
