@@ -367,6 +367,15 @@ def main():
     print("       namen gemaskeerd in de volledige tekst: %d vermelding(en)" % gemaskeerd)
     print("       contactgegevens en geboortedatums gemaskeerd: %d en %d" % (context_adres, context_geb))
 
+    # De waakhonden ook over deze tekst (sinds 28/10/2026). schoon_brontekst.py laat ze enkel over data.json
+    # lopen, en daar ontbreken de notulen, de uittreksels en de vraag-pdf's: een naam of gezondheidszin die
+    # enkel daar stond, werd zo nooit gemeld. Ze melden, ze wijzigen niets; de routine remt op hun uitvoer.
+    print("       waakhonden over de volledige tekst:")
+    _alles = {"college": data.get("college", []), "fracties": data.get("fracties", []),
+              "agendapunten": [{"id": k, "brontekst": t} for k, t in extra.items() if t]}
+    schoon_brontekst.waakhond(_alles)
+    schoon_brontekst.waakhond_gezondheid(_alles)
+
     per_item = {}
     for item_id, tekst in extra.items():
         if not tekst:

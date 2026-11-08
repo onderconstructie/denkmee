@@ -69,9 +69,34 @@ GEB_MASKER = r"··/··/\3"
 # 1. Een geboortedatum met het graadteken ("°22-03-2021") of na "geboren (op)". Dat teken staat in
 #    deze stukken enkel voor een geboortedatum, dus een tabelkop als anker is hier niet nodig.
 #    Dag en maand weg, het jaar blijft, net als bij de kandidatentabellen.
+#    Ook met de geboorteplaats ertussen ("geboren te Plaatsnaam, op 01-01-1970", sinds 28/10/2026).
+#    Een plaatsnaam begint met een hoofdletter, ook binnen een patroon dat verder hoofdletterongevoelig is
+#    ("katten geboren te worden vanaf ..." is geen geboorteplaats).
+_GEB_PLAATSWOORD = r"(?:'s-)?(?-i:[A-ZÀ-Þ])[\w'’-]*"
+_GEB_PLAATS_KERN = r"(?:te|in)\s+" + _GEB_PLAATSWOORD + r"(?:[^\S\n]+\(?" + _GEB_PLAATSWOORD + r"\)?){0,2},?\s+"
+_GEB_PLAATS = r"(?:" + _GEB_PLAATS_KERN + r")?"
 GEB_TEKEN = re.compile(
-    r"(°\s?|\bgeboren\s+(?:op\s+)?)(\d{1,2})[-/.](\d{1,2})[-/.](\d{4}|\d{2})(?!\d)", re.I)
+    r"(°\s?|\bgeboren\s+" + _GEB_PLAATS + r"(?:op\s+)?)(\d{1,2})[-/.](\d{1,2})[-/.](\d{4}|\d{2})(?!\d)", re.I)
 GEB_TEKEN_MASKER = r"\1··-··-\4"
+#    Dezelfde datum met de maand voluit ("geboren te Plaatsnaam, op 1 januari 1970"), zoals in een
+#    ontwerpakte. Enkel met een geboorteplaats ("geboren te/in X op") of na "°": een reglement schrijft
+#    "kinderen geboren op 1 januari 2020 of later" en "elke kat geboren na 31 augustus 2014", en dat is
+#    geen geboortedatum van een persoon. Dag en maand weg, het jaar blijft.
+GEB_TEKEN_LANG = re.compile(
+    r"(°\s?|\bgeboren\s+" + _GEB_PLAATS_KERN + r"op\s+)(\d{1,2}(?:ste|de|e)?)(\s+)(januari|februari|maart|april|"
+    r"mei|juni|juli|augustus|september|oktober|november|december)(\s+(?:\d{4}|['’]\d{2}))(?!\d)", re.I)
+GEB_TEKEN_LANG_MASKER = r"\1··\3··\5"
+
+# 1b. Een rijksregisternummer (sinds 28/10/2026). Een ontwerpakte noemt de ondertekenaars met hun
+#     nummer ("rijksregisternummer 00.00.00-000.00", "RR 00.00.00-000.00"). Dat nummer verraadt ook de
+#     geboortedatum, en het hoort nergens thuis, ook niet bij een mandataris. De vaste vorm herkennen we
+#     ook zonder het woord ervoor; een losser geschreven nummer enkel na het woord.
+RIJKSREGISTER_WOORD = re.compile(
+    r"(\b(?:(?i:rijksregister(?:nummer|nr\.?)?|nationaal\s+nummer)|RR|INSZ)(?:-?(?i:nummer|nr\.?))?"
+    r"(?:[^\S\n]+(?i:nr\.?))?[^\S\n]*:?\s*)"
+    r"\d{2}[.\s]?\d{2}[.\s]?\d{2}\s*[-.\s]?\s*\d{3}[.\s-]?\d{2}(?!\d)")
+RIJKSREGISTER_VAST = re.compile(r"(?<![\d.])\d{2}\.\d{2}\.\d{2}[-.\s]?\d{3}[.-]\d{2}(?![\d.])")
+RIJKSREGISTER_MASKER = "[rijksregisternummer]"
 
 # 2. en 3. Adressen blijven staan. Huisnummers en straten tonen we altijd zoals de stad ze schrijft,
 #    ook naast "[naam]" of na "wonend": enkel namen van burgers, e-mailadressen, telefoonnummers en
@@ -105,7 +130,8 @@ def maskeer_context(tekst):
 
       - de telefoon- en mailvelden in een contactformulier
       - een verhuld e-mailadres (komma of [at] in plaats van punt of @)
-      - een geboortedatum na '°' of 'geboren'
+      - een rijksregisternummer (telt bij de contactgegevens)
+      - een geboortedatum na '°' of 'geboren (te X) op', ook met de maand voluit
 
     Gedeeld met bouw_zoekindex.py, om dezelfde reden als maskeer_namen: de volledige tekst uit de
     pdf's loopt daar niet langs data.json, dus zonder deze gedeelde functie bleef het een zoekterm.
@@ -121,8 +147,11 @@ def maskeer_context(tekst):
 
     tekst = FORM_BLOK.sub(_in_blok, tekst)
     tekst, a4 = EMAIL_VERHULD.subn("[e-mailadres]", tekst)
+    tekst, r1 = RIJKSREGISTER_WOORD.subn(r"\1" + RIJKSREGISTER_MASKER, tekst)
+    tekst, r2 = RIJKSREGISTER_VAST.subn(RIJKSREGISTER_MASKER, tekst)
     tekst, g = GEB_TEKEN.subn(GEB_TEKEN_MASKER, tekst)
-    return tekst, velden[0] + a4, g
+    tekst, g2 = GEB_TEKEN_LANG.subn(GEB_TEKEN_LANG_MASKER, tekst)
+    return tekst, velden[0] + a4 + r1 + r2, g + g2
 
 # --- Namen van gewone burgers ---------------------------------------------------------------
 # Besluiten noemen soms een natuurlijke persoon bij naam: de eigenaars van een woning, wie een
@@ -280,8 +309,9 @@ _GEEN_NAAMWOORD = {"In", "Het", "Een", "En", "Als", "Bij", "Voor", "Met", "Uit",
                    "Volgens", "Vervolgens", "Studiebureau", "Opmeting", "Opmetingsplan", "Vastgoedmanagement",
                    "Landmeter", "Advocaat", "Notaris", "Architect"}
 # Velden die op de site terechtkomen (zoekindex of zichtbaar): brontekst wordt doorzocht;
-# vraag/antwoord staan in de dossier-uitklap; decoded is de samenvatting; titel de kop.
-VELDEN = ("brontekst", "decoded", "vraag", "antwoord", "titel")
+# vraag/antwoord staan in de dossier-uitklap; decoded is de samenvatting; titel de kop. Het onderwerp
+# van een schriftelijke vraag staat ook in de pagina, en de kop valt erop terug als de titel leeg is.
+VELDEN =("brontekst", "decoded", "vraag", "antwoord", "titel", "onderwerp")
 # Velden met een lijst van korte teksten: de kernbegrippen van de tagger en, sinds 27/09/2026, de
 # toezeggingen uit de notulen ("O1. OPDRACHT. ..."). Ze krijgen dezelfde opkuis als de lopende tekst.
 LIJSTVELDEN = ("kernbegrippen", "toezeggingen")
@@ -815,6 +845,22 @@ KOPPELZINNEN = [re.compile(
     r"(?i:(?:de\s+heer|mijnheer)\s+en\s+mevrouw|mevrouw\s+en\s+(?:de\s+heer|mijnheer)|dhr\.?\s+en\s+mevr\.?|"
     r"mevr\.?\s+en\s+dhr\.?|het\s+echtpaar|de\s+echtgenoten|echtgenoten)\s+"
     rf"({_KOPPELNAAMDEEL}(?:(?:[^\S\n]+|[^\S\n]*[-–][^\S\n]*){_KOPPELNAAMDEEL}){{0,3}})(?![\w'’])")]
+# Dezelfde regel voor andere familievormen (sinds 28/10/2026): erven, een weduwe, een echtgenote, consorten,
+# en één familienaam na "verkocht aan de heer" (de rolzinnen hierboven vragen er twee). Op 28/10 kwam geen
+# enkele van deze vormen in de data voor. "De familie X" staat er bewust niet bij: toen waren alle vier de
+# treffers publiek of geen persoon (een familie die schenkt, een domeinnaam, een grafmonument, een straat).
+_KOPPELNAAM = rf"({_KOPPELNAAMDEEL}(?:(?:[^\S\n]+|[^\S\n]*[-–][^\S\n]*){_KOPPELNAAMDEEL}){{0,3}})"
+KOPPELZINNEN += [re.compile(p) for p in (
+    r"\b(?i:(?:de\s+)?erven|weduwe|weduwnaar|wed\.|(?:zijn|haar)\s+echtgeno(?:te|ot))\s+" + _KOPPELNAAM
+    + r"(?![\w'’])",
+    r"\b(?i:(?:verkocht|verkoop|verhuurd|toegewezen|overgedragen)\s+aan\s+(?:de\s+heer|mevrouw|mevr\.|dhr\.))\s+"
+    + _KOPPELNAAM + r"(?![\w'’])",
+)]
+# Hier staat de naam vóór het sleutelwoord, en dan kan er ook een organisatie staan ("Stad Mechelen en
+# consorten"): enkel bij deze vorm telt een organisatiewoord als eerste naamdeel als "geen persoon".
+KOPPEL_NAAM_VOORAF = re.compile(
+    r"(?<![\w'’-])" + _KOPPELNAAM + r"[^\S\n]+(?i:en\s+consorten|c\.s\.|en\s+(?:zijn|haar)\s+echtgeno(?:te|ot))\b")
+KOPPELZINNEN.append(KOPPEL_NAAM_VOORAF)
 
 
 def _koppel_naamwoord(woord):
@@ -831,6 +877,9 @@ GEEN_PERSOON = re.compile(
     # Woorden uit wetten en organen in een GECORO-stuk ("Decreet Lokaal Bestuur", "Commissie voor
     # Ruimtelijke Ordening", "Bestendige Deputatie"), die de ledenlijstregel anders als naam las.
     r"decreet|lokaal|bestuur|commissie|ruimtelijke|ordening|planning|deputatie)\b", re.I)
+# Enkel voor de meldingen van de waakhond, niet voor de maskering (daar zou een extra woord een naam kunnen
+# vrijgeven): een functietitel of een gebouw in de pdf-tekst ("Algemeen Directeur", "Sociaal Huis").
+GEEN_PERSOON_MELDING = re.compile(r"\b(directeur|sociaal)\b", re.I)
 # Een straatnaam is geen persoon. 'van Leestsesteenweg' en 'de Zelestraat' haalden de vorige
 # versie van deze waakhond nog wél, en dat was de grootste bron van ruis.
 STRAATNAAM = re.compile(r"(?:straat|laan|weg|dreef|plein|kaai|baan|vest|lei|markt|hof|pad)$", re.I)
@@ -883,6 +932,13 @@ def waakhond(data):
                     naam = " ".join(kern)
                     if not kern:
                         continue
+                    # Een organisatie als eerste naamdeel ("Stad Mechelen en consorten") is geen persoon, maar
+                    # enkel als de naam vóór het sleutelwoord staat: na "de heer en mevrouw" is ook "Van der
+                    # Bank" een familienaam.
+                    eerste = next(k for k in kern if _koppel_naamwoord(k))
+                    if patroon is KOPPEL_NAAM_VOORAF and (GEEN_PERSOON.search(eerste)
+                                                          or GEEN_PERSOON_MELDING.search(eerste)):
+                        continue
                     if naam in publiek or naam in BEOORDEELD_PUBLIEK or naam in PRIVE_VORMEN:
                         continue
                     i = m.start(1)
@@ -898,7 +954,7 @@ def waakhond(data):
                     continue
                 if any(STRAATNAAM.search(d) for d in delen):
                     continue
-                if naam in publiek or GEEN_PERSOON.search(naam):
+                if naam in publiek or GEEN_PERSOON.search(naam) or GEEN_PERSOON_MELDING.search(naam):
                     continue
                 if BEDRIJFSVORM.match(tekst[m.end(1):m.end(1) + 16]):
                     continue

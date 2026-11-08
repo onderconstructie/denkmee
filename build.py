@@ -297,7 +297,7 @@ else:
 #     afgaan, ook nadat de echte geboortedatums netjes gemaskeerd zijn.
 GEB_KOP_RE = re.compile(r"geboortedatum\s+beroep", re.IGNORECASE)
 GEB_RUW_RE = re.compile(r"(?<![\d/])\d{2}/\d{2}/\d{2}(?![\d/])")
-GEB_VELDEN = ("brontekst", "decoded", "vraag", "antwoord", "titel")
+GEB_VELDEN = ("brontekst", "decoded", "vraag", "antwoord", "titel", "onderwerp")
 _geb_kandidaten = [i for i in _items
                    if any(GEB_KOP_RE.search(str(i.get(v) or "")) for v in GEB_VELDEN)]
 if _geb_kandidaten:
@@ -363,29 +363,32 @@ else:
     print("       advocaten en landmeters: geen naam in de build ✓")
 
 # 3d) Verhulde e-mailadressen en geboortedatums in lopende tekst. schoon_brontekst.py maskeert een
-#     e-mailadres met een komma of [at] en een datum na "°" of "geboren". Deze klep controleert of
+#     e-mailadres met een komma of [at], een datum na "°" of "geboren" (ook met de maand voluit) en,
+#     sinds 28/10/2026, een rijksregisternummer. Deze klep controleert of
 #     dat ook echt gebeurd is, met exact dezelfde patronen, zodat een losse stap die de opkuis
 #     overslaat de site niet live kan zetten. Adressen en huisnummers blijven bewust staan.
 import schoon_brontekst as _sb
 _ctx_lek = []
 for i in _items:
-    for v in GEB_VELDEN:
-        _t = str(i.get(v) or "")
+    for v in GEB_VELDEN + ("kernbegrippen", "toezeggingen"):
+        _w = i.get(v)
+        _ts = [x for x in _w if isinstance(x, str)] if isinstance(_w, list) else [str(_w or "")]
         # Dezelfde regels als maskeer_context, behalve het contactformulier: dat staat enkel in de
         # tekst die de zoekindex voedt, niet in deze velden.
-        if _sb.EMAIL_VERHULD.search(_t) or _sb.GEB_TEKEN.search(_t):
+        if any(_sb.EMAIL_VERHULD.search(_t) or _sb.GEB_TEKEN.search(_t) or _sb.GEB_TEKEN_LANG.search(_t)
+               or _sb.RIJKSREGISTER_WOORD.search(_t) or _sb.RIJKSREGISTER_VAST.search(_t) for _t in _ts):
             _ctx_lek.append(str(i.get("id")))
             break
 if _ctx_lek:
-    print(f"[context-lek] verhuld e-mailadres of geboortedatum in {len(_ctx_lek)} stuk(ken): "
+    print(f"[context-lek] verhuld e-mailadres, geboortedatum of rijksregisternummer in {len(_ctx_lek)} stuk(ken): "
           f"{', '.join(_ctx_lek[:5])}")
     if not is_demo:
-        sys.exit("[STOP] Live build geweigerd: er staat een e-mailadres of geboortedatum van een persoon "
+        sys.exit("[STOP] Live build geweigerd: er staat een e-mailadres, geboortedatum of rijksregisternummer van een persoon "
                  "in de build. Draai schoon_brontekst.py opnieuw, dan bouw_zoekindex.py, en bouw "
                  "daarna de site opnieuw (zie de volgorde in run_all.py).")
     print("   (waarschuwing genegeerd: is_demo staat nog op true)\n")
 else:
-    print("       verhulde e-mailadressen en geboortedatums: niets in de build ✓")
+    print("       verhulde e-mailadressen, geboortedatums en rijksregisternummers: niets in de build ✓")
 
 # 3d2) Gezondheid (sinds 27/10/2026). schoon_brontekst.py vervangt de zinsdelen onder "gezondheid" in
 #     privacy_namen.json: een gezondheidsgegeven van een bewoner die je via het adres terugvindt. Deze klep
