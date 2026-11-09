@@ -10,7 +10,9 @@ Dit script legt elke schriftelijke vraag naast haar kandidaten en laat het taalm
 het over dezelfde concrete zaak gaat. Kandidaten zijn de stukken waarmee de vraag de meeste zeldzame
 woorden deelt (titel, kernbegrippen, straten; algemene titelwoorden uit titelwoorden.json tellen niet),
 eerdere vragen van hetzelfde raadslid met een gedeeld zeldzaam woord, en paren die een sessie één keer
-met --extra meegaf. Elk paar krijgt twee oordelen, één keer met de vraag eerst en één keer met het andere
+met --extra meegaf. Wat ooit kandidaat was, blijft kandidaat zolang beide stukken bestaan (de lijst staat in de
+cache onder "kandidaten_ooit"), zodat een betaald oordeel niet verdwijnt als nieuwe stukken de woordgewichten
+verschuiven. Elk paar krijgt twee oordelen, één keer met de vraag eerst en één keer met het andere
 stuk eerst. Enkel als beide "ja" zeggen, telt het paar als zelfde zaak.
 
 De uitkomst staat in vraag_oordelen.json (enkel stuk-id's): de ja-paren, de paren met een ander oordeel
@@ -360,6 +362,16 @@ def main():
                 return
             haal_batch(client, cache["lopende_batch"], cache)
     paren = kandidaten(st, cache["extra"])
+    # Wat ooit kandidaat was, blijft kandidaat (sinds 09/11/2026). De keuze hierboven weegt woorden naar hun
+    # zeldzaamheid over ALLE stukken; met elke nieuwe reeks stukken verschuiven die gewichten, en dan zakte een
+    # paar dat al beoordeeld was uit de top. Zijn betaalde oordeel verdween zo stil uit de uitkomst, en een stuk
+    # kon zijn vraag verliezen. Een paar blijft dus meedoen zolang beide stukken bestaan; verandert de tekst van
+    # een van beide, dan oordeelt het model opnieuw, zoals bij elk ander paar.
+    ooit = {tuple(sorted(p)) for p in cache.get("kandidaten_ooit", []) if len(p) == 2}
+    paren = sorted(set(paren) | {p for p in ooit if p[0] in st and p[1] in st})
+    if not args.droog and not set(paren) <= ooit:
+        cache["kandidaten_ooit"] = [list(p) for p in sorted(ooit | set(paren))]
+        bewaar_cache(cache)
     nodig = werk(st, paren, cache)
     in_tok, uit_tok, kost = raming(nodig)
     print(f"Vraagoordelen: {len(paren)} kandidaat-paren over {len({p for q in paren for p in q if p.startswith('sv-')})} vragen; "
