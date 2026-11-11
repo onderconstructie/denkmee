@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-08",
+  "generated_at": "2026-11-11",
   "next_meeting": {
     "id": "gemeenteraad-20261124",
     "type": "Gemeenteraad",
@@ -37603,6 +37603,27 @@
     }
   ],
   "college_beslissingen": [
+    {
+      "id": "college-20261110-17A",
+      "date": "2026-11-10",
+      "orgaan": "College",
+      "categorie": "Bestuur",
+      "titel": "Vaststelling tijdelijke politieverordening op het wegverkeer naar aanleiding van Winterfever van 27 november 2026 tot 9 januari 2027.",
+      "voorlopig": true,
+      "uittreksel_url": "https://lblod.mechelen.be/LBLODWeb/Home/Overzicht/7b0258ec55a77ef7f521548d8252c8895243b28ba2247e8658a3bc02c4c09348/GetPublication?filename=Uittreksels_10-11-2026_117517.pdf",
+      "decoded": "Het college van burgemeester en schepenen stelt een tijdelijke politieverordening op het wegverkeer vast voor Winterfever, dat doorgaat van 27 november 2026 tot 9 januari 2027 op Haverwerf. Tijdens de openingsuren is het verkeer verboden voor alle bestuurders in beide richtingen op Haverwerf. Dit geldt op volgende dagen: vrijdag 27/11, 04/12, 11/12, 18/12/2026 en 08/01/2027 van 17u tot 23u30, zaterdag 28/11, 05/12, 12/12, 19/12/2026 en 09/01/2027 van 14u tot 23u30, zondag 29/11, 06/12, 13/12, 20/12, 27/12/2026 en 03/01/2027 van 14u tot 21u, maandag 21/12, dinsdag 22/12 en woensdag 23/12/2026 van 14u tot 22u30, en donderdag 24/12/2026 van 14u tot 17u. Het college brengt het verbod ter kennis met verbodsborden C3. Inbreuken worden bestraft volgens de verkeerswet. Het college maakt een afschrift van de verordening over aan de Bestendige Deputatie van de Provincieraad van Antwerpen en aan de Griffies van de Rechtbank van Eerste Aanleg en de Politierechtbank te Antwerpen, afdeling Mechelen.",
+      "themes": [
+        "Mobiliteit"
+      ],
+      "streets": [
+        "Haverwerf"
+      ],
+      "neighborhood": "Mechelen",
+      "kernbegrippen": [
+        "Winterfever",
+        "Haverwerf"
+      ]
+    },
     {
       "id": "burgemeester-20261103-1",
       "date": "2026-11-03",
@@ -115217,6 +115238,12 @@
           "date": "2026-10-30",
           "published": "2026-11-06",
           "status": "tijdig",
+          "late_days": 0
+        },
+        {
+          "date": "2026-11-10",
+          "published": null,
+          "status": "geen",
           "late_days": 0
         }
       ],
